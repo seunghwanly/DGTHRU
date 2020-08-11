@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>701010176864-ai69g612edtq45p04u8h1oqgf2vl3ke8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.701010176864-ai69g612edtq45p04u8h1oqgf2vl3ke8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDxOsSmpkW-I19s7OEXBfPO09t52AHkqTM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>701010176864</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.DGTHRU</string>
+	<key>PROJECT_ID</key>
+	<string>dgthru-bf3d6</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dgthru-bf3d6.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:701010176864:ios:0505d1872be1692aac4c05</string>
+	<key>DATABASE_URL</key>
+	<string>https://dgthru-bf3d6.firebaseio.com</string>
+</dict>
+</plist>

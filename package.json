@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "preandroid": "npx jetify",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -10,12 +11,16 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^1.1.2",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-firebase/app": "^8.3.0",
+    "@react-native-firebase/auth": "^8.3.1",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/native-stack": "^5.0.5",
     "@react-navigation/stack": "^5.9.0",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-apple-authentication": "^1.0.6",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-reanimated": "^1.11.0",
     "react-native-safe-area-context": "^3.1.4",
@@ -28,6 +33,7 @@
     "babel-jest": "^26.3.0",
     "eslint": "^7.6.0",
     "jest": "^26.3.0",
+    "jetifier": "^1.6.6",
     "metro-react-native-babel-preset": "^0.62.0",
     "react-test-renderer": "16.13.1"
   },

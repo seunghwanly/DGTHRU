@@ -16,9 +16,9 @@ export default App = () => {
   return (
     <NavigationContainer
 
-      >
+    >
       <Stack.Navigator>
-      
+
         <Stack.Screen name="Intro" component={Intro} />
         <Stack.Screen name="Verify" component={Verify} />
       </Stack.Navigator>

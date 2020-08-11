@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "701010176864",
+    "firebase_url": "https://dgthru-bf3d6.firebaseio.com",
+    "project_id": "dgthru-bf3d6",
+    "storage_bucket": "dgthru-bf3d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701010176864:android:3cef9eb2c398a84dac4c05",
+        "android_client_info": {
+          "package_name": "com.dgthru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701010176864-a77rb6tjkhpbtc5u1pult64u4bojieu3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_cJ0GLy1Yx_buDAS54glugJgLey7UGZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701010176864-a77rb6tjkhpbtc5u1pult64u4bojieu3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
