@@ -14,19 +14,35 @@ function Intro({navigation}) {
     // }
 
     return (
-        <View style={{flexDirection:'column', justifyContent:'space-between'}}>
-            <View >
+        <View style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection:'column',
+            backgroundColor:'white'
+
+        }}>
+            <View style={styles.header}>
                 <Text style={styles.title}>DGTHRU</Text>
                 <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
             </View>
-            <View ></View>
-            <View >
+            <View style={
+                [ styles.body, {
+                    height:'30%'
+                } ]
+                }>
+                
+            </View>
+            <View style={styles.footer}>
                 {/* TextInput 값을 props 넘겨야함 */}
                 <TextInput
+                    style={
+                        [ styles.components, styles.phoneNumber ]
+                    }
                     placeholder='010-1234-1234'
                     onChangeText={text => onChangeText(text)}
                 />
                 <Button 
+                    style={styles.components}
                     title='로그인' 
                     onPress={() => navigation.navigate('Verify')}
 
@@ -39,31 +55,41 @@ function Intro({navigation}) {
 const styles = StyleSheet.create(
     {
         header : {
-            flex: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection:'column'
+            height:'20%',
+            margin:'20%'
+
         },
         body:{
-            flex: 3,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor:'red',
-            flexDirection:'column'
+            backgroundColor:'red'
         },
         footer:{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection:'column'
+            height:'30%'
         },
         title: {
-            fontSize: 30,
+            fontSize:44,
             fontWeight: 'bold',
+            textAlign:'center'
         },
         subTitle: {
             fontSize: 20,
-            color: 'gray'
+            color: 'gray',
+            textAlign:'center'
+        },
+        components:{
+            fontSize:20,
+        },
+        phoneNumber : {
+            borderWidth:1,
+            borderColor:'gray',
+            borderRadius:5,
+            backgroundColor:'white',
+            paddingBottom:10,
+            paddingTop:10,
+            paddingStart:40,
+            paddingEnd:40,
+            margin:10,
+            fontSize:15,
+            width:'50%'
         }
     }
 );
