@@ -2,7 +2,11 @@
 
    https://reactnative.dev/docs/environment-setup
 
-# 아마 dependencies 에 있는그대로 받아지면 추가로 해야할거 별로 없을 거라 믿어
+   아마 dependencies 에 있는그대로 받아지면 추가로 해야할거 별로 없을 거라 믿어
+
+## 임시 UI/UX
+
+   https://ovenapp.io/view/NDd5y85Wg7f95q5oooRO6TVSpcmyzxHo/rm92i
 
 ## 일단 mac 기준
 
