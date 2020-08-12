@@ -2,23 +2,46 @@ import React from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    Button
 } from 'react-native';
 
-function Shops() {
+import auth from '@react-native-firebase/auth';
+
+import { enableScreens } from 'react-native-screens';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+enableScreens();
+
+function Shops({navigation}) {
+
+    signOut = () => {
+        auth()
+            .signOut()
+            .then(() => console.log('User Signed Out !'));
+    }
+
     return(
         <>
-            <View style={styles.container}>
+            <View style={styles.background}>
                 <Text style={styles.text}>Welcome !</Text>
+                <Button 
+                    title='로그아웃'
+                    onPress={() => signOut()}
+                />
             </View>
         </>
     );
 }
 const styles = StyleSheet.create({
-    container : {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
+    background: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        backgroundColor: 'white'
     },
     text : {
         fontSize:44,
