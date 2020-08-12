@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    Button,
+    TextInput,
+    StyleSheet,
+    KeyboardAvoidingView,
+    ScrollView
+} from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import Verify from './Verify';
 
 import appleAuth, {
     AppleButton,
@@ -14,6 +20,10 @@ import appleAuth, {
     AppleAuthCredentialState,
     AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
+
+import auth from '@react-native-firebase/auth';
+
+import Shops from './Shops';
 
 /**
  * You'd technically persist this somewhere for later use.
@@ -65,11 +75,22 @@ async function onAppleButtonPress(updateCredentialStateForUser) {
             updateCredentialStateForUser(`Error: ${error.code}`),
         );
 
+        // Ensure Apple returned a user identityToken
+        if (!appleAuthRequestResponse.identityToken) {
+            throw 'Apple Sign-In failed - no identify token returned';
+        }
+
+        //apple ID >> FIREBASE
+        const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+
         if (identityToken) {
             // e.g. sign in with Firebase Auth using `nonce` & `identityToken`
             console.log(nonce, identityToken);
+
+            return auth().signInWithCredential(appleCredential);
         } else {
             // no token - failed sign-in?
+            alert('no identityToken available');
         }
 
         if (realUserStatus === AppleAuthRealUserStatus.LIKELY_REAL) {
@@ -77,6 +98,7 @@ async function onAppleButtonPress(updateCredentialStateForUser) {
         }
 
         console.warn(`Apple Authentication Completed, ${user}, ${email}`);
+
     } catch (error) {
         if (error.code === AppleAuthError.CANCELED) {
             console.warn('User canceled Apple Sign in.');
@@ -86,17 +108,15 @@ async function onAppleButtonPress(updateCredentialStateForUser) {
     }
 }
 
-
-
 enableScreens();
 
-function Intro({ navigation }) {
+function Intro({ navigation, number }) {
 
-    // _onChangeText() {
-
-    // }
+    const [confirm, setConfirm] = useState(null);
+    const [code, setCode] = useState('');
 
     const [credentialStateForUser, updateCredentialStateForUser] = useState(-1);
+
     useEffect(() => {
         if (!appleAuth.isSupported) return
 
@@ -116,71 +136,132 @@ function Intro({ navigation }) {
         });
     }, []);
 
+    function onNumberChange(inputNumber) {
+        number = inputNumber;
+    }
+
     if (!appleAuth.isSupported) {
         return (
-            <View style={[styles.container, styles.horizontal]}>
+            <View style={styles.footer}>
                 <Text>Apple Authentication is not supported on this device.</Text>
             </View>
         );
     }
 
+    // Handle the button press
+    async function signInWithPhoneNumber(phoneNumber) {
+        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+        console.log('signInWith~~ confirmation : ' + confirmation.confirm + "\tID : " + confirmation.verificationId);
+        setConfirm(confirmation);
+        console.log('signInWith~~ smsSetConfirm(): ' + setConfirm(confirmation));
+    }
+
+    async function confirmCode() {
+        try {
+            await confirm.confirm(code);
+            console.log('smscode : ' + code);
+            navigation.navigate('Shops');
+        } catch (error) {
+            console.log('Invalid code.' + error);
+        }
+    }
+    if (!confirm) {
+        return (
+            <View style={styles.background}>
+                <ScrollView>
+                    <View style={styles.header}>
+                        <Text style={styles.title}>DGTHRU</Text>
+                        <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+                    </View>
+                    <View style={styles.body}>
+
+                    </View>
+                    <View style={styles.footer}>
+                        <KeyboardAvoidingView
+                            behavior='position'
+                            keyboardVerticalOffset={20}
+                            style={styles.background}
+                        >
+                            <TextInput
+                                style={
+                                    [styles.components, styles.phoneNumber]
+                                }
+                                placeholder='010-1234-1234'
+                                onChangeText={text => onNumberChange(text)}
+                            />
+                            <Button
+                                style={[styles.components, { width: '50%' }]}
+                                title='로그인'
+                                onPress={() => signInWithPhoneNumber('+82' + number)}
+                            />
+                            <AppleButton
+                                style={styles.appleButton}
+                                cornerRadius={5}
+                                buttonStyle={AppleButton.Style.WHITE}
+                                buttonType={AppleButton.Type.SIGN_IN}
+                                onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
+                            />
+                        </KeyboardAvoidingView>
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
+
     return (
-        <View style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            backgroundColor: 'white'
-
-        }}>
-            <View style={styles.header}>
-                <Text style={styles.title}>DGTHRU</Text>
-                <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
-            </View>
-            <View style={
-                [styles.body, {
-                    height: '30%'
-                }]
-            }>
-
-            </View>
-            <View style={styles.footer}>
-                {/* TextInput 값을 props 넘겨야함 */}
-                <TextInput
-                    style={
-                        [styles.components, styles.phoneNumber]
-                    }
-                    placeholder='010-1234-1234'
-                    onChangeText={text => onChangeText(text)}
-                />
-                <Button
-                    style={styles.components}
-                    title='로그인'
-                    onPress={() => navigation.navigate('Verify')}
-                />
-                <AppleButton
-                    style={styles.appleButton}
-                    cornerRadius={5}
-                    buttonStyle={AppleButton.Style.WHITE}
-                    buttonType={AppleButton.Type.SIGN_IN}
-                    onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
-                />
-            </View>
+        <View style={styles.background}>
+            <ScrollView>
+                <View style={styles.header}>
+                    <Text style={styles.title}>DGTHRU</Text>
+                    <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+                </View>
+                <View style={styles.body}>
+                    <Text style={styles.subTitle}>{number}</Text>
+                    <KeyboardAvoidingView
+                        behavior='position'
+                        keyboardVerticalOffset={30}
+                        style={styles.background}
+                    >
+                        <TextInput
+                            style={styles.phoneNumber}
+                            placeholder='인증번호를 입력해주세요.'
+                            onChangeText={text => setCode(text)}
+                        />
+                        <Button
+                            title='인증하기'
+                            onPress={() => confirmCode()}
+                        />
+                    </KeyboardAvoidingView>
+                </View>
+                <View style={styles.footer}>
+                    <Text style={{margin:5}}>위 번호로 회원가입을 진행합니다.</Text>
+                </View>
+            </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create(
     {
+        background: {
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            backgroundColor: 'white'
+        },
         header: {
             height: '20%',
             margin: '20%'
 
         },
         body: {
-            backgroundColor: 'red'
+            height: '30%'
         },
         footer: {
-            height: '30%'
+            height: '30%',
+            alignSelf: 'center'
         },
         title: {
             fontSize: 44,
@@ -206,13 +287,16 @@ const styles = StyleSheet.create(
             paddingEnd: 40,
             margin: 10,
             fontSize: 15,
-            width: '50%'
+            width: 200,
+            textAlign:'center'
+            
         },
         appleButton: {
             width: 200,
             height: 45,
             margin: 'auto',
-          },
+            alignSelf:'center'
+        },
     }
 );
 export default Intro;
