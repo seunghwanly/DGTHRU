@@ -5662,6 +5662,11 @@ react-native-apple-authentication@^1.0.6:
   resolved "https://registry.yarnpkg.com/react-native-apple-authentication/-/react-native-apple-authentication-1.0.6.tgz#1105bcedf8ce5d0dc41ba4725284724f7ba5ca70"
   integrity sha512-RIPS5Fz2/Jc9RJYReXE8/uClZqhurtwRcXu4SZ8hOOdb6mxCM1r9FfbWg280Ndk9m2pXI6lup8hMi1ONVBmw+g==
 
+react-native-device-info@^5.6.4:
+  version "5.6.4"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.6.4.tgz#dfd378e4c5ee813ab21a68484950934d6860ad11"
+  integrity sha512-N7IC/bxE+UfdY1X/wLCIk3jFeVVazg33IXIVovE37+bdfndZx+dmeBcN2/XDgVT51rUC5K2S2m8vqkAFeBO/6Q==
+
 react-native-gesture-handler@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.7.0.tgz#0ef74a5ba836832e497dc49eb1ce58baa6c617e5"

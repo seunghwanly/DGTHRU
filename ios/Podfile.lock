@@ -376,6 +376,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNDeviceInfo (5.6.4):
+    - React
   - RNFBApp (8.3.0):
     - Firebase/CoreOnly (~> 6.28.1)
     - React
@@ -445,6 +447,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -538,6 +541,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
@@ -604,6 +609,7 @@ SPEC CHECKSUMS:
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
+  RNDeviceInfo: a576aac2f2927eb7e0058a27dad811c8e7cd1474
   RNFBApp: d55b3a69d199cff25ecf4f3bf41a86c47aa37d57
   RNFBAuth: 8cdec65b3c88e8f5b2aa0109d8cbfbaaa73fb379
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
