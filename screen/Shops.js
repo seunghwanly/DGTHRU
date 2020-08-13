@@ -36,6 +36,11 @@ const shopData = [
         id: 'singong_1f',
         title: '신공학관 1층 카페',
         location: '신공학관 1층'
+    },
+    {
+        id: 'library_1f',
+        title: '중앙도서관 1층 카페',
+        location: '중앙도서관 1층'
     }
 ];
 
