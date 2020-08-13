@@ -1,53 +1,33 @@
-// 가게별로 메뉴를 소환할 예정 !
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  SectionList
-} from "react-native";
+import React from 'react';
+import { View, Text, FlatList } from 'react-native';
 
-const DATA = [
-  {
-    title: "Main dishes",
-    data: ["Pizza", "Burger", "Risotto"]
-  },
-  {
-    title: "Sides",
-    data: ["French Fries", "Onion Rings", "Fried Shrimps"]
-  },
-  {
-    title: "Drinks",
-    data: ["Water", "Coke", "Beer"]
-  },
-  {
-    title: "Desserts",
-    data: ["Cheese Cake", "Ice Cream"]
-  }
-];
+import { enableScreens } from 'react-native-screens';
 
-const Item = ({ title }) => (
-  <View >
-    <Text>{title}</Text>
-  </View>
-);
+import HyehwaDessert from './data/HyehwaDessert.json';
 
-const Menu = () => (
-  <SafeAreaView >
-    <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item title={item} />}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
-      )}
-    />
-  </SafeAreaView>
-);
 
-const styles = StyleSheet.create({
-  
-});
+enableScreens();
 
-export default Menu;
+function Hyehwa({ navigation }) {
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'column' }}>
+      <Text >
+        HyehwaDessert List
+           </Text>
+      <FlatList
+        data={HyehwaDessert}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) =>
+          <View >
+            <Text>{item.name}</Text>
+          </View>
+        }
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  );
+}
+
+
+export default Hyehwa;

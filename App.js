@@ -2,6 +2,10 @@ import React from 'react';
 import Intro from './screen/Intro';
 import Shops from './screen/Shops';
 import Verify from './screen/Verify';
+
+//shops
+import Hyehwa from './screen/menu/Hyehwa';
+
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,6 +24,7 @@ export default App = () => {
         <Stack.Screen name="Intro" component={Intro} />
         <Stack.Screen name="Verify" component={Verify} />
         <Stack.Screen name="Shops" component={Shops} />
+        <Stack.Screen name="Hyehwa" component={Hyehwa} />
       </Stack.Navigator>
     </NavigationContainer>
   );

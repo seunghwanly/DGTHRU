@@ -11,8 +11,6 @@ import {
 import auth from '@react-native-firebase/auth';
 
 import { enableScreens } from 'react-native-screens';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 enableScreens();
 
@@ -63,52 +61,105 @@ const shopData = [
     // }
 ];
 
-const Item = ({ title, location, navigation }) => (
-    <TouchableOpacity
-        style={{ width: 300 }}
-        onPress={() => alert('title' + { title } + 'location' + {location})}
-    >
-        <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems:'center' }}>
-            <View style={
-                {
-                    borderRadius: 25,
-                    width: 25,
-                    height: 25,
-                    backgroundColor: 'deepskyblue'
-                }
+class Item extends React.Component {
+
+    _onPress = () => {
+        if(this.props.id === 'hyehwa_roof') {
+            if(this.props.navigation !== null) {
+                console.log('fucking shit !');
+                this.props.navigation.navigate('Hyehwa');
             }
-            />
-            <View style={
-                {
-                    backgroundColor: 'lightgray',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flex: 1,
-                    marginStart: 20,
-                    borderRadius: 12,
-                    padding:5
-                }
-            }>
-                <Text style={
-                    {
-                        fontSize: 15,
-                        fontWeight: 'bold',
-                        textAlign:'center'
+        }
+        else
+            this.props.onPressItem(this.props.id);
+        
+        
+    };
+
+    render() {
+
+        var title = this.props.title;
+        var location = this.props.location;
+
+        return (
+            <TouchableOpacity
+                style={{ width: 300 }}
+                onPress={this._onPress}
+            >
+                <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems: 'center' }}>
+                    <View style={
+                        {
+                            borderRadius: 25,
+                            width: 25,
+                            height: 25,
+                            backgroundColor: 'deepskyblue'
+                        }
                     }
-                }>{title}</Text>
-            </View>
-        </View>
-        <View>
-            <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd:10 }}>{location}</Text>
-        </View>
-    </TouchableOpacity>
-);
+                    />
+                    <View style={
+                        {
+                            backgroundColor: 'lightgray',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                            marginStart: 20,
+                            borderRadius: 12,
+                            padding: 5
+                        }
+                    }>
+                        <Text style={
+                            {
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                textAlign: 'center'
+                            }
+                        }>{title}</Text>
+                    </View>
+                </View>
+                <View>
+                    <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd: 10 }}>{location}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
 
 function Shops({ navigation }) {
 
+    const onPressItem = (id) => {
+
+        switch (id) {
+            case 'main_outdoor':
+                alert('준비중입니다!');
+                break;
+            case 'singong_1f':
+                alert('준비중입니다!');
+                break;
+            case 'hyehwa_roof':
+                alert('혜화관디저트카페');
+                break;
+            case 'economy_outdoor':
+                alert('준비중입니다!');
+                break;
+            case 'munhwa_1f':
+                alert('준비중입니다!');
+                break;
+        }
+    }
+
     const renderItem = ({ item }) => (
-        <Item title={item.title} location={item.location} />
+        <Item
+            id={item.id}
+            title={item.title}
+            location={item.location}
+            onPressItem={onPressItem}
+            navigation={navigation}
+        />
     );
+
+    const keyExtractor = (item) => item.id;
+
+
 
     signOut = () => {
         auth()
@@ -128,7 +179,8 @@ function Shops({ navigation }) {
                     <FlatList
                         data={shopData}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={keyExtractor}
+
                     />
                 </View>
                 <View style={styles.footer}>
@@ -144,6 +196,7 @@ function Shops({ navigation }) {
         </>
     );
 }
+
 const styles = StyleSheet.create({
     background: {
         width: '100%',

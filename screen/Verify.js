@@ -159,7 +159,7 @@ function Verify({ navigation, number }) {
     async function confirmCode() {
         try {
             await confirm.confirm(code)
-            .then(() => navigation.navigate('Shops'));
+            .then(() => navigation.navigate('Shops', { navigation: navigation}));
             console.log('smscode : ' + code);
         } catch (error) {
             console.log('Invalid code.' + error);
