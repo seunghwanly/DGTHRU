@@ -17,31 +17,50 @@ import { createStackNavigator } from '@react-navigation/stack';
 enableScreens();
 
 const shopData = [
-    {
-        id: 'hyehwa_1f',
-        title: '혜화관 1층 카페',
-        location: '혜화관 1층'
-    },
-    {
-        id: 'munhwa_1f',
-        title: '문화관 지하1층 카페',
-        location: '문화관 지하1층'
-    },
+    // 체인점
+    // {
+    //     id: 'hyehwa_1f',
+    //     title: '혜화 디초콜릿',
+    //     location: '혜화관 1층'
+    // },
     {
         id: 'main_outdoor',
-        title: '본관 야외 카페',
+        title: '가온누리',
         location: '본관 야외 휴게장소'
     },
     {
         id: 'singong_1f',
-        title: '신공학관 1층 카페',
+        title: '남산학사 1층 카페',
         location: '신공학관 1층'
     },
     {
-        id: 'library_1f',
-        title: '중앙도서관 1층 카페',
-        location: '중앙도서관 1층'
-    }
+        id: 'hyehwa_roof',
+        title: '혜화 디저트 카페',
+        location: '혜화관 옥상'
+    },
+    //생협아닌가봄 >> 인가봄
+    {
+        id: 'economy_outdoor',
+        title: '그루터기',
+        location: '경영관 야외'
+    },
+    {
+        id: 'munhwa_1f',
+        title: '카페두리터',
+        location: '학술문화관 지하1층'
+    },
+    // 체인점
+    // {
+    //     id: 'iphakcheo_outdoor',
+    //     title: '블루팟 : 커피를 마신다',
+    //     location: '입학처 야외공간'
+    // },
+    // 생협아닌가봄
+    // {
+    //     id: 'library_1f',
+    //     title: '팬도로시',
+    //     location: '중앙도서관 1층'
+    // }
 ];
 
 const Item = ({ title, location, navigation }) => (
@@ -72,14 +91,15 @@ const Item = ({ title, location, navigation }) => (
             }>
                 <Text style={
                     {
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: 'bold',
+                        textAlign:'center'
                     }
                 }>{title}</Text>
             </View>
         </View>
         <View>
-            <Text style={{ textAlign: 'right', color: 'gray', fontSize: 12, marginEnd:10 }}>{location}</Text>
+            <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd:10 }}>{location}</Text>
         </View>
     </TouchableOpacity>
 );
