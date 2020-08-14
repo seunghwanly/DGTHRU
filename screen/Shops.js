@@ -70,6 +70,12 @@ class Item extends React.Component {
                 this.props.navigation.navigate('HyehwaDessert');
             }
         }
+        else if(this.props.id === 'singong_1f') {
+            if(this.props.navigation !== null) {
+                console.log('fucking shit !');
+                this.props.navigation.navigate('DormDessert');
+            }
+        }
         else
             this.props.onPressItem(this.props.id);
         
@@ -133,7 +139,7 @@ function Shops({ navigation }) {
                 alert('준비중입니다!');
                 break;
             case 'singong_1f':
-                alert('준비중입니다!');
+                alert('남산학사카페');
                 break;
             case 'hyehwa_roof':
                 alert('혜화관디저트카페');
