@@ -199,7 +199,7 @@ function Verify({ navigation, number }) {
                                 style={styles.appleButton}
                                 cornerRadius={5}
                                 buttonStyle={AppleButton.Style.WHITE}
-                                buttonType={AppleButton.Type.SIGN_IN}
+                                buttonType={AppleButton.Type.CONTINUE}
                                 onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
                             />
                             }
@@ -259,10 +259,10 @@ const styles = StyleSheet.create(
 
         },
         body: {
-            height: '30%'
+            height: '50%'
         },
         footer: {
-            height: '30%',
+            height: '20%',
             alignSelf: 'center',
             alignItems: 'center'
         },
