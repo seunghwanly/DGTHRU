@@ -4,12 +4,13 @@
     "location": "혜화관 옥상",
     "categories_drink": [
         {
-            "category_name": "espresso",
+            "category_name": "Espresso",
             "menu": [
                 {
                     "name": "에스프레소",
                     "cost": 2300,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {
@@ -71,15 +72,17 @@
             "category_name": "Tea",
             "menu": [
                 {
-                    "name": "레몬차 모과차",
+                    "name": "레몬모과차",
                     "cost": 3600,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {
                     "name": "유자차",
                     "cost": 3600,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {
@@ -111,6 +114,7 @@
                     "name": "고구마라떼",
                     "cost": 3000,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {
@@ -145,6 +149,7 @@
                     "name": "오곡라떼",
                     "cost": 3000,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {
@@ -158,6 +163,7 @@
                     "name": "스팀우유",
                     "cost": 2300,
                     "ice_available": false,
+                    "ice_cost": 0,
                     "sold_out":false
                 },
                 {

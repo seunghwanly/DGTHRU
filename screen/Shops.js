@@ -67,7 +67,7 @@ class Item extends React.Component {
         if(this.props.id === 'hyehwa_roof') {
             if(this.props.navigation !== null) {
                 console.log('fucking shit !');
-                this.props.navigation.navigate('Hyehwa');
+                this.props.navigation.navigate('HyehwaDessert');
             }
         }
         else
@@ -92,7 +92,7 @@ class Item extends React.Component {
                             borderRadius: 25,
                             width: 25,
                             height: 25,
-                            backgroundColor: 'deepskyblue'
+                            backgroundColor: 'cornflowerblue'
                         }
                     }
                     />

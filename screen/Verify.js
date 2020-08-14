@@ -140,14 +140,6 @@ function Verify({ navigation, number }) {
         number = inputNumber;
     }
 
-    if (!appleAuth.isSupported) {
-        return (
-            <View style={styles.footer}>
-                <Text>Apple Authentication is not supported on this device.</Text>
-            </View>
-        );
-    }
-
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
@@ -159,7 +151,7 @@ function Verify({ navigation, number }) {
     async function confirmCode() {
         try {
             await confirm.confirm(code)
-            .then(() => navigation.navigate('Shops', { navigation: navigation}));
+                .then(() => navigation.navigate('Shops', { navigation: navigation }));
             console.log('smscode : ' + code);
         } catch (error) {
             console.log('Invalid code.' + error);
@@ -174,12 +166,9 @@ function Verify({ navigation, number }) {
                         <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
                     </View>
                     <View style={styles.body}>
-
-                    </View>
-                    <View style={styles.footer}>
                         <KeyboardAvoidingView
                             behavior='position'
-                            keyboardVerticalOffset={20}
+                            keyboardVerticalOffset={30}
                             style={styles.background}
                         >
                             <TextInput
@@ -194,6 +183,18 @@ function Verify({ navigation, number }) {
                                 title='인증번호 보내기'
                                 onPress={() => signInWithPhoneNumber('+82' + number)}
                             />
+                        </KeyboardAvoidingView>
+
+                    </View>
+                    <View style={styles.footer}>
+                            {
+                                appleAuth.isSupported === false ? 
+
+                                <View style={styles.footer}>
+                                    <Text>Apple Authentication is not supported on this device.</Text>
+                                </View>
+
+                                :
                             <AppleButton
                                 style={styles.appleButton}
                                 cornerRadius={5}
@@ -201,7 +202,7 @@ function Verify({ navigation, number }) {
                                 buttonType={AppleButton.Type.SIGN_IN}
                                 onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
                             />
-                        </KeyboardAvoidingView>
+                            }
                     </View>
                 </ScrollView>
             </View>
@@ -219,7 +220,7 @@ function Verify({ navigation, number }) {
                     <Text style={styles.subTitle}>{number}</Text>
                     <KeyboardAvoidingView
                         behavior='position'
-                        keyboardVerticalOffset={30}
+                        keyboardVerticalOffset={20}
                         style={styles.background}
                     >
                         <TextInput
@@ -234,7 +235,7 @@ function Verify({ navigation, number }) {
                     </KeyboardAvoidingView>
                 </View>
                 <View style={[styles.footer, styles.subTitle]}>
-                    <Text style={{margin:15, textAlign:'center'}}>위 번호로 회원가입을 진행합니다.</Text>
+                    <Text style={{ margin: 15, textAlign: 'center' }}>위 번호로 회원가입을 진행합니다.</Text>
                 </View>
             </ScrollView>
         </View>
@@ -249,7 +250,8 @@ const styles = StyleSheet.create(
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            flex:1
         },
         header: {
             height: '20%',
@@ -262,7 +264,7 @@ const styles = StyleSheet.create(
         footer: {
             height: '30%',
             alignSelf: 'center',
-            alignItems:'center'
+            alignItems: 'center'
         },
         title: {
             fontSize: 44,
@@ -289,14 +291,14 @@ const styles = StyleSheet.create(
             margin: 10,
             fontSize: 15,
             width: 200,
-            textAlign:'center'
-            
+            textAlign: 'center'
+
         },
         appleButton: {
             width: 200,
             height: 45,
             margin: 'auto',
-            alignSelf:'center'
+            alignSelf: 'center'
         },
     }
 );
