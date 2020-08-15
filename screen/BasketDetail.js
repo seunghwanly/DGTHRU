@@ -10,11 +10,13 @@ import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
-export default BasketDetail = ({ route }) => { 
+export default BasketDetail = ({ navigation, route }) => { 
+
+    const { item }= route.params; 
 
     return (
         <View>
-            
+            <Text>{item}</Text>
         </View>
     )
 }

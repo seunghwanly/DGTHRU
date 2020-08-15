@@ -15,7 +15,7 @@ import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
-export default Basket = ({ naivgation, route }) => {
+export default Basket = ({ navigation, route }) => {
 
     const { item } = route.params;
 
@@ -126,10 +126,8 @@ export default Basket = ({ naivgation, route }) => {
     }
 
     handleOrder = () => {
-        if (count >= 1
-            && selected !== null
-            && inOrOut !== null
-        ) {
+        if (count >= 1 && inOrOut !== null) {
+
             const orderList = {
                 "name": item.name,
                 "count" : count,
@@ -138,7 +136,14 @@ export default Basket = ({ naivgation, route }) => {
                 "cost": item.cost
             };
 
-            alert(orderList);
+            const orderList2 = [item.name, count, selected, inOrOut, item.cost];
+
+            // if() {
+            //     navigation.navigate('BasketDetail', { item : orderList2 })
+            // }
+            // else {
+            //     alert('모두 선택해주세요 !');
+            // }
 
         } else
             alert('모두 선택해주세요 !');
