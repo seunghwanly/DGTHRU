@@ -171,7 +171,7 @@ function Shops({ navigation }) {
         <>
             <View style={styles.background}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>DGTRHU</Text>
+                    <Text style={styles.title}>DGTHRU</Text>
                     <Text style={styles.subtitle}>동국대학교 CAFE LIST</Text>
                 </View>
 

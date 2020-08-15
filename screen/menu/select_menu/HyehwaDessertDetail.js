@@ -24,9 +24,8 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                             style={{
                                 justifyContent:'center',
                                 alignItems:'center',
-                                
                             }}
-                            onPress={() => alert(item.cost + '원입니다 !')}
+                            onPress={() => navigation.navigate('Basket', { item : item })}
                             >
                             <View style={styles.radiusIcon}>
                                 <Text style={{color:'white', fontWeight:'bold'}}>IMG</Text>

@@ -23,6 +23,7 @@
     "react-native-apple-authentication": "^1.0.6",
     "react-native-device-info": "^5.6.4",
     "react-native-gesture-handler": "^1.7.0",
+    "react-native-item-select": "^0.3.0",
     "react-native-reanimated": "^1.11.0",
     "react-native-safe-area-context": "^3.1.4",
     "react-native-screens": "^2.10.1",
