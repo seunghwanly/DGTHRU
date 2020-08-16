@@ -24,11 +24,14 @@ enableScreens();
 const drinkData = data.categories_drink;
 const bakeryData = data.categories_bakery;
 
-const userPhoneNumber = auth().currentUser.phoneNumber;
-const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
+//const userPhoneNumber = auth().currentUser.phoneNumber;
+//const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
 
 
 export default HyehwaDessert = ({ navigation }) => {
+
+    const userPhoneNumber = auth().currentUser.phoneNumber;
+    const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
 
     handleBasket = () => {
 

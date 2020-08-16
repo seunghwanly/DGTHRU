@@ -19,10 +19,10 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-const userPhoneNumber = auth().currentUser;
-var currentTime = moment().format('YYYY_MM_DD');
-
 export default Basket = ({ navigation, route }) => {
+
+    const userPhoneNumber = auth().currentUser;
+    var currentTime = moment().format('YYYY_MM_DD');
 
     const { item } = route.params;
 
@@ -146,7 +146,7 @@ export default Basket = ({ navigation, route }) => {
                 }
                 else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
                     if (item.hasOwnProperty('sub_menu')) {
-                        
+
                         if (selected !== null) {
 
                             const jsonOrderList = {
