@@ -50,7 +50,7 @@ function Intro({ navigation }) {
     }
 
     return (
-        <Shops />
+        <Shops navigation={navigation} />
     );
 }
 

@@ -1,0 +1,434 @@
+{
+    "id":"hyehwa_roof",
+    "shop": "혜화디저트카페",
+    "location": "혜화관 옥상",
+    "categories_drink": [
+        {
+            "category_name": "Espresso",
+            "menu": [
+                {
+                    "name": "에스프레소",
+                    "cost": 2300,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "아메리카노",
+                    "cost": 2000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                }
+            ]
+        },
+        {
+            "category_name": "Coffee Beverage",
+            "menu": [
+                {
+                    "name": "카페라떼",
+                    "cost": 2600,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "카푸치노",
+                    "cost": 2600,
+                    "ice_available": false,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "바닐라라떼",
+                    "cost": 2900,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "헤즐넛라떼",
+                    "cost": 2900,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "카라멜마키아또",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "카페모카",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                }
+            ]
+        },
+        {
+            "category_name": "Tea",
+            "menu": [
+                {
+                    "name": "레몬모과차",
+                    "cost": 3600,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "유자차",
+                    "cost": 3600,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "허브차",
+                    "cost": 2700,
+                    "ice_available": true,
+                    "ice_cost": 300,
+                    "sub_menu": [
+                        "작설",
+                        "얼그레이",
+                        "페퍼민트",
+                        "캐모마일"
+                    ],
+                    "sold_out":false,
+                    "only_ice":false
+                }
+            ]
+        },
+        {
+            "category_name": "Latte",
+            "menu": [
+                {
+                    "name": "녹차라떼",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "고구마라떼",
+                    "cost": 3000,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "초코라떼",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "민트녹차라떼",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "홍차라떼(밀크티)",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "슈라떼",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "오곡라떼",
+                    "cost": 3000,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "밀크티초콜렛",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "스팀우유",
+                    "cost": 2300,
+                    "ice_available": false,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                },
+                {
+                    "name": "토피넛라떼",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":false
+                }
+            ]
+        },
+        {
+            "category_name": "Smoothie",
+            "menu": [
+                {
+                    "name": "스무디",
+                    "cost": 3000,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sub_menu": [
+                        "딸기",
+                        "유자",
+                        "망고"
+                    ],
+                    "sold_out":false,
+                    "only_ice":true
+                },
+                {
+                    "name": "요거트스무디",
+                    "cost": 3400,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sub_menu": [
+                        "플레인",
+                        "딸기",
+                        "망고",
+                        "유자"
+                    ],
+                    "sold_out":false,
+                    "only_ice":true
+                },
+                {
+                    "name": "오곡쉐이크",
+                    "cost": 3400,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":true
+                }
+            ]
+        },
+        {
+            "category_name": "Frappucino",
+            "menu": [
+                {
+                    "name": "프라프치노",
+                    "cost": 3600,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sub_menu": [
+                        "녹차",
+                        "초코",
+                        "민트초코",
+                        "자바칩",
+                        "초코슈크림",
+                        "딸기슈크림"
+                    ],
+                    "sold_out":false,
+                    "only_ice":true
+                }
+            ]
+        },
+        {
+            "category_name": "Fresh Juice",
+            "menu": [
+                {
+                    "name": "생과일주스",
+                    "cost": 3700,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sub_menu": [
+                        "딸기",
+                        "딸기바나나"
+                    ],
+                    "sold_out":false,
+                    "only_ice":true
+                },
+                {
+                    "name": "바나나주스",
+                    "cost": 3500,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":true
+                }
+            ]
+        },
+        {
+            "category_name": "Juice",
+            "menu": [
+                {
+                    "name": "자몽주스",
+                    "cost": 2700,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":true
+                },
+                {
+                    "name": "레몬주스",
+                    "cost": 2700,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":true
+                },
+                {
+                    "name": "아이스티(복숭아)",
+                    "cost": 2700,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sold_out":false,
+                    "only_ice":true
+                }
+            ]
+        },
+        {
+            "category_name": "Ade",
+            "menu": [
+                {
+                    "name": "에이드",
+                    "cost": 2700,
+                    "ice_available": true,
+                    "ice_cost": 0,
+                    "sub_menu": [
+                        "레몬",
+                        "자몽",
+                        "유자"
+                    ],
+                    "sold_out":false,
+                    "only_ice":true
+                }
+            ]
+        },
+        {
+            "category_name": "Others",
+            "menu": [
+                {
+                    "name": "샷추가",
+                    "cost": 500,
+                    "sold_out":false
+                },
+                {
+                    "name": "시럽추가",
+                    "cost": 500,
+                    "sold_out":false
+                },
+                {
+                    "name": "생크림추가",
+                    "cost": 500,
+                    "sold_out":false
+                }
+            ]
+        }
+    ],
+    "categories_bakery":[
+        {
+            "category_name":"SandWich",
+            "menu":[
+                {
+                    "name":"수제핫도그",
+                    "cost":2500,
+                    "sold_out":false
+                },
+                {
+                    "name":"크로크무슈",
+                    "cost":2000,
+                    "sold_out":false
+                },
+                {
+                    "name":"치즈치아바타",
+                    "cost":3800,
+                    "sold_out":false
+                }
+            ]
+        },
+        {
+            "category_name":"Bakery",
+            "menu":[
+                {
+                    "name":"초코머핀",
+                    "cost":2200,
+                    "sold_out":false
+                },
+                {
+                    "name":"치즈머핀",
+                    "cost":2200,
+                    "sold_out":false
+                },
+                {
+                    "name":"조각케잌",
+                    "cost":4000,
+                    "sold_out":false
+                },
+                {
+                    "name":"롤케잌",
+                    "cost":3800,
+                    "sold_out":false
+                },
+                {
+                    "name":"프레즐",
+                    "cost":2200,
+                    "sold_out":false
+                }
+            ]
+        },
+        {
+            "category_name":"Bagel",
+            "menu":[
+                { 
+                    "name":"베이글+크림치즈", "cost":3800, "sold_out":false
+                }
+            ]
+        },
+        {
+            "category_name":"Waffle",
+            "menu":[
+                { 
+                    "name":"플레인", "cost":2000, "sold_out":false,
+                    "sub_menu":[
+                        {
+                            "name":"생크림",
+                            "cost":500
+                        },
+                        {
+                            "name":"시럽",
+                            "cost":500,
+                            "sub_menu":[
+                                "초코", "카라멜", "메이플"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

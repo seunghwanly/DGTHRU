@@ -11,84 +11,155 @@ import {
 import auth from '@react-native-firebase/auth';
 
 import { enableScreens } from 'react-native-screens';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 enableScreens();
 
 const shopData = [
-    {
-        id: 'hyehwa_1f',
-        title: '혜화관 1층 카페',
-        location: '혜화관 1층'
-    },
-    {
-        id: 'munhwa_1f',
-        title: '문화관 지하1층 카페',
-        location: '문화관 지하1층'
-    },
+    // 체인점
+    // {
+    //     id: 'hyehwa_1f',
+    //     title: '혜화 디초콜릿',
+    //     location: '혜화관 1층'
+    // },
     {
         id: 'main_outdoor',
-        title: '본관 야외 카페',
+        title: '가온누리',
         location: '본관 야외 휴게장소'
     },
     {
         id: 'singong_1f',
-        title: '신공학관 1층 카페',
+        title: '남산학사 1층 카페',
         location: '신공학관 1층'
     },
     {
-        id: 'library_1f',
-        title: '중앙도서관 1층 카페',
-        location: '중앙도서관 1층'
-    }
+        id: 'hyehwa_roof',
+        title: '혜화 디저트 카페',
+        location: '혜화관 옥상'
+    },
+    //생협아닌가봄 >> 인가봄
+    {
+        id: 'economy_outdoor',
+        title: '그루터기',
+        location: '경영관 야외'
+    },
+    {
+        id: 'munhwa_1f',
+        title: '카페두리터',
+        location: '학술문화관 지하1층'
+    },
+    // 체인점
+    // {
+    //     id: 'iphakcheo_outdoor',
+    //     title: '블루팟 : 커피를 마신다',
+    //     location: '입학처 야외공간'
+    // },
+    // 생협아닌가봄
+    // {
+    //     id: 'library_1f',
+    //     title: '팬도로시',
+    //     location: '중앙도서관 1층'
+    // }
 ];
 
-const Item = ({ title, location, navigation }) => (
-    <TouchableOpacity
-        style={{ width: 300 }}
-        onPress={() => alert('title' + { title } + 'location' + {location})}
-    >
-        <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems:'center' }}>
-            <View style={
-                {
-                    borderRadius: 25,
-                    width: 25,
-                    height: 25,
-                    backgroundColor: 'deepskyblue'
-                }
+class Item extends React.Component {
+
+    _onPress = () => {
+        if(this.props.id === 'hyehwa_roof') {
+            if(this.props.navigation !== null) {
+                console.log('fucking shit !');
+                this.props.navigation.navigate('HyehwaDessert');
             }
-            />
-            <View style={
-                {
-                    backgroundColor: 'lightgray',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flex: 1,
-                    marginStart: 20,
-                    borderRadius: 12,
-                    padding:5
-                }
-            }>
-                <Text style={
-                    {
-                        fontSize: 20,
-                        fontWeight: 'bold',
+        }
+        else
+            this.props.onPressItem(this.props.id);
+        
+        
+    };
+
+    render() {
+
+        var title = this.props.title;
+        var location = this.props.location;
+
+        return (
+            <TouchableOpacity
+                style={{ width: 300 }}
+                onPress={this._onPress}
+            >
+                <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems: 'center' }}>
+                    <View style={
+                        {
+                            borderRadius: 25,
+                            width: 25,
+                            height: 25,
+                            backgroundColor: 'cornflowerblue'
+                        }
                     }
-                }>{title}</Text>
-            </View>
-        </View>
-        <View>
-            <Text style={{ textAlign: 'right', color: 'gray', fontSize: 12, marginEnd:10 }}>{location}</Text>
-        </View>
-    </TouchableOpacity>
-);
+                    />
+                    <View style={
+                        {
+                            backgroundColor: 'lightgray',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                            marginStart: 20,
+                            borderRadius: 12,
+                            padding: 5
+                        }
+                    }>
+                        <Text style={
+                            {
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                textAlign: 'center'
+                            }
+                        }>{title}</Text>
+                    </View>
+                </View>
+                <View>
+                    <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd: 10 }}>{location}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
 
 function Shops({ navigation }) {
 
+    const onPressItem = (id) => {
+
+        switch (id) {
+            case 'main_outdoor':
+                alert('준비중입니다!');
+                break;
+            case 'singong_1f':
+                alert('준비중입니다!');
+                break;
+            case 'hyehwa_roof':
+                alert('혜화관디저트카페');
+                break;
+            case 'economy_outdoor':
+                alert('준비중입니다!');
+                break;
+            case 'munhwa_1f':
+                alert('준비중입니다!');
+                break;
+        }
+    }
+
     const renderItem = ({ item }) => (
-        <Item title={item.title} location={item.location} />
+        <Item
+            id={item.id}
+            title={item.title}
+            location={item.location}
+            onPressItem={onPressItem}
+            navigation={navigation}
+        />
     );
+
+    const keyExtractor = (item) => item.id;
+
+
 
     signOut = () => {
         auth()
@@ -100,7 +171,7 @@ function Shops({ navigation }) {
         <>
             <View style={styles.background}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>DGTRHU</Text>
+                    <Text style={styles.title}>DGTHRU</Text>
                     <Text style={styles.subtitle}>동국대학교 CAFE LIST</Text>
                 </View>
 
@@ -108,7 +179,8 @@ function Shops({ navigation }) {
                     <FlatList
                         data={shopData}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={keyExtractor}
+
                     />
                 </View>
                 <View style={styles.footer}>
@@ -124,6 +196,7 @@ function Shops({ navigation }) {
         </>
     );
 }
+
 const styles = StyleSheet.create({
     background: {
         width: '100%',

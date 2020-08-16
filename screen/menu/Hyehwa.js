@@ -1,53 +1,84 @@
-// 가게별로 메뉴를 소환할 예정 !
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  SectionList
-} from "react-native";
+import React from 'react';
+import { View, Text, SectionList } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const DATA = [
-  {
-    title: "Main dishes",
-    data: ["Pizza", "Burger", "Risotto"]
-  },
-  {
-    title: "Sides",
-    data: ["French Fries", "Onion Rings", "Fried Shrimps"]
-  },
-  {
-    title: "Drinks",
-    data: ["Water", "Coke", "Beer"]
-  },
-  {
-    title: "Desserts",
-    data: ["Cheese Cake", "Ice Cream"]
+import { enableScreens } from 'react-native-screens';
+
+//json
+import * as data from './data/HyehwaDessert.json';
+
+enableScreens();
+
+const drinkData = data.categories_drink;
+
+const CategroyInfo = ({ category, menu }) => {
+
+  const MenuDetail = () => {
+    const mapToList = (data) => {
+      return data.map((menu, i) => {
+        return (
+          <MenuInfo
+            menu={menu}
+            key={i}
+          />
+        );
+      });
+    };
+    return (
+      <View style={{flexDirection:'row', margin:10}}>
+        { mapToList(category.menu)}
+      </View>
+    )
   }
-];
 
-const Item = ({ title }) => (
-  <View >
-    <Text>{title}</Text>
-  </View>
-);
+  const MenuInfo = ({ menu }) => {
+    return (
+      <View>
+        <Text>{menu.name}</Text>
+        <Text>{menu.cost}</Text>
+      </View>
+    )
+  }
 
-const Menu = () => (
-  <SafeAreaView >
-    <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item title={item} />}
-      renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
-      )}
-    />
-  </SafeAreaView>
-);
+  return (
+    <View>
+      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{category.category_name}</Text>
+      <ScrollView
+        horizontal='true'
+        >
+        <MenuDetail />
+      </ScrollView>
+    </View>
+  );
+}
 
-const styles = StyleSheet.create({
-  
-});
+const CategoryMenu = () => {
+  const mapToComponent = (data) => {
+    return data.map((category, i) => {
+      return (
+        <CategroyInfo
+          category={category}
+          key={i}
+        />);
+    });
+  };
+  return (
+    <View>
+      { mapToComponent(drinkData)}
+    </View>
+  );
+}
 
-export default Menu;
+function Hyehwa({ navigation }) {
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'column', padding:10 }}>
+      <ScrollView>
+        <CategoryMenu />
+      </ScrollView>
+    </View>
+  );
+}
+
+
+export default Hyehwa;
