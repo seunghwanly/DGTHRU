@@ -67,7 +67,7 @@ class Item extends React.Component {
         if(this.props.id === 'hyehwa_roof') {
             if(this.props.navigation !== null) {
                 console.log('fucking shit !');
-                this.props.navigation.navigate('HyehwaDessert');
+                this.props.navigation.navigate('HyehwaDessert', {currentUser : user});
             }
         }
         else
