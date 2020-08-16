@@ -223,7 +223,7 @@ export default Basket = ({ navigation, route }) => {
 
                     }}>
                         {
-                            item.ice_available === true ?
+                            item.ice_available === true && item.only_ice === false ?
                                 <View style={{
                                     flexDirection: 'row',
                                     padding: 10,
@@ -277,7 +277,7 @@ export default Basket = ({ navigation, route }) => {
                                     />
                                 </View>
                                 :
-                                <></>
+                                 <Text>Hot / Ice 선택불가.</Text>
                         }
                         <Text>컵을 선택해주세요.</Text>
                         <View style={{
