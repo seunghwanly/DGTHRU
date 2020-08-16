@@ -9,11 +9,18 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import ReactNativeItemSelect from 'react-native-item-select';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+
+import moment from 'moment';
 
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
+
+
+const userPhoneNumber = auth().currentUser;
+var currentTime = moment().format('YYYY_MM_DD');
 
 export default Basket = ({ navigation, route }) => {
 
@@ -31,7 +38,6 @@ export default Basket = ({ navigation, route }) => {
     const [selected, setSelected] = useState(null);
     const [inOrOut, setInOrOut] = useState(null);
     const [hotOrIced, setHotOrIced] = useState(null);
-
 
 
     function ChooseDetail(props) {
@@ -133,54 +139,95 @@ export default Basket = ({ navigation, route }) => {
     handleOrder = (item) => {
         if (count >= 1 && inOrOut !== null) {
 
-            const orderList = {
-                "name": item.name,
-                "count": count,
-                "selected": selected,
-                "inorout": inOrOut,
-                "cost": item.cost
-            };
-
-            console.log(
-                '\n' + item.hasOwnProperty('sub_menu')
-                + '\n selected : ' + selected
-                + '\n ice ok ? : ' + item.ice_available
-                + '\n hot or ice : ' + hotOrIced
-            );
-
             if (item.ice_available === true && hotOrIced !== null) {
                 if (item.only_ice === true && hotOrIced === 'HOT') {
                     alert('본 메뉴는 ICE만 선택이 가능합니다 !');
                 }
                 else {
-                    console.log('item.ice_available === true && hotOrIced !== null');
                     if (item.hasOwnProperty('sub_menu')) {
-                        console.log('item.hasOwnProperty(sub_menu)');
-                        if (selected !== 'null') {
-                            console.log('selected');
-                            const orderList2 = [item.name, count, inOrOut, item.cost, hotOrIced, selected];
-                            navigation.navigate('BasketDetail', { item: orderList2 })
+                        if (selected !== null) {
+
+                            const jsonOrderList = {
+                                "name": item.name,
+                                "count": count,
+                                "in_out": inOrOut,
+                                "cost": item.cost,
+                                "hot_ice": hotOrIced,
+                                "selected": selected
+                            };
+
+                            // TODO : push to firebase !!
+                            const newReference = database()
+                                .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                .push();
+
+                            console.log('Auto generated key: ', newReference.key);
+
+                            newReference
+                                .set(jsonOrderList)
+                                .then(() => console.log('Data updated.'));
+
                         } else {
                             alert('모두 선택해주세요 !');
                         }
                     }
                     else {
-                        const orderList2 = [item.name, count, inOrOut, item.cost, hotOrIced];
-                        navigation.navigate('BasketDetail', { item: orderList2 })
+
+                        const jsonOrderList = {
+                            "name": item.name,
+                            "count": count,
+                            "in_out": inOrOut,
+                            "cost": item.cost,
+                            "hot_ice": hotOrIced,
+                            "selected": null
+                        };
+
+                        // TODO : push to firebase !!
+                        // TODO : push to firebase !!
+                        const newReference = database()
+                            .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                            .push();
+
+                        console.log('Auto generated key: ', newReference.key);
+
+                        newReference
+                            .set(jsonOrderList)
+                            .then(() => console.log('Data updated.'));
                     }
                 }
             }
-            else if ( item.ice_available === true && hotOrIced === null ) {
-                alert('모두 선택해주세요 !');    
+            else if (item.ice_available === true && hotOrIced === null) {
+                alert('모두 선택해주세요 !');
             }
             else {
-                const orderList2 = [item.name, count, inOrOut, item.cost];
-                        navigation.navigate('BasketDetail', { item: orderList2 })
+
+                const jsonOrderList = {
+                    "name": item.name,
+                    "count": count,
+                    "in_out": inOrOut,
+                    "cost": item.cost,
+                    "hot_ice": null,
+                    "selected": null
+                };
+
+                // TODO : push to firebase !!
+                // TODO : push to firebase !!
+                const newReference = database()
+                    .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                    .push();
+
+                console.log('Auto generated key: ', newReference.key);
+
+                newReference
+                    .set(jsonOrderList)
+                    .then(() => console.log('Data updated.'));
             }
 
         } else
             alert('모두 선택해주세요 !');
     }
+
+
 
     return (
         <View style={styles.background}>

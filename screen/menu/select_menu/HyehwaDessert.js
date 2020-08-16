@@ -3,7 +3,7 @@ import {
     View,
     Text,
     FlatList,
-    StyleSheet
+    StyleSheet, Button
 } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -12,14 +12,45 @@ import { enableScreens } from 'react-native-screens';
 //json
 import * as data from '../data/HyehwaDessert.json';
 
+//firebase
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+
+import moment from 'moment';
+
 enableScreens();
 
 //drink and bakery
 const drinkData = data.categories_drink;
 const bakeryData = data.categories_bakery;
 
+const userPhoneNumber = auth().currentUser.phoneNumber;
+const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
+
 
 export default HyehwaDessert = ({ navigation }) => {
+
+    handleBasket = () => {
+
+        let userBasketData = new Map();
+
+        reference
+            .once('value')
+            .then(
+                (snapshot) => {
+                    snapshot.forEach((childSnapShot) => {
+                        var key = childSnapShot.key;
+                        var val = childSnapShot.val();
+                        
+                        userBasketData.set(key, val);
+                    });
+                }
+            )
+
+        userBasketData.forEach( (value, key) => {
+            console.log('\n' + key + ' : ' + value);
+        })
+    }
 
     function MenuInfo(item) {
 
@@ -36,7 +67,7 @@ export default HyehwaDessert = ({ navigation }) => {
 
         // }
         //navigate?
-       
+
     }
 
     return (
@@ -78,6 +109,13 @@ export default HyehwaDessert = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                 />
             </ScrollView>
+            {
+                reference !== null ?
+                    <Button
+                        title='장바구니'
+                        onPress={() => handleBasket()}
+                    /> : <></>
+            }
         </View>
     )
 }
@@ -114,6 +152,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginStart: 5,
         marginEnd: 5,
-        marginBottom:10
+        marginBottom: 10
     },
 })

@@ -12,11 +12,17 @@ enableScreens();
 
 export default BasketDetail = ({ navigation, route }) => { 
 
-    const { item }= route.params; 
+    const { orderArray }= route.params; 
+
+    var BasketData = new Array();
+
+    var BasketJson = new Object();
+    
 
     return (
         <View>
-            <Text>{item}</Text>
+            <Text>{orderArray}</Text>
+            <Button title='더 담기' onPress={() => navigation.navigate('HyehwaDessert', {orderList : orderArray})}></Button>
         </View>
     )
 }

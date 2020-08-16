@@ -17,6 +17,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
+import { View } from 'react-native';
+
 enableScreens();
 
 //const Stack = createNativeStackNavigator(); //>>예전 버전 !
