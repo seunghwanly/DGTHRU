@@ -11,14 +11,16 @@
                     "cost": 2300,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "아메리카노",
                     "cost": 2000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 }
             ]
         },
@@ -30,41 +32,47 @@
                     "cost": 2600,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "카푸치노",
                     "cost": 2600,
                     "ice_available": false,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "바닐라라떼",
                     "cost": 2900,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "헤즐넛라떼",
                     "cost": 2900,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "카라멜마키아또",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "카페모카",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 }
             ]
         },
@@ -76,14 +84,16 @@
                     "cost": 3600,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "유자차",
                     "cost": 3600,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "허브차",
@@ -96,7 +106,8 @@
                         "페퍼민트",
                         "캐모마일"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 }
             ]
         },
@@ -108,70 +119,80 @@
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "고구마라떼",
                     "cost": 3000,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "초코라떼",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "민트녹차라떼",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "홍차라떼(밀크티)",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "슈라떼",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "오곡라떼",
                     "cost": 3000,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "밀크티초콜렛",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "스팀우유",
                     "cost": 2300,
                     "ice_available": false,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 },
                 {
                     "name": "토피넛라떼",
                     "cost": 3000,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":false
                 }
             ]
         },
@@ -188,7 +209,8 @@
                         "유자",
                         "망고"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 },
                 {
                     "name": "요거트스무디",
@@ -201,14 +223,16 @@
                         "망고",
                         "유자"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 },
                 {
                     "name": "오곡쉐이크",
                     "cost": 3400,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 }
             ]
         },
@@ -228,7 +252,8 @@
                         "초코슈크림",
                         "딸기슈크림"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 }
             ]
         },
@@ -244,14 +269,16 @@
                         "딸기",
                         "딸기바나나"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 },
                 {
                     "name": "바나나주스",
                     "cost": 3500,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 }
             ]
         },
@@ -263,21 +290,24 @@
                     "cost": 2700,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 },
                 {
                     "name": "레몬주스",
                     "cost": 2700,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 },
                 {
                     "name": "아이스티(복숭아)",
                     "cost": 2700,
                     "ice_available": true,
                     "ice_cost": 0,
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 }
             ]
         },
@@ -294,7 +324,8 @@
                         "자몽",
                         "유자"
                     ],
-                    "sold_out":false
+                    "sold_out":false,
+                    "only_ice":true
                 }
             ]
         },

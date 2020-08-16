@@ -23,9 +23,14 @@ export default Basket = ({ navigation, route }) => {
         "매장용", "일회용"
     ];
 
+    const dataIceHot = [
+        "HOT", "ICED"
+    ];
+
     const [count, setCount] = useState(1);
     const [selected, setSelected] = useState(null);
     const [inOrOut, setInOrOut] = useState(null);
+    const [hotOrIced, setHotOrIced] = useState(null);
 
 
 
@@ -125,25 +130,53 @@ export default Basket = ({ navigation, route }) => {
         alert(item);
     }
 
-    handleOrder = () => {
+    handleOrder = (item) => {
         if (count >= 1 && inOrOut !== null) {
 
             const orderList = {
                 "name": item.name,
-                "count" : count,
-                "selected" : selected,
-                "inorout" : inOrOut,
+                "count": count,
+                "selected": selected,
+                "inorout": inOrOut,
                 "cost": item.cost
             };
 
-            const orderList2 = [item.name, count, selected, inOrOut, item.cost];
+            console.log(
+                '\n' + item.hasOwnProperty('sub_menu')
+                + '\n selected : ' + selected
+                + '\n ice ok ? : ' + item.ice_available
+                + '\n hot or ice : ' + hotOrIced
+            );
 
-            // if() {
-            //     navigation.navigate('BasketDetail', { item : orderList2 })
-            // }
-            // else {
-            //     alert('모두 선택해주세요 !');
-            // }
+            if (item.ice_available === true && hotOrIced !== null) {
+                if (item.only_ice === true && hotOrIced === 'HOT') {
+                    alert('본 메뉴는 ICE만 선택이 가능합니다 !');
+                }
+                else {
+                    console.log('item.ice_available === true && hotOrIced !== null');
+                    if (item.hasOwnProperty('sub_menu')) {
+                        console.log('item.hasOwnProperty(sub_menu)');
+                        if (selected !== 'null') {
+                            console.log('selected');
+                            const orderList2 = [item.name, count, inOrOut, item.cost, hotOrIced, selected];
+                            navigation.navigate('BasketDetail', { item: orderList2 })
+                        } else {
+                            alert('모두 선택해주세요 !');
+                        }
+                    }
+                    else {
+                        const orderList2 = [item.name, count, inOrOut, item.cost, hotOrIced];
+                        navigation.navigate('BasketDetail', { item: orderList2 })
+                    }
+                }
+            }
+            else if ( item.ice_available === true && hotOrIced === null ) {
+                alert('모두 선택해주세요 !');    
+            }
+            else {
+                const orderList2 = [item.name, count, inOrOut, item.cost];
+                        navigation.navigate('BasketDetail', { item: orderList2 })
+            }
 
         } else
             alert('모두 선택해주세요 !');
@@ -189,6 +222,63 @@ export default Basket = ({ navigation, route }) => {
                         padding: 2,
 
                     }}>
+                        {
+                            item.ice_available === true ?
+                                <View style={{
+                                    flexDirection: 'row',
+                                    padding: 10,
+                                }}>
+                                    <FlatList
+                                        data={dataIceHot}
+                                        renderItem={
+                                            ({ item }) => {
+
+                                                const backgroundColor = item.toString()
+                                                    === hotOrIced ?
+                                                    'royalblue' : 'lightgray';
+
+                                                const color = item.toString()
+                                                    === hotOrIced ?
+                                                    'white' : 'black';
+
+                                                return (
+                                                    <TouchableOpacity
+                                                        onPress={() => setHotOrIced(item.toString())}
+                                                        style={
+                                                            [
+                                                                {
+                                                                    backgroundColor
+                                                                },
+                                                                {
+                                                                    width: 80,
+                                                                    height: 40,
+                                                                    borderRadius: 8,
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    padding: 5,
+                                                                    margin: 2,
+
+                                                                }
+                                                            ]
+                                                        }>
+                                                        <Text style={
+                                                            {
+                                                                color
+                                                            }
+                                                        }> {item} </Text>
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                        }
+                                        numColumns={3}
+                                        keyExtractor={(item) => item.toString()}
+                                        extraData={hotOrIced}
+                                        scrollEnabled={false}
+                                    />
+                                </View>
+                                :
+                                <></>
+                        }
                         <Text>컵을 선택해주세요.</Text>
                         <View style={{
                             flexDirection: 'row',
@@ -256,7 +346,7 @@ export default Basket = ({ navigation, route }) => {
                                     paddingRight: 45,
                                 }
                             }
-                            onPress={() => handleOrder()}>
+                            onPress={() => handleOrder(item)}>
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
                         </TouchableOpacity>
                     </View>

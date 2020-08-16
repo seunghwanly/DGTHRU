@@ -7,7 +7,7 @@ import {
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
-
+ 
 enableScreens();
 
 export default HyehwaDessertDetail = ({ navigation, route }) => {
