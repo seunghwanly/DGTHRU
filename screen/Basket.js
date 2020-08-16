@@ -19,10 +19,10 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-const userPhoneNumber = auth().currentUser;
-var currentTime = moment().format('YYYY_MM_DD');
-
 export default Basket = ({ navigation, route }) => {
+
+    const userPhoneNumber = auth().currentUser;
+    var currentTime = moment().format('YYYY_MM_DD');
 
     const { item } = route.params;
 
@@ -137,14 +137,16 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
-        if (count >= 1 && inOrOut !== null) {
+        if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
 
-            if (item.ice_available === true && hotOrIced !== null) {
-                if (item.only_ice === true && hotOrIced === 'HOT') {
+            if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
+                
+                if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
                     alert('본 메뉴는 ICE만 선택이 가능합니다 !');
                 }
-                else {
+                else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
                     if (item.hasOwnProperty('sub_menu')) {
+
                         if (selected !== null) {
 
                             const jsonOrderList = {
@@ -270,7 +272,7 @@ export default Basket = ({ navigation, route }) => {
 
                     }}>
                         {
-                            item.ice_available === true && item.only_ice === false ?
+                            item.ice_available === true ?
                                 <View style={{
                                     flexDirection: 'row',
                                     padding: 10,
@@ -324,7 +326,7 @@ export default Basket = ({ navigation, route }) => {
                                     />
                                 </View>
                                 :
-                                 <Text>Hot / Ice 선택불가.</Text>
+                                <></>
                         }
                         <Text>컵을 선택해주세요.</Text>
                         <View style={{
