@@ -5,6 +5,7 @@ import {
     Button,
     StyleSheet
 } from 'react-native';
+import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
 import { enableScreens } from 'react-native-screens';
@@ -16,6 +17,7 @@ import Shops from './Shops';
 enableScreens();
 
 function Intro({ navigation }) {
+    
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();

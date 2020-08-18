@@ -1,7 +1,6 @@
 apply plugin: "com.android.application"
 //파이어베이스
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services' // <- Add this line
+apply plugin: "com.google.gms.google-services" // <- Add this line
 
 import com.android.build.OutputFile
 
@@ -137,6 +136,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -192,6 +193,8 @@ dependencies {
     //20200811 추가됨 
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+    //20200817 added
+    implementation 'com.android.support:multidex:1.0.3'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
