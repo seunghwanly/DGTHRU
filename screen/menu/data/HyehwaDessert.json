@@ -12,7 +12,16 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": [
+
+                            ],
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "아메리카노",
@@ -20,7 +29,16 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  [
+
+                            ],
+                            "syrup": true
+                         }
+                    ]
                 }
             ]
         },
@@ -33,14 +51,28 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "카푸치노",
                     "cost": 2600,
                     "ice_available": false,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "바닐라라떼",
@@ -48,7 +80,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "헤즐넛라떼",
@@ -56,7 +95,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "카라멜마키아또",
@@ -64,7 +110,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "카페모카",
@@ -72,7 +125,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot": 2,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -85,7 +145,14 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "유자차",
@@ -93,7 +160,14 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "허브차",
@@ -107,7 +181,14 @@
                         "캐모마일"
                     ],
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -120,7 +201,18 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "고구마라떼",
@@ -128,7 +220,18 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "초코라떼",
@@ -136,7 +239,18 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "민트녹차라떼",
@@ -144,7 +258,18 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "홍차라떼(밀크티)",
@@ -152,7 +277,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "슈라떼",
@@ -160,7 +292,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "오곡라떼",
@@ -168,7 +307,14 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "밀크티초콜렛",
@@ -176,7 +322,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "스팀우유",
@@ -184,7 +337,14 @@
                     "ice_available": false,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "토피넛라떼",
@@ -192,7 +352,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":false
+                    "only_ice":false,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -210,7 +377,18 @@
                         "망고"
                     ],
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "요거트스무디",
@@ -224,7 +402,18 @@
                         "유자"
                     ],
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "오곡쉐이크",
@@ -232,7 +421,18 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -253,7 +453,18 @@
                         "딸기슈크림"
                     ],
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -270,7 +481,18 @@
                         "딸기바나나"
                     ],
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "바나나주스",
@@ -278,7 +500,18 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": [
+                                "많이",
+                                "적게",
+                                "노노"
+                            ],
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -291,7 +524,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "레몬주스",
@@ -299,7 +539,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 },
                 {
                     "name": "아이스티(복숭아)",
@@ -307,7 +554,14 @@
                     "ice_available": true,
                     "ice_cost": 0,
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },
@@ -325,7 +579,14 @@
                         "유자"
                     ],
                     "sold_out":false,
-                    "only_ice":true
+                    "only_ice":true,
+                    "option_available" : [
+                        {
+                            "whipping": false,
+                            "shot":  false,
+                            "syrup": false
+                         }
+                    ]
                 }
             ]
         },

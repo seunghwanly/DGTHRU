@@ -34,10 +34,15 @@ export default Basket = ({ navigation, route }) => {
         "HOT", "ICED"
     ];
 
+    const dataWhippingCream = [
+        "많이", "적게", "노노"
+    ];
+
     const [count, setCount] = useState(1);
     const [selected, setSelected] = useState(null);
     const [inOrOut, setInOrOut] = useState(null);
     const [hotOrIced, setHotOrIced] = useState(null);
+    const [whippingCream, setWhippingCream] = useState(null);
 
 
     function ChooseDetail(props) {
@@ -145,6 +150,7 @@ export default Basket = ({ navigation, route }) => {
                     alert('본 메뉴는 ICE만 선택이 가능합니다 !');
                 }
                 else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
+
                     if (item.hasOwnProperty('sub_menu')) {
 
                         if (selected !== null) {
