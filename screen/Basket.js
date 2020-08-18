@@ -140,7 +140,7 @@ export default Basket = ({ navigation, route }) => {
         if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
 
             if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
-                
+
                 if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
                     alert('본 메뉴는 ICE만 선택이 가능합니다 !');
                 }
@@ -162,12 +162,13 @@ export default Basket = ({ navigation, route }) => {
                             const newReference = database()
                                 .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
                                 .push();
+                            const postKey = newReference.key;
 
-                            console.log('Auto generated key: ', newReference.key);
+                            console.log('Auto generated key: ', postKey);
 
                             newReference
                                 .set(jsonOrderList)
-                                .then(() => console.log('Data updated.'));
+                                .then(() => navigation.navigate('BasketDetail'));
 
                         } else {
                             alert('모두 선택해주세요 !');
@@ -189,12 +190,13 @@ export default Basket = ({ navigation, route }) => {
                         const newReference = database()
                             .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
                             .push();
+                        const postKey = newReference.key;
 
-                        console.log('Auto generated key: ', newReference.key);
+                        console.log('Auto generated key: ', postKey);
 
                         newReference
                             .set(jsonOrderList)
-                            .then(() => console.log('Data updated.'));
+                            .then(() => navigation.navigate('BasketDetail'));
                     }
                 }
             }
@@ -217,12 +219,13 @@ export default Basket = ({ navigation, route }) => {
                 const newReference = database()
                     .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
                     .push();
+                const postKey = newReference.key;
 
-                console.log('Auto generated key: ', newReference.key);
+                console.log('Auto generated key: ', postKey);
 
                 newReference
                     .set(jsonOrderList)
-                    .then(() => console.log('Data updated.'));
+                    .then(() => navigation.navigate('BasketDetail'));
             }
 
         } else
@@ -402,7 +405,24 @@ export default Basket = ({ navigation, route }) => {
                 </View>
                 <ChooseDetail subMenu={item} />
             </View>
-
+            <TouchableOpacity
+                style={
+                    {
+                        backgroundColor: 'midnightblue',
+                        padding: 10,
+                        borderRadius: 10,
+                        justifyContent: 'center',
+                        alignSelf: 'stretch',
+                        height: 40,
+                        paddingLeft: 45,
+                        paddingRight: 45,
+                        margin: 10
+                    }
+                }
+                onPress={() => navigation.navigate('BasketDetail')}
+            >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
+            </TouchableOpacity>
         </View>
     )
 }

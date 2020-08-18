@@ -24,9 +24,6 @@ enableScreens();
 const drinkData = data.categories_drink;
 const bakeryData = data.categories_bakery;
 
-//const userPhoneNumber = auth().currentUser.phoneNumber;
-//const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
-
 
 export default HyehwaDessert = ({ navigation }) => {
 
@@ -45,31 +42,12 @@ export default HyehwaDessert = ({ navigation }) => {
                         var key = childSnapShot.key;
                         var val = childSnapShot.val();
                         
+                        console.log(key, val);
+
                         userBasketData.set(key, val);
                     });
                 }
             )
-
-        userBasketData.forEach( (value, key) => {
-            console.log('\n' + key + ' : ' + value);
-        })
-    }
-
-    function MenuInfo(item) {
-
-        // for(var i=0; i<item.length; ++i) {
-
-        //     var menuName = item[i].name;
-        //     var menuCost = item[i].cost;
-        //     var iceAvailable = item[i].ice_available;
-        //     var soldOut = item[i].sold_out;
-
-        //     if(item[i].sub_menu !== null) {
-        //         var subMenu = item[i].sub_menu;
-        //     }
-
-        // }
-        //navigate?
 
     }
 
@@ -81,16 +59,27 @@ export default HyehwaDessert = ({ navigation }) => {
                 <FlatList
                     data={drinkData}
                     renderItem={
-                        ({ item }) => (
-                            <TouchableOpacity
-                                style={styles.radiusIcon}
-                                onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu })}
-                            >
-                                <Text style={styles.radiusText}>
-                                    {item.category_name}
-                                </Text>
-                            </TouchableOpacity>
-                        )}
+
+                        ({ item }) => {
+                        
+                            if(item.category_name !== 'Others') {
+                                return (
+                                <TouchableOpacity
+                                    style={styles.radiusIcon}
+                                    onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu })}
+                                >
+                                    <Text style={styles.radiusText}>
+                                        {item.category_name}
+                                    </Text>
+                                </TouchableOpacity>
+                                )
+                            } else {
+                                return(
+                                    <></>
+                                )
+                            }
+                        }
+                    }
                     numColumns={3}
                     keyExtractor={(item, index) => index.toString()}
                 />
@@ -155,6 +144,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginStart: 5,
         marginEnd: 5,
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop:10
     },
 })

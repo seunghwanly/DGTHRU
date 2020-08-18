@@ -10,7 +10,7 @@ import HyehwaDessertDetail from './screen/menu/select_menu/HyehwaDessertDetail';
 
 //Bakset
 import Basket from './screen/Basket';
-import BaksetDetail from './screen/BasketDetail';
+import BasketDetail from './screen/BasketDetail';
 
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
 import { NavigationContainer } from '@react-navigation/native';
