@@ -13,6 +13,8 @@ enableScreens();
 export default HyehwaDessertDetail = ({ navigation, route }) => {
 
     const { items } = route.params;
+    const { shopInfo } = route.params;
+
 
     return (
         <View style={styles.background}>
@@ -25,7 +27,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                                 justifyContent:'center',
                                 alignItems:'center',
                             }}
-                            onPress={() => navigation.navigate('Basket', { item : item })}
+                            onPress={() => navigation.navigate('Basket', { item : item, shopInfo : shopInfo })}
                             >
                             <View style={styles.radiusIcon}>
                                 <Text style={{color:'white', fontWeight:'bold'}}>IMG</Text>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Intro from './screen/Intro';
 import Shops from './screen/Shops';
 import Verify from './screen/Verify';
@@ -17,7 +17,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
-import { View } from 'react-native';
+import {
+  TouchableHighlight,
+  Image
+} from 'react-native';
 
 enableScreens();
 

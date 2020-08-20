@@ -25,7 +25,9 @@ const drinkData = data.categories_drink;
 const bakeryData = data.categories_bakery;
 
 
-export default HyehwaDessert = ({ navigation }) => {
+export default HyehwaDessert = ({ navigation, route }) => {
+
+    const { shopInfo } = route.params;
 
     const userPhoneNumber = auth().currentUser.phoneNumber;
     const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
@@ -66,7 +68,7 @@ export default HyehwaDessert = ({ navigation }) => {
                                 return (
                                 <TouchableOpacity
                                     style={styles.radiusIcon}
-                                    onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu })}
+                                    onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu, shopInfo : shopInfo })}
                                 >
                                     <Text style={styles.radiusText}>
                                         {item.category_name}
@@ -90,7 +92,7 @@ export default HyehwaDessert = ({ navigation }) => {
                     renderItem={
                         ({ item }) => (
                             <TouchableOpacity style={styles.radiusIcon}
-                                onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu })}
+                                onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu, shopInfo : shopInfo })}
                             >
                                 <Text style={styles.radiusText}>
                                     {item.category_name}

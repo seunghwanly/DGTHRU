@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 //파이어베이스
 apply plugin: "com.google.gms.google-services" // <- Add this line
 
+
 import com.android.build.OutputFile
 
 /**

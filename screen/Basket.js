@@ -25,6 +25,7 @@ export default Basket = ({ navigation, route }) => {
     var currentTime = moment().format('YYYY_MM_DD');
 
     const { item } = route.params;
+    const { shopInfo } = route.params;
 
     const dataInOrOut = [
         "매장용", "일회용"
@@ -144,19 +145,19 @@ export default Basket = ({ navigation, route }) => {
     handleOrder = (item) => {
         //TODO: 가게 정보 넣기
 
-        const orderListJson = {
-            'name' : item.name,
-            'cost' : item.cost,
-            'count' : count,
-            'cup' : inOrOut,
-            'type' : hotOrIced,
+        const jsonOrderList = {
+            'name': item.name,
+            'cost': item.cost,
+            'count': count,
+            'cup': inOrOut,
+            'type': hotOrIced,
             //옵션추가를 배열로 할지 고민중
         }
 
         //sold_out >> false 인 것 만
-        if(item.sold_out !== true) {
+        if (item.sold_out !== true) {
             //count 확인  + 매장용/일회용 선택
-            if(count >= 1 && inOrOut != null) {
+            if (count >= 1 && inOrOut != null) {
                 //ice 가능과 hotOrIced 선택되있는지 확인
                 /*
                     [ ice_available,    hotOrIced,  only_ice ]
@@ -173,23 +174,48 @@ export default Basket = ({ navigation, route }) => {
                     11. ice X,  ICED,   T    >> error : not exist
                     12. ice X,  ICED,   F    >> error : only hot
                 */
-               if(hotOrIced === null) { // 1,4
-                    if(
+                if (hotOrIced === null) { // 1,4
+                    if (
                         (item.ice_available === true && item.only_ice === true)
                         ||
                         (item.ice_available === false && item.only_ice === false)
                     ) {
                         // only HOT and ICED possible
                         //sub_menu 확인
-                        if(item.hasOwnProperty('sub_menu')) {
-                            if(selected !== null) { //selected menu detail
-                                if(item.hasOwnProperty('option_available')) {
+                        if (item.hasOwnProperty('sub_menu')) {
+                            if (selected !== null) { //selected menu detail
+                                if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
+                                    
+                                    // 가게 정보 >> shopInfo 
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                                 else {  //none option
                                     //push DB
+                                    
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                             }
                             else { //selected nothing
@@ -197,32 +223,80 @@ export default Basket = ({ navigation, route }) => {
                             }
                         }   //if
                         else {  //sub_menu none >> 단일메뉴임
-                            if(item.hasOwnProperty('option_available')) {
+                            if (item.hasOwnProperty('option_available')) {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
+
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
                             }
                             else {  //none option
                                 //push DB
-                            }   
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
+
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
+                            }
                         }   //else
                     }   //if
                     else {  // 2, 3
                         alert('모두 선택해주세요');
                     }
-               }    //1,2,3,4
-               else {
-                   if(hotOrIced === 'HOT' && item.only_ice === true) {  //6,8
+                }    //1,2,3,4
+                else {
+                    if (hotOrIced === 'HOT' && item.only_ice === false) {  //6,8
                         //sub_menu 확인
-                        if(item.hasOwnProperty('sub_menu')) {
-                            if(selected !== null) { //selected menu detail
-                                if(item.hasOwnProperty('option_available')) {
+                        if (item.hasOwnProperty('sub_menu')) {
+                            if (selected !== null) { //selected menu detail
+                                if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
+                                    
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                                 else {  //none option
                                     //push DB
+                                    
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                             }
                             else { //selected nothing
@@ -230,345 +304,332 @@ export default Basket = ({ navigation, route }) => {
                             }
                         }   //if
                         else {  //sub_menu none >> 단일메뉴임
-                            if(item.hasOwnProperty('option_available')) {
+                            if (item.hasOwnProperty('option_available')) {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
+
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
                             }
                             else {  //none option
                                 //push DB
-                            }   
-                        }   //else
-                   }
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
 
-                   if(hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
+                            }
+                        }   //else
+                    }
+
+                    if (hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
                         //sub_menu 확인
-                        if(item.hasOwnProperty('sub_menu')) {
-                            if(selected !== null) { //selected menu detail
-                                if(item.hasOwnProperty('option_available')) {
+                        if (item.hasOwnProperty('sub_menu')) {
+                            if (selected !== null) { //selected menu detail
+                                if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
+                                    
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                                 else {  //none option
                                     //push DB
+                                    
+                                    // TODO : push to firebase !!
+                                    const newReference = database()
+                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                        .push();
+                                    const postKey = newReference.key;
+
+                                    console.log('Auto generated key: ', postKey);
+
+                                    newReference
+                                        .set(jsonOrderList)
+                                        .then(() => navigation.navigate('BasketDetail'));
                                 }
                             }
                             else { //selected nothing
                                 alert('모두 선택해주세요');
                             }
                         }   //if
+
                         else {  //sub_menu none >> 단일메뉴임
-                            if(item.hasOwnProperty('option_available')) {
+                            if (item.hasOwnProperty('option_available')) {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
+
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
                             }
                             else {  //none option
                                 //push DB
-                            }   
-                        }   //else
-                   }
+                                
+                                // TODO : push to firebase !!
+                                const newReference = database()
+                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                                    .push();
+                                const postKey = newReference.key;
 
-                   else {   //5,7,11,12
+                                console.log('Auto generated key: ', postKey);
+
+                                newReference
+                                    .set(jsonOrderList)
+                                    .then(() => navigation.navigate('BasketDetail'));
+                            }
+                        }   //else
+                    }
+
+                    else {   //5,7,11,12
                         alert('선택항목을 확인해주세요 !');
-                   }
-               }    //5,6,7,8,9,10,11,12
+                    }
+                }    //5,6,7,8,9,10,11,12
             }
             else { //매장용/일회용 선택안한 경우
                 alert('컵을 선택해주세요 !');
             }
         }
-
-        // if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
-
-        //     if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
-
-        //         if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
-        //             alert('본 메뉴는 ICE만 선택이 가능합니다 !');
-        //         }
-        //         else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
-
-        //             if (item.hasOwnProperty('sub_menu')) {
-
-        //                 if (selected !== null) {
-
-        //                     const jsonOrderList = {
-        //                         "name": item.name,
-        //                         "count": count,
-        //                         "in_out": inOrOut,
-        //                         "cost": item.cost,
-        //                         "hot_ice": hotOrIced,
-        //                         "selected": selected
-        //                     };
-
-        //                     // TODO : push to firebase !!
-        //                     const newReference = database()
-        //                         .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-        //                         .push();
-        //                     const postKey = newReference.key;
-
-        //                     console.log('Auto generated key: ', postKey);
-
-        //                     newReference
-        //                         .set(jsonOrderList)
-        //                         .then(() => navigation.navigate('BasketDetail'));
-
-        //                 } else {
-        //                     alert('모두 선택해주세요 !');
-        //                 }
-        //             }
-        //             else {
-
-        //                 const jsonOrderList = {
-        //                     "name": item.name,
-        //                     "count": count,
-        //                     "in_out": inOrOut,
-        //                     "cost": item.cost,
-        //                     "hot_ice": hotOrIced,
-        //                     "selected": null
-        //                 };
-
-        //                 // TODO : push to firebase !!
-        //                 // TODO : push to firebase !!
-        //                 const newReference = database()
-        //                     .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-        //                     .push();
-        //                 const postKey = newReference.key;
-
-        //                 console.log('Auto generated key: ', postKey);
-
-        //                 newReference
-        //                     .set(jsonOrderList)
-        //                     .then(() => navigation.navigate('BasketDetail'));
-        //             }
-        //         }
-        //     }
-        //     else if (item.ice_available === true && hotOrIced === null) {
-        //         alert('모두 선택해주세요 !');
-        //     }
-        //     else {
-
-        //         const jsonOrderList = {
-        //             "name": item.name,
-        //             "count": count,
-        //             "in_out": inOrOut,
-        //             "cost": item.cost,
-        //             "hot_ice": null,
-        //             "selected": null
-        //         };
-
-        //         // TODO : push to firebase !!
-        //         // TODO : push to firebase !!
-        //         const newReference = database()
-        //             .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-        //             .push();
-        //         const postKey = newReference.key;
-
-        //         console.log('Auto generated key: ', postKey);
-
-        //         newReference
-        //             .set(jsonOrderList)
-        //             .then(() => navigation.navigate('BasketDetail'));
-        //     }
-
-        // } else
-        //     alert('모두 선택해주세요 !');
     }
 
 
+    if (item.sold_out === false) {
+        return (
+            <View style={styles.background}>
 
-    return (
-        <View style={styles.background}>
-
-            <View style={styles.subBackground}>
-                {/* 2줄 컬럼형 */}
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    {/* 이미지랑 갯수 조절하는 거 */}
+                <View style={styles.subBackground}>
+                    {/* 2줄 컬럼형 */}
                     <View style={{
+                        flexDirection: 'row',
                         justifyContent: 'center',
-                        alignItems: 'center',
-
+                        alignItems: 'center'
                     }}>
-                        {/* 아이콘이랑 이름 */}
-                        <View style={styles.radiusIcon} />
-                        <Text style={styles.radiusText}>{item.name}</Text>
-                        {/* 버튼 */}
+                        {/* 이미지랑 갯수 조절하는 거 */}
                         <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
                             justifyContent: 'center',
+                            alignItems: 'center',
 
                         }}>
-                            <Button style={styles.amountButton} title='-' onPress={() => handleCount('-')} />
-                            <Text >{count}</Text>
-                            <Button style={styles.amountButton} title='+' onPress={() => handleCount('+')} />
+                            {/* 아이콘이랑 이름 */}
+                            <View style={styles.radiusIcon} />
+                            <Text style={styles.radiusText}>{item.name}</Text>
+                            {/* 버튼 */}
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+
+                            }}>
+                                <Button style={styles.amountButton} title='-' onPress={() => handleCount('-')} />
+                                <Text >{count}</Text>
+                                <Button style={styles.amountButton} title='+' onPress={() => handleCount('+')} />
+                            </View>
+                            {/* 왼쪽 세로 줄 */}
                         </View>
-                        {/* 왼쪽 세로 줄 */}
-                    </View>
 
-                    {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: 2,
-
-                    }}>
-                        {
-                            item.ice_available === true ?
-                                <View style={{
-                                    flexDirection: 'row',
-                                    padding: 10,
-                                }}>
-                                    <FlatList
-                                        data={dataIceHot}
-                                        renderItem={
-                                            ({ item }) => {
-
-                                                const backgroundColor = item.toString()
-                                                    === hotOrIced ?
-                                                    'royalblue' : 'lightgray';
-
-                                                const color = item.toString()
-                                                    === hotOrIced ?
-                                                    'white' : 'black';
-
-                                                return (
-                                                    <TouchableOpacity
-                                                        onPress={() => setHotOrIced(item.toString())}
-                                                        style={
-                                                            [
-                                                                {
-                                                                    backgroundColor
-                                                                },
-                                                                {
-                                                                    width: 80,
-                                                                    height: 40,
-                                                                    borderRadius: 8,
-                                                                    justifyContent: 'center',
-                                                                    alignItems: 'center',
-                                                                    padding: 5,
-                                                                    margin: 2,
-
-                                                                }
-                                                            ]
-                                                        }>
-                                                        <Text style={
-                                                            {
-                                                                color
-                                                            }
-                                                        }> {item} </Text>
-                                                    </TouchableOpacity>
-                                                )
-                                            }
-                                        }
-                                        numColumns={3}
-                                        keyExtractor={(item) => item.toString()}
-                                        extraData={hotOrIced}
-                                        scrollEnabled={false}
-                                    />
-                                </View>
-                                :
-                                <></>
-                        }
-                        <Text>컵을 선택해주세요.</Text>
+                        {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
                         <View style={{
-                            flexDirection: 'row',
-                            padding: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: 2,
+
                         }}>
-                            <FlatList
-                                data={dataInOrOut}
-                                renderItem={
-                                    ({ item }) => {
+                            {
+                                item.ice_available === true && item.only_ice === false ?
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        padding: 10,
+                                    }}>
+                                        <FlatList
+                                            data={dataIceHot}
+                                            renderItem={
+                                                ({ item }) => {
 
-                                        const backgroundColor = item.toString()
-                                            === inOrOut ?
-                                            'royalblue' : 'lightgray';
+                                                    const backgroundColor = item.toString()
+                                                        === hotOrIced ?
+                                                        'royalblue' : 'lightgray';
 
-                                        const color = item.toString()
-                                            === inOrOut ?
-                                            'white' : 'black';
+                                                    const color = item.toString()
+                                                        === hotOrIced ?
+                                                        'white' : 'black';
 
-                                        return (
-                                            <TouchableOpacity
-                                                onPress={() => setInOrOut(item.toString())}
-                                                style={
-                                                    [
+                                                    return (
+                                                        <TouchableOpacity
+                                                            onPress={() => setHotOrIced(item.toString())}
+                                                            style={
+                                                                [
+                                                                    {
+                                                                        backgroundColor
+                                                                    },
+                                                                    {
+                                                                        width: 80,
+                                                                        height: 40,
+                                                                        borderRadius: 8,
+                                                                        justifyContent: 'center',
+                                                                        alignItems: 'center',
+                                                                        padding: 5,
+                                                                        margin: 2,
+
+                                                                    }
+                                                                ]
+                                                            }>
+                                                            <Text style={
+                                                                {
+                                                                    color
+                                                                }
+                                                            }> {item} </Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                }
+                                            }
+                                            numColumns={3}
+                                            keyExtractor={(item) => item.toString()}
+                                            extraData={hotOrIced}
+                                            scrollEnabled={false}
+                                        />
+                                    </View>
+                                    :
+                                    <></>
+                            }
+                            <Text>컵을 선택해주세요.</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                padding: 10,
+                            }}>
+                                <FlatList
+                                    data={dataInOrOut}
+                                    renderItem={
+                                        ({ item }) => {
+
+                                            const backgroundColor = item.toString()
+                                                === inOrOut ?
+                                                'royalblue' : 'lightgray';
+
+                                            const color = item.toString()
+                                                === inOrOut ?
+                                                'white' : 'black';
+
+                                            return (
+                                                <TouchableOpacity
+                                                    onPress={() => setInOrOut(item.toString())}
+                                                    style={
+                                                        [
+                                                            {
+                                                                backgroundColor
+                                                            },
+                                                            {
+                                                                width: 80,
+                                                                height: 40,
+                                                                borderRadius: 8,
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                padding: 5,
+                                                                margin: 2,
+
+                                                            }
+                                                        ]
+                                                    }>
+                                                    <Text style={
                                                         {
-                                                            backgroundColor
-                                                        },
-                                                        {
-                                                            width: 80,
-                                                            height: 40,
-                                                            borderRadius: 8,
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center',
-                                                            padding: 5,
-                                                            margin: 2,
-
+                                                            color
                                                         }
-                                                    ]
-                                                }>
-                                                <Text style={
-                                                    {
-                                                        color
-                                                    }
-                                                }> {item} </Text>
-                                            </TouchableOpacity>
-                                        )
+                                                    }> {item} </Text>
+                                                </TouchableOpacity>
+                                            )
+                                        }
+                                    }
+                                    numColumns={3}
+                                    keyExtractor={(item) => item.toString()}
+                                    extraData={inOrOut}
+                                    scrollEnabled={false}
+                                />
+
+                            </View>
+                            <TouchableOpacity
+                                style={
+                                    {
+                                        backgroundColor: 'midnightblue',
+                                        padding: 10,
+                                        borderRadius: 10,
+                                        justifyContent: 'center',
+                                        alignSelf: 'stretch',
+                                        height: 40,
+                                        paddingLeft: 45,
+                                        paddingRight: 45,
                                     }
                                 }
-                                numColumns={3}
-                                keyExtractor={(item) => item.toString()}
-                                extraData={inOrOut}
-                                scrollEnabled={false}
-                            />
-
+                                onPress={() => handleOrder(item)}>
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            style={
-                                {
-                                    backgroundColor: 'midnightblue',
-                                    padding: 10,
-                                    borderRadius: 10,
-                                    justifyContent: 'center',
-                                    alignSelf: 'stretch',
-                                    height: 40,
-                                    paddingLeft: 45,
-                                    paddingRight: 45,
-                                }
-                            }
-                            onPress={() => handleOrder(item)}>
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
-                        </TouchableOpacity>
                     </View>
+                    <ChooseDetail subMenu={item} />
                 </View>
-                <ChooseDetail subMenu={item} />
-            </View>
-            <TouchableOpacity
-                style={
-                    {
-                        backgroundColor: 'midnightblue',
-                        padding: 10,
-                        borderRadius: 10,
-                        justifyContent: 'center',
-                        alignSelf: 'stretch',
-                        height: 40,
-                        paddingLeft: 45,
-                        paddingRight: 45,
-                        margin: 10
+                <TouchableOpacity
+                    style={
+                        {
+                            backgroundColor: 'midnightblue',
+                            padding: 10,
+                            borderRadius: 10,
+                            justifyContent: 'center',
+                            alignSelf: 'stretch',
+                            height: 40,
+                            paddingLeft: 45,
+                            paddingRight: 45,
+                            margin: 10
+                        }
                     }
-                }
-                onPress={() => navigation.navigate('BasketDetail')}
-            >
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
-            </TouchableOpacity>
-        </View>
-    )
+                    onPress={() => navigation.navigate('BasketDetail')}
+                >
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    } else {
+        return (
+            <View
+                style={styles.background}>
+                <Text>메뉴가 품절되었습니다.</Text>
+            </View>
+
+        )
+    }
 }
 
 const styles = StyleSheet.create({
