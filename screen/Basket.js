@@ -143,7 +143,6 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
-<<<<<<< HEAD
         //TODO: 가게 정보 넣기
 
         const jsonOrderList = {
@@ -422,106 +421,11 @@ export default Basket = ({ navigation, route }) => {
                         alert('선택항목을 확인해주세요 !');
                     }
                 }    //5,6,7,8,9,10,11,12
-=======
-        if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
-
-            if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
-
-                if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
-                    alert('본 메뉴는 ICE만 선택이 가능합니다 !');
-                }
-                else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
-
-                    if (item.hasOwnProperty('sub_menu')) {
-
-                        if (selected !== null) {
-
-                            const jsonOrderList = {
-                                "name": item.name,
-                                "count": count,
-                                "in_out": inOrOut,
-                                "cost": item.cost,
-                                "hot_ice": hotOrIced,
-                                "selected": selected
-                            };
-
-                            // TODO : push to firebase !!
-                            const newReference = database()
-                                .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                .push();
-                            const postKey = newReference.key;
-
-                            console.log('Auto generated key: ', postKey);
-
-                            newReference
-                                .set(jsonOrderList)
-                                .then(() => navigation.navigate('BasketDetail'));
-
-                        } else {
-                            alert('모두 선택해주세요 !');
-                        }
-                    }
-                    else {
-
-                        const jsonOrderList = {
-                            "name": item.name,
-                            "count": count,
-                            "in_out": inOrOut,
-                            "cost": item.cost,
-                            "hot_ice": hotOrIced,
-                            "selected": null
-                        };
-
-                        // TODO : push to firebase !!
-                        // TODO : push to firebase !!
-                        const newReference = database()
-                            .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                            .push();
-                        const postKey = newReference.key;
-
-                        console.log('Auto generated key: ', postKey);
-
-                        newReference
-                            .set(jsonOrderList)
-                            .then(() => navigation.navigate('BasketDetail'));
-                    }
-                }
->>>>>>> parent of b01c886... Basket.js 로직 수정
             }
-            else if (item.ice_available === true && hotOrIced === null) {
-                alert('모두 선택해주세요 !');
+            else { //매장용/일회용 선택안한 경우
+                alert('컵을 선택해주세요 !');
             }
-            else {
-
-                const jsonOrderList = {
-                    "name": item.name,
-                    "count": count,
-                    "in_out": inOrOut,
-                    "cost": item.cost,
-                    "hot_ice": null,
-                    "selected": null
-                };
-
-                // TODO : push to firebase !!
-                // TODO : push to firebase !!
-                const newReference = database()
-                    .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                    .push();
-                const postKey = newReference.key;
-
-                console.log('Auto generated key: ', postKey);
-
-                newReference
-                    .set(jsonOrderList)
-                    .then(() => navigation.navigate('BasketDetail'));
-            }
-<<<<<<< HEAD
         }
-=======
-
-        } else
-            alert('모두 선택해주세요 !');
->>>>>>> parent of b01c886... Basket.js 로직 수정
     }
 
 
