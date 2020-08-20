@@ -53,6 +53,11 @@ export default class BasketDetail extends React.Component {
 
     render() {
 
+        var totalCost = 0;
+        this.state.orderData.map(value => {
+            totalCost += Number(value.cost) * Number(value.count);
+        })
+
         return (
             <View style={styles.background}>
                 <View style={styles.subBackground}>
@@ -72,7 +77,7 @@ export default class BasketDetail extends React.Component {
                                         alignItems: 'center'
                                     }}>
                                         <View style={[styles.radiusIcon, { marginEnd: 5 }]} />
-                                        <Text style={styles.radiusText}>{value.name} [ {value.selected !== null ? value.selected : ''} ]</Text>
+                                        <Text style={styles.radiusText}>{value.name} {value.selected !== undefined ? ', '+value.selected : ' '}</Text>
                                     </View>
                                     <View style={{
                                         flex: 1,
@@ -83,14 +88,27 @@ export default class BasketDetail extends React.Component {
                                         justifyContent: 'flex-end',
                                         alignItems: 'center'
                                     }}>
-                                        {/* <Text>{value.cup}</Text>
-                                        <Text>{value.count}</Text> */}
-                                        <Text>{value.cost}원</Text>
+                                        <Text>x{value.count}{'\t'+ Number(value.cost) * Number(value.count)}원</Text>
                                     </View>
                                 </View>
                             )
                         })
                     }
+                    <View style={
+                        {
+                            marginStart:'auto',
+                            marginEnd:'auto',
+                            marginTop:5,
+                            backgroundColor:'lightgray',
+                            borderRadius:10,
+                            flexDirection:'row',
+                            width:'90%',
+                        
+                        }
+                    }>
+                        <Text style={[styles.radiusText, {alignSelf:'flex-start', width:'60%'}]}>TOTAL</Text>
+                        <Text style={[styles.radiusText, {alignSelf:'flex-end'}]}>{totalCost.toLocaleString()}원</Text>
+                    </View>
                 </View>
                 <TouchableOpacity
                     style={{
@@ -100,12 +118,13 @@ export default class BasketDetail extends React.Component {
                         paddingEnd:10,
                         paddingTop:5,
                         paddingBottom:5,
-                        margin:15
+                        margin:15,
+                        width:300
                     }}
 
                     onPress={() => alert('카카오페이로 결제합니다 !')}
                 >
-                    <Text style={styles.radiusText}>카카오페이로 결제하기</Text>
+                    <Text style={[styles.radiusText, {textAlign:'center', fontSize:18}]}>카카오페이로 결제하기</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -121,14 +140,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white',
         padding: '5%',
-        flex: 1
     },
     subBackground: {
         width: '90%',
         height: 'auto',
         backgroundColor: 'ghostwhite',
-        justifyContent: 'center',
-        alignItems: 'baseline',
         borderRadius: 10,
         padding: 10
     },
@@ -145,7 +161,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: 'midnightblue',
-        textAlign: 'center',
+        textAlignVertical:'center',
         margin: 10
     },
 

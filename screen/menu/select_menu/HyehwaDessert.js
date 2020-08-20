@@ -103,13 +103,6 @@ export default HyehwaDessert = ({ navigation, route }) => {
                     keyExtractor={(item, index) => index.toString()}
                 />
             </ScrollView>
-            {
-                reference !== null ?
-                    <Button
-                        title='장바구니'
-                        onPress={() => handleBasket()}
-                    /> : <></>
-            }
         </View>
     )
 }

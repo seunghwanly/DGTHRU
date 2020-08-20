@@ -151,8 +151,27 @@ export default Basket = ({ navigation, route }) => {
             'count': count,
             'cup': inOrOut,
             'type': hotOrIced,
-            'selected' : selected
+            'selected': selected
             //옵션추가를 배열로 할지 고민중
+        }
+
+        sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
+            // 1.오너와 함께 공유하는 DB
+            const orderRef = database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .push();
+            const postKey = orderRef.key;
+            
+            orderRef
+            .set(jsonOrderList)
+            .then(() => alert('담겼습니다!'));
+            // 2.사용자 History
+            const userRef = database()
+                .ref('user_history/'+userPhoneNumber.uid)
+                .push();
+            userRef
+                .set(jsonOrderList)
+                .then(() => console.log('Updated User History'));
         }
 
         //sold_out >> false 인 것 만
@@ -189,34 +208,11 @@ export default Basket = ({ navigation, route }) => {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
-                                    
-                                    // 가게 정보 >> shopInfo 
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                                 else {  //none option
                                     //push DB
-                                    
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                             }
                             else { //selected nothing
@@ -228,33 +224,11 @@ export default Basket = ({ navigation, route }) => {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                             else {  //none option
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                         }   //else
                     }   //if
@@ -271,33 +245,11 @@ export default Basket = ({ navigation, route }) => {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
-                                    
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                                 else {  //none option
                                     //push DB
-                                    
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                             }
                             else { //selected nothing
@@ -309,33 +261,11 @@ export default Basket = ({ navigation, route }) => {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                             else {  //none option
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                         }   //else
                     }
@@ -348,33 +278,11 @@ export default Basket = ({ navigation, route }) => {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
-                                    
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                                 else {  //none option
                                     //push DB
-                                    
-                                    // TODO : push to firebase !!
-                                    const newReference = database()
-                                        .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                        .push();
-                                    const postKey = newReference.key;
-
-                                    console.log('Auto generated key: ', postKey);
-
-                                    newReference
-                                        .set(jsonOrderList)
-                                        .then(() => alert('담겼습니다!'));
+                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                                 }
                             }
                             else { //selected nothing
@@ -387,33 +295,11 @@ export default Basket = ({ navigation, route }) => {
                                 // 선택한 옵션을 가져와서 DB에 넣어야함
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                             else {  //none option
                                 //push DB
-                                
-                                // TODO : push to firebase !!
-                                const newReference = database()
-                                    .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                    .push();
-                                const postKey = newReference.key;
-
-                                console.log('Auto generated key: ', postKey);
-
-                                newReference
-                                    .set(jsonOrderList)
-                                    .then(() => alert('담겼습니다!'));
+                                sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
                             }
                         }   //else
                     }
@@ -616,7 +502,7 @@ export default Basket = ({ navigation, route }) => {
                             margin: 10
                         }
                     }
-                    onPress={() => navigation.navigate('BasketDetail', {shopInfo : shopInfo})}
+                    onPress={() => navigation.navigate('BasketDetail', { shopInfo: shopInfo })}
                 >
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
                 </TouchableOpacity>
