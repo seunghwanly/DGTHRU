@@ -142,100 +142,238 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
-        if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
+        //TODO: 가게 정보 넣기
 
-            if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
+        const orderListJson = {
+            'name' : item.name,
+            'cost' : item.cost,
+            'count' : count,
+            'cup' : inOrOut,
+            'type' : hotOrIced,
+            //옵션추가를 배열로 할지 고민중
+        }
 
-                if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
-                    alert('본 메뉴는 ICE만 선택이 가능합니다 !');
-                }
-                else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
-
-                    if (item.hasOwnProperty('sub_menu')) {
-
-                        if (selected !== null) {
-
-                            const jsonOrderList = {
-                                "name": item.name,
-                                "count": count,
-                                "in_out": inOrOut,
-                                "cost": item.cost,
-                                "hot_ice": hotOrIced,
-                                "selected": selected
-                            };
-
-                            // TODO : push to firebase !!
-                            const newReference = database()
-                                .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                                .push();
-                            const postKey = newReference.key;
-
-                            console.log('Auto generated key: ', postKey);
-
-                            newReference
-                                .set(jsonOrderList)
-                                .then(() => navigation.navigate('BasketDetail'));
-
-                        } else {
-                            alert('모두 선택해주세요 !');
-                        }
+        //sold_out >> false 인 것 만
+        if(item.sold_out !== true) {
+            //count 확인  + 매장용/일회용 선택
+            if(count >= 1 && inOrOut != null) {
+                //ice 가능과 hotOrIced 선택되있는지 확인
+                /*
+                    [ ice_available,    hotOrIced,  only_ice ]
+                    1. ice O ,  null,   T    >> pass : only ice
+                    2. ice X ,  null,   T    >> error : not exist
+                    3. ice O ,  null,   F    >> error : select menu (both avail)
+                    4. ice X ,  null,   F    >> pass : only hot
+                    5. ice O ,  HOT,    T    >> error : only ice avail
+                    6. ice O ,  HOT,    F    >> pass : hot avail
+                    7. ice X ,  HOT,    T    >> error : not exist
+                    8. ice X ,  HOT,    F    >> pass : only hot
+                    9. ice O ,  ICED,   T    >> pass : only ice
+                    10. ice O,  ICED,   F    >> pass : select menu (both avail)
+                    11. ice X,  ICED,   T    >> error : not exist
+                    12. ice X,  ICED,   F    >> error : only hot
+                */
+               if(hotOrIced === null) { // 1,4
+                    if(
+                        (item.ice_available === true && item.only_ice === true)
+                        ||
+                        (item.ice_available === false && item.only_ice === false)
+                    ) {
+                        // only HOT and ICED possible
+                        //sub_menu 확인
+                        if(item.hasOwnProperty('sub_menu')) {
+                            if(selected !== null) { //selected menu detail
+                                if(item.hasOwnProperty('option_available')) {
+                                    // 선택한 옵션을 가져와서 DB에 넣어야함
+                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                    //push DB
+                                }
+                                else {  //none option
+                                    //push DB
+                                }
+                            }
+                            else { //selected nothing
+                                alert('모두 선택해주세요');
+                            }
+                        }   //if
+                        else {  //sub_menu none >> 단일메뉴임
+                            if(item.hasOwnProperty('option_available')) {
+                                // 선택한 옵션을 가져와서 DB에 넣어야함
+                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                //push DB
+                            }
+                            else {  //none option
+                                //push DB
+                            }   
+                        }   //else
+                    }   //if
+                    else {  // 2, 3
+                        alert('모두 선택해주세요');
                     }
-                    else {
+               }    //1,2,3,4
+               else {
+                   if(hotOrIced === 'HOT' && item.only_ice === true) {  //6,8
+                        //sub_menu 확인
+                        if(item.hasOwnProperty('sub_menu')) {
+                            if(selected !== null) { //selected menu detail
+                                if(item.hasOwnProperty('option_available')) {
+                                    // 선택한 옵션을 가져와서 DB에 넣어야함
+                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                    //push DB
+                                }
+                                else {  //none option
+                                    //push DB
+                                }
+                            }
+                            else { //selected nothing
+                                alert('모두 선택해주세요');
+                            }
+                        }   //if
+                        else {  //sub_menu none >> 단일메뉴임
+                            if(item.hasOwnProperty('option_available')) {
+                                // 선택한 옵션을 가져와서 DB에 넣어야함
+                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                //push DB
+                            }
+                            else {  //none option
+                                //push DB
+                            }   
+                        }   //else
+                   }
 
-                        const jsonOrderList = {
-                            "name": item.name,
-                            "count": count,
-                            "in_out": inOrOut,
-                            "cost": item.cost,
-                            "hot_ice": hotOrIced,
-                            "selected": null
-                        };
+                   if(hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
+                        //sub_menu 확인
+                        if(item.hasOwnProperty('sub_menu')) {
+                            if(selected !== null) { //selected menu detail
+                                if(item.hasOwnProperty('option_available')) {
+                                    // 선택한 옵션을 가져와서 DB에 넣어야함
+                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                    //push DB
+                                }
+                                else {  //none option
+                                    //push DB
+                                }
+                            }
+                            else { //selected nothing
+                                alert('모두 선택해주세요');
+                            }
+                        }   //if
+                        else {  //sub_menu none >> 단일메뉴임
+                            if(item.hasOwnProperty('option_available')) {
+                                // 선택한 옵션을 가져와서 DB에 넣어야함
+                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                //push DB
+                            }
+                            else {  //none option
+                                //push DB
+                            }   
+                        }   //else
+                   }
 
-                        // TODO : push to firebase !!
-                        // TODO : push to firebase !!
-                        const newReference = database()
-                            .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                            .push();
-                        const postKey = newReference.key;
-
-                        console.log('Auto generated key: ', postKey);
-
-                        newReference
-                            .set(jsonOrderList)
-                            .then(() => navigation.navigate('BasketDetail'));
-                    }
-                }
+                   else {   //5,7,11,12
+                        alert('선택항목을 확인해주세요 !');
+                   }
+               }    //5,6,7,8,9,10,11,12
             }
-            else if (item.ice_available === true && hotOrIced === null) {
-                alert('모두 선택해주세요 !');
+            else { //매장용/일회용 선택안한 경우
+                alert('컵을 선택해주세요 !');
             }
-            else {
+        }
 
-                const jsonOrderList = {
-                    "name": item.name,
-                    "count": count,
-                    "in_out": inOrOut,
-                    "cost": item.cost,
-                    "hot_ice": null,
-                    "selected": null
-                };
+        // if (count >= 1 && inOrOut !== null) {   // 최소 한개 이상 주문, 매장용 / 일회용
 
-                // TODO : push to firebase !!
-                // TODO : push to firebase !!
-                const newReference = database()
-                    .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                    .push();
-                const postKey = newReference.key;
+        //     if (item.ice_available === true && hotOrIced !== null) { //얼음 가능인데 안 골라졌을 때
 
-                console.log('Auto generated key: ', postKey);
+        //         if (item.only_ice === true && hotOrIced === 'HOT') { //얼음만 가능인데 핫을 골랐음
+        //             alert('본 메뉴는 ICE만 선택이 가능합니다 !');
+        //         }
+        //         else {                                              //얼음만 가능인데 얼음을 고름 , 얼음만 가능한게 아닌데 핫을고름
 
-                newReference
-                    .set(jsonOrderList)
-                    .then(() => navigation.navigate('BasketDetail'));
-            }
+        //             if (item.hasOwnProperty('sub_menu')) {
 
-        } else
-            alert('모두 선택해주세요 !');
+        //                 if (selected !== null) {
+
+        //                     const jsonOrderList = {
+        //                         "name": item.name,
+        //                         "count": count,
+        //                         "in_out": inOrOut,
+        //                         "cost": item.cost,
+        //                         "hot_ice": hotOrIced,
+        //                         "selected": selected
+        //                     };
+
+        //                     // TODO : push to firebase !!
+        //                     const newReference = database()
+        //                         .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+        //                         .push();
+        //                     const postKey = newReference.key;
+
+        //                     console.log('Auto generated key: ', postKey);
+
+        //                     newReference
+        //                         .set(jsonOrderList)
+        //                         .then(() => navigation.navigate('BasketDetail'));
+
+        //                 } else {
+        //                     alert('모두 선택해주세요 !');
+        //                 }
+        //             }
+        //             else {
+
+        //                 const jsonOrderList = {
+        //                     "name": item.name,
+        //                     "count": count,
+        //                     "in_out": inOrOut,
+        //                     "cost": item.cost,
+        //                     "hot_ice": hotOrIced,
+        //                     "selected": null
+        //                 };
+
+        //                 // TODO : push to firebase !!
+        //                 // TODO : push to firebase !!
+        //                 const newReference = database()
+        //                     .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+        //                     .push();
+        //                 const postKey = newReference.key;
+
+        //                 console.log('Auto generated key: ', postKey);
+
+        //                 newReference
+        //                     .set(jsonOrderList)
+        //                     .then(() => navigation.navigate('BasketDetail'));
+        //             }
+        //         }
+        //     }
+        //     else if (item.ice_available === true && hotOrIced === null) {
+        //         alert('모두 선택해주세요 !');
+        //     }
+        //     else {
+
+        //         const jsonOrderList = {
+        //             "name": item.name,
+        //             "count": count,
+        //             "in_out": inOrOut,
+        //             "cost": item.cost,
+        //             "hot_ice": null,
+        //             "selected": null
+        //         };
+
+        //         // TODO : push to firebase !!
+        //         // TODO : push to firebase !!
+        //         const newReference = database()
+        //             .ref('users/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+        //             .push();
+        //         const postKey = newReference.key;
+
+        //         console.log('Auto generated key: ', postKey);
+
+        //         newReference
+        //             .set(jsonOrderList)
+        //             .then(() => navigation.navigate('BasketDetail'));
+        //     }
+
+        // } else
+        //     alert('모두 선택해주세요 !');
     }
 
 
