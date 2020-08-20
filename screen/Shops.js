@@ -64,16 +64,20 @@ const shopData = [
 class Item extends React.Component {
 
     _onPress = () => {
-        if(this.props.id === 'hyehwa_roof') {
-            if(this.props.navigation !== null) {
+        if (this.props.id === 'hyehwa_roof') {
+            if (this.props.navigation !== null) {
                 console.log('fucking shit !');
-                this.props.navigation.navigate('HyehwaDessert', { shopInfo : this.props.id });
+                this.props.navigation.navigate('HyehwaDessert',
+                    {
+                        shopInfo: this.props.id
+                    },
+                );
             }
         }
         else
             this.props.onPressItem(this.props.id);
-        
-        
+
+
     };
 
     render() {

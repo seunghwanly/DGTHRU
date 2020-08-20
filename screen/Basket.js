@@ -151,6 +151,7 @@ export default Basket = ({ navigation, route }) => {
             'count': count,
             'cup': inOrOut,
             'type': hotOrIced,
+            'selected' : selected
             //옵션추가를 배열로 할지 고민중
         }
 
@@ -200,7 +201,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                                 else {  //none option
                                     //push DB
@@ -215,7 +216,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                             }
                             else { //selected nothing
@@ -238,7 +239,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                             else {  //none option
                                 //push DB
@@ -253,7 +254,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                         }   //else
                     }   //if
@@ -281,7 +282,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                                 else {  //none option
                                     //push DB
@@ -296,7 +297,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                             }
                             else { //selected nothing
@@ -319,7 +320,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                             else {  //none option
                                 //push DB
@@ -334,7 +335,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                         }   //else
                     }
@@ -358,7 +359,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                                 else {  //none option
                                     //push DB
@@ -373,7 +374,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     newReference
                                         .set(jsonOrderList)
-                                        .then(() => navigation.navigate('BasketDetail'));
+                                        .then(() => alert('담겼습니다!'));
                                 }
                             }
                             else { //selected nothing
@@ -397,7 +398,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                             else {  //none option
                                 //push DB
@@ -412,7 +413,7 @@ export default Basket = ({ navigation, route }) => {
 
                                 newReference
                                     .set(jsonOrderList)
-                                    .then(() => navigation.navigate('BasketDetail'));
+                                    .then(() => alert('담겼습니다!'));
                             }
                         }   //else
                     }
@@ -615,7 +616,7 @@ export default Basket = ({ navigation, route }) => {
                             margin: 10
                         }
                     }
-                    onPress={() => navigation.navigate('BasketDetail')}
+                    onPress={() => navigation.navigate('BasketDetail', {shopInfo : shopInfo})}
                 >
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
                 </TouchableOpacity>
