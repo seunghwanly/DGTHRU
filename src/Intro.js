@@ -3,7 +3,7 @@ import {
     View,
     Text,
     Button,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
@@ -11,6 +11,7 @@ import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 
 import Shops from './client/Shops';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 enableScreens();
 
@@ -40,11 +41,22 @@ function Intro({ navigation }) {
                     <Text style={styles.title}>DGTHRU</Text>
                     <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
                 </View>
-                <Button
-                    style={{ margin: 15 }}
-                    title='시작하기'
+                <TouchableOpacity
+                    style={{ 
+                        margin: 15, 
+                    backgroundColor:'dodgerblue', 
+                    width:180, 
+                    padding:10,
+                        borderRadius:10,
+                        alignItems:'center',
+                        justifyContent:'center'
+                     }}
                     onPress={() => navigation.navigate('Verify')}
-                />
+                    // onLongPress={() => navigation.navigate('')}
+                    onLongPress={() => alert('종하석운 화이팅')}
+                >
+                    <Text style={{fontWeight:'bold', fontSize:18, color:'white'}}>시작하기</Text>
+                </TouchableOpacity>
             </View>
         );
     }
