@@ -143,6 +143,12 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
+
+        // HOT / ICED 기본적으로 설정해줌
+        if (item.ice_available === false && item.only_ice === false)
+            setHotOrIced('HOT');
+        if (item.ice_available === true && item.only_ice === true)
+            setHotOrIced('ICED');
         //TODO: 가게 정보 넣기
 
         const jsonOrderList = {
@@ -158,17 +164,18 @@ export default Basket = ({ navigation, route }) => {
         sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
             // 1.오너와 함께 공유하는 DB
             const orderRef = database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .push();
-            const postKey = orderRef.key;
-            
+                .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                .push();
+
             orderRef
-            .set(jsonOrderList)
-            .then(() => alert('담겼습니다!'));
+                .set(jsonOrderList)
+                .then(() => alert('담겼습니다!'));
+
             // 2.사용자 History
             const userRef = database()
-                .ref('user_history/'+userPhoneNumber.uid)
+                .ref('user_history/' + userPhoneNumber.uid)
                 .push();
+
             userRef
                 .set(jsonOrderList)
                 .then(() => console.log('Updated User History'));
@@ -176,6 +183,7 @@ export default Basket = ({ navigation, route }) => {
 
         //sold_out >> false 인 것 만
         if (item.sold_out !== true) {
+
             //count 확인  + 매장용/일회용 선택
             if (count >= 1 && inOrOut != null) {
                 //ice 가능과 hotOrIced 선택되있는지 확인
@@ -270,7 +278,7 @@ export default Basket = ({ navigation, route }) => {
                         }   //else
                     }
 
-                    if (hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
+                    else if (hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
                         //sub_menu 확인
                         if (item.hasOwnProperty('sub_menu')) {
                             if (selected !== null) { //selected menu detail
