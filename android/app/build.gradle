@@ -196,6 +196,9 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     //20200817 added
     implementation 'com.android.support:multidex:1.0.3'
+    //20200821 added
+    implementation project(':iamport-react-native')
+    implementation project(':react-native-webview')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

@@ -16,6 +16,8 @@ import moment from 'moment';
 import { enableScreens } from 'react-native-screens';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import KakaoPay from './payment/KakaoPay';
+
 enableScreens();
 
 
@@ -233,7 +235,17 @@ export default class BasketDetail extends React.Component {
                             width: 300
                         }}
 
-                        onPress={() => alert('카카오페이로 결제합니다 !')}
+                        onPress={() => 
+                        [
+                            alert('카카오페이로 결제합니다 !'), 
+                            this.props.navigation.navigate('KakaoPay', 
+                                {
+                                    totalCost : totalCost,
+                                    quantity : this.state.orderData.length,
+                                    
+                                }
+                            )
+                        ]}
                     >
                         <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
                     </TouchableOpacity>

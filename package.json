@@ -8,8 +8,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
-    "postinstall": "rm -f ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^1.1.2",
@@ -20,6 +19,7 @@
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/native-stack": "^5.0.5",
     "@react-navigation/stack": "^5.9.0",
+    "iamport-react-native": "^1.5.2",
     "moment": "^2.27.0",
     "react": "16.13.1",
     "react-moment": "^0.9.7",
@@ -32,6 +32,7 @@
     "react-native-safe-area-context": "^3.1.4",
     "react-native-screens": "^2.10.1",
     "react-native-status-bar-height": "^2.5.0",
+    "react-native-webview": "^10.7.0",
     "react-navigation": "^4.4.0"
   },
   "devDependencies": {

@@ -102,7 +102,7 @@ class Item extends React.Component {
                     />
                     <View style={
                         {
-                            backgroundColor: 'lightgray',
+                            backgroundColor: 'ghostwhite',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flex: 1,
