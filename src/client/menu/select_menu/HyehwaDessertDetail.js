@@ -27,7 +27,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                                 justifyContent:'center',
                                 alignItems:'center',
                             }}
-                            onPress={() => navigation.navigate('Basket', { item : item, shopInfo : shopInfo })}
+                            onPress={() => navigation.navigate('SelectMenu', { item : item, shopInfo : shopInfo })}
                             >
                             <View style={styles.radiusIcon}>
                                 <Text style={{color:'white', fontWeight:'bold'}}>IMG</Text>

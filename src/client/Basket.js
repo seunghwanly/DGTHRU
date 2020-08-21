@@ -510,7 +510,7 @@ export default Basket = ({ navigation, route }) => {
                             margin: 10
                         }
                     }
-                    onPress={() => navigation.navigate('BasketDetail', { shopInfo: shopInfo })}
+                    onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
                 >
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
                 </TouchableOpacity>

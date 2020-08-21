@@ -9,10 +9,8 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
 import { enableScreens } from 'react-native-screens';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
-import Shops from './Shops';
+import Shops from './client/Shops';
 
 enableScreens();
 
@@ -51,9 +49,9 @@ function Intro({ navigation }) {
         );
     }
 
-    return (
-        <Shops navigation={navigation} />
-    );
+    return(
+        <Shops navigation={navigation}/>
+    )
 }
 
 const styles = StyleSheet.create({

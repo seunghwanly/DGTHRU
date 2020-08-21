@@ -3,7 +3,7 @@ import {
     View,
     Text,
     Image,
-    StyleSheet, RefreshControl
+    StyleSheet, 
 } from 'react-native';
 
 //firebase
@@ -16,7 +16,6 @@ import moment from 'moment';
 import { enableScreens } from 'react-native-screens';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import KakaoPay from './payment/KakaoPay';
 
 enableScreens();
 
@@ -199,7 +198,7 @@ export default class BasketDetail extends React.Component {
                                                     }
                                                 }
                                                 resizeMode='cover'
-                                                source={require('../image/trash-outline.png')}
+                                                source={require('../../image/trash-outline.png')}
 
                                             />
                                         </TouchableOpacity>
@@ -238,7 +237,7 @@ export default class BasketDetail extends React.Component {
                         onPress={() => 
                         [
                             alert('카카오페이로 결제합니다 !'), 
-                            this.props.navigation.navigate('KakaoPay', 
+                            this.props.navigation.navigate('Paying', 
                                 {
                                     totalCost : totalCost,
                                     quantity : this.state.orderData.length,

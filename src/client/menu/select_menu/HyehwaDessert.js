@@ -68,7 +68,7 @@ export default HyehwaDessert = ({ navigation, route }) => {
                                 return (
                                 <TouchableOpacity
                                     style={styles.radiusIcon}
-                                    onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu, shopInfo : shopInfo })}
+                                    onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
                                 >
                                     <Text style={styles.radiusText}>
                                         {item.category_name}
@@ -92,7 +92,7 @@ export default HyehwaDessert = ({ navigation, route }) => {
                     renderItem={
                         ({ item }) => (
                             <TouchableOpacity style={styles.radiusIcon}
-                                onPress={() => navigation.navigate('HyehwaDessertDetail', { items: item.menu, shopInfo : shopInfo })}
+                                onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
                             >
                                 <Text style={styles.radiusText}>
                                     {item.category_name}

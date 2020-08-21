@@ -14,7 +14,7 @@ export function Payment({ navigation, route }) {
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
-        navigation.replace('PaymentResult', response);
+        navigation.replace('Result', response);
     }
 
     /* [필수입력] 결제에 필요한 데이터를 입력합니다. */
@@ -58,6 +58,7 @@ export function Payment({ navigation, route }) {
 
     return (
         <IMP.Payment
+            kakaoOpenApp={true}
             userCode={'imp30810955'}  // 가맹점 식별코드 >> essential
             loading={<Loading />} // 로딩 컴포넌트
             data={data}           // 결제 데이터  >> essential
