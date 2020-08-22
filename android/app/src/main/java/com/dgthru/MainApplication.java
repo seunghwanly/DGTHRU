@@ -10,8 +10,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.iamport.IamportPackage; // 아임포트 패키지를 불러옵니다.
-import com.reactnativecommunity.webview.RNCWebViewPackage; // 리액트 네이티브 웹뷰 패키지를 불러옵니다.
+// import com.iamport.IamportPackage; // 아임포트 패키지를 불러옵니다.
+// import com.reactnativecommunity.webview.RNCWebViewPackage; // 리액트 네이티브 웹뷰 패키지를 불러옵니다.
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -28,8 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          packages.add(new IamportPackage()); // 아임포트 패키지를 추가합니다.
-          packages.add(new RNCWebViewPackage()); // 리액트 네이티브 웹뷰 패키지를 추가합니다.)
+          // packages.add(new IamportPackage()); // 아임포트 패키지를 추가합니다.
+          // packages.add(new RNCWebViewPackage()); // 리액트 네이티브 웹뷰 패키지를 추가합니다.)
           return packages;
         }
 
