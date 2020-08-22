@@ -23,7 +23,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
 //Supervisor
-import supervisorShop from './supervisor/supervisorShop';
 import example from './supervisor/example';
 
 import {
@@ -58,7 +57,6 @@ const payScreen = {
 };
 
 const supervisorScreens = {
-    supervisorShop : supervisorShop,
     example : example
 };
 
@@ -99,7 +97,6 @@ const Client = () => {
 const SuperVisor = () => {
    return (
        <SupervisorStack.Navigator>
-        <SupervisorStack.Screen name="supervisorShop" component={supervisorShop} />
         <SupervisorStack.Screen name="example" component={example} />
        </SupervisorStack.Navigator>
    );
