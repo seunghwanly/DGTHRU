@@ -22,6 +22,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
+//Supervisor
+import Example from './supervisor/Example';
+
+
 import {
   TouchableHighlight,
   Image, Button
@@ -32,6 +36,7 @@ enableScreens();
 //const Stack = createNativeStackNavigator(); //>>예전 버전 !
 
 const ClientStack = createStackNavigator();
+const SupervisorStack = createStackNavigator();
 
 const commonScreen = {
   Intro : Intro,
@@ -52,13 +57,15 @@ const payScreen = {
   Result : PaymentResult
 };
 
-const Client = () => {
+const supervisorScreens = {
+  Example : Example
+};
 
+const Client = () => {
   return (
-    
       <ClientStack.Navigator>
         {Object.entries({
-          ...commonScreen,...menuScreen,...payScreen
+          ...commonScreen,...menuScreen,...payScreen,...supervisorScreens
         }).map(([name, component]) => (
           <ClientStack.Screen name={name} component={component} 
             options=
@@ -89,6 +96,16 @@ const Client = () => {
 
 }
 
+
+// const SuperVisor = () => {
+//   return (
+//       <SupervisorStack.Navigator>
+//         <SupervisorStack.Screen name="example" component={example} />
+//       </SupervisorStack.Navigator>
+//   );
+// }
+
+
 //TODO : 관리자모드 팀
 // 여기서 부터 새로운 stack navigator 나 tab이나 등등 원하는 대로 만들면 될거 같아
 // 참고할 사이트를 적어줄게 >> https://reactnavigation.org/docs/nesting-navigators
@@ -99,11 +116,9 @@ const Client = () => {
 
 
 export default App = () => {
-
   return (
     <NavigationContainer>
       <Client />
-    
     </NavigationContainer>
   );
 }

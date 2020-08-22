@@ -143,6 +143,7 @@ function Verify({ navigation, number }) {
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+
         console.log('signInWith~~ confirmation : ' + confirmation.confirm + "\tID : " + confirmation.verificationId);
         setConfirm(confirmation);
         console.log('signInWith~~ smsSetConfirm(): ' + setConfirm(confirmation));
