@@ -55,7 +55,7 @@ const payScreen = {
 const Client = () => {
 
   return (
-    <NavigationContainer>
+    
       <ClientStack.Navigator>
         {Object.entries({
           ...commonScreen,...menuScreen,...payScreen
@@ -84,7 +84,7 @@ const Client = () => {
           />
         ))}
       </ClientStack.Navigator>
-    </NavigationContainer>
+    
   );
 
 }
@@ -101,7 +101,9 @@ const Client = () => {
 export default App = () => {
 
   return (
-    <Client />
-    // <Supervisor />
+    <NavigationContainer>
+      <Client />
+    
+    </NavigationContainer>
   );
 }
