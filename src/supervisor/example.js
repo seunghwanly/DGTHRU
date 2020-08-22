@@ -6,6 +6,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
+async function DeleteOrderList(key) {
+    var userPath = 'hyehwa_roof/2020_08_22/+821012341234/' + key + '/';
+
+    console.log(userPath);
+
+    await database()
+        .ref(userPath)
+        .remove();
+}
 
 export default class Example extends Component {
 
@@ -51,12 +60,16 @@ export default class Example extends Component {
     //    })
     //}
 
-    deleteorderlist(k){
-        var arr = this.state.list;
-        this.setState({
-            list: arr.filter(arr => arr.key !== k)
-        })
-    }
+    //deleteorderlist(k){
+    //    var arr = this.state.list;
+    //    this.setState({
+    //        list: arr.filter(arr => arr.key !== k)
+    //    })
+
+    //    await database()
+    //    .ref('hyehwa_roof/2020_08_22/+821012341234/' + k)
+    //    .remove();
+    //}
 
     
 
@@ -96,9 +109,9 @@ export default class Example extends Component {
                             alignItems:'center',
                             justifyContent:'center'
                         }}
-                        onPress={() => this.deleteorderlist(item.key)}
+                        onPress={() => DeleteOrderList(item.key)}
                         >
-                        <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.cost}</Text>
+                        <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
                   </TouchableOpacity>
                </View>)
             }}
