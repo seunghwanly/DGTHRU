@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 import database from '@react-native-firebase/database';
@@ -27,6 +28,33 @@ export default class Example extends Component {
                 })
             })
             this.setState({list:li})
+        })
+    }
+
+    //deleteItem(k) {
+    //    let forward = this.state.list.slice(0,k)
+    //    //console.log(`for : `,forward);
+      
+        
+
+    //    for(var i = k + 1;k<this.state.list.length;i++){
+    //        this.state.list[i].index = this.state.list[i].index - 1;
+    //    }
+
+    //    let back = this.state.list.slice(k+1,this.state.list.length)
+    //    //console.log(`back : `,back);
+      
+    //    let total = forward.concat(back)	//forward¿¡ back ºÙÀÌ±ë
+    //    //console.log(`total : `,total);
+    //    this.setState({
+    //        list:total
+    //    })
+    //}
+
+    deleteorderlist(k){
+        var arr = this.state.list;
+        this.setState({
+            list: arr.filter(arr => arr.key !== k)
         })
     }
 
@@ -58,7 +86,20 @@ export default class Example extends Component {
           renderItem={({item})=>{
             return(
                <View>
-                  <Text>{item.name}  {item.cup} {item.cost} </Text>
+                 <TouchableOpacity
+                        style={{ 
+                            margin: 15, 
+                            backgroundColor:'dodgerblue', 
+                            width:350, 
+                            padding:10,
+                            borderRadius:10,
+                            alignItems:'center',
+                            justifyContent:'center'
+                        }}
+                        onPress={() => this.deleteorderlist(item.key)}
+                        >
+                        <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.cost}</Text>
+                  </TouchableOpacity>
                </View>)
             }}
         />
