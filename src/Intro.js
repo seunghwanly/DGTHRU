@@ -52,7 +52,7 @@ function Intro({ navigation }) {
                         justifyContent:'center'
                      }}
                     onPress={() => navigation.navigate('Verify')}
-                    onLongPress = {()=>navigation.navigate('Example')}
+                    onLongPress = {()=>navigation.navigate('example')}
                     //onLongPress={() => alert('종하석운 화이팅')}
                 >
                     <Text style={{fontWeight:'bold', fontSize:18, color:'white'}}>시작하기</Text>

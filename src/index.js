@@ -23,8 +23,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
 //Supervisor
-import Example from './supervisor/Example';
-
+import supervisorShop from './supervisor/supervisorShop';
+import example from './supervisor/example';
 
 import {
   TouchableHighlight,
@@ -58,7 +58,8 @@ const payScreen = {
 };
 
 const supervisorScreens = {
-  Example : Example
+    supervisorShop : supervisorShop,
+    example : example
 };
 
 const Client = () => {
@@ -93,17 +94,16 @@ const Client = () => {
       </ClientStack.Navigator>
     
   );
-
 }
 
-
-// const SuperVisor = () => {
-//   return (
-//       <SupervisorStack.Navigator>
-//         <SupervisorStack.Screen name="example" component={example} />
-//       </SupervisorStack.Navigator>
-//   );
-// }
+const SuperVisor = () => {
+   return (
+       <SupervisorStack.Navigator>
+        <SupervisorStack.Screen name="supervisorShop" component={supervisorShop} />
+        <SupervisorStack.Screen name="example" component={example} />
+       </SupervisorStack.Navigator>
+   );
+ }
 
 
 //TODO : 관리자모드 팀
@@ -112,8 +112,6 @@ const Client = () => {
 // nested navigator 로 만드는게 수월할 거야 내가 위에다가 예시로 코드 만들었어
 // 그러면 화이팅 종하 석운
 // 최종적으로 렌더링 되는 곳은 밑에 부분이니까 추가하면 될거같아 !
-
-
 
 export default App = () => {
   return (
