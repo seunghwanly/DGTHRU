@@ -58,7 +58,8 @@ export default class BasketDetail extends React.Component {
     };
 
     componentDidMount() {
-        this.getData();
+        this.getCommonData();
+        this.getUserData();
     }
 
     shouldComponentUpdate(nextState) {
@@ -77,8 +78,9 @@ export default class BasketDetail extends React.Component {
 
     }
 
-    getData() {
+    getCommonData() {
         const userPhoneNumber = auth().currentUser.phoneNumber;
+
         const reference = database().ref(this.props.route.params.shopInfo + '/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
 
         reference
@@ -89,7 +91,7 @@ export default class BasketDetail extends React.Component {
                 var idx = 0;    // loop
 
                 snapshot.forEach((childSnapShot) => {
-                    console.log(childSnapShot.val());
+                    console.log('\nBasketDetail >> '+childSnapShot.val());
 
                     var tempJSON = {
                         "idx": idx,
@@ -107,6 +109,10 @@ export default class BasketDetail extends React.Component {
                 })
             });
 
+
+    }
+    
+    getUserData() {
         const userRef = database().ref('user_history/' + auth().currentUser.uid);
         
         userRef
@@ -241,9 +247,18 @@ export default class BasketDetail extends React.Component {
                                 {
                                     totalCost : totalCost,
                                     quantity : this.state.orderData.length,
-                                    
+                                    shopInfo : this.props.route.params.shopInfo
                                 }
-                            )
+                            ),
+                            // firebase off
+                            database()
+                                .ref(this.props.route.params.shopInfo + 
+                                '/' + moment().format('YYYY_MM_DD') + 
+                                '/' + auth().currentUser.phoneNumber)
+                                .off('value', this.getCommonData()),
+                            database()
+                                .ref('user_history/' + auth().currentUser.uid)
+                                .off('value', this.getUserData())
                         ]}
                     >
                         <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>

@@ -10,11 +10,16 @@ import Loading from './Loading';
 export function Payment({ navigation, route }) {
 
     const { totalCost } = route.params;
+    const { shopInfo } = route.params;
     // const { quantity } = route.params;
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
-        navigation.replace('Result', response);
+        navigation.replace('Result', 
+        {
+            response : response,
+            shopInfo : shopInfo 
+        });
     }
 
     /* [필수입력] 결제에 필요한 데이터를 입력합니다. */
