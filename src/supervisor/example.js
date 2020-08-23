@@ -92,32 +92,32 @@ export default class Example extends Component {
   
     render() {
         return (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>Order List</Text>
-            <FlatList style={{width:'100%'}}
-data={this.state.list}
-keyExtractor={item => item.key}
-renderItem={({item})=>{
-    return(
-       <View>
-         <TouchableOpacity
-        style={{ 
-            margin: 15, 
-            backgroundColor:'dodgerblue', 
-            width:350, 
-            padding:10,
-            borderRadius:10,
-            alignItems:'center',
-            justifyContent:'center'
-        }}
-              onPress={() => DeleteOrderList(item.key)}
-              >
-              <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
-        </TouchableOpacity>
-     </View>)
-}}
-        />
-</View>
-    );
-}
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text>Order List</Text>
+                    <FlatList style={{width:'100%'}}
+                    data={this.state.list}
+                    keyExtractor={item => item.key}
+                    renderItem={({item})=>{
+                    return(
+                        <View>
+                            <TouchableOpacity
+                                style={{ 
+                                    margin: 15, 
+                                    backgroundColor:'dodgerblue', 
+                                    width:350, 
+                                    padding:10,
+                                    borderRadius:10,
+                                    alignItems:'center',
+                                    justifyContent:'center'
+                                }}
+                                onPress={() => DeleteOrderList(item.key)}
+                                >
+                                <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
+                            </TouchableOpacity>
+                        </View>)
+                    }}
+                />
+            </View>
+        );
+    }
 }
