@@ -56,6 +56,7 @@ export default Basket = ({ navigation, route }) => {
                     alignItems: 'center',
                     width: '100%',
                     padding: 5,
+                    margin: 5,
                 }}
                 >
                     <Text style={{
@@ -487,6 +488,7 @@ export default Basket = ({ navigation, route }) => {
                                         height: 40,
                                         paddingLeft: 45,
                                         paddingRight: 45,
+                                        
                                     }
                                 }
                                 onPress={() => handleOrder(item)}>
@@ -500,20 +502,46 @@ export default Basket = ({ navigation, route }) => {
                     style={
                         {
                             backgroundColor: 'midnightblue',
-                            padding: 10,
                             borderRadius: 10,
-                            justifyContent: 'center',
-                            alignSelf: 'stretch',
-                            height: 40,
-                            paddingLeft: 45,
-                            paddingRight: 45,
-                            margin: 10
+                            paddingStart: 10,
+                            paddingEnd: 10,
+                            paddingTop: 5,
+                            paddingBottom: 5,
+                            margin: 5,
+                            width: 300
                         }
                     }
                     onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
                 >
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니 바로가기</Text>
+                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18, color:'white' }]}>장바구니 바로가기</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                        style={{
+                            backgroundColor: 'gold',
+                            borderRadius: 10,
+                            paddingStart: 10,
+                            paddingEnd: 10,
+                            paddingTop: 5,
+                            paddingBottom: 5,
+                            margin: 5,
+                            width: 300
+                        }}
+
+                        onPress={() => 
+                        [
+                            alert('카카오페이로 결제합니다 !'),
+                            handleOrder(item), 
+                            navigation.navigate('Paying', 
+                                {
+                                    totalCost : item.cost,
+                                    shopInfo : shopInfo
+                                }
+                            ),
+                        ]}
+                        >
+                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                        </TouchableOpacity>
+
             </View>
         )
     } else {

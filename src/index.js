@@ -17,9 +17,13 @@ import KakaoPay from './client/payment/KakaoPay';
 import Loading from './client/payment/Loading';
 import PaymentResult from './client/payment/PaymetResult';
 
+//drawer
+import Bill from './client/drawer/Bill';
+
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, DrawerActions } from '@react-navigation/native';
+import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { enableScreens } from 'react-native-screens';
 
 //Supervisor
@@ -28,82 +32,90 @@ import supervisorShops from './supervisor/supervisorShops';
 
 import {
   TouchableHighlight,
-  Image, Button
+  Image,
+  View
 } from 'react-native';
 
 enableScreens();
 
 //const Stack = createNativeStackNavigator(); //>>예전 버전 !
 
-const ClientStack = createStackNavigator();
-const SupervisorStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const commonScreen = {
-  Intro : Intro,
-  Verify : Verify,
-  Basket : BasketDetail
+  Intro: Intro,
+  Verify: Verify,
+  Basket: BasketDetail
 };
 
 const menuScreen = {
-  Shops : Shops,
-  Menu :  HyehwaDessert,
-  MenuDetail : HyehwaDessertDetail,
-  SelectMenu : Basket 
+  Shops: Shops,
+  Menu: HyehwaDessert,
+  MenuDetail: HyehwaDessertDetail,
+  SelectMenu: Basket
 };
 
 const payScreen = {
-  Loading : Loading,
-  Paying : KakaoPay,
-  Result : PaymentResult
+  Loading: Loading,
+  Paying: KakaoPay,
+  Result: PaymentResult
 };
 
 const supervisorScreens = {
-    supervisorShops : supervisorShops,
-    example : example
+  supervisorShops: supervisorShops,
+  example: example
 };
 
-const Client = () => {
+const StackContainer = () => {
   return (
-      <ClientStack.Navigator>
-        {Object.entries({
-          ...commonScreen,...menuScreen,...payScreen,...supervisorScreens
-        }).map(([name, component]) => (
-          <ClientStack.Screen name={name} component={component} 
-            options=
-            {
-              name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu" ?
-              
-                ({ navigation, route }) => ({
-                  headerRight: () => (
-                    <TouchableHighlight
-                      style={{ flexDirection: 'row-reverse' }}
-                      onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
-                    >
-                      <Image
-                        style={{ height: 30, width: 30, marginEnd: 10 }}
-                        resizeMode='cover'
-                        source={require('../image/cart-outline.png')}
-                      />
-                    </TouchableHighlight>
-                  )
-                }):
-                name === "Result" ? {headerLeft:null} : {}
-            }
-          />
-        ))}
-      </ClientStack.Navigator>
-    
-  );
+    <Stack.Navigator initialRouteName='Intro'>
+      {Object.entries({
+        ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
+      }).map(([name, component]) => (
+        <Stack.Screen name={name} component={component}
+          options=
+          {
+            name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu" ?
+
+              ({ navigation, route }) => ({
+                headerRight: () => (
+                  <TouchableHighlight
+                    style={{ flexDirection: 'row-reverse' }}
+                    onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
+                  >
+                    <Image
+                      style={{ height: 30, width: 30, marginEnd: 10 }}
+                      resizeMode='cover'
+                      source={require('../image/cart-outline.png')}
+                    />
+                  </TouchableHighlight>
+                )
+              }) :
+              name === "Result" ? { headerLeft: null } : {}
+            ,
+            ({ navigation, route }) => ({
+              headerLeft: () => (
+                <TouchableHighlight
+                  style={{ flexDirection: 'row-reverse' }}
+                  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                >
+                  <Image
+                    style={{ height: 30, width: 30, marginEnd: 10 }}
+                    resizeMode='cover'
+                    source={require('../image/basket_outline.png')}
+                  />
+                </TouchableHighlight>
+              )
+            })
+          }
+        />
+      ))}
+
+    </Stack.Navigator>
+  )
 }
 
-const SuperVisor = () => {
-   return (
-       <SupervisorStack.Navigator>
-        <SupervisorStack.Screen name="example" component={example} />
-        <SupervisorStack.Screen name="supervisorShops" component={supervisorShops} />
-       </SupervisorStack.Navigator>
-   );
- }
+const DrawerStack = createDrawerNavigator();
 
 
 //TODO : 관리자모드 팀
@@ -115,8 +127,13 @@ const SuperVisor = () => {
 
 export default App = () => {
   return (
+
     <NavigationContainer>
-      <Client />
+      <DrawerStack.Navigator initialRouteName='HOME'
+        drawerType='front'>
+        <DrawerStack.Screen name='HOME' component={StackContainer} />
+        <DrawerStack.Screen name='Bill' component={Bill} />
+      </DrawerStack.Navigator>
     </NavigationContainer>
   );
 }
