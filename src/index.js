@@ -24,6 +24,7 @@ import { enableScreens } from 'react-native-screens';
 
 //Supervisor
 import example from './supervisor/example';
+import supervisorShops from './supervisor/supervisorShops';
 
 import {
   TouchableHighlight,
@@ -57,6 +58,7 @@ const payScreen = {
 };
 
 const supervisorScreens = {
+    supervisorShops : supervisorShops,
     example : example
 };
 
@@ -98,6 +100,7 @@ const SuperVisor = () => {
    return (
        <SupervisorStack.Navigator>
         <SupervisorStack.Screen name="example" component={example} />
+        <SupervisorStack.Screen name="supervisorShops" component={supervisorShops} />
        </SupervisorStack.Navigator>
    );
  }
