@@ -3,7 +3,9 @@ import {
     View,
     Text,
     Button,
-    Vibration, Alert
+    Vibration, 
+    Alert,
+    Image
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
@@ -65,7 +67,8 @@ export default class PaymentResult extends React.Component {
                                                 .ref(this.props.route.params.shopInfo +
                                                     '/' + moment().format('YYYY_MM_DD') +
                                                     '/' + auth().currentUser.phoneNumber)
-                                                .off('value', readData)
+                                                .off('value', readData),
+                                            this.props.navigation.navigate('Shops')
                                         ]
                                 }
                             ]
@@ -89,6 +92,13 @@ export default class PaymentResult extends React.Component {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
+                    <Image
+                    style={{
+                        width:200,
+                        height:200,
+                        margin:20
+                    }}
+                     source={require('../../../image/sample.gif')}/>
                     <Text>메뉴가 준비되면 알려드리겠습니다 !</Text>
                     <Button
                         title="홈으로 돌아가기"
