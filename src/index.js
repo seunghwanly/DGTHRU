@@ -22,6 +22,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 
+import Example from './supervisor/example';
+
 import {
   TouchableHighlight,
   Image, Button
@@ -96,14 +98,18 @@ const Client = () => {
 // 그러면 화이팅 종하 석운
 // 최종적으로 렌더링 되는 곳은 밑에 부분이니까 추가하면 될거같아 !
 
+const SuperStack = createStackNavigator();
 
+const RootStack = createStackNavigator();
 
 export default App = () => {
 
   return (
     <NavigationContainer>
-      <Client />
-    
+      <RootStack.Navigator>
+        <RootStack.Screen name='Client' component={Client} />
+        <RootStack.Screen name='Super' component={Example}/>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
