@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import firebase from '@react-native-firebase/app';
+import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import example from './example';
 
@@ -65,9 +66,21 @@ const shopData = [
 
 class Item extends React.Component {
 
+
     _onPress = () => {
+        var user = firebase.auth().currentUser;
+        const phonenumber = user.phoneNumber;
+        console.log("phonenumber : ", phonenumber);
         if (this.props.id === 'hyehwa_roof') {  
-                this.props.navigation.navigate('example');
+            
+            database().ref('admin/' + 'hyehwa_roof').on('value', (snapshot) =>{
+                if(snapshot.val() == phonenumber)this.props.navigation.navigate('example',{ShopInfo : this.props.id});
+                else{
+                    alert('권한이없습니다!');
+                }
+            })
+
+                
         }
         else
             this.props.onPressItem(this.props.id);

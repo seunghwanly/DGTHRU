@@ -6,7 +6,8 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 var currentTime = moment().format('YYYY_MM_DD');
-
+var shopname = '';
+var phonenumber = '';
 async function DeleteOrderList(key) {
     var userPath = 'hyehwa_roof/' + currentTime + '/+821012341234/' + key + '/';
 
@@ -21,23 +22,39 @@ export default class Example extends Component {
 
     constructor(props){
         super(props);
+        shopname =this.props.route.params.ShopInfo;
+        console.log("params : ", shopname);
         this.state={ 
             list:[],
         } }
 
+
+    
+
     componentDidMount(){
-        database().ref('hyehwa_roof/' + currentTime + '/+821012341234/').on('value', (snapshot) =>{
+        database().ref('admin/' + shopname).on('value', (snapshot) =>{
+                phonenumber = snapshot.val();
+            })
+
+        database().ref(shopname + '/' + currentTime +'/').on('value', (snapshot) =>{
             var li = []
-            snapshot.forEach((child)=>{
+            snapshot.forEach((childSnapShot) => {
+            childSnapShot.forEach((child)=>{
                 li.push({
                     key: child.key,
                     name:child.val().name,
+                    orderTime:child.val().orderTime,
                     cost: child.val().cost,
                     count: child.val().count,
                     cup : child.val().cup
                 })
             })
-            this.setState({list:li})
+
+         
+            
+            })
+            let sortedArray = li.sort((a, b) => a.orderTime.valueOf() - b.orderTime.valueOf())
+            this.setState({list:sortedArray})
         })
     }
 
@@ -93,7 +110,7 @@ export default class Example extends Component {
     render() {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Text>Order List</Text>
+                <Text>[{shopname}] : Order List</Text>
                     <FlatList style={{width:'100%'}}
                     data={this.state.list}
                     keyExtractor={item => item.key}
@@ -104,15 +121,19 @@ export default class Example extends Component {
                                 style={{ 
                                     margin: 15, 
                                     backgroundColor:'dodgerblue', 
-                                    width:350, 
+                                    width: '85%', 
                                     padding:10,
                                     borderRadius:10,
+                                    
                                     alignItems:'center',
-                                    justifyContent:'center'
+                                    justifyContent:'center',
+                                
+
                                 }}
                                 onPress={() => DeleteOrderList(item.key)}
                                 >
                                 <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
+                                <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}> {item.orderTime}</Text>
                             </TouchableOpacity>
                         </View>)
                     }}
