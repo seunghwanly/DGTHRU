@@ -145,7 +145,7 @@ function Verify({ navigation, number }) {
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
         console.log('phoneNumber : ' + phoneNumber);
-        if(phoneNumber == "+8201012341234") setAdmin(true);
+        if(phoneNumber == "+8201041282470") setAdmin(true);
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
         
         console.log('signInWith~~ confirmation : ' + confirmation.confirm + "\tID : " + confirmation.verificationId);
