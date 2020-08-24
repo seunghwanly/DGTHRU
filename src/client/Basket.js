@@ -51,7 +51,6 @@ export default Basket = ({ navigation, route }) => {
         const subMenu = props.subMenu;
         setTime(moment().format('HH:mm:ss'));
         if (subMenu.hasOwnProperty('sub_menu')) {
-
             return (
                 <View style={{
                     justifyContent: 'center',
@@ -146,7 +145,7 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
-
+        item.time = moment().format('HH:mm:ss');
         // HOT / ICED 기본적으로 설정해줌
         if (item.ice_available === false && item.only_ice === false)
             setHotOrIced('HOT');
