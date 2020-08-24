@@ -113,7 +113,8 @@ enableScreens();
 function Verify({ navigation, number }) {
 
     const [confirm, setConfirm] = useState(null);
-    const admin = false;
+    //var admin = false;
+    const [admin, setAdmin] = useState(null);
     const [code, setCode] = useState('');
 
     const [credentialStateForUser, updateCredentialStateForUser] = useState(-1);
@@ -144,19 +145,20 @@ function Verify({ navigation, number }) {
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
         console.log('phoneNumber : ' + phoneNumber);
+        if(phoneNumber == "+8201012341234") setAdmin(true);
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      
-        if(phoneNumber == "+821041282470") admin = true;
+        
         console.log('signInWith~~ confirmation : ' + confirmation.confirm + "\tID : " + confirmation.verificationId);
         setConfirm(confirmation);
         console.log('signInWith~~ smsSetConfirm(): ' + setConfirm(confirmation));
     }
 
     async function confirmCode() {
+        console.log('admin : ' + admin);
         if(admin){
         try {
             await confirm.confirm(code)
-                .then(() => navigation.navigate('Shops', { navigation: navigation }));
+                .then(() => navigation.navigate('supervisorShops', { navigation: navigation }));
             console.log('smscode : ' + code);
         } catch (error) {
             console.log('Invalid code.' + error);
@@ -165,7 +167,7 @@ function Verify({ navigation, number }) {
     else{
         try {
             await confirm.confirm(code)
-                .then(() => navigation.navigate('supervisorShops', { navigation: navigation }));
+                .then(() => navigation.navigate('Shops', { navigation: navigation }));
             console.log('smscode : ' + code);
         } catch (error) {
             console.log('Invalid code.' + error);
