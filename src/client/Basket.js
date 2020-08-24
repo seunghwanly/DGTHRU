@@ -44,10 +44,12 @@ export default Basket = ({ navigation, route }) => {
     const [inOrOut, setInOrOut] = useState(null);
     const [hotOrIced, setHotOrIced] = useState(null);
     const [whippingCream, setWhippingCream] = useState(null);
+    const [time, setTime] = useState(null);
 
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
+        setTime(moment().format('HH:mm:ss'));
         if (subMenu.hasOwnProperty('sub_menu')) {
 
             return (
@@ -154,6 +156,7 @@ export default Basket = ({ navigation, route }) => {
 
         const jsonOrderList = {
             'name': item.name,
+            'orderTime' : item.time,
             'cost': item.cost,
             'count': count,
             'cup': inOrOut,
