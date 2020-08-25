@@ -138,6 +138,12 @@ class Item extends React.Component {
 
 function supervisorShops({ navigation }) {
 
+    signOut = () => {
+        auth()
+            .signOut()
+            .then(() => console.log('User Signed Out !'));
+    }
+
     const onPressItem = (id) => {
 
         switch (id) {
@@ -187,23 +193,16 @@ function supervisorShops({ navigation }) {
 
                     />
                 </View>
+                <View style={styles.footer}>
+                    <Button
+                        title='로그아웃'
+                        onPress={() => signOut()}
+                    />
+                </View>
             </View>
         </>
     );
    }
-                //<View style={styles.footer}>
-                //    <Button
-                //        title='로그아웃'
-                //        onPress={() => signOut()}
-                //    />
-                //</View>
-
-
-
-//            </View>
-//        </>
-//    );
-//}
 
 const styles = StyleSheet.create({
     background: {

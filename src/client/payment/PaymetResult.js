@@ -88,7 +88,7 @@ export default class PaymentResult extends React.Component {
 
             if (this.state.isMenuReady === true) {
 
-                const PATTERN = [1000, 1000, 1000, 1000];
+                const PATTERN = [ 1000 ];
                 Vibration.vibrate(PATTERN, true);
 
                 Alert.alert(

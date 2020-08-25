@@ -11,13 +11,13 @@ import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 
 import Shops from './client/Shops';
-import supervisorShops from './supervisor/supervisorShops';
+import SupervisorShops from './supervisor/SupervisorShops';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 enableScreens();
 
 function Intro({ navigation }) {
-    
+
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
@@ -43,28 +43,34 @@ function Intro({ navigation }) {
                     <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
                 </View>
                 <TouchableOpacity
-                    style={{ 
-                        margin: 15, 
-                    backgroundColor:'dodgerblue', 
-                    width:180, 
-                    padding:10,
-                        borderRadius:10,
-                        alignItems:'center',
-                        justifyContent:'center'
-                     }}
+                    style={{
+                        margin: 15,
+                        backgroundColor: 'dodgerblue',
+                        width: 180,
+                        padding: 10,
+                        borderRadius: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                     onPress={() => navigation.navigate('Verify')}
-                    onLongPress = {()=>navigation.navigate('supervisorShops')}
-                    //onLongPress={() => alert('종하석운 화이팅')}
+                    onLongPress={() => navigation.navigate('supervisorShops')}
+                //onLongPress={() => alert('종하석운 화이팅')}
                 >
-                    <Text style={{fontWeight:'bold', fontSize:18, color:'white'}}>시작하기</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
                 </TouchableOpacity>
             </View>
         );
     }
-
-    return(
-        <Shops navigation={navigation}/>
-    )
+    if (user.phoneNumber === '+821011112222') {
+        return (
+            <SupervisorShops navigation={navigation} />
+        )
+    }
+    else {
+        return (
+            <Shops navigation={navigation} />
+        )
+    }
 }
 
 const styles = StyleSheet.create({
