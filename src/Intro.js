@@ -63,7 +63,7 @@ function Intro({ navigation }) {
     }
 
     return(
-        <SafeAreaView>
+        <>
         {
             user.phoneNumber === '+821011112222' ?
 
@@ -72,7 +72,7 @@ function Intro({ navigation }) {
             <Shops navigation={navigation} />
 
         }
-        </SafeAreaView>
+        </>
     )
 }
 
