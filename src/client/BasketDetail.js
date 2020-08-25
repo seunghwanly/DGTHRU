@@ -29,7 +29,7 @@ async function handleDeleteOrder(shopInfo, key) {
 
 async function handleDeleteUser(key) {
 
-    var userPath = userHistoryRef + '/' + key;
+    var userPath = userHistoryRef() + '/' + key;
 
     await database()
         .ref(userPath)
@@ -50,7 +50,7 @@ export default class BasketDetail extends React.Component {
         }
 
         this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);
-        this._firebaseUserDatabase = userHistoryDatabase;
+        this._firebaseUserDatabase = userHistoryDatabase();
     };
 
     componentDidMount() {

@@ -70,7 +70,6 @@ function Intro({ navigation }) {
             <SupervisorShops navigation={navigation} />
             :
             <Shops navigation={navigation} />
-
         }
         </>
     )

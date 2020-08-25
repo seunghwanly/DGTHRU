@@ -3,6 +3,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 
+var currDate = moment().format('YYYY_MM_DD');
 
 export const userHistoryRef = () => { 
     if(auth().currentUser !== null)
