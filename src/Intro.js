@@ -5,22 +5,22 @@ import {
     Button,
     StyleSheet,
 } from 'react-native';
-import firebase from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { enableScreens } from 'react-native-screens';
+import auth from '@react-native-firebase/auth';
 
 import Shops from './client/Shops';
 import SupervisorShops from './supervisor/SupervisorShops';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 function Intro({ navigation }) {
 
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
 
     // Handle user state changes
     function onAuthStateChanged(user) {
@@ -53,7 +53,7 @@ function Intro({ navigation }) {
                         justifyContent: 'center'
                     }}
                     onPress={() => navigation.navigate('Verify')}
-                    onLongPress={() => navigation.navigate('supervisorShops')}
+                    onLongPress={() => navigation.navigate('SupervisorShops')}
                 //onLongPress={() => alert('종하석운 화이팅')}
                 >
                     <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
@@ -61,16 +61,19 @@ function Intro({ navigation }) {
             </View>
         );
     }
-    if (user.phoneNumber === '+821011112222') {
-        return (
+
+    return(
+        <SafeAreaView>
+        {
+            user.phoneNumber === '+821011112222' ?
+
             <SupervisorShops navigation={navigation} />
-        )
-    }
-    else {
-        return (
+            :
             <Shops navigation={navigation} />
-        )
-    }
+
+        }
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({

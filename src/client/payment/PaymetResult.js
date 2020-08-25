@@ -22,7 +22,7 @@ export default class PaymentResult extends React.Component {
 
         this.state = {
             isMenuReady: false,
-            count: 0,
+            orderState : []
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -33,17 +33,26 @@ export default class PaymentResult extends React.Component {
 
         // this.setState({ count : 0 });
         var count = 0;
+        var prevKey = null;
 
         this._firebaseRef
             .on('value', (snapshot) => {
+                this.setState({ orderState : [] }); //init
                 console.log('before >> ' + count, this.countProperties(snapshot));
 
                 snapshot.forEach((childSnapShot) => {
 
+                    this.setState({ orderState : this.state.orderState.concat(childSnapShot.val().orderState) })
+
                     if (childSnapShot.val().orderState === 'ready') {
+
                         // this.setState({ count : this.state.count + 1 });
                         count++;
                     }
+                    
+
+
+
                     // if (childSnapShot.key === "orderState") {
                     //     console.log('key : ' + childSnapShot.key + '\t state : ' + childSnapShot.val());
                     //     if (childSnapShot.val() === "ready") {
@@ -58,17 +67,32 @@ export default class PaymentResult extends React.Component {
                     // }
 
                 })
-                if (count === this.countProperties(snapshot.val()) && count !== 0) {
-                    this.setState({ isMenuReady: true });
+                var isFullyReady = 0;
+                for(var i=0; i < this.state.orderState.length; ++i) {
+                    if(this.state.orderState[i] === 'ready') isFullyReady++;
                 }
-                console.log('after >> ' + count, this.countProperties(snapshot.val()));
+                if(isFullyReady === this.state.orderState.length) this.setState({ isMenuReady : true });
+
+                console.log('\norderState >>'+ this.state.orderState.length +'\n'+this.state.orderState);
+
+                // if (count === this.countProperties(snapshot.val()) && count !== 0) {
+                //     this.setState({ isMenuReady: true });
+                // }
+                // console.log('after >> ' + count, this.countProperties(snapshot.val()));
                 // console.log('after >> '+ count , snapshot);
             });
+        
+        // this.state.orderState.forEach((state) => {
+        //     if(state === 'ready')
+        //         count++;
+        // })
+        // if (count === this.state.orderState.length) this.setState({ isMenuReady : true })
     }
 
     componentWillUnmount() {
         console.log('componentWillUnmout');
         this._firebaseRef.off();
+        this.setState({ isMenuReady : false });
     }
 
     countProperties(obj) {

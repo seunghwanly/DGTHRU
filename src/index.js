@@ -90,20 +90,20 @@ const StackContainer = () => {
                       onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
                     >
                       <Image
-                        style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf:'center'}}
+                        style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
                         resizeMode='cover'
                         source={require('../image/cart-outline.png')}
                       />
                       {
                         route.amount === undefined ?
                           <>
-                          <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position:'relative' }}>
-                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10 }}>!</Text>
-                          </View>
+                            <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
+                              <Text style={{ textAlign: 'center', color: 'white', fontSize: 10 }}>!</Text>
+                            </View>
                           </>
                           :
-                          <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position:'relative'  }}>
-                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight:'bold' }}>{route.amount}</Text>
+                          <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{route.amount}</Text>
                           </View>
 
                       }
@@ -113,18 +113,23 @@ const StackContainer = () => {
                 }
               },
 
-              headerLeft: () => (
-                <TouchableOpacity
-                  style={{ flexDirection: 'row-reverse' }}
-                  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                >
-                  <Image
-                    style={{ height: 30, width: 30, marginStart: 10 }}
-                    resizeMode='cover'
-                    source={require('../image/basket_outline.png')}
-                  />
-                </TouchableOpacity>
-              )
+              headerLeft: () => {
+
+                if (name !== 'Verify') {
+              
+                return(
+                  <TouchableOpacity
+                    style={{ flexDirection: 'row-reverse' }}
+                    onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                  >
+                    <Image
+                      style={{ height: 30, width: 30, marginStart: 10 }}
+                      resizeMode='cover'
+                      source={require('../image/basket_outline.png')}
+                    />
+                  </TouchableOpacity>
+                )
+              }}
 
             })
           }

@@ -53,25 +53,30 @@ export default Basket = ({ navigation, route }) => {
 
     useEffect(() => {
         var tempTotalCost = 0;
-        database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .once('value', (snapshot) => {
-                console.log('[Basket] length >>' + countProperties(snapshot.val()));
+        
+            database()
+                .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                .once('value', (snapshot) => {
+                    console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
-                snapshot.forEach((childSnapShot) => {
+                    snapshot.forEach((childSnapShot) => {
 
-                    tempTotalCost += childSnapShot.val().cost;
-                    // console.log('prevCost >> ' + prevCost);
+                        console.log('[Basket] childSnapShot >> '+childSnapShot.val());
 
-                    console.log('[Basket] in loop : totalCost >> ' + totalCost);
-                    console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
-                    () => setTotalCost(tempTotalCost);
-                })
-                // return () => { setTotalCost(tempTotalCost);
-                console.log('[Basket] out totalCost >> ' + totalCost);
-                console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
-                //}
-            });
+                        tempTotalCost += childSnapShot.val().cost;
+                        
+                        // console.log('prevCost >> ' + prevCost);
+
+                        console.log('[Basket] in loop : totalCost >> ' + totalCost);
+                        console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
+                    })
+                    setTotalCost(() => tempTotalCost);
+                    // return () => { setTotalCost(tempTotalCost);
+                    console.log('[Basket] out totalCost >> ' + totalCost);
+                    console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
+                    //}
+                });
+        
     }, [totalCost]);
 
     function ChooseDetail(props) {
@@ -181,22 +186,6 @@ export default Basket = ({ navigation, route }) => {
         }
 
         return count;
-    }
-
-
-
-
-
-    handleTotalCost = (shopInfo, userPhoneNumber) => {
-        console.log('>>>>>>>>>>.\thandleTotalCost');
-
-        database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .once('value', (snapshot) => {
-
-            });
-
-        console.log('total Cost >> ' + totalCost);
     }
 
     sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
@@ -617,7 +606,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     navigation.navigate('Paying',
                                         {
-                                            totalCost: item.cost,
+                                            totalCost: totalCost + item.cost,
                                             shopInfo: shopInfo
                                         }
                                     ) : {}
@@ -627,7 +616,7 @@ export default Basket = ({ navigation, route }) => {
 
                                     navigation.navigate('Paying',
                                         {
-                                            totalCost: totalCost,
+                                            totalCost: item.cost,
                                             shopInfo: shopInfo
                                         }
                                     ) : {}

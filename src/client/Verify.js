@@ -158,7 +158,7 @@ function Verify({ navigation, number }) {
         if(admin){
         try {
             await confirm.confirm(code)
-                .then(() => navigation.navigate('supervisorShops', { navigation: navigation }));
+                .then(() => navigation.navigate('SupervisorShops', { navigation: navigation }));
             console.log('smscode : ' + code);
         } catch (error) {
             console.log('Invalid code.' + error);
