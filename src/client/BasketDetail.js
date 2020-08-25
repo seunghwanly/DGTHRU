@@ -82,7 +82,6 @@ export default class BasketDetail extends React.Component {
         const userPhoneNumber = auth().currentUser.phoneNumber;
 
         const reference = database().ref(this.props.route.params.shopInfo + '/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
-
         reference
             .on('value', (snapshot) => {
 

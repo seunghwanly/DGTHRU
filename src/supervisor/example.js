@@ -18,18 +18,28 @@ async function DeleteOrderList(key) {
         .remove();
 }
 
+async function Setconfirm(key, phoneNum){
+    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'confirm'});
+}
+
+async function SetUnconfirm(key, phoneNum){
+    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'request'});
+}
+
+async function SetReady(key, phoneNum){
+    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'ready'});
+}
+
 export default class Example extends Component {
 
     constructor(props){
         super(props);
         shopname =this.props.route.params.ShopInfo;
-        console.log("params : ", shopname);
         this.state={ 
             list:[],
         } }
 
 
-    
 
     componentDidMount(){
         database().ref('admin/' + shopname).on('value', (snapshot) =>{
@@ -39,9 +49,12 @@ export default class Example extends Component {
         database().ref(shopname + '/' + currentTime +'/').on('value', (snapshot) =>{
             var li = []
             snapshot.forEach((childSnapShot) => {
+            var orderPhoneNumber = childSnapShot.key
             childSnapShot.forEach((child)=>{
+                console.log('orderTime2 : ' , child.val().orderTime)
                 li.push({
                     key: child.key,
+                    orderPhoneNumber: orderPhoneNumber,
                     name:child.val().name,
                     orderTime:child.val().orderTime,
                     cost: child.val().cost,
@@ -49,13 +62,13 @@ export default class Example extends Component {
                     cup : child.val().cup
                 })
             })
-
-         
             
             })
-            let sortedArray = li.sort((a, b) => a.orderTime.valueOf() - b.orderTime.valueOf())
-            this.setState({list:sortedArray})
+            this.setState({list:li})
+            this.sortListByTime()
+            
         })
+     
     }
 
     //deleteItem(k) {
@@ -106,6 +119,15 @@ export default class Example extends Component {
     //       <ListItem item={item} />
     //     )
     // }
+
+    sortListByTime(){
+        this.state.list.sort(function(obj1, obj2) {
+         return new Date(obj1.orderTime).getTime() -new Date(obj2.orderTime).getTime();
+       });
+       this.setState(previousState => (
+         { list: previousState.list }
+       ))
+     }
   
     render() {
         return (
@@ -124,16 +146,19 @@ export default class Example extends Component {
                                     width: '85%', 
                                     padding:10,
                                     borderRadius:10,
-                                    
                                     alignItems:'center',
                                     justifyContent:'center',
                                 
 
                                 }}
-                                onPress={() => DeleteOrderList(item.key)}
+                                //onPress={() => DeleteOrderList(item.key)}
                                 >
                                 <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
                                 <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}> {item.orderTime}</Text>
+                                
+                                <Button title="승인취소" onPress={() => SetUnconfirm(item.key , item.orderPhoneNumber)}></Button> 
+                                <Button title="주문승인" onPress={() => Setconfirm(item.key , item.orderPhoneNumber)}></Button> 
+                                <Button title="준비완료" onPress={() => SetReady(item.key , item.orderPhoneNumber)}></Button> 
                             </TouchableOpacity>
                         </View>)
                     }}
