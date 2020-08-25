@@ -3,87 +3,108 @@ import {
     View,
     Text,
     Button,
-    Vibration, 
+    Vibration,
     Alert,
     Image
 } from 'react-native';
 
 import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
-import moment from 'moment';
+import { commonRef } from '../../DatabaseRef.js';
 
 export default class PaymentResult extends React.Component {
 
-    // const navigation = this.props.route.params.navigation;
-    // const route = this.props.route;
-    // const response = this.props.route.params.response;
-    // const shopInfo this.props.route.params.shopInfo;
+    _firebaseRef;
 
     constructor(props) {
         super(props);
 
+        console.log('constructor >> ');
+
         this.state = {
-            isDataEmpty: false
+            isMenuReady: false,
+            count: 0,
         }
+
+        this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
     }
 
     componentDidMount() {
         console.log('componentDidMount');
-        this.getResponseSignal();
-    }
 
-    getResponseSignal() {
+        // this.setState({ count : 0 });
+        var count = 0;
 
-        const PATTERN = [1000, 1000, 1000];
+        this._firebaseRef
+            .on('value', (snapshot) => {
+                console.log('before >> ' + count, this.countProperties(snapshot));
 
-        console.log('getResponseSignal >> ');
+                snapshot.forEach((childSnapShot) => {
 
-        const readData =
-            database()
-                .ref(this.props.route.params.shopInfo +
-                    '/' + moment().format('YYYY_MM_DD') +
-                    '/' + auth().currentUser.phoneNumber)
-                .on('value', (snapshot) => {
-
-
-                    console.log('read database >>> ' + snapshot.val());
-
-                    if (snapshot.val() === null) {
-
-                        this.setState({ isDataEmpty: true });
-
-
-                        Vibration.vibrate(PATTERN, true);
-
-                        Alert.alert(
-                            'DGHTRU', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
-                            [
-                                {
-                                    text: '확인',
-                                    onPress: () =>
-                                        [
-                                            Vibration.cancel(),
-                                            database()
-                                                .ref(this.props.route.params.shopInfo +
-                                                    '/' + moment().format('YYYY_MM_DD') +
-                                                    '/' + auth().currentUser.phoneNumber)
-                                                .off('value', readData),
-                                            this.props.navigation.navigate('Shops')
-                                        ]
-                                }
-                            ]
-                        )
+                    if (childSnapShot.val().orderState === 'ready') {
+                        // this.setState({ count : this.state.count + 1 });
+                        count++;
                     }
-                    else {
-                        this.setState({ isDataEmpty: false })
-                    }
+                    // if (childSnapShot.key === "orderState") {
+                    //     console.log('key : ' + childSnapShot.key + '\t state : ' + childSnapShot.val());
+                    //     if (childSnapShot.val() === "ready") {
+                    //         // this.setState({ count : this.state.count + 1 });
+                    //         count++;
+                    //         console.log('count ++');
+                    //     }
+                    // }  
+                    // if (this.state.count === (this.countProperties(snapshot.val()) - 1) && this.state.count !== 0) {
+                    //     this.setState({ isMenuReady: !this.state.isMenuReady });
+                    //     return () => this._firebaseRef.off();
+                    // }
 
                 })
+                if (count === this.countProperties(snapshot.val()) && count !== 0) {
+                    this.setState({ isMenuReady: true });
+                }
+                console.log('after >> ' + count, this.countProperties(snapshot.val()));
+                // console.log('after >> '+ count , snapshot);
+            });
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmout');
+        this._firebaseRef.off();
+    }
+
+    countProperties(obj) {
+        var count = 0;
+
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                ++count;
+        }
+
+        return count;
     }
 
     render() {
         console.log('render >> ');
         if (this.props.route.params.response.imp_success === 'true') {
+
+            if (this.state.isMenuReady === true) {
+
+                const PATTERN = [1000, 1000, 1000, 1000];
+                Vibration.vibrate(PATTERN, true);
+
+                Alert.alert(
+                    'DGHTRU', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
+                    [
+                        {
+                            text: '확인',
+                            onPress: () =>
+                                [
+                                    Vibration.cancel(),
+                                    this.props.navigation.navigate('Shops')
+                                ]
+                        }
+                    ]
+                );
+            }
 
             return (
                 <View style={{
@@ -93,12 +114,12 @@ export default class PaymentResult extends React.Component {
                     alignItems: 'center'
                 }}>
                     <Image
-                    style={{
-                        width:200,
-                        height:200,
-                        margin:20
-                    }}
-                     source={require('../../../image/sample.gif')}/>
+                        style={{
+                            width: 200,
+                            height: 200,
+                            margin: 20
+                        }}
+                        source={require('../../../image/sample.gif')} />
                     <Text>메뉴가 준비되면 알려드리겠습니다 !</Text>
                     <Button
                         title="홈으로 돌아가기"

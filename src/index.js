@@ -75,25 +75,26 @@ const StackContainer = () => {
         <Stack.Screen name={name} component={component}
           options=
           {
-            name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu" ?
-
-              ({ navigation, route }) => ({
-                headerRight: () => (
-                  <TouchableHighlight
-                    style={{ flexDirection: 'row-reverse' }}
-                    onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
-                  >
-                    <Image
-                      style={{ height: 30, width: 30, marginEnd: 10 }}
-                      resizeMode='cover'
-                      source={require('../image/cart-outline.png')}
-                    />
-                  </TouchableHighlight>
-                )
-              }) :
-              name === "Result" ? { headerLeft: null } : {}
-            ,
             ({ navigation, route }) => ({
+              
+              headerRight: () => {
+                if (name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+
+                  return (
+                    <TouchableHighlight
+                      style={{ flexDirection: 'row-reverse' }}
+                      onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
+                    >
+                      <Image
+                        style={{ height: 30, width: 30, marginEnd: 10 }}
+                        resizeMode='cover'
+                        source={require('../image/cart-outline.png')}
+                      />
+                    </TouchableHighlight>
+                  )
+                }
+              },
+
               headerLeft: () => (
                 <TouchableHighlight
                   style={{ flexDirection: 'row-reverse' }}
@@ -106,6 +107,7 @@ const StackContainer = () => {
                   />
                 </TouchableHighlight>
               )
+
             })
           }
         />

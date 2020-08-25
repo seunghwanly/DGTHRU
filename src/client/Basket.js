@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -35,6 +35,10 @@ export default Basket = ({ navigation, route }) => {
         "HOT", "ICED"
     ];
 
+    // const orderState = [
+    //     'request', 'confirm', 'ready'
+    // ]
+
     const dataWhippingCream = [
         "많이", "적게", "노노"
     ];
@@ -45,11 +49,12 @@ export default Basket = ({ navigation, route }) => {
     const [hotOrIced, setHotOrIced] = useState(null);
     const [whippingCream, setWhippingCream] = useState(null);
     const [time, setTime] = useState(null);
+    const [totalCost, setTotalCost] = useState(0);
 
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
-        setTime(moment().format('HH:mm:ss'));
+
         if (subMenu.hasOwnProperty('sub_menu')) {
             return (
                 <View style={{
@@ -144,6 +149,58 @@ export default Basket = ({ navigation, route }) => {
         alert(item);
     }
 
+    countProperties = (obj) => {
+        var count = 0;
+
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                ++count;
+        }
+
+        return count;
+    }
+
+    handleReadData = (shopInfo, userPhoneNumber) => {
+        database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .once('value', (snapshot) => {
+                console.log(countProperties(snapshot.val()));
+                return countProperties(snapshot.val());
+            });
+
+            
+    }
+    handleTotalCost = (shopInfo, userPhoneNumber) => {
+        database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .once('value', (snapshot) => {
+                snapshot.forEach((childSnapShot) => {
+                    setTotalCost(totalCost + childSnapShot.val().cost);
+                })
+            });
+        console.log('total Cost >> ' + totalCost);
+    }
+
+    sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
+        // 1.오너와 함께 공유하는 DB
+        const orderRef = database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .push();
+
+        orderRef
+            .set(jsonOrderList)
+            .then(() => alert('담겼습니다!'));
+
+        // 2.사용자 History
+        const userRef = database()
+            .ref('user_history/' + userPhoneNumber.uid)
+            .push();
+
+        userRef
+            .set(jsonOrderList)
+            .then(() => console.log('Updated User History'));
+    }
+
     handleOrder = (item) => {
         item.time = moment().format('HH:mm:ss');
         // HOT / ICED 기본적으로 설정해줌
@@ -155,35 +212,15 @@ export default Basket = ({ navigation, route }) => {
 
         const jsonOrderList = {
             'name': item.name,
-            'orderTime' : item.time,
+            'orderTime': item.time,
             'cost': item.cost,
             'count': count,
             'cup': inOrOut,
             'type': hotOrIced,
-            'selected': selected
+            'selected': selected,
+            'orderState': 'request'
             //옵션추가를 배열로 할지 고민중
         }
-
-        sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
-            // 1.오너와 함께 공유하는 DB
-            const orderRef = database()
-                .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                .push();
-
-            orderRef
-                .set(jsonOrderList)
-                .then(() => alert('담겼습니다!'));
-
-            // 2.사용자 History
-            const userRef = database()
-                .ref('user_history/' + userPhoneNumber.uid)
-                .push();
-
-            userRef
-                .set(jsonOrderList)
-                .then(() => console.log('Updated User History'));
-        }
-
         //sold_out >> false 인 것 만
         if (item.sold_out !== true) {
 
@@ -220,14 +257,17 @@ export default Basket = ({ navigation, route }) => {
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                                 else {  //none option
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                             }
                             else { //selected nothing
                                 alert('모두 선택해주세요');
+                                return false;
                             }
                         }   //if
                         else {  //sub_menu none >> 단일메뉴임
@@ -236,15 +276,18 @@ export default Basket = ({ navigation, route }) => {
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                             else {  //none option
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                         }   //else
                     }   //if
                     else {  // 2, 3
                         alert('모두 선택해주세요');
+                        return false;
                     }
                 }    //1,2,3,4
                 else {
@@ -257,14 +300,17 @@ export default Basket = ({ navigation, route }) => {
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                                 else {  //none option
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                             }
                             else { //selected nothing
                                 alert('모두 선택해주세요');
+                                return false;
                             }
                         }   //if
                         else {  //sub_menu none >> 단일메뉴임
@@ -273,10 +319,12 @@ export default Basket = ({ navigation, route }) => {
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                             else {  //none option
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                         }   //else
                     }
@@ -290,14 +338,17 @@ export default Basket = ({ navigation, route }) => {
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                                 else {  //none option
                                     //push DB
                                     sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                    return true;
                                 }
                             }
                             else { //selected nothing
                                 alert('모두 선택해주세요');
+                                return false;
                             }
                         }   //if
 
@@ -307,21 +358,25 @@ export default Basket = ({ navigation, route }) => {
                                 // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                             else {  //none option
                                 //push DB
                                 sendOrder(jsonOrderList, shopInfo, userPhoneNumber);
+                                return true;
                             }
                         }   //else
                     }
 
                     else {   //5,7,11,12
                         alert('선택항목을 확인해주세요 !');
+                        return false;
                     }
                 }    //5,6,7,8,9,10,11,12
             }
             else { //매장용/일회용 선택안한 경우
                 alert('컵을 선택해주세요 !');
+                return false;
             }
         }
     }
@@ -490,7 +545,7 @@ export default Basket = ({ navigation, route }) => {
                                         height: 40,
                                         paddingLeft: 45,
                                         paddingRight: 45,
-                                        
+
                                     }
                                 }
                                 onPress={() => handleOrder(item)}>
@@ -515,34 +570,47 @@ export default Basket = ({ navigation, route }) => {
                     }
                     onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
                 >
-                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18, color:'white' }]}>장바구니 바로가기</Text>
+                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18, color: 'white' }]}>장바구니 바로가기</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                        style={{
-                            backgroundColor: 'gold',
-                            borderRadius: 10,
-                            paddingStart: 10,
-                            paddingEnd: 10,
-                            paddingTop: 5,
-                            paddingBottom: 5,
-                            margin: 5,
-                            width: 300
-                        }}
+                    style={{
+                        backgroundColor: 'gold',
+                        borderRadius: 10,
+                        paddingStart: 10,
+                        paddingEnd: 10,
+                        paddingTop: 5,
+                        paddingBottom: 5,
+                        margin: 5,
+                        width: 300
+                    }}
 
-                        onPress={() => 
-                        [
-                            alert('카카오페이로 결제합니다 !'),
-                            handleOrder(item), 
-                            navigation.navigate('Paying', 
+                    onPress={() =>
+
+                        handleReadData(shopInfo, userPhoneNumber) !== 0 ?
+
+                            handleOrder(item) === true ?
+
+                                navigation.navigate('Paying',
+                                    {
+                                        totalCost: item.cost,
+                                        shopInfo: shopInfo
+                                    }
+                                ) : {}
+
+                            :
+                            [
+                            handleTotalCost(shopInfo, userPhoneNumber),
+                            navigation.navigate('Paying',
                                 {
-                                    totalCost : item.cost,
-                                    shopInfo : shopInfo
+                                    totalCost: totalCost,
+                                    shopInfo: shopInfo
                                 }
-                            ),
-                        ]}
-                        >
-                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
-                        </TouchableOpacity>
+                            )
+                            ]
+                    }
+                >
+                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                </TouchableOpacity>
 
             </View>
         )
