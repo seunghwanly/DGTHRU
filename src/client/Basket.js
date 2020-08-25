@@ -28,7 +28,7 @@ export default Basket = ({ navigation, route }) => {
     const { shopInfo } = route.params;
 
     const dataInOrOut = [
-        "매장용", "일회용"
+        "개인컵", "매장용", "일회용"
     ];
 
     const dataIceHot = [
@@ -51,6 +51,28 @@ export default Basket = ({ navigation, route }) => {
     const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
+    useEffect(() => {
+        var tempTotalCost = 0;
+        database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .once('value', (snapshot) => {
+                console.log('[Basket] length >>' + countProperties(snapshot.val()));
+
+                snapshot.forEach((childSnapShot) => {
+
+                    tempTotalCost += childSnapShot.val().cost;
+                    // console.log('prevCost >> ' + prevCost);
+
+                    console.log('[Basket] in loop : totalCost >> ' + totalCost);
+                    console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
+                    () => setTotalCost(tempTotalCost);
+                })
+                // return () => { setTotalCost(tempTotalCost);
+                console.log('[Basket] out totalCost >> ' + totalCost);
+                console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
+                //}
+            });
+    }, [totalCost]);
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
@@ -126,6 +148,7 @@ export default Basket = ({ navigation, route }) => {
 
         if (count > 0) {
             if (count === 1) {
+
                 if (id === '-') {
                     alert('다른 메뉴를 주문하시겠어요?');
                 }
@@ -160,24 +183,19 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    handleReadData = (shopInfo, userPhoneNumber) => {
+
+
+
+
+    handleTotalCost = (shopInfo, userPhoneNumber) => {
+        console.log('>>>>>>>>>>.\thandleTotalCost');
+
         database()
             .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
             .once('value', (snapshot) => {
-                console.log(countProperties(snapshot.val()));
-                return countProperties(snapshot.val());
+
             });
 
-            
-    }
-    handleTotalCost = (shopInfo, userPhoneNumber) => {
-        database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .once('value', (snapshot) => {
-                snapshot.forEach((childSnapShot) => {
-                    setTotalCost(totalCost + childSnapShot.val().cost);
-                })
-            });
         console.log('total Cost >> ' + totalCost);
     }
 
@@ -391,7 +409,8 @@ export default Basket = ({ navigation, route }) => {
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        alignSelf: 'stretch',
                     }}>
                         {/* 이미지랑 갯수 조절하는 거 */}
                         <View style={{
@@ -418,10 +437,8 @@ export default Basket = ({ navigation, route }) => {
 
                         {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
                         <View style={{
-                            justifyContent: 'center',
                             alignItems: 'center',
-                            padding: 2,
-
+                            width: '72%',
                         }}>
                             {
                                 item.ice_available === true && item.only_ice === false ?
@@ -430,6 +447,10 @@ export default Basket = ({ navigation, route }) => {
                                         padding: 10,
                                     }}>
                                         <FlatList
+                                            style={{
+                                                marginStart: '5%',
+                                                marginEnd: '5%'
+                                            }}
                                             data={dataIceHot}
                                             renderItem={
                                                 ({ item }) => {
@@ -507,7 +528,7 @@ export default Basket = ({ navigation, route }) => {
                                                                 backgroundColor
                                                             },
                                                             {
-                                                                width: 80,
+                                                                width: 60,
                                                                 height: 40,
                                                                 borderRadius: 8,
                                                                 justifyContent: 'center',
@@ -555,63 +576,67 @@ export default Basket = ({ navigation, route }) => {
                     </View>
                     <ChooseDetail subMenu={item} />
                 </View>
-                <TouchableOpacity
-                    style={
-                        {
-                            backgroundColor: 'midnightblue',
+                <View
+                    style={{
+                        flexDirection: 'row'
+                    }}>
+                    <TouchableOpacity
+                        style={
+                            {
+                                backgroundColor: 'midnightblue',
+                                borderRadius: 10,
+                                paddingStart: 10,
+                                paddingEnd: 10,
+                                paddingTop: 5,
+                                paddingBottom: 5,
+                                margin: 5,
+                                width: 150
+                            }
+                        }
+                        onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
+                    >
+                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: 'gold',
                             borderRadius: 10,
                             paddingStart: 10,
                             paddingEnd: 10,
                             paddingTop: 5,
                             paddingBottom: 5,
                             margin: 5,
-                            width: 300
+                            width: 150
+                        }}
+
+                        onPress={() => [
+
+                            totalCost > 0 ?
+
+                                handleOrder(item) === true ?
+
+                                    navigation.navigate('Paying',
+                                        {
+                                            totalCost: item.cost,
+                                            shopInfo: shopInfo
+                                        }
+                                    ) : {}
+
+                                :
+                                handleOrder(item) === true ?
+
+                                    navigation.navigate('Paying',
+                                        {
+                                            totalCost: totalCost,
+                                            shopInfo: shopInfo
+                                        }
+                                    ) : {}
+                        ]
                         }
-                    }
-                    onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
-                >
-                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18, color: 'white' }]}>장바구니 바로가기</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: 'gold',
-                        borderRadius: 10,
-                        paddingStart: 10,
-                        paddingEnd: 10,
-                        paddingTop: 5,
-                        paddingBottom: 5,
-                        margin: 5,
-                        width: 300
-                    }}
-
-                    onPress={() =>
-
-                        handleReadData(shopInfo, userPhoneNumber) !== 0 ?
-
-                            handleOrder(item) === true ?
-
-                                navigation.navigate('Paying',
-                                    {
-                                        totalCost: item.cost,
-                                        shopInfo: shopInfo
-                                    }
-                                ) : {}
-
-                            :
-                            [
-                            handleTotalCost(shopInfo, userPhoneNumber),
-                            navigation.navigate('Paying',
-                                {
-                                    totalCost: totalCost,
-                                    shopInfo: shopInfo
-                                }
-                            )
-                            ]
-                    }
-                >
-                    <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
-                </TouchableOpacity>
-
+                    >
+                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     } else {
@@ -637,7 +662,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     subBackground: {
-        width: '90%',
+        width: '95%',
         height: 'auto',
         backgroundColor: 'ghostwhite',
         justifyContent: 'center',

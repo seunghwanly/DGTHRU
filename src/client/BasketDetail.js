@@ -3,18 +3,16 @@ import {
     View,
     Text,
     Image,
-    StyleSheet, 
+    StyleSheet,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-//firebase
+//Firebase Ref
+import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../DatabaseRef';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
-//moment
-import moment from 'moment';
-
 import { enableScreens } from 'react-native-screens';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 enableScreens();
@@ -22,12 +20,7 @@ enableScreens();
 
 async function handleDeleteOrder(shopInfo, key) {
 
-    var orderPath = shopInfo
-        + '/' + moment().format('YYYY_MM_DD')
-        + '/' + auth().currentUser.phoneNumber
-        + '/' + key;
-
-    console.log(orderPath);
+    var orderPath = commonRef(shopInfo) + '/' + key;
 
     await database()
         .ref(orderPath)
@@ -35,11 +28,8 @@ async function handleDeleteOrder(shopInfo, key) {
 }
 
 async function handleDeleteUser(key) {
-    var userPath = 'user_history'
-        + '/' + auth().currentUser.uid
-        + '/' + key;
-
-    console.log(userPath);
+    
+    var userPath = userHistoryRef + '/' + key;
 
     await database()
         .ref(userPath)
@@ -48,6 +38,9 @@ async function handleDeleteUser(key) {
 
 export default class BasketDetail extends React.Component {
 
+    _firebaseCommonRef;
+    _firebaseUserRef;
+
     constructor(props) {
         super(props);
 
@@ -55,43 +48,22 @@ export default class BasketDetail extends React.Component {
             orderData: [],
             userData: []
         }
+
+        this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);
+        this._firebaseUserDatabase = userHistoryDatabase;
     };
 
     componentDidMount() {
-        this.getCommonData();
-        this.getUserData();
-    }
 
-    shouldComponentUpdate(nextState) {
-        return this.state.orderData !== nextState.orderData;
-    }
-
-    _returnIndexFromOrderData = (key) => {
-
-        for (var k in this.state.orderData) {
-            if (key === this.state.orderData[k].key) {
-                console.log(this.state.userData[this.state.orderData[k].idx].key);
-                return this.state.userData[this.state.orderData[k].idx].key;
-            }
-        }
-
-
-    }
-
-    getCommonData() {
-        const userPhoneNumber = auth().currentUser.phoneNumber;
-
-        const reference = database().ref(this.props.route.params.shopInfo + '/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
-
-        reference
+        this._firebaseCommonDatabase
             .on('value', (snapshot) => {
 
-                this.setState({ orderData : [] })   //상태가 바뀌어야 화면이 reload되는데 이게 지금은 최선임
+                this.setState({ orderData: [] })   //상태가 바뀌어야 화면이 reload되는데 이게 지금은 최선임
 
                 var idx = 0;    // loop
 
                 snapshot.forEach((childSnapShot) => {
-                    console.log('\nBasketDetail >> '+childSnapShot.val());
+                    console.log('\nBasketDetail >> ' + childSnapShot.val());
 
                     var tempJSON = {
                         "idx": idx,
@@ -104,21 +76,15 @@ export default class BasketDetail extends React.Component {
                     this.setState({
                         orderData: this.state.orderData.concat(tempJSON)
                     })
-
+                    this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
                     console.log('\n after : ' + this.state.orderData.length);
                 })
             });
 
-
-    }
-    
-    getUserData() {
-        const userRef = database().ref('user_history/' + auth().currentUser.uid);
-        
-        userRef
+        this._firebaseUserDatabase
             .on('value', (snapshot2) => {
 
-                this.setState({ userData : [] })
+                this.setState({ userData: [] })
 
                 var idx = 0;
 
@@ -134,7 +100,30 @@ export default class BasketDetail extends React.Component {
                     });
                 })
             });
+
     }
+
+    shouldComponentUpdate(nextState) {
+        return this.state.orderData !== nextState.orderData;
+    }
+
+    componentWillUnmount() {
+        this._firebaseCommonDatabase.off();
+        this._firebaseUserDatabase.off();
+    }
+
+    _returnIndexFromOrderData = (key) => {
+
+        for (var k in this.state.orderData) {
+            if (key === this.state.orderData[k].key) {
+                console.log(this.state.userData[this.state.orderData[k].idx].key);
+                return this.state.userData[this.state.orderData[k].idx].key;
+            }
+        }
+
+
+    }
+
 
 
     render() {
@@ -150,6 +139,7 @@ export default class BasketDetail extends React.Component {
                     <View style={styles.subBackground}>
                         {
                             this.state.orderData.map(item => {
+                                //key 값 부여하기 !
                                 return (
                                     <View style={
                                         {
@@ -240,26 +230,17 @@ export default class BasketDetail extends React.Component {
                             width: 300
                         }}
 
-                        onPress={() => 
-                        [
-                            alert('카카오페이로 결제합니다 !'), 
-                            this.props.navigation.navigate('Paying', 
-                                {
-                                    totalCost : totalCost,
-                                    quantity : this.state.orderData.length,
-                                    shopInfo : this.props.route.params.shopInfo
-                                }
-                            ),
-                            // firebase off
-                            database()
-                                .ref(this.props.route.params.shopInfo + 
-                                '/' + moment().format('YYYY_MM_DD') + 
-                                '/' + auth().currentUser.phoneNumber)
-                                .off('value', this.getCommonData()),
-                            database()
-                                .ref('user_history/' + auth().currentUser.uid)
-                                .off('value', this.getUserData())
-                        ]}
+                        onPress={() =>
+                            [
+                                alert('카카오페이로 결제합니다 !'),
+                                this.props.navigation.navigate('Paying',
+                                    {
+                                        totalCost: totalCost,
+                                        quantity: this.state.orderData.length,
+                                        shopInfo: this.props.route.params.shopInfo
+                                    }
+                                )
+                            ]}
                     >
                         <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
                     </TouchableOpacity>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+//common
 import Intro from './Intro';
 import Shops from './client/Shops';
 import Verify from './client/Verify';
@@ -20,18 +22,20 @@ import PaymentResult from './client/payment/PaymetResult';
 //drawer
 import Bill from './client/drawer/Bill';
 
+//Supervisor
+import example from './supervisor/example';
+import SupervisorShops from './supervisor/SupervisorShops';
+
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { enableScreens } from 'react-native-screens';
-
-//Supervisor
-import example from './supervisor/example';
-import supervisorShops from './supervisor/supervisorShops';
+import { commonDatabase } from './DatabaseRef';
 
 import {
-  TouchableHighlight,
+  Text,
+  TouchableOpacity,
   Image,
   View
 } from 'react-native';
@@ -62,7 +66,7 @@ const payScreen = {
 };
 
 const supervisorScreens = {
-  supervisorShops: supervisorShops,
+  SupervisorShops: SupervisorShops,
   example: example
 };
 
@@ -76,36 +80,50 @@ const StackContainer = () => {
           options=
           {
             ({ navigation, route }) => ({
-              
+
               headerRight: () => {
                 if (name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
 
                   return (
-                    <TouchableHighlight
+                    <TouchableOpacity
                       style={{ flexDirection: 'row-reverse' }}
                       onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
                     >
                       <Image
-                        style={{ height: 30, width: 30, marginEnd: 10 }}
+                        style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf:'center'}}
                         resizeMode='cover'
                         source={require('../image/cart-outline.png')}
                       />
-                    </TouchableHighlight>
+                      {
+                        route.amount === undefined ?
+                          <>
+                          <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position:'relative' }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10 }}>!</Text>
+                          </View>
+                          </>
+                          :
+                          <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position:'relative'  }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight:'bold' }}>{route.amount}</Text>
+                          </View>
+
+                      }
+
+                    </TouchableOpacity>
                   )
                 }
               },
 
               headerLeft: () => (
-                <TouchableHighlight
+                <TouchableOpacity
                   style={{ flexDirection: 'row-reverse' }}
                   onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                 >
                   <Image
-                    style={{ height: 30, width: 30, marginEnd: 10 }}
+                    style={{ height: 30, width: 30, marginStart: 10 }}
                     resizeMode='cover'
                     source={require('../image/basket_outline.png')}
                   />
-                </TouchableHighlight>
+                </TouchableOpacity>
               )
 
             })
