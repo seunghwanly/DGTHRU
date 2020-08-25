@@ -22,7 +22,7 @@ export default class PaymentResult extends React.Component {
 
         this.state = {
             isMenuReady: false,
-            orderState : []
+            orderState: []
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -31,68 +31,35 @@ export default class PaymentResult extends React.Component {
     componentDidMount() {
         console.log('componentDidMount');
 
-        // this.setState({ count : 0 });
-        var count = 0;
-        var prevKey = null;
-
         this._firebaseRef
             .on('value', (snapshot) => {
-                this.setState({ orderState : [] }); //init
-                console.log('before >> ' + count, this.countProperties(snapshot));
+
+                //init
+                this.setState({ orderState: [], isMenuReady: false }); 
 
                 snapshot.forEach((childSnapShot) => {
-
-                    this.setState({ orderState : this.state.orderState.concat(childSnapShot.val().orderState) })
-
-                    if (childSnapShot.val().orderState === 'ready') {
-
-                        // this.setState({ count : this.state.count + 1 });
-                        count++;
-                    }
-                    
-
-
-
-                    // if (childSnapShot.key === "orderState") {
-                    //     console.log('key : ' + childSnapShot.key + '\t state : ' + childSnapShot.val());
-                    //     if (childSnapShot.val() === "ready") {
-                    //         // this.setState({ count : this.state.count + 1 });
-                    //         count++;
-                    //         console.log('count ++');
-                    //     }
-                    // }  
-                    // if (this.state.count === (this.countProperties(snapshot.val()) - 1) && this.state.count !== 0) {
-                    //     this.setState({ isMenuReady: !this.state.isMenuReady });
-                    //     return () => this._firebaseRef.off();
-                    // }
-
+                    this.setState({ orderState: this.state.orderState.concat(childSnapShot.val().orderState) })
                 })
+
                 var isFullyReady = 0;
-                for(var i=0; i < this.state.orderState.length; ++i) {
-                    if(this.state.orderState[i] === 'ready') isFullyReady++;
+                for (var i = 0; i < this.state.orderState.length; ++i) {
+                    if (this.state.orderState[i] === 'ready') isFullyReady++;
+                    else {
+                        if (isFullyReady > 0) isFullyReady--;
+                    }
                 }
-                if(isFullyReady === this.state.orderState.length) this.setState({ isMenuReady : true });
+                if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
+                    this.setState({ isMenuReady: true });  
+                }
 
-                console.log('\norderState >>'+ this.state.orderState.length +'\n'+this.state.orderState);
-
-                // if (count === this.countProperties(snapshot.val()) && count !== 0) {
-                //     this.setState({ isMenuReady: true });
-                // }
-                // console.log('after >> ' + count, this.countProperties(snapshot.val()));
-                // console.log('after >> '+ count , snapshot);
+                console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
-        
-        // this.state.orderState.forEach((state) => {
-        //     if(state === 'ready')
-        //         count++;
-        // })
-        // if (count === this.state.orderState.length) this.setState({ isMenuReady : true })
     }
 
     componentWillUnmount() {
         console.log('componentWillUnmout');
         this._firebaseRef.off();
-        this.setState({ isMenuReady : false });
+        // this.setState({ isMenuReady : false });
     }
 
     countProperties(obj) {
@@ -112,22 +79,20 @@ export default class PaymentResult extends React.Component {
 
             if (this.state.isMenuReady === true) {
 
-                const PATTERN = [ 1000 ];
-                Vibration.vibrate(PATTERN, true);
-
+                console.log('menu ready !');
                 Alert.alert(
-                    'DGHTRU', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
+                    'DGHTRU 알림', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
                     [
                         {
                             text: '확인',
-                            onPress: () =>
-                                [
-                                    Vibration.cancel(),
-                                    this.props.navigation.navigate('Shops')
-                                ]
+                            onPress: () => [ Vibration.cancel(), this.props.navigation.navigate('Shops') ]
+                        },
+                        {
+                            text: 'x', onPress: () => console.log('cancel pressed !'), style:'cancel'
                         }
                     ]
                 );
+                Vibration.vibrate([1000, 1000, 1000], true);
             }
 
             return (
@@ -136,7 +101,8 @@ export default class PaymentResult extends React.Component {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center'
-                }}>
+                }}
+                >
                     <Image
                         style={{
                             width: 200,

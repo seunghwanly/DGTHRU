@@ -52,6 +52,7 @@ export default Basket = ({ navigation, route }) => {
     const [totalCost, setTotalCost] = useState(0);
 
     useEffect(() => {
+        //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
         var tempTotalCost = 0;
         
             database()

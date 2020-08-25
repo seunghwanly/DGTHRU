@@ -68,7 +68,7 @@ class Item extends React.Component {
             if (this.props.navigation !== null) {
                 console.log('fucking shit !');
                 this.props.navigation.navigate('Menu',{ shopInfo: this.props.id });
-                this.props.navigation.setParams({ shopInfo: this.props.id });
+                // this.props.navigation.setParams({ shopInfo: this.props.id });
             }
         }
         else
