@@ -2,11 +2,11 @@ import React from 'react';
 import {
     View,
     Text,
-    StyleSheet,
     Button,
     FlatList,
     TouchableOpacity
 } from 'react-native';
+import { clientStyles } from './styles';
 
 import auth from '@react-native-firebase/auth';
 
@@ -87,38 +87,14 @@ class Item extends React.Component {
                 style={{ width: 300 }}
                 onPress={this._onPress}
             >
-                <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems: 'center' }}>
-                    <View style={
-                        {
-                            borderRadius: 25,
-                            width: 25,
-                            height: 25,
-                            backgroundColor: 'cornflowerblue'
-                        }
-                    }
-                    />
-                    <View style={
-                        {
-                            backgroundColor: 'ghostwhite',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flex: 1,
-                            marginStart: 20,
-                            borderRadius: 12,
-                            padding: 5
-                        }
-                    }>
-                        <Text style={
-                            {
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                                textAlign: 'center'
-                            }
-                        }>{title}</Text>
+                <View style={clientStyles.itemWrapper}>
+                    <View style={clientStyles.itemCircle}/>
+                    <View style={clientStyles.itemNameBar}>
+                        <Text style={clientStyles.itemDesc}>{title}</Text>
                     </View>
                 </View>
                 <View>
-                    <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd: 10 }}>{location}</Text>
+                    <Text style={clientStyles.itemSubDesc}>{location}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -170,13 +146,13 @@ function Shops({ navigation }) {
 
     return (
         <>
-            <View style={styles.background}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>DGTHRU</Text>
-                    <Text style={styles.subtitle}>동국대학교 CAFE LIST</Text>
+            <View style={clientStyles.background}>
+                <View style={clientStyles.header}>
+                    <Text style={clientStyles.title}>DGTHRU</Text>
+                    <Text style={clientStyles.subTitle}>동국대학교 CAFE LIST</Text>
                 </View>
 
-                <View style={styles.body}>
+                <View style={clientStyles.body}>
                     <FlatList
                         data={shopData}
                         renderItem={renderItem}
@@ -184,7 +160,7 @@ function Shops({ navigation }) {
 
                     />
                 </View>
-                <View style={styles.footer}>
+                <View style={clientStyles.footer}>
                     <Button
                         title='로그아웃'
                         onPress={() => signOut()}
@@ -198,41 +174,4 @@ function Shops({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '10%',
-        flex: 1
-    },
-    header: {
-        height: '20%',
-        width: '100%'
-    },
-    body: {
-        height: '60%',
-        width: '100%'
-    },
-    footer: {
-        height: '20%',
-        width: '100%',
-    },
-    title: {
-        fontSize: 44,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    subtitle: {
-        fontSize: 22,
-        color: 'gray',
-        textAlign: 'center'
-    },
-    item: {
-
-    },
-});
 export default Shops;

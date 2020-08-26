@@ -3,8 +3,8 @@ import {
     View,
     Text,
     Image,
-    StyleSheet,
 } from 'react-native';
+import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
@@ -120,8 +120,6 @@ export default class BasketDetail extends React.Component {
                 return this.state.userData[this.state.orderData[k].idx].key;
             }
         }
-
-
     }
 
 
@@ -135,64 +133,30 @@ export default class BasketDetail extends React.Component {
 
         if (this.state.orderData.length > 0) {
             return (
-                <View style={styles.background}>
-                    <View style={styles.subBackground}>
+                <View style={basketStyles.background}>
+                    <View style={basketStyles.subBackground}>
                         {
                             this.state.orderData.map(item => {
                                 //key 값 부여하기 !
                                 return (
-                                    <View style={
-                                        {
-                                            flexDirection: 'row',
-                                            padding: 2,
-                                            width: '100%',
-                                        }
-                                    }>
-                                        <View style={{
-                                            alignSelf: 'flex-start',
-                                            flexDirection: 'row',
-                                            alignItems: 'center'
-                                        }}>
-                                            <View style={[styles.radiusIcon, { marginEnd: 5 }]} />
-                                            <Text style={styles.radiusText}>{} {item.value.name} {item.value.selected !== undefined ? ', ' + item.value.selected : ' '}</Text>
+                                    <View style={basketStyles.detailWrapper}>
+                                        <View style={basketStyles.detailItemNameWrapper}>
+                                            <View style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
+                                            <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.selected !== undefined ? ', ' + item.value.selected : ' '}</Text>
                                         </View>
-                                        <View style={{
-                                            flex: 1,
-                                            flexDirection: 'row',
-                                            alignSelf: 'flex-end',
-                                            width: '100%',
-                                            height: '100%',
-                                            justifyContent: 'flex-end',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 12
-                                            }}>x{item.value.count}{'\t' + Number(item.value.cost) * Number(item.value.count)}원</Text>
+                                        <View style={basketStyles.detailItemInfoWrapper}>
+                                            <Text style={{fontSize: 12}}>x{item.value.count}{'\t' + Number(item.value.cost) * Number(item.value.count)}원</Text>
                                         </View>
                                         <TouchableOpacity
-                                            style={{
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                flex: 1,
-                                                marginStart: 10,
-
-                                            }}
+                                            style={basketStyles.detailImgButton}
                                             onPress={() => {
                                                 [
                                                     handleDeleteOrder(this.props.route.params.shopInfo, item.key),
                                                     handleDeleteUser(this._returnIndexFromOrderData(item.key)),
-
                                                 ]
-                                            }}
-
-                                        >
+                                            }}>
                                             <Image
-                                                style={
-                                                    {
-                                                        width: 15,
-                                                        height: 15
-                                                    }
-                                                }
+                                                style={{ width: 15, height: 15 }}
                                                 resizeMode='cover'
                                                 source={require('../../image/trash-outline.png')}
 
@@ -202,34 +166,13 @@ export default class BasketDetail extends React.Component {
                                 )
                             })
                         }
-                        <View style={
-                            {
-                                marginStart: 'auto',
-                                marginEnd: 'auto',
-                                marginTop: 5,
-                                backgroundColor: 'lightgray',
-                                borderRadius: 10,
-                                flexDirection: 'row',
-                                width: '90%',
-
-                            }
-                        }>
-                            <Text style={[styles.radiusText, { alignSelf: 'flex-start', width: '60%' }]}>TOTAL</Text>
-                            <Text style={[styles.radiusText, { alignSelf: 'flex-end' }]}>{totalCost.toLocaleString()}원</Text>
+                        <View style={basketStyles.detailTotalInfoWrapper}>
+                            <Text style={[basketStyles.smallRadiusText, { alignSelf: 'flex-start', width: '70%' }]}>TOTAL</Text>
+                            <Text style={[basketStyles.smallRadiusText, { alignSelf: 'flex-end', textAlign:'right' }]}>{totalCost.toLocaleString()}원</Text>
                         </View>
                     </View>
                     <TouchableOpacity
-                        style={{
-                            backgroundColor: 'gold',
-                            borderRadius: 10,
-                            paddingStart: 10,
-                            paddingEnd: 10,
-                            paddingTop: 5,
-                            paddingBottom: 5,
-                            margin: 15,
-                            width: 300
-                        }}
-
+                        style={basketStyles.goToPayment}
                         onPress={() =>
                             [
                                 alert('카카오페이로 결제합니다 !'),
@@ -242,53 +185,17 @@ export default class BasketDetail extends React.Component {
                                 )
                             ]}
                     >
-                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                        <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
                     </TouchableOpacity>
                 </View>
             );
         } //if
         else {
             return (
-                <View style={styles.background}>
+                <View style={basketStyles.background}>
                     <Text>장바구니가 비어있어요 !</Text>
                 </View>
             );
         }
     }
 }
-
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '5%',
-    },
-    subBackground: {
-        width: '90%',
-        height: 'auto',
-        backgroundColor: 'ghostwhite',
-        borderRadius: 10,
-        padding: 10
-    },
-    radiusIcon: {
-        width: 30,
-        height: 30,
-        borderRadius: 30,
-        backgroundColor: 'royalblue',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5
-    },
-    radiusText: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: 'midnightblue',
-        textAlignVertical: 'center',
-        margin: 10
-    },
-
-});

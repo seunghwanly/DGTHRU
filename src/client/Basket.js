@@ -3,10 +3,9 @@ import {
     View,
     Text,
     Button,
-    Pressable,
     FlatList,
-    StyleSheet
 } from 'react-native';
+import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import database from '@react-native-firebase/database';
@@ -85,18 +84,8 @@ export default Basket = ({ navigation, route }) => {
 
         if (subMenu.hasOwnProperty('sub_menu')) {
             return (
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    padding: 5,
-                    margin: 5,
-                }}
-                >
-                    <Text style={{
-                        alignSelf: 'center',
-                        margin: 5
-                    }}>맛을 선택해주세요</Text>
+                <View style={basketStyles.chooseDetailWrapper}>
+                    <Text style={basketStyles.chooseDetailText}>맛을 선택해주세요</Text>
                     <FlatList
                         data={subMenu.sub_menu}
                         renderItem={
@@ -111,20 +100,7 @@ export default Basket = ({ navigation, route }) => {
                                 return (
                                     <TouchableOpacity
                                         onPress={() => setSelected(item.toString())}
-                                        style={
-                                            [
-                                                { backgroundColor },
-                                                {
-                                                    width: 80,
-                                                    borderRadius: 8,
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    padding: 5,
-                                                    margin: 2,
-
-                                                }
-                                            ]
-                                        }>
+                                        style={[ { backgroundColor }, basketStyles.chooseDetailItem ]}>
                                         <Text
                                             style={{
                                                 color,
@@ -392,55 +368,32 @@ export default Basket = ({ navigation, route }) => {
 
     if (item.sold_out === false) {
         return (
-            <View style={styles.background}>
+            <View style={basketStyles.background}>
 
-                <View style={styles.subBackground}>
+                <View style={basketStyles.subBackground}>
                     {/* 2줄 컬럼형 */}
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                    }}>
+                    <View style={basketStyles.basketWrapper}>
                         {/* 이미지랑 갯수 조절하는 거 */}
-                        <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-
-                        }}>
+                        <View style={basketStyles.basketLeftColumnWrapper}>
                             {/* 아이콘이랑 이름 */}
-                            <View style={styles.radiusIcon} />
-                            <Text style={styles.radiusText}>{item.name}</Text>
+                            <View style={basketStyles.radiusIcon} />
+                            <Text style={basketStyles.radiusText}>{item.name}</Text>
                             {/* 버튼 */}
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-
-                            }}>
-                                <Button style={styles.amountButton} title='-' onPress={() => handleCount('-')} />
+                            <View style={basketStyles.basketLeftColumnButtonWrapper}>
+                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-')} />
                                 <Text >{count}</Text>
-                                <Button style={styles.amountButton} title='+' onPress={() => handleCount('+')} />
+                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+')} />
                             </View>
                             {/* 왼쪽 세로 줄 */}
                         </View>
 
                         {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
-                        <View style={{
-                            alignItems: 'center',
-                            width: '72%',
-                        }}>
+                        <View style={basketStyles.basketRightColumnWrapper}>
                             {
                                 item.ice_available === true && item.only_ice === false ?
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        padding: 10,
-                                    }}>
+                                    <View style={{ flexDirection: 'row', padding: 10 }}>
                                         <FlatList
-                                            style={{
-                                                marginStart: '5%',
-                                                marginEnd: '5%'
-                                            }}
+                                            style={{ marginStart: '5%', marginEnd: '5%'}}
                                             data={dataIceHot}
                                             renderItem={
                                                 ({ item }) => {
@@ -456,28 +409,11 @@ export default Basket = ({ navigation, route }) => {
                                                     return (
                                                         <TouchableOpacity
                                                             onPress={() => setHotOrIced(item.toString())}
-                                                            style={
-                                                                [
-                                                                    {
-                                                                        backgroundColor
-                                                                    },
-                                                                    {
-                                                                        width: 80,
-                                                                        height: 40,
-                                                                        borderRadius: 8,
-                                                                        justifyContent: 'center',
-                                                                        alignItems: 'center',
-                                                                        padding: 5,
-                                                                        margin: 2,
-
-                                                                    }
-                                                                ]
-                                                            }>
-                                                            <Text style={
-                                                                {
-                                                                    color
-                                                                }
-                                                            }> {item} </Text>
+                                                            style={[
+                                                                    { backgroundColor },
+                                                                    basketStyles.basketTwoItem
+                                                             ]}>
+                                                            <Text style={{ color }}> {item} </Text>
                                                         </TouchableOpacity>
                                                     )
                                                 }
@@ -492,10 +428,7 @@ export default Basket = ({ navigation, route }) => {
                                     <></>
                             }
                             <Text>컵을 선택해주세요.</Text>
-                            <View style={{
-                                flexDirection: 'row',
-                                padding: 10,
-                            }}>
+                            <View style={{flexDirection: 'row',padding: 10 }}>
                                 <FlatList
                                     data={dataInOrOut}
                                     renderItem={
@@ -512,28 +445,8 @@ export default Basket = ({ navigation, route }) => {
                                             return (
                                                 <TouchableOpacity
                                                     onPress={() => setInOrOut(item.toString())}
-                                                    style={
-                                                        [
-                                                            {
-                                                                backgroundColor
-                                                            },
-                                                            {
-                                                                width: 60,
-                                                                height: 40,
-                                                                borderRadius: 8,
-                                                                justifyContent: 'center',
-                                                                alignItems: 'center',
-                                                                padding: 5,
-                                                                margin: 2,
-
-                                                            }
-                                                        ]
-                                                    }>
-                                                    <Text style={
-                                                        {
-                                                            color
-                                                        }
-                                                    }> {item} </Text>
+                                                    style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
+                                                    <Text style={ { color } }> {item} </Text>
                                                 </TouchableOpacity>
                                             )
                                         }
@@ -546,19 +459,7 @@ export default Basket = ({ navigation, route }) => {
 
                             </View>
                             <TouchableOpacity
-                                style={
-                                    {
-                                        backgroundColor: 'midnightblue',
-                                        padding: 10,
-                                        borderRadius: 10,
-                                        justifyContent: 'center',
-                                        alignSelf: 'stretch',
-                                        height: 40,
-                                        paddingLeft: 45,
-                                        paddingRight: 45,
-
-                                    }
-                                }
+                                style={basketStyles.pushToBasket}
                                 onPress={() => handleOrder(item)}>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
                             </TouchableOpacity>
@@ -567,37 +468,15 @@ export default Basket = ({ navigation, route }) => {
                     <ChooseDetail subMenu={item} />
                 </View>
                 <View
-                    style={{
-                        flexDirection: 'row'
-                    }}>
+                    style={{ flexDirection: 'row', marginTop:8 }}>
                     <TouchableOpacity
-                        style={
-                            {
-                                backgroundColor: 'midnightblue',
-                                borderRadius: 10,
-                                paddingStart: 10,
-                                paddingEnd: 10,
-                                paddingTop: 5,
-                                paddingBottom: 5,
-                                margin: 5,
-                                width: 150
-                            }
-                        }
+                        style={basketStyles.goToBasket}
                         onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
                     >
-                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
+                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={{
-                            backgroundColor: 'gold',
-                            borderRadius: 10,
-                            paddingStart: 10,
-                            paddingEnd: 10,
-                            paddingTop: 5,
-                            paddingBottom: 5,
-                            margin: 5,
-                            width: 150
-                        }}
+                        style={[basketStyles.goToBasket, {backgroundColor:'gold'}]}
 
                         onPress={() => [
 
@@ -624,7 +503,7 @@ export default Basket = ({ navigation, route }) => {
                         ]
                         }
                     >
-                        <Text style={[styles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
+                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -632,55 +511,10 @@ export default Basket = ({ navigation, route }) => {
     } else {
         return (
             <View
-                style={styles.background}>
+                style={basketStyles.background}>
                 <Text>메뉴가 품절되었습니다.</Text>
             </View>
 
         )
     }
 }
-
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '5%',
-        flex: 1
-    },
-    subBackground: {
-        width: '95%',
-        height: 'auto',
-        backgroundColor: 'ghostwhite',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        padding: 10
-    },
-    radiusIcon: {
-        width: 80,
-        height: 80,
-        borderRadius: 80,
-        backgroundColor: 'royalblue',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5
-    },
-    radiusText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: 'midnightblue',
-        textAlign: 'center',
-        margin: 10
-    },
-    amountButton: {
-        backgroundColor: 'darkgray',
-        borderRadius: 10,
-        width: '5%',
-        height: '5%',
-        color: 'midnightblue'
-    }
-});

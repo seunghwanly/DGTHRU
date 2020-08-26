@@ -1,9 +1,9 @@
 import React from 'react';
 import {
     View,
-    Text,
-    StyleSheet
+    Text
 } from 'react-native';
+import { menuStyles } from './styles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
@@ -17,7 +17,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
 
 
     return (
-        <View style={styles.background}>
+        <View style={menuStyles.background}>
             <FlatList
                 data={items}
                 renderItem={
@@ -29,45 +29,17 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                             }}
                             onPress={() => navigation.navigate('SelectMenu', { item : item, shopInfo : shopInfo })}
                             >
-                            <View style={styles.radiusIcon}>
+                            <View style={menuStyles.subRadiusIcon}>
                                 <Text style={{color:'white', fontWeight:'bold'}}>IMG</Text>
-                                <Text style={styles.radiusText}>{item.name}</Text>
+                                <Text style={menuStyles.subRadiusText}>{item.name}</Text>
                             </View>
                         </TouchableOpacity>
                     )
                 }
                 numColumns={3}
                 keyExtractor={(item, index) => index.toString()}
+                scrollEnabled={false}
             />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '5%',
-        flex: 1
-    },
-    radiusIcon: {
-        width: 100,
-        height: 100,
-        borderRadius: 100,
-        backgroundColor: 'dodgerblue',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5
-    },
-    radiusText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: 'lightgray',
-        textAlign: 'center',
-        margin:10
-    },
-});

@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    Button,
-    StyleSheet,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { styles } from './styles';
 
 import auth from '@react-native-firebase/auth';
 
@@ -43,15 +41,7 @@ function Intro({ navigation }) {
                     <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
                 </View>
                 <TouchableOpacity
-                    style={{
-                        margin: 15,
-                        backgroundColor: 'dodgerblue',
-                        width: 180,
-                        padding: 10,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
+                    style={styles.confirmButton}
                     onPress={() => navigation.navigate('Verify')}
                 >
                     <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
@@ -72,26 +62,5 @@ function Intro({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white'
-    },
-    title: {
-        fontSize: 44,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    subTitle: {
-        fontSize: 20,
-        color: 'gray',
-        textAlign: 'center'
-    },
-});
 
 export default Intro;

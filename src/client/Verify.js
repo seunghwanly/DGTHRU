@@ -4,13 +4,12 @@ import {
     Text,
     Button,
     TextInput,
-    StyleSheet,
     KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
+import { clientStyles } from './styles';
+
 import { enableScreens } from 'react-native-screens';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import appleAuth, {
     AppleButton,
@@ -22,8 +21,6 @@ import appleAuth, {
 } from '@invertase/react-native-apple-authentication';
 
 import auth from '@react-native-firebase/auth';
-
-import Shops from './Shops';
 
 /**
  * You'd technically persist this somewhere for later use.
@@ -176,44 +173,44 @@ function Verify({ navigation, number }) {
     }
     if (!confirm) {
         return (
-            <View style={styles.background}>
+            <View style={clientStyles.background}>
                 <ScrollView>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>DGTHRU</Text>
-                        <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+                    <View style={clientStyles.header}>
+                        <Text style={clientStyles.title}>DGTHRU</Text>
+                        <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
                     </View>
-                    <View style={styles.body}>
+                    <View style={clientStyles.body}>
                         <KeyboardAvoidingView
                             behavior='position'
                             keyboardVerticalOffset={30}
-                            style={styles.background}
+                            style={clientStyles.background}
                         >
                             <TextInput
                                 style={
-                                    [styles.components, styles.phoneNumber]
+                                    [clientStyles.components, clientStyles.phoneNumber]
                                 }
                                 placeholder='010-1234-1234'
                                 onChangeText={text => onNumberChange(text)}
                             />
                             <Button
-                                style={[styles.components, { width: '50%' }]}
+                                style={[clientStyles.components, { width: '50%' }]}
                                 title='인증번호 보내기'
                                 onPress={() => signInWithPhoneNumber('+82' + number)}
                             />
                         </KeyboardAvoidingView>
 
                     </View>
-                    <View style={styles.footer}>
+                    <View style={clientStyles.footer}>
                             {
                                 appleAuth.isSupported === false ? 
 
-                                <View style={styles.footer}>
+                                <View style={clientStyles.footer}>
                                     <Text>Apple Authentication is not supported on this device.</Text>
                                 </View>
 
                                 :
                             <AppleButton
-                                style={styles.appleButton}
+                                style={clientStyles.appleButton}
                                 cornerRadius={5}
                                 buttonStyle={AppleButton.Style.WHITE}
                                 buttonType={AppleButton.Type.CONTINUE}
@@ -227,21 +224,21 @@ function Verify({ navigation, number }) {
     }
 
     return (
-        <View style={styles.background}>
+        <View style={clientStyles.background}>
             <ScrollView>
-                <View style={styles.header}>
-                    <Text style={styles.title}>DGTHRU</Text>
-                    <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+                <View style={clientStyles.header}>
+                    <Text style={clientStyles.title}>DGTHRU</Text>
+                    <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
                 </View>
-                <View style={styles.body}>
-                    <Text style={styles.subTitle}>{number}</Text>
+                <View style={clientStyles.body}>
+                    <Text style={clientStyles.subTitle}>{number}</Text>
                     <KeyboardAvoidingView
                         behavior='position'
                         keyboardVerticalOffset={20}
-                        style={styles.background}
+                        style={clientStyles.background}
                     >
                         <TextInput
-                            style={styles.phoneNumber}
+                            style={clientStyles.phoneNumber}
                             placeholder='인증번호를 입력해주세요.'
                             onChangeText={text => setCode(text)}
                         />
@@ -251,7 +248,7 @@ function Verify({ navigation, number }) {
                         />
                     </KeyboardAvoidingView>
                 </View>
-                <View style={[styles.footer, styles.subTitle]}>
+                <View style={[clientStyles.footer, clientStyles.subTitle]}>
                     <Text style={{ margin: 15, textAlign: 'center' }}>위 번호로 회원가입을 진행합니다.</Text>
                 </View>
             </ScrollView>
@@ -259,64 +256,4 @@ function Verify({ navigation, number }) {
     );
 }
 
-const styles = StyleSheet.create(
-    {
-        background: {
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            backgroundColor: 'white',
-            flex:1
-        },
-        header: {
-            height: '20%',
-            margin: '20%'
-
-        },
-        body: {
-            height: '50%'
-        },
-        footer: {
-            height: '20%',
-            alignSelf: 'center',
-            alignItems: 'center'
-        },
-        title: {
-            fontSize: 44,
-            fontWeight: 'bold',
-            textAlign: 'center'
-        },
-        subTitle: {
-            fontSize: 20,
-            color: 'gray',
-            textAlign: 'center'
-        },
-        components: {
-            fontSize: 20,
-        },
-        phoneNumber: {
-            borderWidth: 1,
-            borderColor: 'gray',
-            borderRadius: 5,
-            backgroundColor: 'white',
-            paddingBottom: 10,
-            paddingTop: 10,
-            paddingStart: 40,
-            paddingEnd: 40,
-            margin: 10,
-            fontSize: 15,
-            width: 200,
-            textAlign: 'center'
-
-        },
-        appleButton: {
-            width: 200,
-            height: 45,
-            margin: 'auto',
-            alignSelf: 'center'
-        },
-    }
-);
 export default Verify;

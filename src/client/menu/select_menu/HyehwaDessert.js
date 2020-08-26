@@ -3,8 +3,8 @@ import {
     View,
     Text,
     FlatList,
-    StyleSheet, Button
 } from 'react-native';
+import { menuStyles } from './styles';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
@@ -54,9 +54,9 @@ export default HyehwaDessert = ({ navigation, route }) => {
     }
 
     return (
-        <View style={styles.background}>
+        <View style={menuStyles.background}>
             <ScrollView>
-                <Text style={styles.subtitle}>DRINKS</Text>
+                <Text style={menuStyles.subTitle}>DRINKS</Text>
                 {/* drink data */}
                 <FlatList
                     data={drinkData}
@@ -67,10 +67,10 @@ export default HyehwaDessert = ({ navigation, route }) => {
                             if(item.category_name !== 'Others') {
                                 return (
                                 <TouchableOpacity
-                                    style={styles.radiusIcon}
+                                    style={menuStyles.radiusIcon}
                                     onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
                                 >
-                                    <Text style={styles.radiusText}>
+                                    <Text style={menuStyles.radiusText}>
                                         {item.category_name}
                                     </Text>
                                 </TouchableOpacity>
@@ -85,16 +85,16 @@ export default HyehwaDessert = ({ navigation, route }) => {
                     numColumns={3}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <Text style={styles.subtitle}>BAKERY</Text>
+                <Text style={menuStyles.subTitle}>BAKERY</Text>
                 {/* bakery data */}
                 <FlatList
                     data={bakeryData}
                     renderItem={
                         ({ item }) => (
-                            <TouchableOpacity style={styles.radiusIcon}
+                            <TouchableOpacity style={menuStyles.radiusIcon}
                                 onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
                             >
-                                <Text style={styles.radiusText}>
+                                <Text style={menuStyles.radiusText}>
                                     {item.category_name}
                                 </Text>
                             </TouchableOpacity>
@@ -106,40 +106,3 @@ export default HyehwaDessert = ({ navigation, route }) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '10%',
-        flex: 1
-    },
-    radiusIcon: {
-        width: 80,
-        height: 80,
-        borderRadius: 80,
-        backgroundColor: 'deepskyblue',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5
-    },
-    radiusText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
-    },
-    subtitle: {
-        fontSize: 22,
-        color: 'gray',
-        textAlign: 'center',
-        marginStart: 5,
-        marginEnd: 5,
-        marginBottom: 10,
-        marginTop:10
-    },
-})

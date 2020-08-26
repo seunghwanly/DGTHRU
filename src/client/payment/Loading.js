@@ -3,18 +3,10 @@ import {
     View,
     Text
 } from 'react-native';
+import { paymentStyles } from './styles';
 
 export default Loading = () => (
-    <View style={{
-        backgroundColor:'white',
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
-    }}>
-        <Text style={{
-            fontSize:44,
-            fontWeight:'bold',
-            textAlign:'center'
-        }}>잠시만{'\n'}기다려주세요 !</Text>
+    <View style={paymentStyles.background}>
+        <Text style={paymentStyles.notifyText}>잠시만{'\n'}기다려주세요 !</Text>
     </View>
 )

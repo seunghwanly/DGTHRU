@@ -7,7 +7,7 @@ import {
     Alert,
     Image
 } from 'react-native';
-
+import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
 import { commonRef } from '../../DatabaseRef.js';
 
@@ -96,21 +96,11 @@ export default class PaymentResult extends React.Component {
             }
 
             return (
-                <View style={{
-                    backgroundColor: 'white',
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-                >
+                <View style={paymentStyles.background}>
                     <Image
-                        style={{
-                            width: 200,
-                            height: 200,
-                            margin: 20
-                        }}
+                        style={paymentStyles.loadingGif}
                         source={require('../../../image/sample.gif')} />
-                    <Text>메뉴가 준비되면 알려드리겠습니다 !</Text>
+                    <Text style={paymentStyles.notifyText}>메뉴가 준비되면 알려드리겠습니다 !</Text>
                     <Button
                         title="홈으로 돌아가기"
                         onPress={() => this.props.navigation.navigate('Shops')}
@@ -119,13 +109,8 @@ export default class PaymentResult extends React.Component {
             )
         } else {
             return (
-                <View style={{
-                    backgroundColor: 'white',
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Text>결제 실패{'\n'}관리자에게 문의하세요.</Text>
+                <View style={paymentStyles.background}>
+                    <Text style={paymentStyles.notifyText}>결제 실패{'\n'}관리자에게 문의하세요.</Text>
                 </View>
             )
         }
