@@ -51,6 +51,15 @@ const menuStyles = StyleSheet.create({
         textAlign: 'center',
         margin:10
     },
+    subRadiusIconSoldOut: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+        backgroundColor: 'gray',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5
+    }
 });
 
 export {

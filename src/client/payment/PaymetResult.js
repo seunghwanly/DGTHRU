@@ -85,7 +85,11 @@ export default class PaymentResult extends React.Component {
                     [
                         {
                             text: '확인',
-                            onPress: () => [ Vibration.cancel(), this.props.navigation.navigate('Shops') ]
+                            // onPress: () => [ Vibration.cancel(), this.props.navigation.pop(), this.props.navigation.navigate('Shops') ]
+                            onPress: () => 
+                            [ 
+                                Vibration.cancel(), this.props.navigation.reset({ index:0, routes :  [{ name : 'HOME' }] }) 
+                            ]
                         },
                         {
                             text: 'x', onPress: () => console.log('cancel pressed !'), style:'cancel'
@@ -103,7 +107,7 @@ export default class PaymentResult extends React.Component {
                     <Text style={paymentStyles.notifyText}>메뉴가 준비되면 알려드리겠습니다 !</Text>
                     <Button
                         title="홈으로 돌아가기"
-                        onPress={() => this.props.navigation.navigate('Shops')}
+                        onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
                     />
                 </View>
             )

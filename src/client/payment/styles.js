@@ -12,7 +12,7 @@ const paymentStyles = StyleSheet.create({
         flex: 1
     },
     notifyText: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
         color:'gray'

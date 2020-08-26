@@ -7,7 +7,7 @@ import { menuStyles } from './styles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
- 
+
 enableScreens();
 
 export default HyehwaDessertDetail = ({ navigation, route }) => {
@@ -21,20 +21,28 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
             <FlatList
                 data={items}
                 renderItem={
-                    ({ item }) => (
-                        <TouchableOpacity
-                            style={{
-                                justifyContent:'center',
-                                alignItems:'center',
-                            }}
-                            onPress={() => navigation.navigate('SelectMenu', { item : item, shopInfo : shopInfo })}
-                            >
-                            <View style={menuStyles.subRadiusIcon}>
-                                <Text style={{color:'white', fontWeight:'bold'}}>IMG</Text>
-                                <Text style={menuStyles.subRadiusText}>{item.name}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )
+                    ({ item }) => {
+                        if (item.sold_out !== true) {
+                            return (
+                                <TouchableOpacity
+                                    style={{ justifyContent: 'center', alignItems: 'center', }}
+                                    onPress={() => navigation.navigate('SelectMenu', { item: item, shopInfo: shopInfo })}>
+                                    <View style={menuStyles.subRadiusIcon}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
+                                        <Text style={menuStyles.subRadiusText}>{item.name}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        } 
+                        else {
+                            return (
+                                <View style={menuStyles.subRadiusIconSoldOut} >
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
+                                    <Text style={menuStyles.subRadiusText}>{item.name}</Text>
+                                </View>
+                            )
+                        }
+                    }
                 }
                 numColumns={3}
                 keyExtractor={(item, index) => index.toString()}

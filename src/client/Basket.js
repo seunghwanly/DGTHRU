@@ -56,7 +56,7 @@ export default Basket = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
-        }, [])
+        },[])
     );
 
     useEffect(() => {

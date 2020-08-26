@@ -618,7 +618,7 @@
                 {
                     "name":"수제핫도그",
                     "cost":2500,
-                    "sold_out":true
+                    "sold_out":false
                 },
                 {
                     "name":"크로크무슈",

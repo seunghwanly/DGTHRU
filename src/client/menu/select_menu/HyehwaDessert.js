@@ -9,100 +9,94 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
 
-//json
-import * as data from '../data/HyehwaDessert.json';
-
-//firebase
 import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
-
-import moment from 'moment';
 
 enableScreens();
 
-//drink and bakery
-const drinkData = data.categories_drink;
-const bakeryData = data.categories_bakery;
 
+export default class HyehwaDessert extends React.Component {
 
-export default HyehwaDessert = ({ navigation, route }) => {
+    _drinkDataRef;
+    _bakeryDataRef;
+    
+    constructor(props) {
+        super(props);
 
-    const { shopInfo } = route.params;
+        this.state = {
+            _drinkData: [],
+            _bakeryData: []
+        }
 
-    const userPhoneNumber = auth().currentUser.phoneNumber;
-    const reference = database().ref('users/' + moment().format('YYYY_MM_DD') + '/' + userPhoneNumber);
+        this._drinkDataRef = database().ref('menu/hyehwa/categories_drink');
+        this._bakeryDataRef = database().ref('menu/hyehwa/categories_bakery');
+    }
 
-    handleBasket = () => {
+    componentDidMount() {
 
-        let userBasketData = new Map();
+        this._drinkDataRef
+            .once('value', (snapshot) => {
+                this.setState({ _drinkData: snapshot.val() });
+            });
 
-        reference
-            .once('value')
-            .then(
-                (snapshot) => {
-                    snapshot.forEach((childSnapShot) => {
-                        var key = childSnapShot.key;
-                        var val = childSnapShot.val();
-                        
-                        console.log(key, val);
-
-                        userBasketData.set(key, val);
-                    });
-                }
-            )
+        this._bakeryDataRef
+            .once('value', (snapshot) => {
+                this.setState({ _bakeryData: snapshot.val() });
+            });
 
     }
 
-    return (
-        <View style={menuStyles.background}>
-            <ScrollView>
-                <Text style={menuStyles.subTitle}>DRINKS</Text>
-                {/* drink data */}
-                <FlatList
-                    data={drinkData}
-                    renderItem={
+    render() {
+        return (
+            <View style={menuStyles.background}>
+                <ScrollView>
+                    <Text style={menuStyles.subTitle}>DRINKS</Text>
+                    {/* drink data */}
+                    <FlatList
+                        data={this.state._drinkData}
+                        renderItem={
 
-                        ({ item }) => {
-                        
-                            if(item.category_name !== 'Others') {
-                                return (
-                                <TouchableOpacity
-                                    style={menuStyles.radiusIcon}
-                                    onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
+                            ({ item }) => {
+
+                                if (item.category_name !== 'Others') {
+                                    return (
+                                        <TouchableOpacity
+                                            style={menuStyles.radiusIcon}
+                                            onPress={() => this.props.navigation.navigate('MenuDetail', { items: item.menu, shopInfo: this.props.route.params.shopInfo })}
+                                        >
+                                            <Text style={menuStyles.radiusText}>
+                                                {item.category_name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )
+                                } else {
+                                    return (
+                                        <></>
+                                    )
+                                }
+                            }
+                        }
+                        numColumns={3}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                    <Text style={menuStyles.subTitle}>BAKERY</Text>
+                    {/* bakery data */}
+                    <FlatList
+                        data={this.state._bakeryData}
+                        renderItem={
+                            ({ item }) => (
+                                <TouchableOpacity style={menuStyles.radiusIcon}
+                                    onPress={() => this.props.navigation.navigate('MenuDetail', { items: item.menu, shopInfo: this.props.route.params.shopInfo })}
                                 >
                                     <Text style={menuStyles.radiusText}>
                                         {item.category_name}
                                     </Text>
                                 </TouchableOpacity>
-                                )
-                            } else {
-                                return(
-                                    <></>
-                                )
-                            }
-                        }
-                    }
-                    numColumns={3}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-                <Text style={menuStyles.subTitle}>BAKERY</Text>
-                {/* bakery data */}
-                <FlatList
-                    data={bakeryData}
-                    renderItem={
-                        ({ item }) => (
-                            <TouchableOpacity style={menuStyles.radiusIcon}
-                                onPress={() => navigation.navigate('MenuDetail', { items: item.menu, shopInfo : shopInfo })}
-                            >
-                                <Text style={menuStyles.radiusText}>
-                                    {item.category_name}
-                                </Text>
-                            </TouchableOpacity>
-                        )}
-                    numColumns={3}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            </ScrollView>
-        </View>
-    )
+                            )}
+                        numColumns={3}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </ScrollView>
+            </View>
+        )
+    }
 }

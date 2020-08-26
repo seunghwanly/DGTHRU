@@ -38,8 +38,8 @@ async function handleDeleteUser(key) {
 
 export default class BasketDetail extends React.Component {
 
-    _firebaseCommonRef;
-    _firebaseUserRef;
+    _firebaseCommonDatabase;
+    _firebaseUserDatabase;
 
     constructor(props) {
         super(props);
