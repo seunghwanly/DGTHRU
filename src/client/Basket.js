@@ -13,6 +13,8 @@ import auth from '@react-native-firebase/auth';
 
 import moment from 'moment';
 
+import { useFocusEffect } from '@react-navigation/native';
+
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
@@ -50,33 +52,42 @@ export default Basket = ({ navigation, route }) => {
     const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setTotalCost(0);
+        }, [])
+    );
+
     useEffect(() => {
         //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
         var tempTotalCost = 0;
-        
-            database()
-                .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                .once('value', (snapshot) => {
-                    console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
-                    snapshot.forEach((childSnapShot) => {
+        console.log('[Basket] init totalcost >>> ' + totalCost);
 
-                        console.log('[Basket] childSnapShot >> '+childSnapShot.val());
+        database()
+            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .once('value', (snapshot) => {
+                console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
-                        tempTotalCost += childSnapShot.val().cost;
-                        
-                        // console.log('prevCost >> ' + prevCost);
+                snapshot.forEach((childSnapShot) => {
 
-                        console.log('[Basket] in loop : totalCost >> ' + totalCost);
-                        console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
-                    })
-                    setTotalCost(() => tempTotalCost);
-                    // return () => { setTotalCost(tempTotalCost);
-                    console.log('[Basket] out totalCost >> ' + totalCost);
-                    console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
-                    //}
-                });
-        
+                    console.log('[Basket] childSnapShot >> ' + childSnapShot.val());
+
+                    tempTotalCost += childSnapShot.val().cost;
+
+                    // console.log('prevCost >> ' + prevCost);
+
+                    console.log('[Basket] in loop : totalCost >> ' + totalCost);
+                    console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
+                })
+                setTotalCost(() => tempTotalCost);
+                // return () => { setTotalCost(tempTotalCost);
+                console.log('[Basket] out totalCost >> ' + totalCost);
+                console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
+                //}
+            });
+
     }, [totalCost]);
 
     function ChooseDetail(props) {
@@ -100,7 +111,7 @@ export default Basket = ({ navigation, route }) => {
                                 return (
                                     <TouchableOpacity
                                         onPress={() => setSelected(item.toString())}
-                                        style={[ { backgroundColor }, basketStyles.chooseDetailItem ]}>
+                                        style={[{ backgroundColor }, basketStyles.chooseDetailItem]}>
                                         <Text
                                             style={{
                                                 color,
@@ -393,7 +404,7 @@ export default Basket = ({ navigation, route }) => {
                                 item.ice_available === true && item.only_ice === false ?
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
                                         <FlatList
-                                            style={{ marginStart: '5%', marginEnd: '5%'}}
+                                            style={{ marginStart: '5%', marginEnd: '5%' }}
                                             data={dataIceHot}
                                             renderItem={
                                                 ({ item }) => {
@@ -410,9 +421,9 @@ export default Basket = ({ navigation, route }) => {
                                                         <TouchableOpacity
                                                             onPress={() => setHotOrIced(item.toString())}
                                                             style={[
-                                                                    { backgroundColor },
-                                                                    basketStyles.basketTwoItem
-                                                             ]}>
+                                                                { backgroundColor },
+                                                                basketStyles.basketTwoItem
+                                                            ]}>
                                                             <Text style={{ color }}> {item} </Text>
                                                         </TouchableOpacity>
                                                     )
@@ -428,7 +439,7 @@ export default Basket = ({ navigation, route }) => {
                                     <></>
                             }
                             <Text>컵을 선택해주세요.</Text>
-                            <View style={{flexDirection: 'row',padding: 10 }}>
+                            <View style={{ flexDirection: 'row', padding: 10 }}>
                                 <FlatList
                                     data={dataInOrOut}
                                     renderItem={
@@ -446,7 +457,7 @@ export default Basket = ({ navigation, route }) => {
                                                 <TouchableOpacity
                                                     onPress={() => setInOrOut(item.toString())}
                                                     style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
-                                                    <Text style={ { color } }> {item} </Text>
+                                                    <Text style={{ color }}> {item} </Text>
                                                 </TouchableOpacity>
                                             )
                                         }
@@ -468,7 +479,7 @@ export default Basket = ({ navigation, route }) => {
                     <ChooseDetail subMenu={item} />
                 </View>
                 <View
-                    style={{ flexDirection: 'row', marginTop:8 }}>
+                    style={{ flexDirection: 'row', marginTop: 8 }}>
                     <TouchableOpacity
                         style={basketStyles.goToBasket}
                         onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
@@ -476,7 +487,7 @@ export default Basket = ({ navigation, route }) => {
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[basketStyles.goToBasket, {backgroundColor:'gold'}]}
+                        style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
 
                         onPress={() => [
 
