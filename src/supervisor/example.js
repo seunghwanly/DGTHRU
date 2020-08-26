@@ -64,8 +64,13 @@ export default class Example extends Component {
             })
             
             })
+            const Moment = require('moment')
+            console.log('what? : ' , li);
+            li.sort((d1, d2) => new Moment(d2.orderTime,'HH:mm:ss') - new Moment(d1.orderTime,'HH:mm:ss'));
+            console.log('after? : ' , li);
             this.setState({list:li})
-            this.sortListByTime()
+           // this.sortListByTime(li)
+          
             
         })
      
@@ -122,7 +127,11 @@ export default class Example extends Component {
 
     sortListByTime(){
         this.state.list.sort(function(obj1, obj2) {
-         return new Date(obj1.orderTime).getTime() -new Date(obj2.orderTime).getTime();
+           // return obj1.cost - obj2.cost;
+         //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
+         var date1 = new Date(obj1.orderTime);
+         var date2 = new Date(obj2.orderTime);
+         return date2 - date1;
        });
        this.setState(previousState => (
          { list: previousState.list }
@@ -138,29 +147,31 @@ export default class Example extends Component {
                     keyExtractor={item => item.key}
                     renderItem={({item})=>{
                     return(
-                        <View>
-                            <TouchableOpacity
-                                style={{ 
-                                    margin: 15, 
-                                    backgroundColor:'dodgerblue', 
-                                    width: '85%', 
-                                    padding:10,
-                                    borderRadius:10,
-                                    alignItems:'center',
-                                    justifyContent:'center',
-                                
-
-                                }}
-                                //onPress={() => DeleteOrderList(item.key)}
-                                >
-                                <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
-                                <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}> {item.orderTime}</Text>
-                                
-                                <Button title="승인취소" onPress={() => SetUnconfirm(item.key , item.orderPhoneNumber)}></Button> 
-                                <Button title="주문승인" onPress={() => Setconfirm(item.key , item.orderPhoneNumber)}></Button> 
-                                <Button title="준비완료" onPress={() => SetReady(item.key , item.orderPhoneNumber)}></Button> 
-                            </TouchableOpacity>
-                        </View>)
+                        <View  style={{ 
+                            alignSelf:'center',
+                            margin: 5, 
+                            backgroundColor:'dodgerblue', 
+                            width: '85%', 
+                            padding:10,
+                            flex:1,
+                            borderRadius:10,
+                            alignItems:'center',
+                            justifyContent:'center',
+                        }}
+                         //onPress={() => DeleteOrderList(item.key)}
+                        >    
+                            <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
+                            <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}> {item.orderTime}</Text>
+                            <View style={{flexDirection : 'row'}}>
+                            <Button 
+                            style={{padding:5,}}
+                             title="승인취소" onPress={() => SetUnconfirm(item.key , item.orderPhoneNumber)}></Button> 
+                            <Button  style={{margin:5}}
+                             title="주문승인" onPress={() => Setconfirm(item.key , item.orderPhoneNumber)}></Button> 
+                            <Button  style={{margin:5}}
+                             title="준비완료" onPress={() => SetReady(item.key , item.orderPhoneNumber)}></Button> 
+                            </View>
+                    </View>)
                     }}
                 />
             </View>
