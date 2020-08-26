@@ -2,26 +2,31 @@ import { StyleSheet } from 'react-native';
 
 const clientStyles = StyleSheet.create({
     background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
+        // width: '100%',
+        // height: '100%',
+        justifyContent:'center',
         alignItems: 'center',
-        flexDirection: 'column',
         backgroundColor: 'white',
-        padding: '10%',
-        flex: 1
+        padding: 10,
+        flex: 6
     },
     header: {
-        height: '20%',
-        width: '100%'
+        flex:1,
+        // width: '100%',
+        marginTop:20,
+        
     },
     body: {
-        height: '60%',
-        width: '100%'
+        flex:4,
+        // width: '100%',
+        margin:5,
+        
     },
     footer: {
-        height: '20%',
-        width: '100%',
+        flex:1,
+        // width: '100%',
+        justifyContent:'center'
+        
     },
     title: {
         fontSize: 44,
@@ -39,7 +44,7 @@ const clientStyles = StyleSheet.create({
     phoneNumber: {
         borderWidth: 1,
         borderColor: 'gray',
-        borderRadius: 5,
+        borderRadius: 8,
         backgroundColor: 'white',
         paddingBottom: 10,
         paddingTop: 10,
@@ -47,7 +52,7 @@ const clientStyles = StyleSheet.create({
         paddingEnd: 40,
         margin: 10,
         fontSize: 15,
-        width: 200,
+        width: 240,
         textAlign: 'center'
 
     },

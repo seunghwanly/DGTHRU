@@ -6,7 +6,6 @@ import {
     Button,
     Text
 } from 'react-native';
-import Modal from 'react-native-modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import auth from '@react-native-firebase/auth';

@@ -8,8 +8,6 @@ import {
 } from 'react-native';
 import { clientStyles } from './styles';
 
-import auth from '@react-native-firebase/auth';
-
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
@@ -137,13 +135,6 @@ function Shops({ navigation }) {
     const keyExtractor = (item) => item.id;
 
 
-
-    signOut = () => {
-        auth()
-            .signOut()
-            .then(() => console.log('User Signed Out !'));
-    }
-
     return (
         <>
             <View style={clientStyles.background}>
@@ -157,15 +148,15 @@ function Shops({ navigation }) {
                         data={shopData}
                         renderItem={renderItem}
                         keyExtractor={keyExtractor}
-
+                        scrollEnabled={false}
                     />
                 </View>
-                <View style={clientStyles.footer}>
+                {/* <View style={clientStyles.footer}>
                     <Button
                         title='로그아웃'
                         onPress={() => signOut()}
                     />
-                </View>
+                </View> */}
 
 
 

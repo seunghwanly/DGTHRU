@@ -142,9 +142,9 @@ function Verify({ navigation, number }) {
     // Handle the button press
     async function signInWithPhoneNumber(phoneNumber) {
         console.log('phoneNumber : ' + phoneNumber);
-        if(phoneNumber == "+8201041282470" || phoneNumber == "+8201011112222") setAdmin(true);
+        if (phoneNumber == "+8201041282470" || phoneNumber == "+8201011112222") setAdmin(true);
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-        
+
         console.log('signInWith~~ confirmation : ' + confirmation.confirm + "\tID : " + confirmation.verificationId);
         setConfirm(confirmation);
         console.log('signInWith~~ smsSetConfirm(): ' + setConfirm(confirmation));
@@ -152,33 +152,34 @@ function Verify({ navigation, number }) {
 
     async function confirmCode() {
         console.log('admin : ' + admin);
-        if(admin){
-        try {
-            await confirm.confirm(code)
-                .then(() => navigation.navigate('SupervisorShops', { navigation: navigation }));
-            console.log('smscode : ' + code);
-        } catch (error) {
-            console.log('Invalid code.' + error);
+        if (admin) {
+            try {
+                await confirm.confirm(code)
+                    .then(() => navigation.navigate('SupervisorShops', { navigation: navigation }));
+                console.log('smscode : ' + code);
+            } catch (error) {
+                console.log('Invalid code.' + error);
+            }
         }
-    }
-    else{
-        try {
-            await confirm.confirm(code)
-                .then(() => navigation.navigate('Shops', { navigation: navigation }));
-            console.log('smscode : ' + code);
-        } catch (error) {
-            console.log('Invalid code.' + error);
+        else {
+            try {
+                await confirm.confirm(code)
+                    .then(() => navigation.navigate('Shops', { navigation: navigation }));
+                console.log('smscode : ' + code);
+            } catch (error) {
+                console.log('Invalid code.' + error);
+            }
         }
-    }
     }
     if (!confirm) {
         return (
             <View style={clientStyles.background}>
+
+                <View style={clientStyles.header}>
+                    <Text style={clientStyles.title}>DGTHRU</Text>
+                    <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+                </View>
                 <ScrollView>
-                    <View style={clientStyles.header}>
-                        <Text style={clientStyles.title}>DGTHRU</Text>
-                        <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-                    </View>
                     <View style={clientStyles.body}>
                         <KeyboardAvoidingView
                             behavior='position'
@@ -201,22 +202,22 @@ function Verify({ navigation, number }) {
 
                     </View>
                     <View style={clientStyles.footer}>
-                            {
-                                appleAuth.isSupported === false ? 
+                        {
+                            appleAuth.isSupported === false ?
 
                                 <View style={clientStyles.footer}>
                                     <Text>Apple Authentication is not supported on this device.</Text>
                                 </View>
 
                                 :
-                            <AppleButton
-                                style={clientStyles.appleButton}
-                                cornerRadius={5}
-                                buttonStyle={AppleButton.Style.WHITE}
-                                buttonType={AppleButton.Type.CONTINUE}
-                                onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
-                            />
-                            }
+                                <AppleButton
+                                    style={clientStyles.appleButton}
+                                    cornerRadius={5}
+                                    buttonStyle={AppleButton.Style.WHITE}
+                                    buttonType={AppleButton.Type.CONTINUE}
+                                    onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
+                                />
+                        }
                     </View>
                 </ScrollView>
             </View>
@@ -225,11 +226,12 @@ function Verify({ navigation, number }) {
 
     return (
         <View style={clientStyles.background}>
+
+            <View style={clientStyles.header}>
+                <Text style={clientStyles.title}>DGTHRU</Text>
+                <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+            </View>
             <ScrollView>
-                <View style={clientStyles.header}>
-                    <Text style={clientStyles.title}>DGTHRU</Text>
-                    <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-                </View>
                 <View style={clientStyles.body}>
                     <Text style={clientStyles.subTitle}>{number}</Text>
                     <KeyboardAvoidingView
@@ -249,7 +251,7 @@ function Verify({ navigation, number }) {
                     </KeyboardAvoidingView>
                 </View>
                 <View style={[clientStyles.footer, clientStyles.subTitle]}>
-                    <Text style={{ margin: 15, textAlign: 'center' }}>위 번호로 회원가입을 진행합니다.</Text>
+                    <Text style={{ margin: 15, textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
                 </View>
             </ScrollView>
         </View>

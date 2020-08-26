@@ -8,7 +8,7 @@ import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
-import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../DatabaseRef';
+import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 

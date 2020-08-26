@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
-import { commonRef } from '../../DatabaseRef.js';
+import { commonRef } from '../../utils/DatabaseRef.js';
 
 export default class PaymentResult extends React.Component {
 

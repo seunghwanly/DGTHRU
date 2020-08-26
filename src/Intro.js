@@ -8,9 +8,6 @@ import { styles } from './styles';
 
 import auth from '@react-native-firebase/auth';
 
-import Shops from './client/Shops';
-import SupervisorShops from './supervisor/SupervisorShops';
-
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
@@ -50,16 +47,21 @@ function Intro({ navigation }) {
         );
     }
 
-    return(
-        <>
-        {
-            user.phoneNumber === '+821011112222' ?
-
-            <SupervisorShops navigation={navigation} />
-            :
-            <Shops navigation={navigation} />
-        }
-        </>
+    return (
+        <View style={styles.background}>
+            <View style={{ marginBottom: 30 }}>
+                <Text style={styles.title}>DGTHRU</Text>
+                <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+            </View>
+            <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={() => {
+                    user.phoneNumber === '+821011112222' ? navigation.replace('SupervisorShops') : navigation.replace('Shops')
+                }}
+            >
+                <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
+            </TouchableOpacity>
+        </View>
     )
 }
 
