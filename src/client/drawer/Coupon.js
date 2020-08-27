@@ -1,19 +1,41 @@
 import React from 'react';
 import {
-    View,
+    TouchableOpacity,
+    Image,
     Text
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Header } from 'react-native-elements';
 
 export default Coupon = ({ navigation }) => {
-    return(
-        <SafeAreaView
-        style={{
-            flex:1,
-            justifyContent:'center',
-            alignItems:'center'
-        }}>
-            <Text>정인이화이팅</Text>
-        </SafeAreaView>
+    return (
+        <>
+            <Header
+                containerStyle={{ backgroundColor: 'white' }}
+                leftComponent={
+                    () => (
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row-reverse' }}
+                            // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                            onPress={() => navigation.toggleDrawer()}
+                        >
+                            <Image
+                                style={{ height: 30, width: 30,}}
+                                resizeMode='cover'
+                                source={require('../../../image/menu-outline.png')}
+                            />
+                        </TouchableOpacity>
+                    )
+                } />
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor:'white'
+                }}>
+                <Text>정인이화이팅</Text>
+            </SafeAreaView>
+        </>
     )
 }

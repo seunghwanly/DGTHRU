@@ -30,7 +30,7 @@ import SupervisorShops from './supervisor/SupervisorShops';
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderBackground, HeaderTitle } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CustomDrawerContent from './utils/CustomNavigator';
@@ -42,7 +42,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  View
+  View,
 } from 'react-native';
 
 enableScreens();
@@ -214,10 +214,11 @@ export default App = () => {
           }}
         />
         <DrawerStack.Screen name='Receipt/History' component={Bill}
-          options={{
-            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />),
-            
-          }}
+          options={
+            {
+              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />)
+            }
+          }
         />
         <DrawerStack.Screen name='Coupon' component={Coupon}
           options={{

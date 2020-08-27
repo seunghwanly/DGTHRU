@@ -1,50 +1,75 @@
-//주문내역 보여줄거임
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    View,
-    Button,
-    Text
+    TouchableOpacity,
+    Image,
+    Text, FlatList, View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Header } from 'react-native-elements';
 
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
-import { FlatList } from 'react-native-gesture-handler';
+//firebase
+import { userHistoryDatabase } from '../../utils/DatabaseRef';
 
+export default Bill = ({ navigation }) => {
 
-//>> 이거 클래스로 바꿀예정
-export default Bill = ({ navigation, route }) => {
+    const userHistoryDB = userHistoryDatabase();
 
+    const [userHistory, setUserHistory] = useState(null);
 
-    const userHistory = [];
-
-    const getData = () => {
-        
-        database()
-            .ref('user_history/' + auth().currentUser.uid)
-            .once('value')
-            .then((snapshot) => {
+    useEffect(() => {
+        var tempJSON = [];
+        userHistoryDB
+            .once('value', (snapshot) => {
                 snapshot.forEach((childSnapShot) => {
-                    userHistory.concat(childSnapShot.val());
+                    // console.log(childSnapShot);
+                    tempJSON.push(childSnapShot.val());
+                    // console.log(childSnapShot.val());
+                    setUserHistory(() => tempJSON);
+                    // console.log(userHistory.length);
                 })
+                // console.log(snapshot.val());
             })
-        return userHistory;
-    }
-
+    }, []);
 
     return (
-        <SafeAreaView>
-            <Text>{auth().currentUser.phoneNumber} 님 환영합니다 !</Text>
-            <FlatList 
-                data={userHistory}
-                renderItem={ ({item}) => (
-                    <View>
-                        <Text>{item.name+'\t'+item.cost}</Text>
-                    </View>
-                )}
-                keyExtractor={(item, id) => id}
-            />
-        </SafeAreaView>
+        <>
+            <Header
+                containerStyle={{ backgroundColor: 'white' }}
+                leftComponent={
+                    () => (
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row-reverse' }}
+                            // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                            onPress={() => navigation.toggleDrawer()}
+                        >
+                            <Image
+                                style={{ height: 30, width: 30, }}
+                                resizeMode='cover'
+                                source={require('../../../image/menu-outline.png')}
+                            />
+                        </TouchableOpacity>
+                    )
+                } />
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'white'
+                }}>
+                <FlatList 
+                    data={userHistory}
+                    renderItem={
+                        ({item}) => (
+                            <View>
+                                <Text>{item.name} {item.cost} {item.cup} {item.orderTime}</Text>
+                            </View>
+                        )
+                    }
+                    keyExtractor={(item) => item.toString()}
+                />
+            </SafeAreaView>
+        </>
     )
+
 }
