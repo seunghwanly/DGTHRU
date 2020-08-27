@@ -88,7 +88,7 @@ export default class PaymentResult extends React.Component {
                             // onPress: () => [ Vibration.cancel(), this.props.navigation.pop(), this.props.navigation.navigate('Shops') ]
                             onPress: () => 
                             [ 
-                                Vibration.cancel(), this.props.navigation.reset({ index:0, routes :  [{ name : 'HOME' }] }) 
+                                Vibration.cancel(), this.props.navigation.reset({ index:0, routes :  [{ name : 'Home' }] }) 
                             ]
                         },
                         {

@@ -28,9 +28,12 @@ import example from './supervisor/example';
 import SupervisorShops from './supervisor/SupervisorShops';
 
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
-import { NavigationContainer, DrawerActions, useNavigation } from '@react-navigation/native';
-import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import CustomDrawerContent from './utils/CustomNavigator';
 
 import { enableScreens } from 'react-native-screens';
 import auth from '@react-native-firebase/auth';
@@ -94,8 +97,13 @@ const StackContainer = () => {
   if (initializing) return null;
 
   if (user) {
+    console.log('exist user');
     return (
-      <Stack.Navigator initialRouteName='Shops'>
+      <Stack.Navigator initialRouteName='Shops' 
+      // screenOptions={
+      //   Stack.Screen.name === 'Shops' ? {gestureEnabled:false} : {gestureEnabled:true} 
+      // }
+      >
         {Object.entries({
           ...IntroScreen, ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
         }).map(([name, component]) => (
@@ -154,7 +162,9 @@ const StackContainer = () => {
                       </TouchableOpacity>
                     )
                   }
-                }
+                },
+
+                gestureEnabled : name === 'Shops' ? false : true
 
               })
             }
@@ -165,8 +175,9 @@ const StackContainer = () => {
     )
   }
   else {
+    console.log('null user');
     return (
-      <Stack.Navigator initialRouteName='Intro'>
+      <Stack.Navigator initialRouteName='Intro' screenOptions={{gestureEnabled:false}}>
         {Object.entries({
           ...IntroScreen
         }).map(([name, component]) => (
@@ -186,67 +197,16 @@ const DrawerStack = createDrawerNavigator();
 // 그러면 화이팅 종하 석운
 // 최종적으로 렌더링 되는 곳은 밑에 부분이니까 추가하면 될거같아 !
 
-function CustomDrawerContent(props) {
 
-  signOut = () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User Signed Out !'))
-      .catch(() => console.log('already signed out !'));
-  }
+export default App = () => {
 
-  return (
-    <>
-      <DrawerContentScrollView {...props}
-        style={{ flex: 1 }}>
-        <DrawerItem
-          label={() => <Text style={{ fontSize: 14 }}>{
-            auth().currentUser !== null ?
-              auth().currentUser.phoneNumber + ' 님'
-              :
-              ''
-          }</Text>}
-        />
-        <DrawerItemList {...props} />
-      </DrawerContentScrollView>
-      <DrawerItem
-        style={{ marginBottom: 40, marginStart: 20 }}
-        label='로그아웃'
-        // onPress={() => { [ signOut(), navigation.reset({ index:0, routes :  [{ name : 'HOME' }] })] }}
-        onPress={() => { [signOut(), DrawerActions.closeDrawer()] }}
-      />
-    </>
-  );
-}
-
-export default App = ({ navigation }) => {
-
-  // // Set an initializing state whilst Firebase connects
-  // const [initializing, setInitializing] = useState(true);
-  // const [user, setUser] = useState(null);
-
-  // // Handle user state changes
-  // function onAuthStateChanged(user) {
-  //   setUser(user);
-  //   if (initializing) setInitializing(false);
-  // }
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-
-  // if (initializing) return null;
-
-  // if (user !== null) {
   return (
     <NavigationContainer>
       <DrawerStack.Navigator
         initialRouteName='Home'
         drawerType='front'
         drawerStyle={{ width: '60%' }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-        
+        drawerContent={(props) => <CustomDrawerContent {...props}/>}
       >
         <DrawerStack.Screen name='Home' component={StackContainer}
           options={{
@@ -256,6 +216,7 @@ export default App = ({ navigation }) => {
         <DrawerStack.Screen name='Receipt/History' component={Bill}
           options={{
             drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />),
+            
           }}
         />
         <DrawerStack.Screen name='Coupon' component={Coupon}
