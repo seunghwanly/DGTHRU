@@ -13,9 +13,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
+
                     "option_available" : [
                         {
-                            "whipping": false,
                             "shot": [
 
                             ],
@@ -30,12 +31,11 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
+
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot":  [
-
-                            ],
+                            "shot": true,
                             "syrup": true
                          }
                     ]
@@ -52,10 +52,11 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
+
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -66,10 +67,10 @@
                     "ice_available": false,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -81,10 +82,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -96,10 +97,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -111,10 +112,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -126,10 +127,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot": 2,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -146,10 +147,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot":  false,
+                            "shot": false,
                             "syrup": false
                          }
                     ]
@@ -161,10 +162,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot":  false,
+                            "shot": false,
                             "syrup": false
                          }
                     ]
@@ -182,10 +183,10 @@
                     ],
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": false,
                     "option_available" : [
                         {
-                            "whipping": false,
-                            "shot":  false,
+                            "shot": false,
                             "syrup": false
                          }
                     ]
@@ -202,10 +203,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": true,
                     "option_available" : [
                         {
-                            "whipping": true,
-                            "shot":  false,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -217,10 +218,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": true,
                     "option_available" : [
                         {
-                            "whipping": true,
-                            "shot":  false,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -232,10 +233,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": true,
                     "option_available" : [
                         {
-                            "whipping": true,
-                            "shot":  false,
+                            "shot": true,
                             "syrup": false
                          }
                     ]
@@ -247,10 +248,10 @@
                     "ice_cost": 0,
                     "sold_out":false,
                     "only_ice":false,
+                    "whipping": true,
                     "option_available" : [
                         {
-                            "whipping": true,
-                            "shot":  false,
+                            "shot": true,
                             "syrup": false
                          }
                     ]

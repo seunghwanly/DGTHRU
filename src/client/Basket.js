@@ -64,6 +64,7 @@ export default Basket = ({ navigation, route }) => {
         var tempTotalCost = 0;
 
         console.log('[Basket] init totalcost >>> ' + totalCost);
+        console.log('[whipping] init totalcost >>> ' + item.whipping);
 
         database()
             .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
@@ -382,7 +383,6 @@ export default Basket = ({ navigation, route }) => {
     if (item.sold_out === false) {
         return (
             <View style={basketStyles.background}>
-
                 <View style={basketStyles.subBackground}>
                     {/* 2줄 컬럼형 */}
                     <View style={basketStyles.basketWrapper}>
@@ -443,6 +443,7 @@ export default Basket = ({ navigation, route }) => {
                             {
                                 item.option_available.whipping === true ?
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
+
                                         <FlatList
                                             style={{ marginStart: '5%', marginEnd: '5%' }}
                                             data={dataWhippingCream}
