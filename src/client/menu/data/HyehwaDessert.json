@@ -204,11 +204,7 @@
                     "only_ice":false,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -223,11 +219,7 @@
                     "only_ice":false,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -242,11 +234,7 @@
                     "only_ice":false,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -261,11 +249,7 @@
                     "only_ice":false,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -380,11 +364,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -405,11 +385,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -424,11 +400,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -456,11 +428,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -484,11 +452,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }
@@ -503,11 +467,7 @@
                     "only_ice":true,
                     "option_available" : [
                         {
-                            "whipping": [
-                                "많이",
-                                "적게",
-                                "노노"
-                            ],
+                            "whipping": true,
                             "shot":  false,
                             "syrup": false
                          }

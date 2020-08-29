@@ -56,7 +56,7 @@ export default Basket = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
-        },[])
+        }, [])
     );
 
     useEffect(() => {
@@ -212,6 +212,7 @@ export default Basket = ({ navigation, route }) => {
             'count': count,
             'cup': inOrOut,
             'type': hotOrIced,
+            'whipping': whippingCream,
             'selected': selected,
             'orderState': 'request'
             //옵션추가를 배열로 할지 고민중
@@ -368,6 +369,7 @@ export default Basket = ({ navigation, route }) => {
                         return false;
                     }
                 }    //5,6,7,8,9,10,11,12
+
             }
             else { //매장용/일회용 선택안한 경우
                 alert('컵을 선택해주세요 !');
@@ -432,6 +434,44 @@ export default Basket = ({ navigation, route }) => {
                                             numColumns={3}
                                             keyExtractor={(item) => item.toString()}
                                             extraData={hotOrIced}
+                                            scrollEnabled={false}
+                                        />
+                                    </View>
+                                    :
+                                    <></>
+                            }
+                            {
+                                item.option_available.whipping === true ?
+                                    <View style={{ flexDirection: 'row', padding: 10 }}>
+                                        <FlatList
+                                            style={{ marginStart: '5%', marginEnd: '5%' }}
+                                            data={dataWhippingCream}
+                                            renderItem={
+                                                ({ item }) => {
+
+                                                    const backgroundColor = item.toString()
+                                                        === whippingCream ?
+                                                        'royalblue' : 'lightgray';
+
+                                                    const color = item.toString()
+                                                        === whippingCream ?
+                                                        'white' : 'black';
+
+                                                    return (
+                                                        <TouchableOpacity
+                                                            onPress={() => setWhippingCream(item.toString())}
+                                                            style={[
+                                                                { backgroundColor },
+                                                                basketStyles.basketTwoItem
+                                                            ]}>
+                                                            <Text style={{ color }}> {item} </Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                }
+                                            }
+                                            numColumns={3}
+                                            keyExtractor={(item) => item.toString()}
+                                            extraData={whippingCream}
                                             scrollEnabled={false}
                                         />
                                     </View>
