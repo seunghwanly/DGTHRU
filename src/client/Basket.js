@@ -57,7 +57,7 @@ export default Basket = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
-        },[])
+        }, [])
     );
 
     useEffect(() => {
@@ -65,6 +65,7 @@ export default Basket = ({ navigation, route }) => {
         var tempTotalCost = 0;
 
         console.log('[Basket] init totalcost >>> ' + totalCost);
+        console.log('[whipping] init whipping >>> ' + item.option_available.whipping);
 
         database()
             .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
@@ -213,6 +214,7 @@ export default Basket = ({ navigation, route }) => {
             'count': count,
             'cup': inOrOut,
             'type': hotOrIced,
+            'whipping': whippingCream,
             'selected': selected,
             'orderState': 'request'
             //옵션추가를 배열로 할지 고민중
@@ -369,6 +371,7 @@ export default Basket = ({ navigation, route }) => {
                         return false;
                     }
                 }    //5,6,7,8,9,10,11,12
+
             }
             else { //매장용/일회용 선택안한 경우
                 alert('컵을 선택해주세요 !');
@@ -381,7 +384,6 @@ export default Basket = ({ navigation, route }) => {
     if (item.sold_out === false) {
         return (
             <View style={basketStyles.background}>
-
                 <View style={basketStyles.subBackground}>
                     {/* 2줄 컬럼형 */}
                     <View style={basketStyles.basketWrapper}>
@@ -433,6 +435,40 @@ export default Basket = ({ navigation, route }) => {
                                             numColumns={3}
                                             keyExtractor={(item) => item.toString()}
                                             extraData={hotOrIced}
+                                            scrollEnabled={false}
+                                        />
+                                    </View>
+                                    :
+                                    <></>
+                            }
+                            {
+                                item.option_available.whipping === true ?
+                                    <View style={{ flexDirection: 'row', padding: 10 }}>
+                                        <FlatList
+                                            data={dataWhippingCream}
+                                            renderItem={
+                                                ({ item }) => {
+
+                                                    const backgroundColor = item.toString()
+                                                        === whippingCream ?
+                                                        'royalblue' : 'lightgray';
+
+                                                    const color = item.toString()
+                                                        === whippingCream ?
+                                                        'white' : 'black';
+
+                                                    return (
+                                                        <TouchableOpacity
+                                                            onPress={() => setWhippingCream(item.toString())}
+                                                            style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
+                                                            <Text style={{ color }}> {item} </Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                }
+                                            }
+                                            numColumns={3}
+                                            keyExtractor={(item) => item.toString()}
+                                            extraData={inOrOut}
                                             scrollEnabled={false}
                                         />
                                     </View>
