@@ -57,17 +57,22 @@ export default Bill = ({ navigation }) => {
                     alignItems: 'center',
                     backgroundColor: 'white'
                 }}>
-                <FlatList 
-                    data={userHistory}
-                    renderItem={
-                        ({item}) => (
-                            <View>
-                                <Text>{item.name} {item.cost} {item.cup} {item.orderTime}</Text>
-                            </View>
-                        )
-                    }
-                    keyExtractor={(item) => item.toString()}
-                />
+                {
+                    userHistory !== null ?
+                        <FlatList
+                            data={userHistory}
+                            renderItem={
+                                ({ item }) => (
+                                    <View>
+                                        <Text>{item.name} {item.cost} {item.cup} {item.orderTime}</Text>
+                                    </View>
+                                )
+                            }
+                            keyExtractor={(item) => item.toString()}
+                        />
+                        :
+                        <Text>주문내역이 없네요 ~</Text>
+                }
             </SafeAreaView>
         </>
     )

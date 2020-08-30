@@ -10,7 +10,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 //Firebase Ref
 import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -76,7 +75,7 @@ export default class BasketDetail extends React.Component {
                     this.setState({
                         orderData: this.state.orderData.concat(tempJSON)
                     })
-                    this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
+                    // this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
                     console.log('\n after : ' + this.state.orderData.length);
                 })
             });

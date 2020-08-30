@@ -15,6 +15,8 @@ import moment from 'moment';
 
 import { useFocusEffect } from '@react-navigation/native';
 
+import { pushData } from '../utils/asyncStorage';
+
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
@@ -52,7 +54,6 @@ export default Basket = ({ navigation, route }) => {
     const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
-
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
@@ -67,7 +68,7 @@ export default Basket = ({ navigation, route }) => {
         console.log('[whipping] init whipping >>> ' + item.option_available.whipping);
 
         database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
             .once('value', (snapshot) => {
                 console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
@@ -102,6 +103,7 @@ export default Basket = ({ navigation, route }) => {
                         data={subMenu.sub_menu}
                         renderItem={
                             ({ item }) => {
+
                                 const backgroundColor = item.toString()
                                     === selected ?
                                     'coral' : 'steelblue';
@@ -136,7 +138,6 @@ export default Basket = ({ navigation, route }) => {
             )
         }
     }
-
 
     handleCount = (id) => {
 
@@ -180,7 +181,7 @@ export default Basket = ({ navigation, route }) => {
     sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
         // 1.오너와 함께 공유하는 DB
         const orderRef = database()
-            .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+            .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
             .push();
 
         orderRef
@@ -507,7 +508,7 @@ export default Basket = ({ navigation, route }) => {
                             </View>
                             <TouchableOpacity
                                 style={basketStyles.pushToBasket}
-                                onPress={() => handleOrder(item)}>
+                                onPress={() => [ handleOrder(item), pushData(count) ] }>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
                             </TouchableOpacity>
                         </View>

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { exampleStyle } from './styles';
 
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
+
+
 var currentTime = moment().format('YYYY_MM_DD');
 var shopname = '';
 var phonenumber = '';
@@ -140,31 +143,21 @@ export default class Example extends Component {
   
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View style={exampleStyle.background}>
                 <Text>[{shopname}] : Order List</Text>
                     <FlatList style={{width:'100%'}}
                     data={this.state.list}
                     keyExtractor={item => item.key}
                     renderItem={({item})=>{
                     return(
-                        <View  style={{ 
-                            alignSelf:'center',
-                            margin: 5, 
-                            backgroundColor:'dodgerblue', 
-                            width: '85%', 
-                            padding:10,
-                            flex:1,
-                            borderRadius:10,
-                            alignItems:'center',
-                            justifyContent:'center',
-                        }}
+                        <View  style={exampleStyle.listbox}
                          //onPress={() => DeleteOrderList(item.key)}
                         >    
-                            <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}>{item.name}  {item.cup} {item.count}</Text>
-                            <Text style={{fontWeight:'bold', fontSize:15, color:'white'}}> {item.orderTime}</Text>
-                            <View style={{flexDirection : 'row'}}>
+                            <Text style={exampleStyle.orderlisttext}>{item.name}  {item.cup} {item.count}</Text>
+                            <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
+                            <View style={exampleStyle.orderlistview}>
                             <Button 
-                            style={{padding:5,}}
+                            style={exampleStyle.buttonstyle}
                              title="승인취소" onPress={() => SetUnconfirm(item.key , item.orderPhoneNumber)}></Button> 
                             <Button  style={{margin:5}}
                              title="주문승인" onPress={() => Setconfirm(item.key , item.orderPhoneNumber)}></Button> 
