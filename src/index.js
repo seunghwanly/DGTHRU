@@ -30,12 +30,13 @@ import SupervisorShops from './supervisor/SupervisorShops';
 //import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, HeaderBackground, HeaderTitle } from '@react-navigation/stack';
+import { createStackNavigator, HeaderBackground, HeaderTitle, TransitionSpecs } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CustomDrawerContent from './utils/CustomNavigator';
 
 import { enableScreens } from 'react-native-screens';
+
 import auth from '@react-native-firebase/auth';
 
 import {
@@ -99,7 +100,7 @@ const StackContainer = () => {
   if (user) {
     console.log('exist user');
     return (
-      <Stack.Navigator initialRouteName='Shops' 
+      <Stack.Navigator initialRouteName='Shops'
       // screenOptions={
       //   Stack.Screen.name === 'Shops' ? {gestureEnabled:false} : {gestureEnabled:true} 
       // }
@@ -149,22 +150,50 @@ const StackContainer = () => {
                   if (auth().currentUser !== null) {
 
                     return (
-                      <TouchableOpacity
-                        style={{ flexDirection: 'row-reverse' }}
-                        // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                        onPress={() => navigation.toggleDrawer()}
-                      >
-                        <Image
-                          style={{ height: 30, width: 30, marginStart: 10 }}
-                          resizeMode='cover'
-                          source={require('../image/menu-outline.png')}
-                        />
-                      </TouchableOpacity>
+                      // {
+                      //   // <- 화살표 추가 Menu 부터
+                      // }
+                      <View style={{flexDirection:'row'}}>
+                        {
+                          name === 'Menu' || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
+
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row-reverse' }}
+                              // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                              onPress={() => navigation.goBack()}
+                              
+                            >
+                              <Image
+                                style={{ height: 20, width: 25, marginStart: 10, alignSelf:'center' }}
+                                resizeMode='cover'
+                                source={require('../image/chevron-back-outline.png')}
+                              />
+                            </TouchableOpacity>
+
+                            :
+
+                            <></>
+                        }
+                        <TouchableOpacity
+                          style={{ flexDirection: 'row-reverse' }}
+                          // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                          onPress={() => navigation.toggleDrawer()}
+                        >
+                          <Image
+                            style={{ height: 30, width: 30, marginStart: 10 }}
+                            resizeMode='cover'
+                            source={require('../image/menu-outline.png')}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     )
                   }
+                  TransitionSpecs
                 },
 
-                gestureEnabled : name === 'Shops' ? false : true
+                animationTypeForReplace : true,
+
+                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
 
               })
             }
@@ -177,7 +206,7 @@ const StackContainer = () => {
   else {
     console.log('null user');
     return (
-      <Stack.Navigator initialRouteName='Intro' screenOptions={{gestureEnabled:false}}>
+      <Stack.Navigator initialRouteName='Intro' screenOptions={{ gestureEnabled: false }}>
         {Object.entries({
           ...IntroScreen
         }).map(([name, component]) => (
@@ -206,12 +235,13 @@ export default App = () => {
         initialRouteName='Home'
         drawerType='front'
         drawerStyle={{ width: '60%' }}
-        drawerContent={(props) => <CustomDrawerContent {...props}/>}
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <DrawerStack.Screen name='Home' component={StackContainer}
           options={{
-            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/basket_outline.png')} />),
+            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')} />),
           }}
+        //Home onPress () >> reset
         />
         <DrawerStack.Screen name='Receipt/History' component={Bill}
           options={
