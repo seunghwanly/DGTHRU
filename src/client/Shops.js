@@ -9,6 +9,7 @@ import {
 import { clientStyles } from './styles';
 
 import { enableScreens } from 'react-native-screens';
+import CustomNavigator from '../utils/CustomNavigator';
 
 enableScreens();
 
