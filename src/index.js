@@ -36,6 +36,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from './utils/CustomNavigator';
 
 import { enableScreens } from 'react-native-screens';
+
 import auth from '@react-native-firebase/auth';
 
 import {
@@ -149,6 +150,9 @@ const StackContainer = () => {
                   if (auth().currentUser !== null) {
 
                     return (
+                      // {
+                      //   // <- 화살표 추가 Menu 부터
+                      // }
                       <TouchableOpacity
                         style={{ flexDirection: 'row-reverse' }}
                         // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -164,7 +168,7 @@ const StackContainer = () => {
                   }
                 },
 
-                gestureEnabled : name === 'Shops' ? false : true
+                gestureEnabled : name === 'Shops' || name === 'SupervisorShops' ? false : true
 
               })
             }
@@ -210,8 +214,9 @@ export default App = () => {
       >
         <DrawerStack.Screen name='Home' component={StackContainer}
           options={{
-            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/basket_outline.png')} />),
+            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')} />),
           }}
+          //Home onPress () >> reset
         />
         <DrawerStack.Screen name='Receipt/History' component={Bill}
           options={

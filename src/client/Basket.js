@@ -101,6 +101,7 @@ export default Basket = ({ navigation, route }) => {
                         data={subMenu.sub_menu}
                         renderItem={
                             ({ item }) => {
+
                                 const backgroundColor = item.toString()
                                     === selected ?
                                     'coral' : 'steelblue';

@@ -6,6 +6,8 @@ import auth from '@react-native-firebase/auth';
 
 function CustomDrawerContent(props) {
 
+    console.log('Custom Navigator >>'+props.state.routes, props.state.index);
+
     signOut = () => {
       auth()
         .signOut()
@@ -29,7 +31,12 @@ function CustomDrawerContent(props) {
                 ''
             }</Text>}
           />
-          <DrawerItemList {...props}/>
+          <DrawerItemList {...props}
+            // onPress={
+              
+            //   // props.name === 'Home' ? props.navigation.popToTop() : {}
+            // }
+          />
         </DrawerContentScrollView>
         <DrawerItem
           style={{ marginBottom: 40, marginStart: 20 }}

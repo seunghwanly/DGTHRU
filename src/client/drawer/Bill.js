@@ -13,7 +13,7 @@ import { userHistoryDatabase } from '../../utils/DatabaseRef';
 export default Bill = ({ navigation }) => {
 
     const userHistoryDB = userHistoryDatabase();
-
+    
     const [userHistory, setUserHistory] = useState(null);
 
     useEffect(() => {
