@@ -45,7 +45,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -57,7 +57,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -70,7 +70,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -83,7 +83,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -96,7 +96,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -109,7 +109,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -177,7 +177,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -190,7 +190,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -203,7 +203,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -216,7 +216,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -229,7 +229,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -268,7 +268,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -294,7 +294,7 @@
                     "sold_out": false,
                     "only_ice": false,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -317,7 +317,7 @@
                     "sold_out": false,
                     "only_ice": true,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -336,7 +336,7 @@
                     "sold_out": false,
                     "only_ice": true,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
@@ -375,7 +375,7 @@
                     "sold_out": false,
                     "only_ice": true,
                     "option_available": {
-                        "whipping": false,
+                        "whipping": true,
                         "shot": true,
                         "syrup": false
                     }
