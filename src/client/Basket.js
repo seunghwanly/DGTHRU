@@ -64,7 +64,7 @@ export default Basket = ({ navigation, route }) => {
         var tempTotalCost = 0;
 
         console.log('[Basket] init totalcost >>> ' + totalCost);
-        console.log('[whipping] init totalcost >>> ' + item.whipping);
+        console.log('[whipping] init whipping >>> ' + item.whipping);
 
         database()
             .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
