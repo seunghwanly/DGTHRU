@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     View,
     Text,
@@ -53,12 +53,18 @@ export default Basket = ({ navigation, route }) => {
     const [whippingCream, setWhippingCream] = useState(null);
     const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
+    const [refresh, setRefresh] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
         },[])
     );
+
+    useEffect(() => {
+        console.log('refreshed !');
+        return setRefresh(false);
+    }, [refresh]);
 
     useEffect(() => {
         //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
@@ -88,7 +94,6 @@ export default Basket = ({ navigation, route }) => {
                 console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
                 //}
             });
-
     }, [totalCost]);
 
     function ChooseDetail(props) {
@@ -472,7 +477,7 @@ export default Basket = ({ navigation, route }) => {
                             </View>
                             <TouchableOpacity
                                 style={basketStyles.pushToBasket}
-                                onPress={() => [ handleOrder(item), pushData(count) ] }>
+                                onPress={() => [ handleOrder(item), pushData(count.toString()), setRefresh(true) ] }>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
                             </TouchableOpacity>
                         </View>

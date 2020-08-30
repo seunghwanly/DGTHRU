@@ -11,9 +11,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 
+import { popData } from '../utils/asyncStorage';
+
 import { enableScreens } from 'react-native-screens';
-
-
 enableScreens();
 
 
@@ -24,6 +24,8 @@ async function handleDeleteOrder(shopInfo, key) {
     await database()
         .ref(orderPath)
         .remove();
+    
+    popData();
 }
 
 async function handleDeleteUser(key) {
@@ -45,7 +47,8 @@ export default class BasketDetail extends React.Component {
 
         this.state = {
             orderData: [],
-            userData: []
+            userData: [],
+            needRefresh : false
         }
 
         this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);

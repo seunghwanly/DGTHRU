@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const getData = async () => {
+    // await AsyncStorage.removeItem('amount');
     const pp = await AsyncStorage.getItem('amount');
     console.log('index.js >>>> ' + pp);
-    if (pp != null) {
+    if (pp !== null) {
         return pp;
     } else {
         return 0;
@@ -11,16 +12,29 @@ export const getData = async () => {
 }
 
 export const pushData = async (count) => {
-    if(getData() === 0 ) {
-        await AsyncStorage.setItem('amount', count.toString());
+
+    if(await AsyncStorage.getItem('amount') === null) {
+        await AsyncStorage.setItem('amount', count);
     }
     else {
-        const prevCount = Number(getData());
-        const currCount = prevCount + count;
+        var prev = await AsyncStorage.getItem('amount');
+        prev = Number.parseInt(prev, 10);
+        const curr = count * 1;
 
-        console.log('asyncStorage >>>>>>>>>   ' + currCount);
+        var res = prev + curr;
 
-        await AsyncStorage.setItem('amount', currCount.toString());
+        await AsyncStorage.setItem('amount', res.toString());
+    }   
+}
+
+export const popData = async () => {
+    var prev = await AsyncStorage.getItem('amount');
+    prev = Number.parseInt(prev, 10) - 1;
+
+    if(prev > 0) {
+        await AsyncStorage.setItem('amount', prev.toString());
     }
-    
+    else {
+        await AsyncStorage.setItem('amount', null);
+    }
 }

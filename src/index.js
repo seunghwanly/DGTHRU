@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 
 //common
 import Intro from './Intro';
@@ -90,9 +90,17 @@ const StackContainer = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    getData().then((result) => setAmount(result));
     return subscriber; // unsubscribe on unmount
   }, []);
+
+  useEffect(() => {
+    console.log('=======useEffect========');
+    const readBakset = async() => {
+      getData().then((result) => setAmount(result));
+    }
+    readBakset();
+  });
+  
 
   
 
@@ -124,7 +132,7 @@ const StackContainer = () => {
                           source={require('../image/cart-outline.png')}
                         />
                         {
-                          amount > 0 ?
+                          amount !== null ?
                             <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
                               <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{amount}</Text>
                             </View>
