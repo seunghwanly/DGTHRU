@@ -51,6 +51,7 @@ export default Basket = ({ navigation, route }) => {
     const [inOrOut, setInOrOut] = useState(null);
     const [hotOrIced, setHotOrIced] = useState(null);
     const [whippingCream, setWhippingCream] = useState(null);
+    const [shotNum, setShotNum] = useState(2);
     const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
@@ -65,23 +66,22 @@ export default Basket = ({ navigation, route }) => {
         var tempTotalCost = 0;
 
         console.log('[Basket] init totalcost >>> ' + totalCost);
-        console.log('[whipping] init whipping >>> ' + item.option_available.whipping);
 
         database()
             .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
             .once('value', (snapshot) => {
-                console.log('[Basket] length >>' + countProperties(snapshot.val()));
+                // console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
                 snapshot.forEach((childSnapShot) => {
 
-                    console.log('[Basket] childSnapShot >> ' + childSnapShot.val());
+                    // console.log('[Basket] childSnapShot >> ' + childSnapShot.val());
 
                     tempTotalCost += childSnapShot.val().cost;
 
                     // console.log('prevCost >> ' + prevCost);
 
-                    console.log('[Basket] in loop : totalCost >> ' + totalCost);
-                    console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
+                    // console.log('[Basket] in loop : totalCost >> ' + totalCost);
+                    // console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
                 })
                 setTotalCost(() => tempTotalCost);
                 // return () => { setTotalCost(tempTotalCost);
@@ -140,10 +140,8 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleCount = (id) => {
-
         if (count > 0) {
             if (count === 1) {
-
                 if (id === '-') {
                     alert('다른 메뉴를 주문하시겠어요?');
                 }
@@ -157,6 +155,26 @@ export default Basket = ({ navigation, route }) => {
                 }
                 else {
                     setCount(count + 1);
+                }
+            }
+        }
+    }
+    handleShotCount = (id) => {
+        if (shotNum > 0) {
+            if (shotNum === 1) {
+                if (id === '+') {
+                    setShotNum(shotNum + 1);
+                    // setTotalCost(totalCost + 600);
+                }
+            }
+            else {
+                if (id === '+') {
+                    setShotNum(shotNum + 1);
+                    // setTotalCost(totalCost + 600);
+                }
+                else {
+                    setShotNum(shotNum - 1);
+                    // setTotalCost(totalCost - 600);
                 }
             }
         }
@@ -215,6 +233,7 @@ export default Basket = ({ navigation, route }) => {
             'cup': inOrOut,
             'type': hotOrIced,
             'whipping': whippingCream,
+            'shotNum' : shotNum,
             'selected': selected,
             'orderState': 'request'
             //옵션추가를 배열로 할지 고민중
@@ -437,6 +456,18 @@ export default Basket = ({ navigation, route }) => {
                                             extraData={hotOrIced}
                                             scrollEnabled={false}
                                         />
+                                    </View>
+                                    :
+                                    <></>
+                            }
+                            {
+                                item.option_available.shot === true ?
+                                    <View style={basketStyles.basketLeftColumnButtonWrapper}>
+                                        <Text>샷 추가</Text>
+                                        {/* TODO: 음료마다 기본 샷이 다름 */}
+                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
+                                        <Text >{ shotNum }</Text>
+                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
                                     </View>
                                     :
                                     <></>
