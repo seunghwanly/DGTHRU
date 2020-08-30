@@ -12,6 +12,7 @@ import firebase from '@react-native-firebase/app';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import example from './example';
+import { styles } from './styles';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -190,6 +191,7 @@ function supervisorShops({ navigation }) {
                         data={shopData}
                         renderItem={renderItem}
                         keyExtractor={keyExtractor}
+                        //scrollEnabled={false}
 
                     />
                 </View>
@@ -204,41 +206,5 @@ function supervisorShops({ navigation }) {
     );
    }
 
-const styles = StyleSheet.create({
-    background: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '10%',
-        flex: 1
-    },
-    header: {
-        height: '20%',
-        width: '100%'
-    },
-    body: {
-        height: '60%',
-        width: '100%'
-    },
-    footer: {
-        height: '20%',
-        width: '100%',
-    },
-    title: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-    subtitle: {
-        fontSize: 22,
-        color: 'gray',
-        textAlign: 'center'
-    },
-    item: {
 
-    },
-});
 export default supervisorShops;

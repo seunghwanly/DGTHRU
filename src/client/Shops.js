@@ -9,6 +9,7 @@ import {
 import { clientStyles } from './styles';
 
 import { enableScreens } from 'react-native-screens';
+import CustomNavigator from '../utils/CustomNavigator';
 
 enableScreens();
 
@@ -151,14 +152,12 @@ function Shops({ navigation }) {
                         scrollEnabled={false}
                     />
                 </View>
-                {/* <View style={clientStyles.footer}>
+                {/*<View style={clientStyles.footer}>
                     <Button
                         title='로그아웃'
-                        onPress={() => signOut()}
+                        onPress={() => CustomNavigator.signOut()}
                     />
-                </View> */}
-
-
+    </View>*/}
 
             </View>
         </>
