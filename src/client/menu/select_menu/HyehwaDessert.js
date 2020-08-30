@@ -27,8 +27,8 @@ export default class HyehwaDessert extends React.Component {
             _bakeryData: []
         }
 
-        this._drinkDataRef = database().ref('menu/hyehwa/categories_drink');
-        this._bakeryDataRef = database().ref('menu/hyehwa/categories_bakery');
+        this._drinkDataRef = database().ref('menu/hyehwa_roof/categories_drink');
+        this._bakeryDataRef = database().ref('menu/hyehwa_roof/categories_bakery');
     }
 
     componentDidMount() {

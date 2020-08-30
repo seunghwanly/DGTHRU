@@ -64,7 +64,7 @@ export default Basket = ({ navigation, route }) => {
         var tempTotalCost = 0;
 
         console.log('[Basket] init totalcost >>> ' + totalCost);
-        console.log('[whipping] init whipping >>> ' + item.whipping);
+        console.log('[whipping] init whipping >>> ' + item.option_available.whipping);
 
         database()
             .ref(shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
@@ -443,9 +443,7 @@ export default Basket = ({ navigation, route }) => {
                             {
                                 item.option_available.whipping === true ?
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
-
                                         <FlatList
-                                            style={{ marginStart: '5%', marginEnd: '5%' }}
                                             data={dataWhippingCream}
                                             renderItem={
                                                 ({ item }) => {
@@ -461,10 +459,7 @@ export default Basket = ({ navigation, route }) => {
                                                     return (
                                                         <TouchableOpacity
                                                             onPress={() => setWhippingCream(item.toString())}
-                                                            style={[
-                                                                { backgroundColor },
-                                                                basketStyles.basketTwoItem
-                                                            ]}>
+                                                            style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
                                                             <Text style={{ color }}> {item} </Text>
                                                         </TouchableOpacity>
                                                     )
@@ -472,7 +467,7 @@ export default Basket = ({ navigation, route }) => {
                                             }
                                             numColumns={3}
                                             keyExtractor={(item) => item.toString()}
-                                            extraData={whippingCream}
+                                            extraData={inOrOut}
                                             scrollEnabled={false}
                                         />
                                     </View>
