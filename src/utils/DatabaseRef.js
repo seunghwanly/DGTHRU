@@ -12,7 +12,7 @@ export const userHistoryRef = () => {
 
 export function commonRef(shopInfo) {
     if(auth().currentUser !== null)
-        return shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber;
+        return 'shops/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber;
 }
 
 export function commonDatabase(shopInfo) {
@@ -23,4 +23,30 @@ export function commonDatabase(shopInfo) {
 export const userHistoryDatabase = () => {
     if(auth().currentUser !== null)
         return database().ref('user_history' + '/' + auth().currentUser.uid);
-} 
+}
+
+export function getBasketLength(shopInfo) {
+
+    countProperties = (obj) => {
+        var count = 0;
+
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                ++count;
+        }
+
+        return count;
+    }
+
+    if(auth().currentUser !== null) {
+        database()
+            .ref('shops' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber)
+            .once('value', (snapshot) => {
+                console.log('>> dataref : '+snapshot.val());
+                if(snapshot.val() !== null)
+                    return countProperties(snapshot);
+                else
+                    return 0;
+            });
+    }
+}

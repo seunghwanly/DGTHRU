@@ -27,13 +27,12 @@ import Coupon from './client/drawer/Coupon';
 import example from './supervisor/example';
 import SupervisorShops from './supervisor/SupervisorShops';
 
-//import { createNativeStackNavigator } from '@react-navigation/native-stack'; //>> 예전버전 !
-
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, HeaderBackground, HeaderTitle, TransitionSpecs } from '@react-navigation/stack';
+import { createStackNavigator,} from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import CustomDrawerContent from './utils/CustomNavigator';
+
+import { getData } from './utils/asyncStorage';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -47,8 +46,6 @@ import {
 } from 'react-native';
 
 enableScreens();
-
-//const Stack = createNativeStackNavigator(); //>>예전 버전 !
 
 const Stack = createStackNavigator();
 
@@ -83,6 +80,7 @@ const StackContainer = () => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
+  const [amount, setAmount] = useState(0);
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -92,26 +90,25 @@ const StackContainer = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    getData().then((result) => setAmount(result));
     return subscriber; // unsubscribe on unmount
   }, []);
+
+  
 
   if (initializing) return null;
 
   if (user) {
     console.log('exist user');
     return (
-      <Stack.Navigator initialRouteName='Shops'
-      // screenOptions={
-      //   Stack.Screen.name === 'Shops' ? {gestureEnabled:false} : {gestureEnabled:true} 
-      // }
-      >
+      <Stack.Navigator initialRouteName='Shops'>
         {Object.entries({
           ...IntroScreen, ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
         }).map(([name, component]) => (
           <Stack.Screen name={name} component={component}
             options=
             {
-              ({ navigation, route }) => ({
+              ({ navigation }) => ({
 
                 headerRight: () => {
                   if (name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
@@ -127,19 +124,13 @@ const StackContainer = () => {
                           source={require('../image/cart-outline.png')}
                         />
                         {
-                          route.amount === undefined ?
-                            <>
-                              <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
-                                <Text style={{ textAlign: 'center', color: 'white', fontSize: 10 }}>!</Text>
-                              </View>
-                            </>
-                            :
+                          amount > 0 ?
                             <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
-                              <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{route.amount}</Text>
+                              <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{amount}</Text>
                             </View>
-
+                            :
+                            <></>
                         }
-
                       </TouchableOpacity>
                     )
                   }
@@ -153,7 +144,7 @@ const StackContainer = () => {
                       // {
                       //   // <- 화살표 추가 Menu 부터
                       // }
-                      <View style={{flexDirection:'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         {
                           name === 'Menu' || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
 
@@ -161,10 +152,10 @@ const StackContainer = () => {
                               style={{ flexDirection: 'row-reverse' }}
                               // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                               onPress={() => navigation.goBack()}
-                              
+
                             >
                               <Image
-                                style={{ height: 20, width: 25, marginStart: 10, alignSelf:'center' }}
+                                style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
                                 resizeMode='cover'
                                 source={require('../image/chevron-back-outline.png')}
                               />
@@ -188,10 +179,10 @@ const StackContainer = () => {
                       </View>
                     )
                   }
-                  TransitionSpecs
+                  
                 },
 
-                animationTypeForReplace : true,
+                animationTypeForReplace: true,
 
                 gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
 
@@ -218,45 +209,36 @@ const StackContainer = () => {
 
 const DrawerStack = createDrawerNavigator();
 
-
-//TODO : 관리자모드 팀
-// 여기서 부터 새로운 stack navigator 나 tab이나 등등 원하는 대로 만들면 될거 같아
-// 참고할 사이트를 적어줄게 >> https://reactnavigation.org/docs/nesting-navigators
-// nested navigator 로 만드는게 수월할 거야 내가 위에다가 예시로 코드 만들었어
-// 그러면 화이팅 종하 석운
-// 최종적으로 렌더링 되는 곳은 밑에 부분이니까 추가하면 될거같아 !
-
-
 export default App = () => {
 
   return (
-    <NavigationContainer>
-      <DrawerStack.Navigator
-        initialRouteName='Home'
-        drawerType='front'
-        drawerStyle={{ width: '60%' }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        <DrawerStack.Screen name='Home' component={StackContainer}
-          options={{
-            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')} />),
-          }}
-        //Home onPress () >> reset
-        />
-        <DrawerStack.Screen name='Receipt/History' component={Bill}
-          options={
-            {
-              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />)
+    
+      <NavigationContainer>
+        <DrawerStack.Navigator
+          initialRouteName='Home'
+          drawerType='front'
+          drawerStyle={{ width: '60%' }}
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
+          <DrawerStack.Screen name='Home' component={StackContainer}
+            options={{
+              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')} />),
+            }}
+          //Home onPress () >> reset 애들한테 물어보자 이건
+          />
+          <DrawerStack.Screen name='Receipt/History' component={Bill}
+            options={
+              {
+                drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />)
+              }
             }
-          }
-        />
-        <DrawerStack.Screen name='Coupon' component={Coupon}
-          options={{
-            drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/star-outline.png')} />),
-          }}
-        />
-      </DrawerStack.Navigator>
-    </NavigationContainer>
+          />
+          <DrawerStack.Screen name='Coupon' component={Coupon}
+            options={{
+              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/star-outline.png')} />),
+            }}
+          />
+        </DrawerStack.Navigator>
+      </NavigationContainer>
   );
-  //}  
 }
