@@ -12,8 +12,7 @@ import firebase from '@react-native-firebase/app';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import example from './example';
-import { styles } from './styles';
-
+import { shopStyles } from './styles';
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
@@ -99,38 +98,14 @@ class Item extends React.Component {
                 style={{ width: 300 }}
                 onPress={this._onPress}
             >
-                <View style={{ flexDirection: 'row', margin: 5, padding: 5, alignItems: 'center' }}>
-                    <View style={
-                        {
-                            borderRadius: 25,
-                            width: 25,
-                            height: 25,
-                            backgroundColor: 'cornflowerblue'
-                        }
-                    }
-                    />
-                    <View style={
-                        {
-                            backgroundColor: 'ghostwhite',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flex: 1,
-                            marginStart: 20,
-                            borderRadius: 12,
-                            padding: 5
-                        }
-                    }>
-                        <Text style={
-                            {
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                                textAlign: 'center'
-                            }
-                        }>{title}</Text>
+                <View style={shopStyles.itemWrapper}>
+                    <View style={shopStyles.itemCircle}/>
+                    <View style={shopStyles.itemNameBar}>
+                        <Text style={shopStyles.itemDesc}>{title}</Text>
                     </View>
                 </View>
                 <View>
-                    <Text style={{ textAlign: 'right', color: 'gray', fontSize: 10, marginEnd: 10 }}>{location}</Text>
+                    <Text style={shopStyles.itemSubDesc}>{location}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -180,13 +155,13 @@ function supervisorShops({ navigation }) {
 
     return (
         <>
-            <View style={styles.background}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>DGTHRU SUPERVISOR</Text>
-                    <Text style={styles.subtitle}>동국대학교 CAFE LIST</Text>
+            <View style={shopStyles.background}>
+                <View style={shopStyles.header}>
+                    <Text style={shopStyles.title}>DGTHRU SUPERVISOR</Text>
+                    <Text style={shopStyles.subtitle}>동국대학교 CAFE LIST</Text>
                 </View>
 
-                <View style={styles.body}>
+                <View style={shopStyles.body}>
                     <FlatList
                         data={shopData}
                         renderItem={renderItem}
@@ -195,7 +170,7 @@ function supervisorShops({ navigation }) {
 
                     />
                 </View>
-                <View style={styles.footer}>
+                <View style={shopStyles.footer}>
                     <Button
                         title='로그아웃'
                         onPress={() => signOut()}

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+const shopStyles = StyleSheet.create({
     background: {
         //width: '100%',
         //height: '100%',
@@ -34,9 +34,68 @@ const styles = StyleSheet.create({
         color: 'gray',
         textAlign: 'center'
     },
-    item: {
-
+    itemWrapper: {
+        flexDirection: 'row',
+        margin: 5,
+        padding: 5,
+        alignItems: 'center'
     },
+    itemCircle: {
+        borderRadius: 25,
+        width: 25,
+        height: 25,
+        backgroundColor: 'cornflowerblue'
+    },
+    itemNameBar: {
+        backgroundColor: 'ghostwhite',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginStart: 20,
+        borderRadius: 12,
+        padding: 5
+    },
+    itemDesc: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    itemSubDesc: {
+        textAlign: 'right',
+        color: 'gray',
+        fontSize: 10,
+        marginEnd: 10
+    }
 });
 
-export {styles};
+const exampleStyle = StyleSheet.create({
+    background: {
+        flex: 1, 
+        justifyContent: "center", 
+        alignItems: "center",
+    },
+    listbox: {
+        alignSelf:'center',
+        margin: 5, 
+        backgroundColor:'dodgerblue', 
+        width: '85%', 
+        padding:10,
+        flex:1,
+        borderRadius:10,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    orderlisttext: {
+        fontWeight:'bold', 
+        fontSize:15, 
+        color:'white',
+    },
+    orderlistview: {
+        flexDirection : 'row',
+    },
+    buttonstyle: {
+        padding: 5,
+    },
+})
+
+export {shopStyles, exampleStyle};
