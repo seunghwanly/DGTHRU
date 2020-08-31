@@ -31,10 +31,14 @@ export const popData = async () => {
     var prev = await AsyncStorage.getItem('amount');
     prev = Number.parseInt(prev, 10) - 1;
 
-    if(prev > 0) {
+    if(prev >= 0) {
         await AsyncStorage.setItem('amount', prev.toString());
     }
     else {
         await AsyncStorage.setItem('amount', null);
     }
+}
+
+export const clearStorage = async () => {
+    await AsyncStorage.clear();
 }

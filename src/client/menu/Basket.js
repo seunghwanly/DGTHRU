@@ -5,7 +5,7 @@ import {
     Button,
     FlatList,
 } from 'react-native';
-import { basketStyles } from './styles';
+import { basketStyles } from '../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import database from '@react-native-firebase/database';
@@ -15,7 +15,7 @@ import moment from 'moment';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { pushData } from '../utils/asyncStorage';
+import { pushData } from '../../utils/asyncStorage';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -64,7 +64,7 @@ export default Basket = ({ navigation, route }) => {
 
     useEffect(() => {
         console.log('refreshed !');
-        return setRefresh(false);
+        setRefresh(false);
     }, [refresh]);
 
     useEffect(() => {

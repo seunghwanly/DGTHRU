@@ -11,6 +11,8 @@ import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
 import { commonRef } from '../../utils/DatabaseRef.js';
 
+import { clearStorage } from '../../utils/asyncStorage'; //장바구니 화면 삭제
+
 export default class PaymentResult extends React.Component {
 
     _firebaseRef;
@@ -76,6 +78,8 @@ export default class PaymentResult extends React.Component {
     render() {
         console.log('render >> ');
         if (this.props.route.params.response.imp_success === 'true') {
+
+            clearStorage(); //장바구니 갯수 기능 삭제
 
             if (this.state.isMenuReady === true) {
 

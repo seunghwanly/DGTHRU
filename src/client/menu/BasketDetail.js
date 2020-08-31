@@ -4,14 +4,14 @@ import {
     Text,
     Image,
 } from 'react-native';
-import { basketStyles } from './styles';
+import { basketStyles } from '../styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
-import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../utils/DatabaseRef';
+import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 
-import { popData } from '../utils/asyncStorage';
+import { popData } from '../../utils/asyncStorage';
 
 import { enableScreens } from 'react-native-screens';
 enableScreens();
@@ -160,7 +160,7 @@ export default class BasketDetail extends React.Component {
                                             <Image
                                                 style={{ width: 15, height: 15 }}
                                                 resizeMode='cover'
-                                                source={require('../../image/trash-outline.png')}
+                                                source={require('../../../image/trash-outline.png')}
 
                                             />
                                         </TouchableOpacity>

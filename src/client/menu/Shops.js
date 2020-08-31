@@ -6,10 +6,10 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
-import { clientStyles } from './styles';
+import { clientStyles } from '../styles';
 
 import { enableScreens } from 'react-native-screens';
-import CustomNavigator from '../utils/CustomNavigator';
+import CustomNavigator from '../../utils/CustomNavigator';
 
 enableScreens();
 
