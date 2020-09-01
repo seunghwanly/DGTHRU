@@ -214,9 +214,9 @@ export default Basket = ({ navigation, route }) => {
 
         // 2.사용자 History
         const userRef = database()
-            .ref('user_history/' + userPhoneNumber.uid)
+            .ref('user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
             .push();
-
+        
         userRef
             .set(jsonOrderList)
             .then(() => console.log('Updated User History'));
@@ -231,7 +231,7 @@ export default Basket = ({ navigation, route }) => {
             setHotOrIced('ICED');
         //TODO: 가게 정보 넣기
 
-        const jsonOrderList = {
+        var jsonOrderList = {
             'name': item.name,
             'orderTime': item.time,
             'cost': item.cost,
@@ -241,7 +241,7 @@ export default Basket = ({ navigation, route }) => {
             'whipping': whippingCream,
             'shotNum': shotNum,
             'selected': selected,
-            'orderState': 'request'
+            'orderState': 'request',
             //옵션추가를 배열로 할지 고민중
         }
         //sold_out >> false 인 것 만

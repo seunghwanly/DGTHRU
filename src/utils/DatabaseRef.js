@@ -7,7 +7,7 @@ var currDate = moment().format('YYYY_MM_DD');
 
 export const userHistoryRef = () => { 
     if(auth().currentUser !== null)
-        return 'user_history' + '/' + auth().currentUser.uid;
+        return 'user_history' + '/' + auth().currentUser.uid + '/' + currDate;
 }
 
 export function commonRef(shopInfo) {
@@ -21,6 +21,11 @@ export function commonDatabase(shopInfo) {
 }
 
 export const userHistoryDatabase = () => {
+    if(auth().currentUser !== null)
+        return database().ref('user_history' + '/' + auth().currentUser.uid + '/' + currDate);
+}
+
+export const userHistoryTotalDatabase = () => {
     if(auth().currentUser !== null)
         return database().ref('user_history' + '/' + auth().currentUser.uid);
 }

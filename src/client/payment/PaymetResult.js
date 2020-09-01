@@ -94,9 +94,6 @@ export default class PaymentResult extends React.Component {
                             [ 
                                 Vibration.cancel(), this.props.navigation.reset({ index:0, routes :  [{ name : 'Home' }] }) 
                             ]
-                        },
-                        {
-                            text: 'x', onPress: () => console.log('cancel pressed !'), style:'cancel'
                         }
                     ]
                 );
