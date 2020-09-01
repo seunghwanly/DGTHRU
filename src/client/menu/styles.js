@@ -178,7 +178,7 @@ const basketStyles = StyleSheet.create({
         margin: 2,
     },
     pushToBasket: {
-        backgroundColor: 'midnightblue',
+        backgroundColor: 'dodgerblue',
         padding: 10,
         borderRadius: 10,
         justifyContent: 'center',
