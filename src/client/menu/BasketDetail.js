@@ -4,7 +4,7 @@ import {
     Text,
     Image,
 } from 'react-native';
-import { basketStyles } from '../styles';
+import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
