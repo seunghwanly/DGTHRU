@@ -61,7 +61,7 @@ const supervisorScreens = {
     example: example
 };
 
-export default StackContainer = () => {
+export default StackContainer = ({ navigation }) => {
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
@@ -83,7 +83,12 @@ export default StackContainer = () => {
         const readBakset = async () => {
             getData().then((result) => setAmount(result));
         }
-        readBakset();
+        return readBakset;
+        // const getCurrentState = navigation.addListener('focus', () => {
+        //     getData()
+        //         .then((res) => setAmount(res));
+        // });
+        // return getCurrentState;
     });
 
     if (initializing) return null;

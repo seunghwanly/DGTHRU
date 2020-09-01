@@ -21,7 +21,6 @@ import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
-
 export default Basket = ({ navigation, route }) => {
 
     const userPhoneNumber = auth().currentUser;
@@ -29,6 +28,7 @@ export default Basket = ({ navigation, route }) => {
 
     const { item } = route.params;
     const { shopInfo } = route.params;
+    const { type } = route.params;
 
     const dataInOrOut = [
         "개인컵", "매장용", "일회용"
@@ -65,7 +65,8 @@ export default Basket = ({ navigation, route }) => {
     useEffect(() => {
         console.log('refreshed !');
         setRefresh(false);
-    }, [refresh]);
+
+    });
 
     useEffect(() => {
         //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
@@ -238,7 +239,7 @@ export default Basket = ({ navigation, route }) => {
             'cup': inOrOut,
             'type': hotOrIced,
             'whipping': whippingCream,
-            'shotNum' : shotNum,
+            'shotNum': shotNum,
             'selected': selected,
             'orderState': 'request'
             //옵션추가를 배열로 할지 고민중
@@ -428,7 +429,7 @@ export default Basket = ({ navigation, route }) => {
                         {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
                         <View style={basketStyles.basketRightColumnWrapper}>
                             {
-                                item.ice_available === true && item.only_ice === false ?
+                                type === 'drink' && item.ice_available === true && item.only_ice === false ?
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
                                         <FlatList
                                             style={{ marginStart: '5%', marginEnd: '5%' }}
@@ -466,19 +467,19 @@ export default Basket = ({ navigation, route }) => {
                                     <></>
                             }
                             {
-                                item.option_available.shot === true ?
+                                type === 'drink' && item.option_available.shot === true ?
                                     <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                         <Text>샷 추가</Text>
                                         {/* TODO: 음료마다 기본 샷이 다름 */}
                                         <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
-                                        <Text >{ shotNum }</Text>
+                                        <Text >{shotNum}</Text>
                                         <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
                                     </View>
                                     :
                                     <></>
                             }
                             {
-                                item.option_available.whipping === true ?
+                                type === 'drink' && item.option_available.whipping === true ?
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
                                         <FlatList
                                             data={dataWhippingCream}
@@ -540,11 +541,10 @@ export default Basket = ({ navigation, route }) => {
                                     extraData={inOrOut}
                                     scrollEnabled={false}
                                 />
-
                             </View>
                             <TouchableOpacity
                                 style={basketStyles.pushToBasket}
-                                onPress={() => [ handleOrder(item), pushData(count.toString()), setRefresh(true) ] }>
+                                onPress={() => [handleOrder(item), pushData(count.toString()), setRefresh(true)]}>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>장바구니담기</Text>
                             </TouchableOpacity>
                         </View>

@@ -14,6 +14,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
 
     const { items } = route.params;
     const { shopInfo } = route.params;
+    const { type } = route.params;
 
 
     return (
@@ -26,7 +27,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                             return (
                                 <TouchableOpacity
                                     style={{ justifyContent: 'center', alignItems: 'center', }}
-                                    onPress={() => navigation.navigate('SelectMenu', { item: item, shopInfo: shopInfo })}>
+                                    onPress={() => navigation.navigate('SelectMenu', { item: item, shopInfo: shopInfo, type : type })}>
                                     <View style={menuStyles.subRadiusIcon}>
                                         <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
                                         <Text style={menuStyles.subRadiusText}>{item.name}</Text>

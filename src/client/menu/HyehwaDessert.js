@@ -61,7 +61,11 @@ export default class HyehwaDessert extends React.Component {
                                     return (
                                         <TouchableOpacity
                                             style={menuStyles.radiusIcon}
-                                            onPress={() => this.props.navigation.navigate('MenuDetail', { items: item.menu, shopInfo: this.props.route.params.shopInfo })}
+                                            onPress={() => this.props.navigation.navigate('MenuDetail', { 
+                                                items: item.menu, 
+                                                shopInfo: this.props.route.params.shopInfo,
+                                                type : 'drink'
+                                            })}
                                         >
                                             <Text style={menuStyles.radiusText}>
                                                 {item.category_name}
@@ -85,7 +89,11 @@ export default class HyehwaDessert extends React.Component {
                         renderItem={
                             ({ item }) => (
                                 <TouchableOpacity style={menuStyles.radiusIcon}
-                                    onPress={() => this.props.navigation.navigate('MenuDetail', { items: item.menu, shopInfo: this.props.route.params.shopInfo })}
+                                    onPress={() => this.props.navigation.navigate('MenuDetail', { 
+                                        items: item.menu, 
+                                        shopInfo: this.props.route.params.shopInfo,
+                                        type : 'bakery'
+                                    })}
                                 >
                                     <Text style={menuStyles.radiusText}>
                                         {item.category_name}
