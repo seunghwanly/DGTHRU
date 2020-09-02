@@ -7,8 +7,6 @@ import {
 } from 'react-native';
 import { createStackNavigator, } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
-import { getData } from '../utils/asyncStorage';
-
 
 //common
 import Intro from '../Intro';
@@ -16,8 +14,8 @@ import Shops from './menu/Shops';
 import Verify from './Verify';
 
 //shops
-import HyehwaDessert from './menu/HyehwaDessert';
-import HyehwaDessertDetail from './menu/HyehwaDessertDetail';
+import Menu from './menu/Menu';
+import MenuDetail from './menu/MenuDetail';
 
 //Bakset
 import Basket from './menu/Basket';
@@ -47,8 +45,8 @@ const commonScreen = {
 
 const menuScreen = {
     Shops: Shops,
-    Menu: HyehwaDessert,
-    MenuDetail: HyehwaDessertDetail,
+    Menu: Menu,
+    MenuDetail: MenuDetail,
     SelectMenu: Basket
 };
 
@@ -64,6 +62,7 @@ const supervisorScreens = {
 };
 
 export default StackContainer = ({ navigation }) => {
+    
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
@@ -82,7 +81,7 @@ export default StackContainer = ({ navigation }) => {
 
     useEffect(() => {
         console.log('[index] : refreshed ! ');
-        return setRefresh(false);
+        return () => setRefresh(false);
     }, []);
 
     if (initializing) return null;

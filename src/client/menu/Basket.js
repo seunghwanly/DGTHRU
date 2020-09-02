@@ -74,7 +74,7 @@ export default Basket = ({ navigation, route }) => {
 
         database()
             .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .once('value', (snapshot) => {
+            .on('value', (snapshot) => {
                 // console.log('[Basket] length >>' + countProperties(snapshot.val()));
 
                 snapshot.forEach((childSnapShot) => {
@@ -94,7 +94,7 @@ export default Basket = ({ navigation, route }) => {
                 console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
                 //}
             });
-    }, [totalCost]);
+    }, []);
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
@@ -561,7 +561,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         <TouchableOpacity
                             style={[basketStyles.pushToBasket, { alignSelf: 'center', width:'100%' }]}
-                            onPress={() => [handleOrder(item), setRefresh(true)]}>
+                            onPress={() => [handleOrder(item),]}>
                             <Text style={{ color: 'white', fontWeight: 'bold', textAlign:'center' }}>장바구니담기</Text>
                         </TouchableOpacity>
                     </View>

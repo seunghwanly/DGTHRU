@@ -18,8 +18,6 @@ export default class HeaderRight extends React.Component {
             amount : 0
         }
 
-        console.log('[ HeaderRight ] - constructor >> ' );
-
         this._basketDatabase = commonDatabase(this.props.shopInfo);
     }
 
@@ -30,13 +28,10 @@ export default class HeaderRight extends React.Component {
             if (obj.hasOwnProperty(prop))
                 ++count;
         }
-        console.log('countProprerites >> '+ count, (typeof count));
         return count;
     }
 
     componentDidMount() {
-        console.log('\t[ Header Right ] : componentDidMount >>')
-        
         this._basketDatabase
             .on('value', (snapshot) => {
                 this.setState({
@@ -44,11 +39,8 @@ export default class HeaderRight extends React.Component {
                 });
             });
     }
-    
 
     render() {
-        
-        console.log('[ HeaderRight ] - render >> ' );
         return (
             <>
                 <TouchableOpacity

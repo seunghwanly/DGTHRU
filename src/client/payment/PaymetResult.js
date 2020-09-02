@@ -113,6 +113,10 @@ export default class PaymentResult extends React.Component {
             return (
                 <View style={paymentStyles.background}>
                     <Text style={paymentStyles.notifyText}>결제 실패{'\n'}관리자에게 문의하세요.</Text>
+                    <Button
+                        title="홈으로 돌아가기"
+                        onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
+                    />
                 </View>
             )
         }

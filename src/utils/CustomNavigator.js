@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { SafeAreaView, Text, Image } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import auth from '@react-native-firebase/auth';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 function CustomDrawerContent(props) {
@@ -33,19 +34,14 @@ function CustomDrawerContent(props) {
             }</Text>}
           />
           <DrawerItemList {...props}
-            // onPress={
-              
-            //   // props.name === 'Home' ? props.navigation.popToTop() : {}
-            // }
           />
         </DrawerContentScrollView>
-        <DrawerItem
-          style={{ marginBottom: 40, marginStart: 20 }}
-          label='로그아웃'
-          // onPress={() => { [ signOut(), navigation.reset({ index:0, routes :  [{ name : 'HOME' }] })] }}
-          onPress={() => signOut() }
-          // icon={require('../../image/close-outline.png')} >> iconㅇㅕ기에 추가할 예정
-        />
+        <SafeAreaView>
+        <TouchableOpacity style={{justifyContent:'flex-start', alignItems:'center', paddingStart:20, flexDirection:'row'}} onPress={() => signOut()}>
+            <Image source={require('../../image/close-outline.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
+            <Text>로그아웃</Text>
+        </TouchableOpacity>
+        </SafeAreaView>
       </>
     );
   }
