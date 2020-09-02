@@ -4,7 +4,6 @@ import { withNavigation } from 'react-navigation';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import auth from '@react-native-firebase/auth';
 
-import { clearStorage } from './asyncStorage';
 
 function CustomDrawerContent(props) {
 
@@ -13,7 +12,7 @@ function CustomDrawerContent(props) {
     signOut = () => {
       auth()
         .signOut()
-        .then(() => [ console.log('User Signed Out !'), clearStorage()])
+        .then(() => [ console.log('User Signed Out !'),])
         .catch(() => console.log('already signed out !'));
 
       props.navigation.closeDrawer();

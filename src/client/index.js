@@ -32,6 +32,8 @@ import PaymentResult from './payment/PaymetResult';
 import example from '../supervisor/example';
 import SupervisorShops from '../supervisor/SupervisorShops';
 
+import HeaderRight from './HeaderRight';
+
 const Stack = createStackNavigator();
 
 const IntroScreen = {
@@ -65,7 +67,7 @@ export default StackContainer = ({ navigation }) => {
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
-    const [amount, setAmount] = useState(0);
+    const [refresh, setRefresh] = useState(false);
 
     // Handle user state changes
     function onAuthStateChanged(user) {
@@ -79,17 +81,9 @@ export default StackContainer = ({ navigation }) => {
     }, []);
 
     useEffect(() => {
-        console.log('=======useEffect========');
-        const readBakset = async () => {
-            getData().then((result) => setAmount(result));
-        }
-        return readBakset;
-        // const getCurrentState = navigation.addListener('focus', () => {
-        //     getData()
-        //         .then((res) => setAmount(res));
-        // });
-        // return getCurrentState;
-    });
+        console.log('[index] : refreshed ! ');
+        return setRefresh(false);
+    }, []);
 
     if (initializing) return null;
 
@@ -103,30 +97,15 @@ export default StackContainer = ({ navigation }) => {
                     <Stack.Screen name={name} component={component}
                         options=
                         {
+                            {
+                                //name changed
+                            },
                             ({ navigation }) => ({
 
                                 headerRight: () => {
                                     if (name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
-
                                         return (
-                                            <TouchableOpacity
-                                                style={{ flexDirection: 'row-reverse' }}
-                                                onPress={() => navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
-                                            >
-                                                <Image
-                                                    style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
-                                                    resizeMode='cover'
-                                                    source={require('../../image/cart-outline.png')}
-                                                />
-                                                {
-                                                    amount !== null ?
-                                                        <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
-                                                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{amount}</Text>
-                                                        </View>
-                                                        :
-                                                        <></>
-                                                }
-                                            </TouchableOpacity>
+                                            <HeaderRight navigation={navigation} shopInfo={'hyehwa_roof'} />
                                         )
                                     }
                                 },
@@ -146,8 +125,7 @@ export default StackContainer = ({ navigation }) => {
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
                                                             // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                                                            onPress={() => navigation.goBack()}
-
+                                                            onPress={() => [navigation.goBack(), setRefresh(true)]}
                                                         >
                                                             <Image
                                                                 style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
@@ -155,7 +133,6 @@ export default StackContainer = ({ navigation }) => {
                                                                 source={require('../../image/chevron-back-outline.png')}
                                                             />
                                                         </TouchableOpacity>
-
                                                         :
 
                                                         <></>
@@ -179,7 +156,8 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
+                                // gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
+                                gestureEnabled: false
 
                             })
                         }

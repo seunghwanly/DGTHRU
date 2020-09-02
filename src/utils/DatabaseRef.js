@@ -30,28 +30,28 @@ export const userHistoryTotalDatabase = () => {
         return database().ref('user_history' + '/' + auth().currentUser.uid);
 }
 
-export function getBasketLength(shopInfo) {
+// export function getBasketLength(shopInfo) {
 
-    countProperties = (obj) => {
-        var count = 0;
+//     countProperties = (obj) => {
+//         var count = 0;
 
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop))
-                ++count;
-        }
+//         for (var prop in obj) {
+//             if (obj.hasOwnProperty(prop))
+//                 ++count;
+//         }
+//         console.log('countProprerites >> '+ count, (typeof count));
+//         return count;
+//     }
 
-        return count;
-    }
-
-    if(auth().currentUser !== null) {
-        database()
-            .ref('shops' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber)
-            .once('value', (snapshot) => {
-                console.log('>> dataref : '+snapshot.val());
-                if(snapshot.val() !== null)
-                    return countProperties(snapshot);
-                else
-                    return 0;
-            });
-    }
-}
+//     if(auth().currentUser !== null) {
+//         database()
+//             .ref('shops' + '/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber)
+//             .once('value', (snapshot) => {
+//                 console.log('>> dataref : '+JSON.stringify(snapshot.val()));
+//                 if(snapshot.val() !== null)
+//                     return countProperties(snapshot.val());
+//                 else
+//                     return 0;
+//             });
+//     }
+// }

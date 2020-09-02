@@ -15,8 +15,6 @@ import moment from 'moment';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { pushData } from '../../utils/asyncStorage';
-
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
@@ -563,7 +561,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         <TouchableOpacity
                             style={[basketStyles.pushToBasket, { alignSelf: 'center', width:'100%' }]}
-                            onPress={() => [handleOrder(item), pushData(count.toString()), setRefresh(true)]}>
+                            onPress={() => [handleOrder(item), setRefresh(true)]}>
                             <Text style={{ color: 'white', fontWeight: 'bold', textAlign:'center' }}>장바구니담기</Text>
                         </TouchableOpacity>
                     </View>
