@@ -101,40 +101,45 @@ export default Basket = ({ navigation, route }) => {
 
         if (subMenu.hasOwnProperty('sub_menu')) {
             return (
-                <View style={basketStyles.chooseDetailWrapper}>
-                    <Text style={basketStyles.chooseDetailText}>맛을 선택해주세요</Text>
-                    <FlatList
-                        data={subMenu.sub_menu}
-                        renderItem={
-                            ({ item }) => {
+                <>
+                    <View style={[basketStyles.goToBasket, { width: '100%', backgroundColor: '#020659', margin: 0 }]}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>OPTIONS : 필수사항</Text>
+                    </View>
+                    <View style={basketStyles.chooseDetailWrapper}>
+                        {/* <Text style={basketStyles.chooseDetailText}>맛을 선택해주세요</Text> */}
+                        <FlatList
+                            data={subMenu.sub_menu}
+                            renderItem={
+                                ({ item }) => {
 
-                                const backgroundColor = item.toString()
-                                    === selected ?
-                                    'coral' : 'steelblue';
-                                const color = item.toString()
-                                    === selected ?
-                                    'black' : 'white';
+                                    const backgroundColor = item.toString()
+                                        === selected ?
+                                        '#F29F05' : '#F2F2F2';
+                                    const color = item.toString()
+                                        === selected ?
+                                        'white' : 'black';
 
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => setSelected(item.toString())}
-                                        style={[{ backgroundColor }, basketStyles.chooseDetailItem]}>
-                                        <Text
-                                            style={{
-                                                color,
-                                                fontWeight: 'bold'
-                                            }}
-                                        > {item} </Text>
-                                    </TouchableOpacity>
-                                )
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => setSelected(item.toString())}
+                                            style={[{ backgroundColor }, basketStyles.chooseDetailItem]}>
+                                            <Text
+                                                style={{
+                                                    color,
+                                                    // fontWeight: 'bold'
+                                                }}
+                                            > {item} </Text>
+                                        </TouchableOpacity>
+                                    )
+                                }
                             }
-                        }
-                        numColumns={3}
-                        keyExtractor={(item) => item.toString()}
-                        extraData={selected}
-                        scrollEnabled={false}
-                    />
-                </View>
+                            numColumns={3}
+                            keyExtractor={(item) => item.toString()}
+                            extraData={selected}
+                            scrollEnabled={false}
+                        />
+                    </View>
+                </>
             )
         } else {
             return (
@@ -214,7 +219,7 @@ export default Basket = ({ navigation, route }) => {
         const userRef = database()
             .ref('user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
             .push();
-        
+
         userRef
             .set(jsonOrderList)
             .then(() => console.log('Updated User History'));
@@ -415,6 +420,7 @@ export default Basket = ({ navigation, route }) => {
                             {/* 아이콘이랑 이름 */}
                             <View style={basketStyles.radiusIcon} />
                             <Text style={basketStyles.radiusText}>{item.name}</Text>
+                            <Text style={[basketStyles.radiusText, {margin:0, fontWeight:'normal'}]}>{item.cost}원</Text>
                             {/* 버튼 */}
                             <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                 <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-')} />
@@ -437,7 +443,7 @@ export default Basket = ({ navigation, route }) => {
 
                                                     const backgroundColor = item.toString()
                                                         === hotOrIced ?
-                                                        'royalblue' : 'lightgray';
+                                                        '#F29F05' : '#F2F2F2';
 
                                                     const color = item.toString()
                                                         === hotOrIced ?
@@ -464,7 +470,7 @@ export default Basket = ({ navigation, route }) => {
                                     :
                                     <></>
                             }
-                            <Text>컵을 선택해주세요.</Text>
+                            {/* <Text>컵을 선택해주세요.</Text> */}
                             <View style={{ flexDirection: 'row', padding: 10 }}>
                                 <FlatList
                                     data={dataInOrOut}
@@ -473,7 +479,7 @@ export default Basket = ({ navigation, route }) => {
 
                                             const backgroundColor = item.toString()
                                                 === inOrOut ?
-                                                'royalblue' : 'lightgray';
+                                                '#F29F05' : '#F2F2F2';
 
                                             const color = item.toString()
                                                 === inOrOut ?
@@ -496,22 +502,22 @@ export default Basket = ({ navigation, route }) => {
                             </View>
                         </View>
                     </View>
-                    <View style={[basketStyles.subBackground, { backgroundColor: 'snow', alignItems: 'stretch' }]}>
-                        <View style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: 'dodgerblue' }]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>OPTIONS</Text>
-                        </View>
+                    <View style={[basketStyles.subBackground, { backgroundColor: 'snow', alignItems: 'stretch', width: '100%' }]}>
                         <ChooseDetail subMenu={item} />
+                        <View style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: '#F2F2F2', margin: 0, borderBottomWidth:1, borderColor:'lightgray' }]}>
+                            <Text style={{ color: 'black', fontWeight: 'bold' }}>OPTIONS : 선택사항</Text>
+                        </View>
                         {
                             type === 'drink' && item.option_available.shot === true ?
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                        <View style={[basketStyles.smallRadiusIcon, { width: 15, height: 15, backgroundColor: 'dodgerblue' }]} />
-                                        <Text>에스프레소 샷 추가</Text>
+                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
+                                        <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가</Text>
                                     </View>
                                     <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                         {/* TODO: 음료마다 기본 샷이 다름 */}
                                         <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
-                                        <Text style={{width:100, textAlign:'center'}}>{shotNum}</Text>
+                                        <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
                                         <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
                                     </View>
                                 </>
@@ -522,8 +528,8 @@ export default Basket = ({ navigation, route }) => {
                             type === 'drink' && item.option_available.whipping === true ?
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                        <View style={[basketStyles.smallRadiusIcon, { width: 15, height: 15, backgroundColor: 'dodgerblue' }]} />
-                                        <Text>휘핑크림 추가</Text>
+                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
+                                        <Text style={{ fontSize: 12, marginStart: 10 }}>휘핑크림 추가</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', padding: 10 }}>
                                         <FlatList
@@ -533,7 +539,7 @@ export default Basket = ({ navigation, route }) => {
 
                                                     const backgroundColor = item.toString()
                                                         === whippingCream ?
-                                                        'dodgerblue' : 'lightgray';
+                                                        '#F29F05' : '#F2F2F2';
 
                                                     const color = item.toString()
                                                         === whippingCream ?
@@ -560,9 +566,9 @@ export default Basket = ({ navigation, route }) => {
                                 <></>
                         }
                         <TouchableOpacity
-                            style={[basketStyles.pushToBasket, { alignSelf: 'center', width:'100%' }]}
+                            style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor:'#020659' }]}
                             onPress={() => [handleOrder(item),]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign:'center' }}>장바구니담기</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

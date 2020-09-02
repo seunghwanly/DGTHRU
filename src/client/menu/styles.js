@@ -85,7 +85,7 @@ const basketStyles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 80,
-        backgroundColor: 'royalblue',
+        backgroundColor: '#F2F2F2',
         justifyContent: 'center',
         alignItems: 'center',
         margin: 5
