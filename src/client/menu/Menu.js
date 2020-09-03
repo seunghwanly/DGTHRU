@@ -68,14 +68,14 @@ export default class HyehwaDessert extends React.Component {
         return (
             <SafeAreaView style={menuStyles.background}>
                 <ScrollView
-                    // showsVerticalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ alignItems: 'center', marginTop: 10, height: Dimensions.get('window').height + 100}}
                     scrollsToTop={true}
                     >
                     {
                         this.state._favoriteData.length > 0 ?
                             <View style={menuStyles.sectionHeader}>
-                                <Text style={menuStyles.subTitle}>FAVORITES</Text>
+                                <Text style={menuStyles.subTitle}>FAVORITES❤️</Text>
                                 <FlatList
                                     data={this.state._favoriteData}
                                     renderItem={
@@ -104,7 +104,7 @@ export default class HyehwaDessert extends React.Component {
                             <></>
                     }
                     <View style={[menuStyles.sectionHeader, { height: '40%', width: '95%' }]}>
-                        <Text style={menuStyles.subTitle}>DRINKS</Text>
+                        <Text style={menuStyles.subTitle}>DRINKS☕️</Text>
                         {/* drink data */}
                         <FlatList
                             data={this.state._drinkData}
@@ -141,7 +141,7 @@ export default class HyehwaDessert extends React.Component {
                         />
                     </View>
                     <View style={[menuStyles.sectionHeader, { height: '30%', width: '95%' }]}>
-                        <Text style={menuStyles.subTitle}>BAKERY</Text>
+                        <Text style={menuStyles.subTitle}>BAKERY🥐</Text>
                         {/* bakery data */}
                         <FlatList
                             data={this.state._bakeryData}

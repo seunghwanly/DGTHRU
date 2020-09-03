@@ -17,6 +17,21 @@ export default Coupon = ({ navigation }) => {
                         <TouchableOpacity
                             style={{ flexDirection: 'row-reverse' }}
                             // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Image
+                                style={{ height: 30, width: 30,}}
+                                resizeMode='cover'
+                                source={require('../../../image/chevron-back-outline.png')}
+                            />
+                        </TouchableOpacity>
+                    )
+                }
+                rightComponent={
+                    () => (
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row-reverse' }}
+                            // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                             onPress={() => navigation.toggleDrawer()}
                         >
                             <Image

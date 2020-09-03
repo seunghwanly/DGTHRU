@@ -23,17 +23,16 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
 
     return (
         <View style={menuStyles.background}>
-            <View style={[menuStyles.sectionHeader, { height: 'auto', width: '90%', borderBottomWidth: 2, borderColor: 'lightgray' }]}>
-                <Text style={menuStyles.subTitle}>{categoryName}</Text>
+            <View style={[menuStyles.sectionHeader, { height: 'auto', width: '90%', borderColor: 'lightgray' }]}>
+                <Text style={[menuStyles.subTitle, {color:'black', fontSize:16}]}>{categoryName}</Text>
             </View>
             <ScrollView style={[menuStyles.sectionHeader, {
                 width: '90%',
-                height:
-                    items.length > 3 ? items.length * 180 / 3 :
-                        items.length === 3 ? items.length * 150 / 2 :
-                            items.length > 1 ? items.length * 110 : 180
+                height:'100%',
+                borderColor:'lightgray'
             }]}
                 scrollEnabled={true}
+                showsVerticalScrollIndicator={false}
             >
                 <FlatList
                     data={items}

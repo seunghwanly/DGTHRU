@@ -17,7 +17,7 @@ export function commonRef(shopInfo) {
 
 export const favoriteRef = (shopInfo) => {
     if (auth().currentUser !== null)
-        return 'favorites' + '/' + shopInfo + '/' + auth().currentUser.uid;
+        return 'user/favorites' + '/' + shopInfo + '/' + auth().currentUser.uid;
 }
 
 export function commonDatabase(shopInfo) {
@@ -32,7 +32,7 @@ export const userHistoryDatabase = () => {
 
 export const userHistoryTotalDatabase = () => {
     if (auth().currentUser !== null)
-        return database().ref('user_history' + '/' + auth().currentUser.uid);
+        return database().ref('user/user_history' + '/' + auth().currentUser.uid);
 }
 
 export const userFavoriteDatabase = (shopInfo) => {

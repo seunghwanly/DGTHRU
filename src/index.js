@@ -27,6 +27,8 @@ export default App = () => {
           drawerType='front'
           drawerStyle={{ width: '60%' }}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
+          drawerPosition='right'
+
         >
           <DrawerStack.Screen name='Home' component={StackContainer}
             options={{

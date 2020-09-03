@@ -102,7 +102,7 @@ export default StackContainer = ({ navigation }) => {
                             ({ navigation }) => ({
 
                                 headerRight: () => {
-                                    if (name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+                                    if (name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
                                         return (
                                             <HeaderRight navigation={navigation} shopInfo={'hyehwa_roof'} />
                                         )
@@ -136,17 +136,6 @@ export default StackContainer = ({ navigation }) => {
 
                                                         <></>
                                                 }
-                                                <TouchableOpacity
-                                                    style={{ flexDirection: 'row-reverse' }}
-                                                    // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                                                    onPress={() => navigation.toggleDrawer()}
-                                                >
-                                                    <Image
-                                                        style={{ height: 30, width: 30, marginStart: 10 }}
-                                                        resizeMode='cover'
-                                                        source={require('../../image/menu-outline.png')}
-                                                    />
-                                                </TouchableOpacity>
                                             </View>
                                         )
                                     }
@@ -155,8 +144,8 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                // gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
-                                gestureEnabled: false
+                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
+                                // gestureEnabled: false
 
                             })
                         }

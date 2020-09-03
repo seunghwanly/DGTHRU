@@ -217,7 +217,7 @@ export default Basket = ({ navigation, route }) => {
 
         // 2.사용자 History
         const userRef = database()
-            .ref('user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
+            .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
             .push();
 
         userRef

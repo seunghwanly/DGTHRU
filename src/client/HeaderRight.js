@@ -15,7 +15,7 @@ export default class HeaderRight extends React.Component {
         super(props);
 
         this.state = {
-            amount : 0
+            amount: 0
         }
 
         this._basketDatabase = commonDatabase(this.props.shopInfo);
@@ -35,14 +35,14 @@ export default class HeaderRight extends React.Component {
         this._basketDatabase
             .on('value', (snapshot) => {
                 this.setState({
-                    amount : this.countProperties(snapshot.val())
+                    amount: this.countProperties(snapshot.val())
                 });
             });
     }
 
     render() {
         return (
-            <>
+            <View style={{flexDirection:'row'}}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     onPress={() => this.props.navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
@@ -61,7 +61,18 @@ export default class HeaderRight extends React.Component {
                             <></>
                     }
                 </TouchableOpacity>
-            </>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row-reverse' }}
+                    // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                    onPress={() => this.props.navigation.toggleDrawer()}
+                >
+                    <Image
+                        style={{ height: 30, width: 30, marginEnd: 10 }}
+                        resizeMode='cover'
+                        source={require('../../image/menu-outline.png')}
+                    />
+                </TouchableOpacity>
+            </View>
         )
     }
 }

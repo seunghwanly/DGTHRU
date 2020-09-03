@@ -100,7 +100,7 @@ export default class Bill extends React.Component {
                 <Header
                     containerStyle={{ backgroundColor: 'white' }}
                     centerComponent={(<Text style={{fontWeight:'bold', fontSize:16}}>e-Receipt / History</Text>)}
-                    leftComponent={
+                    rightComponent={
                         () => (
                             <TouchableOpacity
                                 style={{ flexDirection: 'row-reverse' }}
