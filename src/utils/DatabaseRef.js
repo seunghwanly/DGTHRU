@@ -5,53 +5,65 @@ import moment from 'moment';
 
 var currDate = moment().format('YYYY_MM_DD');
 
-export const userHistoryRef = () => { 
-    if(auth().currentUser !== null)
+export const userHistoryRef = () => {
+    if (auth().currentUser !== null)
         return 'user_history' + '/' + auth().currentUser.uid + '/' + currDate;
 }
 
 export function commonRef(shopInfo) {
-    if(auth().currentUser !== null)
+    if (auth().currentUser !== null)
         return 'shops/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber;
 }
 
+export const favoriteRef = (shopInfo) => {
+    if (auth().currentUser !== null)
+        return 'favorites' + '/' + shopInfo + '/' + auth().currentUser.uid;
+}
+
 export function commonDatabase(shopInfo) {
-    if(auth().currentUser !== null)
+    if (auth().currentUser !== null)
         return database().ref(commonRef(shopInfo));
 }
 
 export const userHistoryDatabase = () => {
-    if(auth().currentUser !== null)
-        return database().ref('user_history' + '/' + auth().currentUser.uid + '/' + currDate);
+    if (auth().currentUser !== null)
+        return database().ref(userHistoryRef());
 }
 
 export const userHistoryTotalDatabase = () => {
-    if(auth().currentUser !== null)
+    if (auth().currentUser !== null)
         return database().ref('user_history' + '/' + auth().currentUser.uid);
 }
 
-// export function getBasketLength(shopInfo) {
+export const userFavoriteDatabase = (shopInfo) => {
+    if(auth().currentUser !== null) 
+        return database().ref(favoriteRef(shopInfo));
+}
 
-//     countProperties = (obj) => {
-//         var count = 0;
+export const pushFavorite = (shopInfo, menu) => {
+    if (auth().currentUser !== null) {
 
-//         for (var prop in obj) {
-//             if (obj.hasOwnProperty(prop))
-//                 ++count;
-//         }
-//         console.log('countProprerites >> '+ count, (typeof count));
-//         return count;
-//     }
+        const newItem = database()
+            .ref(favoriteRef(shopInfo))
+            .push();
+        
+        
+        const data ={
+            'key' : newItem.key,
+            'value' : menu
+        }
 
-//     if(auth().currentUser !== null) {
-//         database()
-//             .ref('shops' + '/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber)
-//             .once('value', (snapshot) => {
-//                 console.log('>> dataref : '+JSON.stringify(snapshot.val()));
-//                 if(snapshot.val() !== null)
-//                     return countProperties(snapshot.val());
-//                 else
-//                     return 0;
-//             });
-//     }
-// }
+        newItem
+            .set(data)
+            .then(() => alert('즐겨찾기로 등록되었습니다 !'));
+    }
+}
+
+export async function popFavorite(shopInfo, key) {
+    if (auth().currentUser !== null) {
+
+        var favoritePath = favoriteRef(shopInfo) + '/' + key;
+
+        await database().ref(favoritePath).remove().then(() => alert('삭제되었습니다 !'));
+    }
+}
