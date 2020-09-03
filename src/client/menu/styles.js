@@ -7,13 +7,10 @@ const menuStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '5%',
-        flex: 1
     },
     radiusIcon: {
-        width: 80,
-        height: 80,
+        width: 90,
+        height: 90,
         borderRadius: 80,
         backgroundColor: 'deepskyblue',
         justifyContent: 'center',
@@ -25,20 +22,23 @@ const menuStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
+        margin:2
     },
     subTitle: {
-        fontSize: 22,
+        fontSize: 14,
+        fontWeight:'bold',
         color: 'gray',
-        textAlign: 'center',
-        marginStart: 5,
+        alignSelf:'flex-start',
+        textAlignVertical:'center',
+        marginStart: 15,
         marginEnd: 5,
         marginBottom: 10,
         marginTop:10
     },
     subRadiusIcon: {
-        width: 100,
-        height: 100,
-        borderRadius: 100,
+        width: 70,
+        height: 70,
+        borderRadius: 70,
         backgroundColor: 'dodgerblue',
         justifyContent: 'center',
         alignItems: 'center',
@@ -47,9 +47,9 @@ const menuStyles = StyleSheet.create({
     subRadiusText: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: 'lightgray',
-        textAlign: 'center',
-        margin:10
+        color: 'dimgray',
+        textAlignVertical: 'center',
+        margin:1
     },
     subRadiusIconSoldOut: {
         width: 100,
@@ -59,6 +59,13 @@ const menuStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 5
+    },
+    sectionHeader : {
+        backgroundColor:'white',
+        borderRadius:10,
+        margin:10,
+        paddingTop:10,
+        height:'22%'
     }
 });
 

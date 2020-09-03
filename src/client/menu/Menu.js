@@ -3,14 +3,18 @@ import {
     View,
     Text,
     FlatList,
+    ScrollView,
+    SafeAreaView,
+    Dimensions,
 } from 'react-native';
 import { menuStyles } from './styles';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { enableScreens } from 'react-native-screens';
 
 import database from '@react-native-firebase/database';
 import { popFavorite, userFavoriteDatabase } from '../../utils/DatabaseRef';
+
 
 enableScreens();
 
@@ -62,18 +66,21 @@ export default class HyehwaDessert extends React.Component {
 
     render() {
         return (
-            <View style={menuStyles.background}>
-                <ScrollView>
+            <SafeAreaView style={menuStyles.background}>
+                <ScrollView
+                    // showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ alignItems: 'center', marginTop: 10, height: Dimensions.get('window').height + 100}}
+                    scrollsToTop={true}
+                    >
                     {
                         this.state._favoriteData.length > 0 ?
-                            <>
+                            <View style={menuStyles.sectionHeader}>
                                 <Text style={menuStyles.subTitle}>FAVORITES</Text>
                                 <FlatList
                                     data={this.state._favoriteData}
                                     renderItem={
                                         ({ item }) => (
                                             <TouchableOpacity
-                                                style={menuStyles.radiusIcon}
                                                 onPress={() =>
                                                     this.props.navigation.navigate('SelectMenu', {
                                                         item: item.value,
@@ -82,74 +89,84 @@ export default class HyehwaDessert extends React.Component {
                                                     })}
                                                 onLongPress={() => popFavorite(this.props.route.params.shopInfo, item.key)}
                                             >
-                                                <Text style={menuStyles.radiusText}>
+                                                <View style={menuStyles.radiusIcon} />
+                                                <Text style={[menuStyles.radiusText, { color: 'black', fontWeight: 'normal', fontSize: 12 }]}>
                                                     {item.value.name}
                                                 </Text>
                                             </TouchableOpacity>
-                                        )
-                                    }
+                                        )}
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    contentContainerStyle={{ marginStart: 10, width : this.state._favoriteData.length > 3 ? (this.state._favoriteData.length-3)*80 +  Dimensions.get('window').width :  Dimensions.get('window').width }}
                                 />
-                            </>
+                            </View>
                             :
                             <></>
                     }
-                    <Text style={menuStyles.subTitle}>DRINKS</Text>
-                    {/* drink data */}
-                    <FlatList
-                        data={this.state._drinkData}
-                        renderItem={
-
-                            ({ item }) => {
-
-                                if (item.category_name !== 'Others') {
-                                    return (
-                                        <TouchableOpacity
-                                            style={menuStyles.radiusIcon}
-                                            onPress={() => this.props.navigation.navigate('MenuDetail', {
-                                                items: item.menu,
-                                                shopInfo: this.props.route.params.shopInfo,
-                                                type: 'drink'
-                                            })}
-                                        >
-                                            <Text style={menuStyles.radiusText}>
-                                                {item.category_name}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )
-                                } else {
-                                    return (
-                                        <></>
-                                    )
+                    <View style={[menuStyles.sectionHeader, { height: '40%', width: '95%' }]}>
+                        <Text style={menuStyles.subTitle}>DRINKS</Text>
+                        {/* drink data */}
+                        <FlatList
+                            data={this.state._drinkData}
+                            renderItem={
+                                ({ item }) => {
+                                    if (item.category_name !== 'Others') {
+                                        return (
+                                            <TouchableOpacity
+                                                style={menuStyles.radiusIcon}
+                                                onPress={() => this.props.navigation.navigate('MenuDetail', {
+                                                    items: item.menu,
+                                                    shopInfo: this.props.route.params.shopInfo,
+                                                    type: 'drink',
+                                                    categoryName : item.category_name
+                                                })}
+                                            >
+                                                <Text style={menuStyles.radiusText}>
+                                                    {item.category_name}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        )
+                                    } else {
+                                        return (
+                                            <></>
+                                        )
+                                    }
                                 }
                             }
-                        }
-                        numColumns={3}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                    <Text style={menuStyles.subTitle}>BAKERY</Text>
-                    {/* bakery data */}
-                    <FlatList
-                        data={this.state._bakeryData}
-                        renderItem={
-                            ({ item }) => (
-                                <TouchableOpacity style={menuStyles.radiusIcon}
-                                    onPress={() => this.props.navigation.navigate('MenuDetail', {
-                                        items: item.menu,
-                                        shopInfo: this.props.route.params.shopInfo,
-                                        type: 'bakery'
-                                    })}
-                                >
-                                    <Text style={menuStyles.radiusText}>
-                                        {item.category_name}
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                        numColumns={3}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                            numColumns={3}
+                            keyExtractor={(item, index) => index.toString()}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={false}
+                            contentContainerStyle={{ marginStart: 10, marginEnd: 10, alignSelf: 'center' }}
+                        />
+                    </View>
+                    <View style={[menuStyles.sectionHeader, { height: '30%', width: '95%' }]}>
+                        <Text style={menuStyles.subTitle}>BAKERY</Text>
+                        {/* bakery data */}
+                        <FlatList
+                            data={this.state._bakeryData}
+                            renderItem={
+                                ({ item }) => (
+                                    <TouchableOpacity style={menuStyles.radiusIcon}
+                                        onPress={() => this.props.navigation.navigate('MenuDetail', {
+                                            items: item.menu,
+                                            shopInfo: this.props.route.params.shopInfo,
+                                            type: 'bakery'
+                                        })}
+                                    >
+                                        <Text style={menuStyles.radiusText}>
+                                            {item.category_name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            numColumns={3}
+                            keyExtractor={(item, index) => index.toString()}
+                            contentContainerStyle={{ marginStart: 10, marginEnd: 10, alignSelf: 'center' }}
+                        />
+                    </View>
                 </ScrollView>
-                <Text style={{ marginBottom: 10, color: 'gray', fontSize: 12 }}>즐겨찾기에서 상품을 길게 누르시면 삭제가 됩니다.</Text>
-            </View>
+                <Text style={{ color: 'gray', fontSize: 12 }}>즐겨찾기에서 상품을 길게 누르시면 삭제가 됩니다.</Text>
+            </SafeAreaView>
         )
     }
 }
