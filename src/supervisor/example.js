@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { exampleStyle } from './styles';
@@ -21,60 +21,57 @@ async function DeleteOrderList(key) {
         .remove();
 }
 
-async function Setconfirm(key, phoneNum){
-    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'confirm'});
+async function Setconfirm(key, date, childKey){
+    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'confirm'});
 }
 
-async function SetUnconfirm(key, phoneNum){
-    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'request'});
+async function SetUnconfirm(orderkey, date,phoneNum){
+    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'request'});
 }
 
-async function SetReady(key, phoneNum){
-    database().ref(shopname + '/' + currentTime +'/' + phoneNum + '/' + key + '/').update({orderState: 'ready'});
+async function SetReady(orderkey, date,phoneNum){
+    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'ready'});
 }
 
 export default class Example extends Component {
 
     constructor(props){
         super(props);
-        shopname =this.props.route.params.ShopInfo;
+        shopname = "hyehwaroof";
         this.state={ 
             list:[],
         } }
 
-
-
     componentDidMount(){
-        database().ref('admin/' + shopname).on('value', (snapshot) =>{
-                phonenumber = snapshot.val();
-            })
-
-        database().ref(shopname + '/' + currentTime +'/').on('value', (snapshot) =>{
+        
+        database().ref('user/user_history/').on('value', (snapshot) =>{
             var li = []
             snapshot.forEach((childSnapShot) => {
-            var orderPhoneNumber = childSnapShot.key
+            var orderKey = childSnapShot.key
             childSnapShot.forEach((child)=>{
-                console.log('orderTime2 : ' , child.val().orderTime)
-                li.push({
-                    key: child.key,
-                    orderPhoneNumber: orderPhoneNumber,
-                    name:child.val().name,
-                    orderTime:child.val().orderTime,
-                    cost: child.val().cost,
-                    count: child.val().count,
-                    cup : child.val().cup
+                var orderDate = child.key
+                child.forEach((menuChild)=>{
+                    console.log('orderTime2 : ' , menuChild.val().orderTime)
+                    li.push({
+                        key: orderKey,
+                        childkey: menuChild.key,
+                        date: orderDate,
+                        name: menuChild.val().name,
+                        orderTime: menuChild.val().orderTime,
+                        cost: menuChild.val().cost,
+                        count: menuChild.val().count,
+                        cup : menuChild.val().cup
+                    })
                 })
             })
             
             })
             const Moment = require('moment')
             console.log('what? : ' , li);
-            li.sort((d1, d2) => new Moment(d2.orderTime,'HH:mm:ss') - new Moment(d1.orderTime,'HH:mm:ss'));
+            li.sort((d2, d1) => new Moment(d2.orderTime,'HH:mm:ss') - new Moment(d1.orderTime,'HH:mm:ss'));
             console.log('after? : ' , li);
             this.setState({list:li})
            // this.sortListByTime(li)
-          
-            
         })
      
     }
@@ -150,21 +147,19 @@ export default class Example extends Component {
                     keyExtractor={item => item.key}
                     renderItem={({item})=>{
                     return(
-                        <View  style={exampleStyle.listbox}
-                         //onPress={() => DeleteOrderList(item.key)}
-                        >    
+                        <View  style={exampleStyle.listbox}>    
                             <Text style={exampleStyle.orderlisttext}>{item.name}  {item.cup} {item.count}</Text>
                             <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
                             <View style={exampleStyle.orderlistview}>
-                            <Button 
-                            style={exampleStyle.buttonstyle}
-                             title="승인취소" onPress={() => SetUnconfirm(item.key , item.orderPhoneNumber)}></Button> 
-                            <Button  style={{margin:5}}
-                             title="주문승인" onPress={() => Setconfirm(item.key , item.orderPhoneNumber)}></Button> 
-                            <Button  style={{margin:5}}
-                             title="준비완료" onPress={() => SetReady(item.key , item.orderPhoneNumber)}></Button> 
+                                <Button 
+                                style={exampleStyle.buttonstyle}
+                                title="승인취소" onPress={() => SetUnconfirm(item.key , item.date, item.childkey)}></Button> 
+                                <Button  style={{margin:5}}
+                                title="주문승인" onPress={() => Setconfirm(item.key , item.date, item.childkey)}></Button> 
+                                <Button  style={{margin:5}}
+                                title="준비완료" onPress={() => SetReady(item.key , item.date, item.childkey)}></Button> 
                             </View>
-                    </View>)
+                        </View>)
                     }}
                 />
             </View>
