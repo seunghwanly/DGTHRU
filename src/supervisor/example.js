@@ -21,46 +21,47 @@ async function DeleteOrderList(key) {
         .remove();
 }
 
-async function Setconfirm(key, date, childKey){
-    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'confirm'});
+async function Setconfirm(shopname, date, phonenum, key){
+    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({orderState: 'confirm'});
 }
 
-async function SetUnconfirm(orderkey, date,phoneNum){
-    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'request'});
+async function SetUnconfirm(shopname, date, phonenum, key){
+    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({orderState: 'request'});
 }
 
-async function SetReady(orderkey, date,phoneNum){
-    database().ref('user/user_history/' + key +'/' + date + '/' + childKey + '/').update({orderState: 'ready'});
+async function SetReady(shopname, date, phonenum, key){
+    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({orderState: 'ready'});
 }
 
 export default class Example extends Component {
 
     constructor(props){
         super(props);
-        shopname = "hyehwaroof";
+        shopname = "hyehwa_roof";
         this.state={ 
             list:[],
         } }
 
     componentDidMount(){
         
-        database().ref('user/user_history/').on('value', (snapshot) =>{
+        database().ref('shops/' + shopname).on('value', (snapshot) =>{
             var li = []
             snapshot.forEach((childSnapShot) => {
-            var orderKey = childSnapShot.key
+            var orderDate = childSnapShot.key
             childSnapShot.forEach((child)=>{
-                var orderDate = child.key
+                var phonenumber = child.key
                 child.forEach((menuChild)=>{
                     console.log('orderTime2 : ' , menuChild.val().orderTime)
                     li.push({
-                        key: orderKey,
-                        childkey: menuChild.key,
+                        key: menuChild.key,
+                        phonenum: phonenumber,
                         date: orderDate,
                         name: menuChild.val().name,
                         orderTime: menuChild.val().orderTime,
                         cost: menuChild.val().cost,
                         count: menuChild.val().count,
-                        cup : menuChild.val().cup
+                        cup : menuChild.val().cup,
+                        shotnum : menuChild.val().shotnum,
                     })
                 })
             })
@@ -153,11 +154,11 @@ export default class Example extends Component {
                             <View style={exampleStyle.orderlistview}>
                                 <Button 
                                 style={exampleStyle.buttonstyle}
-                                title="승인취소" onPress={() => SetUnconfirm(item.key , item.date, item.childkey)}></Button> 
+                                title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
                                 <Button  style={{margin:5}}
-                                title="주문승인" onPress={() => Setconfirm(item.key , item.date, item.childkey)}></Button> 
+                                title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
                                 <Button  style={{margin:5}}
-                                title="준비완료" onPress={() => SetReady(item.key , item.date, item.childkey)}></Button> 
+                                title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
                             </View>
                         </View>)
                     }}
