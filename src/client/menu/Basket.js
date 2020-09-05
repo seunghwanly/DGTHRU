@@ -245,6 +245,7 @@ export default Basket = ({ navigation, route }) => {
             'shotNum': shotNum,
             'selected': selected,
             'orderState': 'request',
+            'shopInfo': shopInfo
             //옵션추가를 배열로 할지 고민중
         }
         //sold_out >> false 인 것 만
