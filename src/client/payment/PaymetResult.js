@@ -4,6 +4,8 @@ import {
     Text,
     Button,
     Vibration,
+    ScrollView,
+    Dimensions,
     Alert,
     Image,
     FlatList
@@ -13,11 +15,34 @@ import database from '@react-native-firebase/database';
 import { commonRef } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import auth from '@react-native-firebase/auth';
+import moment from 'moment';
 
+var currDate = moment().format('YYYY_MM_DD');
+
+async function sendOrderWithOrdernum(orderList, shopInfo, num){
+    const orderRef = database()
+        .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
+        .push();
+
+    orderRef
+        .set(orderList)
+        .then(() => alert('주문번호 : ' + num + '번'));
+}
+
+async function setOrderNumber(num) {
+    if(num === 999){
+        database().ref('order_num/').update({number : 1});
+    }
+    else{
+        database().ref('order_num/').update({number : num + 1});
+    }
+}
 
 export default class PaymentResult extends React.Component {
 
     _firebaseRef;
+    orderNum;
 
     constructor(props) {
         super(props);
@@ -33,7 +58,9 @@ export default class PaymentResult extends React.Component {
                 confirm: '',
                 ready: ''
             },
-            data: []
+            data: [],
+            basket: [],
+            
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -43,12 +70,17 @@ export default class PaymentResult extends React.Component {
     componentDidMount() {
         console.log('componentDidMount');
 
+        database().ref('order_num/').on('value', (snapshot) => {
+            this.orderNum = snapshot.val().number;
+        });
+
         this._firebaseRef
             .on('value', (snapshot) => {
 
                 //init
                 this.setState({ orderState: [], isMenuReady: false });
                 var idx = 0;
+                var li = [];
                 snapshot.forEach((childSnapShot) => {
                     var tempJSONObject = {
                         name: childSnapShot.val().name,
@@ -63,10 +95,15 @@ export default class PaymentResult extends React.Component {
                     //주문정보담기
                     this.setState({
                         orderState: this.state.orderState.concat(childSnapShot.val().orderState),
-                        data: this.state.data.concat(tempJSONObject)
+                        data: this.state.data.concat(tempJSONObject),
                     });
                     idx++;
+                    li.push(tempJSONObject);
+                        
+                    
                 })
+                this.setState({basket:li});
+
 
                 var isFullyReady = 0;
                 for (var i = 0; i < this.state.orderState.length; ++i) {
@@ -82,6 +119,7 @@ export default class PaymentResult extends React.Component {
                 console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
     }
+    
 
     componentWillUnmount() {
         console.log('componentWillUnmout');
@@ -99,6 +137,8 @@ export default class PaymentResult extends React.Component {
 
         return count;
     }
+
+    
 
     render() {
         if (this.props.route.params.response.imp_success === 'true') {
@@ -121,9 +161,9 @@ export default class PaymentResult extends React.Component {
                 );
                 Vibration.vibrate([1000, 1000, 1000], true);
             }
-
+            
             return (
-                <>
+                <ScrollView>
                     <View style={{backgroundColor:'white'}}>
                     <Image
                         style={[paymentStyles.loadingGif, {alignSelf:'center'}]}
@@ -200,7 +240,12 @@ export default class PaymentResult extends React.Component {
                                 paddingVertical: 10,
                                 marginTop: 5
                             }}
-                            onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
+                            onPress={() => [
+                                sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
+                                setOrderNumber(this.orderNum),
+                                this.props.navigation.pop(), 
+                                this.props.navigation.navigate('Shops')
+                            ]}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
                         </TouchableOpacity>
@@ -216,8 +261,9 @@ export default class PaymentResult extends React.Component {
 
                             }}
                         />
+                        
                     </View>
-                </>
+                </ScrollView>
             )
         } else {
             return (
