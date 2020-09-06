@@ -1,55 +1,35 @@
-# DGTHRU
+1. < 보류 >이벤트 메뉴 활성화하기<br>
+2. 커피들 사진 넣기<br>
 
-   https://reactnative.dev/docs/environment-setup
+================사용자=====================
 
-   아마 dependencies 에 있는그대로 받아지면 추가로 해야할거 별로 없을 거라 믿어
+1. < 정인 > 다른가게들 DB 채우기 <br>
+2. < 정인 >메뉴 옵션 되는거 확인하기<br>
+3. < 정인 >샷추가 하면 돈 추가되는거<br>
+4. < 정인 >샷추가 초기값 설정<br>
+5. < 정인 >쿠폰 >> 정인이<br>
+6. < 정인 >메뉴화면 탭뷰로 구성하기<br>
 
-## 임시 UI/UX
+~~1. < 승환 >요청사항입력 (15자이내)~~ <br>
+~~2. < 승환 >바로결제는 한개만 결제~~<br>
+3. < 승환 >결제완료 후 앱으로 돌아가기<br>
+~~4. < 승환 >결제확인창 만들기 >> Modal~~<br>
+5. <승환 >결제완료 주문요청 주문승인 준비완료 화면 구성<br>
+6. < 승환 >전자영수증<br>
+7. < 승환 >준비완료화면에 뭘 주문한 내역 보여주기<br>
+8. < 승환 >주문내역에 전자영수증 보기 만들기<br>
+9. < 승환 : 필 >관리자 화면 구성 그려주기<br>
 
-   https://ovenapp.io/view/NDd5y85Wg7f95q5oooRO6TVSpcmyzxHo/rm92i
+1. < 승환 || 정인 >주문승인취소시에 환불해줘야함 > iamport 결제모듈 환불모듈사용하면 될듯, 사용자화면만들기<br>
 
-## 일단 mac 기준
+==================관리자===================
 
-    $ npm install / $ yarn install
+1. < 종하 > 퍼미션 :  알림 —> 푸시알림으로 바꾸기<br>
+2. < 종하 >디비에 결제완료 주문요청 주문승인 준비완료 시간 넣기<br>
+    1. 사용자 >> 결제완료 주문요청<br>
+    2. 관리자 >> 주문승인 준비완료<br>
 
-## [ 화면 전환 이동해주는 거 : navigation ]
-    $ npm install @react-navigation/native
-    $ npm install @react-navigation/stack
+1. < 석운 >메뉴 CSS 설정값 바꾸기<br>
+2. < 석운 >주문번호같은거 만들기<br>
 
-## [ navigation iOS랑 연동해주기 ]
-    $ cd ios
-    $ pod install
-
-## [ enable screen error ]
-    $ npm install --save react-native-screens
-
-## 그 외 추가한 것
-     PATH : android/app/build.gradle
-     
-## 0811 추가한 것
-    
-    파이어베이스
-    $ npm install --save @react-native-firebase/app
-    
-    Jetify(mac에서 안드로이드 돌릴때)
-    $ npm install —save-dev jetifier
-
-## dependencies
-
-    "dependencies": {
-     "@react-native-community/masked-view": "^0.1.10",
-     "@react-navigation/native": "^5.7.3",
-     "@react-navigation/native-stack": "^5.0.5",
-     "@react-navigation/stack": "^5.9.0",
-     "react": "16.13.1",
-     "react-native": "0.63.2",
-     "react-native-gesture-handler": "^1.7.0",
-     "react-native-reanimated": "^1.11.0",
-     "react-native-safe-area-context": "^3.1.4",
-     "react-native-screens": "^2.10.1"
-    },
-
-### //20200811 추가됨 
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-
+1. < 종하 && 석운 >패스오더 https://passorder.co.kr/service 화면 구성 참고<br>
