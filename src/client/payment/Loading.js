@@ -6,7 +6,7 @@ import {
 import { paymentStyles } from './styles';
 
 export default Loading = () => (
-    <View style={paymentStyles.background}>
+    <View style={[paymentStyles.background,{justifyContent:'center'}]}>
         <Text style={paymentStyles.notifyText}>잠시만{'\n'}기다려주세요 !</Text>
     </View>
 )

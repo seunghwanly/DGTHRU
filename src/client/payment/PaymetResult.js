@@ -5,11 +5,14 @@ import {
     Button,
     Vibration,
     Alert,
-    Image
+    Image,
+    FlatList
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
 import { commonRef } from '../../utils/DatabaseRef.js';
+import { getCafeIcon } from '../../utils/getCafeIcon';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default class PaymentResult extends React.Component {
@@ -30,10 +33,11 @@ export default class PaymentResult extends React.Component {
                 confirm: '',
                 ready: ''
             },
-            data: {}
+            data: []
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
+        this.state.timeArray.request = this.props.route.params.requestTime;
     }
 
     componentDidMount() {
@@ -44,13 +48,24 @@ export default class PaymentResult extends React.Component {
 
                 //init
                 this.setState({ orderState: [], isMenuReady: false });
-
+                var idx = 0;
                 snapshot.forEach((childSnapShot) => {
+                    var tempJSONObject = {
+                        name: childSnapShot.val().name,
+                        cost: childSnapShot.val().cost,
+                        count: childSnapShot.val().count,
+                        cup: childSnapShot.val().cup,
+                        orderTime: childSnapShot.val().orderTime,
+                        shotNum: childSnapShot.val().shotNum,
+                        type: childSnapShot.val().type
+                    };
+                    if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
                     //주문정보담기
                     this.setState({
                         orderState: this.state.orderState.concat(childSnapShot.val().orderState),
-                        data: childSnapShot.val()
+                        data: this.state.data.concat(tempJSONObject)
                     });
+                    idx++;
                 })
 
                 var isFullyReady = 0;
@@ -86,7 +101,6 @@ export default class PaymentResult extends React.Component {
     }
 
     render() {
-        console.log('render >> ');
         if (this.props.route.params.response.imp_success === 'true') {
 
             if (this.state.isMenuReady === true) {
@@ -109,48 +123,119 @@ export default class PaymentResult extends React.Component {
             }
 
             return (
-                <View style={paymentStyles.background}>
+                <>
+                    <View style={{backgroundColor:'white'}}>
                     <Image
-                        style={paymentStyles.loadingGif}
+                        style={[paymentStyles.loadingGif, {alignSelf:'center'}]}
                         source={require('../../../image/sample.gif')} />
-                    <Text style={paymentStyles.notifyText}>메뉴가 준비되면 알려드리겠습니다 !</Text>
-                    <View style={{ backgroundColor: 'ivory', padding:30 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{this.state.data.name}</Text>
-                            <Text style={{ fonsSize: 14, }}>A-12</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.type} / </Text>
-                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.cup} / </Text>
-                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.cost}원 / </Text>
-                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.count}개 </Text>
-                        </View>
-                        <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.offers}</Text>
                     </View>
-                    <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text>결제완료  </Text>
-                            <Text>{this.state.data.orderTime}</Text>
+                    <View style={paymentStyles.background}>
+                        <View style={{
+                            backgroundColor: '#F6F6F6',
+                            padding: 30,
+                            width: '100%',
+                            borderRadius: 10,
+                            borderWidth: 1,
+                            borderColor: 'lightgray',
+                            marginVertical: 5
+                        }}>
+                            <FlatList
+                                data={this.state.data}
+                                renderItem={
+                                    ({ item }) => (
+                                        <>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
+                                                <Text style={{ fonsSize: 14, }}> / A-12</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.type} / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cup} / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cost}원 / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.count}개 </Text>
+                                                {
+                                                    item.offers !== null ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.offers}</Text> : <></>
+                                                }
+                                            </View>
+                                        </>
+                                    )
+                                }
+                            />
                         </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text>주문요청  </Text>
-                            <Text>{this.props.route.params.requestTime}</Text>
+
+                        <View style={{
+                            backgroundColor: '#F6F6F6',
+                            padding: 30,
+                            width: '100%',
+                            marginVertical: 5,
+                            borderRadius: 10,
+                            borderWidth: 1,
+                            borderColor: 'lightgray'
+                        }}>
+                            <View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' }}>결제완료{'\t\t'}</Text>
+                                    <Text>{this.state.timeArray.paid}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' }}>주문요청{'\t\t'}</Text>
+                                    <Text>{this.state.timeArray.request}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' }}>주문승인{'\t\t'}</Text>
+                                    <Text>관리자에게</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' }}>준비완료{'\t\t'}</Text>
+                                    <Text>관리자에게</Text>
+                                </View>
+                            </View>
                         </View>
+                        <TouchableOpacity
+                            style={{
+                                width: '100%',
+                                backgroundColor: '#020659',
+                                borderRadius: 10,
+                                paddingHorizontal: 30,
+                                paddingVertical: 10,
+                                marginTop: 5
+                            }}
+                            onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
+                        </TouchableOpacity>
+                        <Image
+                            source={getCafeIcon(this.props.route.params.shopInfo)}
+                            style={{
+                                width: 60,
+                                height: 60,
+                                position: 'absolute',
+                                right: '8%',
+                                top: '40%',
+                                transform: [{ rotate: '330deg' }],
+
+                            }}
+                        />
                     </View>
-                    <Button
-                        title="홈으로 돌아가기"
-                        onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
-                    />
-                </View>
+                </>
             )
         } else {
             return (
                 <View style={paymentStyles.background}>
                     <Text style={paymentStyles.notifyText}>결제 실패{'\n'}관리자에게 문의하세요.</Text>
-                    <Button
-                        title="홈으로 돌아가기"
+                    <TouchableOpacity
+                        style={{
+                            width: '100%',
+                            backgroundColor: '#020659',
+                            borderRadius: 10,
+                            paddingHorizontal: 30,
+                            paddingVertical: 10,
+                            marginTop: 5
+                        }}
                         onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
-                    />
+                    >
+                        <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
+                    </TouchableOpacity>
                 </View>
             )
         }

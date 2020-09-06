@@ -6,9 +6,13 @@ import {
     FlatList,
     View,
     ScrollView,
-    RefreshControl
+    RefreshControl,
+    Modal,
+    Button,
+    SafeAreaView
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ReceiptModal } from '../../utils/ReceiptModal';
+import { BillStyles } from './styles';
 import { Header } from 'react-native-elements';
 import moment from 'moment';
 
@@ -79,7 +83,8 @@ export default class Bill extends React.Component {
         this.state = {
             totalCost: 0,
             userHistory: [],
-            refreshing: false
+            refreshing: false,
+            modalVisible : false
         };
 
         this._userHistoryDB = userHistoryTotalDatabase();
@@ -87,6 +92,14 @@ export default class Bill extends React.Component {
 
     componentDidMount() {
         this._fetchData();
+    }
+
+    setModalVisible(visible) {
+        this.setState({ modalVisible : visible });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState !== this.state;
     }
 
     _fetchData() {
@@ -101,7 +114,7 @@ export default class Bill extends React.Component {
                 snapshot.forEach((childSnapShot) => {
                     tempJSONArray = [];
                     var subObjectKey = childSnapShot.key;
-                    console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
+                    // console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
                     // 날짜 : { autokey : { values } }
                     childSnapShot.forEach((dataSnapShot) => {
                         // console.log('dataChildSnapShot >> ' + dataSnapShot.val().orderTime );
@@ -113,7 +126,8 @@ export default class Bill extends React.Component {
                             selected: dataSnapShot.val().selected,
                             cup: dataSnapShot.val().cup,
                             type: dataSnapShot.val().type,
-                            shopInfo: dataSnapShot.val().shopInfo
+                            shopInfo: dataSnapShot.val().shopInfo,
+                            offers: dataSnapShot.val().offers
                         });
 
                         tempTotalCost += dataSnapShot.val().cost;
@@ -132,6 +146,7 @@ export default class Bill extends React.Component {
                         totalCost: tempTotalCost
                     });
                 });
+                this.setState({ userHistory : this.state.userHistory.reverse() });
                 // console.log('BILL >>>>\n\n' + JSON.stringify(this.state.userHistory));
             });
     }
@@ -144,6 +159,10 @@ export default class Bill extends React.Component {
     }, []);
 
     render() {
+
+        const userHistory = this.state.userHistory;
+        const { modalVisible } = this.state;
+
         return (
             <>
                 <Header
@@ -202,8 +221,8 @@ export default class Bill extends React.Component {
                                 </View>
                                 <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />}>
                                     {
-                                        this.state.userHistory.reverse().map(items => {
-                                            console.log('Bills  >> \n\n' + JSON.stringify(this.state.userHistory));
+                                        userHistory.map((items) => {
+                                            {/* console.log('Bills  >> \n\n' + JSON.stringify(this.state.userHistory)); */}
                                             return (
                                                 <>
                                                     <View style={{ paddingTop: 2, paddingBottom: 2, marginBottom: 5, borderBottomColor:'lightgray', borderBottomWidth:1 }}>
@@ -215,18 +234,47 @@ export default class Bill extends React.Component {
                                                         data={items.item}
                                                         renderItem={
                                                             ({ item }) => (
-                                                                <View style={{ flexDirection: 'row', marginBottom:3}}>
+                                                                <>
+                                                                    <Modal
+                                                                        animationType='slide'
+                                                                        transparent={true}
+                                                                        visible={modalVisible}
+                                                                    >
+                                                                        <View style={BillStyles.modalBackground}>
+                                                                            <View style={BillStyles.modalSubBackground}>
+                                                                                <ReceiptModal
+                                                                                    name={item.name}
+                                                                                    cost={item.cost}
+                                                                                    count={item.count}
+                                                                                    inOrOut={item.cup}
+                                                                                    hotOrIced={item.type}
+                                                                                    offers={item.offers}
+                                                                                    shopInfo={item.shopInfo}
+                                                                                />
+                                                                                <TouchableOpacity
+                                                                                    style={{borderRadius:10, backgroundColor:'#F0F0F0', width:'90%', paddingHorizontal:50, paddingVertical:10}}
+                                                                                    onPress={() => this.setModalVisible(!modalVisible)}
+                                                                                >
+                                                                                    <Text>닫기</Text>
+                                                                                </TouchableOpacity>
+                                                                            </View>
+                                                                        </View>
+                                                                    </Modal>
+                                                                <TouchableOpacity 
+                                                                    style={{ flexDirection: 'row', marginVertical:3, alignItems:'center'}}
+                                                                    onPress={() => this.setModalVisible(true)}
+                                                                >
                                                                     <GetCafeIcon name={item.shopInfo}/>
                                                                     <Text style={{ width: '25%' }}>{item.name}</Text>
                                                                     <Text style={{ width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}</Text>
                                                                     <Text style={{ width: '20%', textAlign: 'center' }}>{item.cup}</Text>
                                                                     <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
-                                                                </View>
+                                                                </TouchableOpacity>
+                                                                </>
                                                             )
                                                         }
                                                         keyExtractor={(item) => item.toString()}
                                                         scrollEnabled={false}
-                                                        contentContainerStyle={{}}
                                                     />
                                                     <View style={{ marginBottom: 10 }} />
                                                 </>

@@ -3,6 +3,7 @@ import {
     View,
     Text,
     Image,
+    Alert
 } from 'react-native';
 import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -61,7 +62,7 @@ export default class BasketDetail extends React.Component {
                 var idx = 0;    // loop
 
                 snapshot.forEach((childSnapShot) => {
-                    console.log('\nBasketDetail >> ' + childSnapShot.val());
+                    //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
 
                     var tempJSON = {
                         "idx": idx,
@@ -75,13 +76,12 @@ export default class BasketDetail extends React.Component {
                         orderData: this.state.orderData.concat(tempJSON)
                     })
                     // this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
-                    console.log('\n after : ' + this.state.orderData.length);
+                    //console.log('\n after : ' + JSON.stringify(this.state.orderData));
                 })
-            });
+            }),
 
         this._firebaseUserDatabase
             .on('value', (snapshot2) => {
-
                 this.setState({ userData: [] })
 
                 var idx = 0;
@@ -96,6 +96,7 @@ export default class BasketDetail extends React.Component {
                     this.setState({
                         userData: this.state.userData.concat(tempJSON2)
                     });
+                    
                 })
             });
 
@@ -114,13 +115,11 @@ export default class BasketDetail extends React.Component {
 
         for (var k in this.state.orderData) {
             if (key === this.state.orderData[k].key) {
-                console.log(this.state.userData[this.state.orderData[k].idx].key);
+                // console.log('_returnIndexFromOrderData >>>>>>\t' + this.state.userData[this.state.orderData[k].idx].key);
                 return this.state.userData[this.state.orderData[k].idx].key;
             }
         }
     }
-
-
 
     render() {
 
@@ -128,7 +127,7 @@ export default class BasketDetail extends React.Component {
         this.state.orderData.map(item => {
             totalCost += Number(item.value.cost) * Number(item.value.count);
         })
-
+        
         if (this.state.orderData.length > 0) {
             return (
                 <View style={basketStyles.background}>
@@ -148,10 +147,17 @@ export default class BasketDetail extends React.Component {
                                         <TouchableOpacity
                                             style={basketStyles.detailImgButton}
                                             onPress={() => {
-                                                [
-                                                    handleDeleteOrder(this.props.route.params.shopInfo, item.key),
-                                                    handleDeleteUser(this._returnIndexFromOrderData(item.key)),
-                                                ]
+                                                Alert.alert(
+                                                    'DGTHRU 알림', '삭제하시겠습니까 ?',
+                                                    [
+                                                        {
+                                                            text : '삭제', onPress: () => [handleDeleteOrder(this.props.route.params.shopInfo, item.key) ,handleDeleteUser(this._returnIndexFromOrderData(item.key)) ]
+                                                        },
+                                                        {
+                                                            text : '취소', onPress: () => console.log('cancel delete'), style:"cancel"
+                                                        }
+                                                    ]
+                                                )
                                             }}>
                                             <Image
                                                 style={{ width: 15, height: 15 }}

@@ -9,7 +9,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    Image,
 } from 'react-native';
 import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -18,6 +19,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 import moment from 'moment';
+import { getCafeIcon } from '../../utils/getCafeIcon';
 
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -219,7 +221,7 @@ export default Basket = ({ navigation, route }) => {
 
         orderRef
             .set(jsonOrderList)
-            .then(() => alert('담겼습니다!'));
+            .then(() => console.log('Updated Shops DB'));
 
         // 2.사용자 History
         const userRef = database()
@@ -232,7 +234,6 @@ export default Basket = ({ navigation, route }) => {
     }
 
     handleOrder = (item) => {
-        item.time = moment().format('HH:mm:ss');
         // HOT / ICED 기본적으로 설정해줌
         if (item.ice_available === false && item.only_ice === false)
             setHotOrIced('HOT');
@@ -397,11 +398,11 @@ export default Basket = ({ navigation, route }) => {
 
         var jsonOrderList = {
             name: item.name,
-            orderTime: item.time,
+            orderTime: moment().format('HH:mm:ss'),
             cost: item.cost,
             count: count,
             cup: inOrOut,
-            type: hotOrIced,
+            type: hotOrIced !== null ? hotOrIced : item.ice_available === true && item.only_ice === true ? "ICED" : "HOT",
             whipping: whippingCream,
             shotNum: shotNum,
             selected: selected,
@@ -439,7 +440,22 @@ export default Basket = ({ navigation, route }) => {
                             shadowRadius: 3.84,
                             elevation: 5
                         }}>
-                            <Text style={[basketStyles.radiusText, { fontSize: 20 }]}>주문내역확인</Text>
+                            <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight:'800' }]}>주문내역확인</Text>
+                            <Image 
+                                source={getCafeIcon(shopInfo)}
+                                resizeMode='cover'
+                                style={{
+                                    width:100, 
+                                    height:100, 
+                                    alignSelf:'flex-end', 
+                                    position:'absolute', 
+                                    opacity:0.3,
+                                    right:10,
+                                    top:10,
+                                    transform: [{rotate:'330deg'}]
+                                }}
+                            />
+                            
                             <View style={{
                                 marginVertical: 50,
                                 padding: 10,
@@ -447,12 +463,12 @@ export default Basket = ({ navigation, route }) => {
                                 alignItems: 'stretch'
                             }}>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>상품명 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{item.name}</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>상품명 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.name}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>가격 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{item.cost}</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.cost}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
@@ -468,9 +484,9 @@ export default Basket = ({ navigation, route }) => {
                                 </View>
                                 {
                                     offers.length > 0 ?
-                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                        <View style={{ flexDirection: 'column', width: '100%', marginVertical: 2 }}>
                                             <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{offers}</Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'left', width: '100%', marginTop:15, color:'dimgray' }}>{offers}</Text>
                                         </View>
                                         :
                                         <></>
@@ -674,7 +690,7 @@ export default Basket = ({ navigation, route }) => {
                                 </>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#020659' }]}
-                                    onPress={() => [handleOrder(item),]}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(jsonOrderList, shopInfo, userPhoneNumber), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>
