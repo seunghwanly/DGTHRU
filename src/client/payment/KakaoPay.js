@@ -7,6 +7,9 @@ import IMP from 'iamport-react-native';
 /* 로딩 컴포넌트를 불러옵니다. */
 import Loading from './Loading';
 
+//결제완료시간 주기
+import moment from 'moment';
+
 export function Payment({ navigation, route }) {
 
     const { totalCost } = route.params;
@@ -20,7 +23,8 @@ export function Payment({ navigation, route }) {
         navigation.replace('Result', 
         {
             response : response,
-            shopInfo : shopInfo 
+            shopInfo : shopInfo,
+            requestTime : moment().format('HH:mm:ss') 
         });
     }
 

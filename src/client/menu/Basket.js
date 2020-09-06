@@ -394,6 +394,7 @@ export default Basket = ({ navigation, route }) => {
 
 
     if (item.sold_out === false) {
+
         var jsonOrderList = {
             name: item.name,
             orderTime: item.time,
@@ -409,6 +410,7 @@ export default Basket = ({ navigation, route }) => {
             offers: offers
             //옵션추가를 배열로 할지 고민중
         }
+        
         return (
             <>
                 <Modal

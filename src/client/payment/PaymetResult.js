@@ -23,7 +23,14 @@ export default class PaymentResult extends React.Component {
 
         this.state = {
             isMenuReady: false,
-            orderState: []
+            orderState: [],
+            timeArray: {
+                paid: '',
+                request: '',
+                confirm: '',
+                ready: ''
+            },
+            data: {}
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -36,10 +43,14 @@ export default class PaymentResult extends React.Component {
             .on('value', (snapshot) => {
 
                 //init
-                this.setState({ orderState: [], isMenuReady: false }); 
+                this.setState({ orderState: [], isMenuReady: false });
 
                 snapshot.forEach((childSnapShot) => {
-                    this.setState({ orderState: this.state.orderState.concat(childSnapShot.val().orderState) })
+                    //주문정보담기
+                    this.setState({
+                        orderState: this.state.orderState.concat(childSnapShot.val().orderState),
+                        data: childSnapShot.val()
+                    });
                 })
 
                 var isFullyReady = 0;
@@ -50,7 +61,7 @@ export default class PaymentResult extends React.Component {
                     }
                 }
                 if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
-                    this.setState({ isMenuReady: true });  
+                    this.setState({ isMenuReady: true });
                 }
 
                 console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
@@ -87,10 +98,10 @@ export default class PaymentResult extends React.Component {
                         {
                             text: '확인',
                             // onPress: () => [ Vibration.cancel(), this.props.navigation.pop(), this.props.navigation.navigate('Shops') ]
-                            onPress: () => 
-                            [ 
-                                Vibration.cancel(), this.props.navigation.reset({ index:0, routes :  [{ name : 'Home' }] }) 
-                            ]
+                            onPress: () =>
+                                [
+                                    Vibration.cancel(), this.props.navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+                                ]
                         }
                     ]
                 );
@@ -103,6 +114,29 @@ export default class PaymentResult extends React.Component {
                         style={paymentStyles.loadingGif}
                         source={require('../../../image/sample.gif')} />
                     <Text style={paymentStyles.notifyText}>메뉴가 준비되면 알려드리겠습니다 !</Text>
+                    <View style={{ backgroundColor: 'ivory', padding:30 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{this.state.data.name}</Text>
+                            <Text style={{ fonsSize: 14, }}>A-12</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.type} / </Text>
+                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.cup} / </Text>
+                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.cost}원 / </Text>
+                            <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.count}개 </Text>
+                        </View>
+                        <Text style={{ color: 'gray', fontSize: 14 }}>{this.state.data.offers}</Text>
+                    </View>
+                    <View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text>결제완료  </Text>
+                            <Text>{this.state.data.orderTime}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text>주문요청  </Text>
+                            <Text>{this.props.route.params.requestTime}</Text>
+                        </View>
+                    </View>
                     <Button
                         title="홈으로 돌아가기"
                         onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
