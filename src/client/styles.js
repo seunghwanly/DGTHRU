@@ -8,8 +8,8 @@ const clientStyles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         backgroundColor: 'white',
-        padding: '1%',
-        flex: 1
+        padding: 5,
+        flex: 7
     },
     header: {
         flex:1,
@@ -21,7 +21,6 @@ const clientStyles = StyleSheet.create({
         flex:5,
         width: '100%',
         margin:5,
-        alignItems: 'center',
     },
     footer: {
         flex:1,
@@ -97,20 +96,22 @@ const clientStyles = StyleSheet.create({
     },
     image: {
         resizeMode: 'cover',
-        justifyContent: "center",
+        justifyContent: 'center',
         borderWidth: 1,
         borderColor: 'lightgray',
         borderRadius: 12,
+        width:'95%'
     },
     itemContainer: {
-        width: "50%",
+        width:'50%',
         alignItems: 'center',
+        flexWrap:'wrap',
     },
     imageContainer:{
-        width: "100%",
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '2%', 
+        margin: '2%',
     },
 });
 

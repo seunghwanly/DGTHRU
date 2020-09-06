@@ -10,7 +10,6 @@ import {
 import { clientStyles } from '../styles';
 
 import { enableScreens } from 'react-native-screens';
-import CustomNavigator from '../../utils/CustomNavigator';
 
 enableScreens();
 
@@ -110,7 +109,7 @@ class Item extends React.Component {
 }
 
 function Shops({ navigation }) {
-
+    console.log('[Shops]');
     function _onPress(id){
         if (id === 'hyehwa_roof') {
             if (navigation !== null) {
@@ -170,6 +169,7 @@ function Shops({ navigation }) {
                         numColumns={2}
                         keyExtractor={keyExtractor}
                         scrollEnabled={true}
+                        contentContainerStyle={{alignItems:'stretch'}}
                     />
                 </View>
             </View>
