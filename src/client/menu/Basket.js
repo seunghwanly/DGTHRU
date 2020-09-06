@@ -427,7 +427,7 @@ export default Basket = ({ navigation, route }) => {
                             backgroundColor: "white",
                             borderRadius: 20,
                             padding: 35,
-                            alignItems: "center",
+                            alignItems: 'center',
                             shadowColor: "#000",
                             shadowOffset: {
                                 width: 0,
@@ -437,29 +437,61 @@ export default Basket = ({ navigation, route }) => {
                             shadowRadius: 3.84,
                             elevation: 5
                         }}>
-                            <Text style={basketStyles.radiusText}>주문내역확인</Text>
+                            <Text style={[basketStyles.radiusText, { fontSize: 20 }]}>주문내역확인</Text>
                             <View style={{
-                                alignItems: 'stretch',
-                                marginVertical: 50
+                                marginVertical: 50,
+                                padding: 10,
+                                width: 200,
+                                alignItems: 'stretch'
                             }}>
-                                <Text>상품명 : {item.name}</Text>
-                                <Text>가격 : {item.cost}</Text>
-                                <Text>갯수 : {count}</Text>
-                                <Text>가게정보 : {shopInfo}</Text>
-                                <Text>테이크아웃 : {inOrOut}</Text>
-                                <Text>따뜻차갑 : {hotOrIced}</Text>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>상품명 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{item.name}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>가격 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{item.cost}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{count}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{inOrOut}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
+                                </View>
+                                {
+                                    offers.length > 0 ?
+                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{offers}</Text>
+                                        </View>
+                                        :
+                                        <></>
+                                }
                             </View>
-                            <TouchableOpacity
-                                style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-                                onPress={() => [
-                                    sendOrder(jsonOrderList, shopInfo, userPhoneNumber),
-                                    navigation.navigate('Paying', { totalCost: item.cost, shopInfo: shopInfo }),
-                                    setModalVisible(!modalVisible)
-                                ]}
-                            >
-                                <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
-                            </TouchableOpacity>
-                            <Button title='close' onPress={() => setModalVisible(!modalVisible)} />
+                            <View style={{ flexDirection: 'row-reverse' }}>
+                                <TouchableOpacity
+                                    style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
+                                    onPress={() => [
+                                        sendOrder(jsonOrderList, shopInfo, userPhoneNumber),
+                                        navigation.navigate('Paying', { totalCost: item.cost, shopInfo: shopInfo }),
+                                        setModalVisible(!modalVisible)
+                                    ]}
+                                >
+                                    <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[basketStyles.goToBasket, { width: 100 }]}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>취소하기</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </Modal>
