@@ -2,25 +2,25 @@ import { StyleSheet } from 'react-native';
 
 const clientStyles = StyleSheet.create({
     background: {
-        // width: '100%',
-        // height: '100%',
+        width: '100%',
+        height: '100%',
         justifyContent:'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        padding: 10,
-        flex: 6
+        padding: '1%',
+        flex: 5
     },
     header: {
         flex:1,
-        // width: '100%',
+        width: '100%',
         marginTop:20,
-        
+        alignItems: 'center',
     },
     body: {
-        flex:4,
-        // width: '100%',
+        flex:5,
+        width: '100%',
         margin:5,
-        
+        alignItems: 'center',
     },
     footer: {
         flex:1,
@@ -95,26 +95,22 @@ const clientStyles = StyleSheet.create({
         marginEnd: 10
     },
     image: {
-        flex: 1,
         resizeMode: 'cover',
         justifyContent: "center",
         borderWidth: 1,
         borderColor: 'lightgray',
         borderRadius: 12,
-
     },
     itemContainer: {
         width: "50%",
         alignItems: 'center',
     },
     imageContainer:{
-        width: "50%",
+        width: "100%",
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10, 
+        margin: '2%', 
     },
-    
-
 });
 
 export {
