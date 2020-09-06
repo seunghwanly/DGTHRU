@@ -87,7 +87,7 @@ export default StackContainer = ({ navigation }) => {
     if (initializing) return null;
 
     if (user) {
-        console.log('exist user');
+        console.log('current user : ' + user.phoneNumber);
         return (
             <Stack.Navigator initialRouteName='Shops'>
                 {Object.entries({

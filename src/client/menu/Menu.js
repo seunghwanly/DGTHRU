@@ -85,7 +85,7 @@ export default class HyehwaDessert extends React.Component {
                                                     this.props.navigation.navigate('SelectMenu', {
                                                         item: item.value,
                                                         shopInfo: this.props.route.params.shopInfo,
-                                                        type: item.hasOwnProperty('ice_available') ? 'drink' : 'bakery'
+                                                        type: item.ice_available !== null ? 'drink' : 'bakery'
                                                     })}
                                                 onLongPress={() => popFavorite(this.props.route.params.shopInfo, item.key)}
                                             >
