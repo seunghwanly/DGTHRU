@@ -6,9 +6,10 @@ const clientStyles = StyleSheet.create({
         height: '100%',
         justifyContent:'center',
         alignItems: 'center',
+        flexDirection: 'column',
         backgroundColor: 'white',
         padding: '1%',
-        flex: 5
+        flex: 1
     },
     header: {
         flex:1,
