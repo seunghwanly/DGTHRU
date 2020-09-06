@@ -155,6 +155,7 @@ function Shops({ navigation }) {
         />
     );
     const keyExtractor = (item) => item.id;
+    
     return (
         <>
             <View style={clientStyles.background}>

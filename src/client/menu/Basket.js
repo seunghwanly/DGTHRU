@@ -4,6 +4,12 @@ import {
     Text,
     Button,
     FlatList,
+    TextInput,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -50,21 +56,14 @@ export default Basket = ({ navigation, route }) => {
     const [hotOrIced, setHotOrIced] = useState(null);
     const [whippingCream, setWhippingCream] = useState(null);
     const [shotNum, setShotNum] = useState(2);
-    const [time, setTime] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
-    const [refresh, setRefresh] = useState(false);
+    const [offers, setOffers] = useState('');
 
     useFocusEffect(
         React.useCallback(() => {
             setTotalCost(0);
         }, [])
     );
-
-    useEffect(() => {
-        console.log('refreshed !');
-        setRefresh(false);
-
-    });
 
     useEffect(() => {
         //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
@@ -245,7 +244,8 @@ export default Basket = ({ navigation, route }) => {
             'shotNum': shotNum,
             'selected': selected,
             'orderState': 'request',
-            'shopInfo': shopInfo
+            'shopInfo': shopInfo,
+            'offers' : offers
             //옵션추가를 배열로 할지 고민중
         }
         //sold_out >> false 인 것 만
@@ -412,207 +412,233 @@ export default Basket = ({ navigation, route }) => {
 
     if (item.sold_out === false) {
         return (
-            <View style={basketStyles.background}>
-                <View style={basketStyles.subBackground}>
-                    {/* 2줄 컬럼형 */}
-                    <View style={basketStyles.basketWrapper}>
-                        {/* 이미지랑 갯수 조절하는 거 */}
-                        <View style={basketStyles.basketLeftColumnWrapper}>
-                            {/* 아이콘이랑 이름 */}
-                            <View style={basketStyles.radiusIcon} />
-                            <Text style={basketStyles.radiusText}>{item.name}</Text>
-                            <Text style={[basketStyles.radiusText, {margin:0, fontWeight:'normal'}]}>{item.cost}원</Text>
-                            {/* 버튼 */}
-                            <View style={basketStyles.basketLeftColumnButtonWrapper}>
-                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-')} />
-                                <Text >{count}</Text>
-                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+')} />
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={10}
+                style={{ backgroundColor: 'white', flex: 1 }}
+                >
+                <View style={basketStyles.background}>
+                    <View style={basketStyles.subBackground}>
+                        {/* 2줄 컬럼형 */}
+                        <View style={basketStyles.basketWrapper}>
+                            {/* 이미지랑 갯수 조절하는 거 */}
+                            <View style={basketStyles.basketLeftColumnWrapper}>
+                                {/* 아이콘이랑 이름 */}
+                                <View style={basketStyles.radiusIcon} />
+                                <Text style={basketStyles.radiusText}>{item.name}</Text>
+                                <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost}원</Text>
+                                {/* 버튼 */}
+                                <View style={basketStyles.basketLeftColumnButtonWrapper}>
+                                    <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-')} />
+                                    <Text >{count}</Text>
+                                    <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+')} />
+                                </View>
+                                {/* 왼쪽 세로 줄 */}
                             </View>
-                            {/* 왼쪽 세로 줄 */}
-                        </View>
 
-                        {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
-                        <View style={basketStyles.basketRightColumnWrapper}>
-                            {
-                                type === 'drink' && item.ice_available === true && item.only_ice === false ?
-                                    <View style={{ flexDirection: 'row', padding: 10 }}>
-                                        <FlatList
-                                            style={{ marginStart: '5%', marginEnd: '5%' }}
-                                            data={dataIceHot}
-                                            renderItem={
-                                                ({ item }) => {
+                            {/* 매장용 또는 일회용 선택과 장바구니담기 버튼 */}
+                            <View style={basketStyles.basketRightColumnWrapper}>
+                                {
+                                    type === 'drink' && item.ice_available === true && item.only_ice === false ?
+                                        <View style={{ flexDirection: 'row', padding: 10 }}>
+                                            <FlatList
+                                                style={{ marginStart: '5%', marginEnd: '5%' }}
+                                                data={dataIceHot}
+                                                renderItem={
+                                                    ({ item }) => {
 
-                                                    const backgroundColor = item.toString()
-                                                        === hotOrIced ?
-                                                        '#F29F05' : '#F2F2F2';
+                                                        const backgroundColor = item.toString()
+                                                            === hotOrIced ?
+                                                            '#F29F05' : '#F2F2F2';
 
-                                                    const color = item.toString()
-                                                        === hotOrIced ?
-                                                        'white' : 'black';
+                                                        const color = item.toString()
+                                                            === hotOrIced ?
+                                                            'white' : 'black';
 
-                                                    return (
-                                                        <TouchableOpacity
-                                                            onPress={() => setHotOrIced(item.toString())}
-                                                            style={[
-                                                                { backgroundColor },
-                                                                basketStyles.basketTwoItem
-                                                            ]}>
-                                                            <Text style={{ color }}> {item} </Text>
-                                                        </TouchableOpacity>
-                                                    )
+                                                        return (
+                                                            <TouchableOpacity
+                                                                onPress={() => setHotOrIced(item.toString())}
+                                                                style={[
+                                                                    { backgroundColor },
+                                                                    basketStyles.basketTwoItem
+                                                                ]}>
+                                                                <Text style={{ color }}> {item} </Text>
+                                                            </TouchableOpacity>
+                                                        )
+                                                    }
                                                 }
+                                                numColumns={3}
+                                                keyExtractor={(item) => item.toString()}
+                                                extraData={hotOrIced}
+                                                scrollEnabled={false}
+                                            />
+                                        </View>
+                                        :
+                                        <></>
+                                }
+                                {/* <Text>컵을 선택해주세요.</Text> */}
+                                <View style={{ flexDirection: 'row', padding: 10 }}>
+                                    <FlatList
+                                        data={dataInOrOut}
+                                        renderItem={
+                                            ({ item }) => {
+
+                                                const backgroundColor = item.toString()
+                                                    === inOrOut ?
+                                                    '#F29F05' : '#F2F2F2';
+
+                                                const color = item.toString()
+                                                    === inOrOut ?
+                                                    'white' : 'black';
+
+                                                return (
+                                                    <TouchableOpacity
+                                                        onPress={() => setInOrOut(item.toString())}
+                                                        style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
+                                                        <Text style={{ color }}> {item} </Text>
+                                                    </TouchableOpacity>
+                                                )
                                             }
-                                            numColumns={3}
-                                            keyExtractor={(item) => item.toString()}
-                                            extraData={hotOrIced}
-                                            scrollEnabled={false}
-                                        />
-                                    </View>
+                                        }
+                                        numColumns={3}
+                                        keyExtractor={(item) => item.toString()}
+                                        extraData={inOrOut}
+                                        scrollEnabled={false}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View style={[basketStyles.subBackground, { backgroundColor: 'snow', alignItems: 'stretch', width: '100%' }]}>
+                            <ChooseDetail subMenu={item} />
+                            <View style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: '#F2F2F2', margin: 0, borderBottomWidth: 1, borderColor: 'lightgray' }]}>
+                                <Text style={{ color: 'black', fontWeight: 'bold' }}>OPTIONS : 선택사항</Text>
+                            </View>
+                            {
+                                type === 'drink' && item.option_available.shot === true ?
+                                    <>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
+                                            <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
+                                            <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가</Text>
+                                        </View>
+                                        <View style={basketStyles.basketLeftColumnButtonWrapper}>
+                                            {/* TODO: 음료마다 기본 샷이 다름 */}
+                                            <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
+                                            <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
+                                            <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
+                                        </View>
+                                    </>
                                     :
                                     <></>
                             }
-                            {/* <Text>컵을 선택해주세요.</Text> */}
-                            <View style={{ flexDirection: 'row', padding: 10 }}>
-                                <FlatList
-                                    data={dataInOrOut}
-                                    renderItem={
-                                        ({ item }) => {
+                            {
+                                type === 'drink' && item.option_available.whipping === true ?
+                                    <>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
+                                            <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
+                                            <Text style={{ fontSize: 12, marginStart: 10 }}>휘핑크림 추가</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', padding: 10 }}>
+                                            <FlatList
+                                                data={dataWhippingCream}
+                                                renderItem={
+                                                    ({ item }) => {
 
-                                            const backgroundColor = item.toString()
-                                                === inOrOut ?
-                                                '#F29F05' : '#F2F2F2';
+                                                        const backgroundColor = item.toString()
+                                                            === whippingCream ?
+                                                            '#F29F05' : '#F2F2F2';
 
-                                            const color = item.toString()
-                                                === inOrOut ?
-                                                'white' : 'black';
+                                                        const color = item.toString()
+                                                            === whippingCream ?
+                                                            'white' : 'black';
 
-                                            return (
-                                                <TouchableOpacity
-                                                    onPress={() => setInOrOut(item.toString())}
-                                                    style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
-                                                    <Text style={{ color }}> {item} </Text>
-                                                </TouchableOpacity>
-                                            )
-                                        }
-                                    }
-                                    numColumns={3}
-                                    keyExtractor={(item) => item.toString()}
-                                    extraData={inOrOut}
-                                    scrollEnabled={false}
-                                />
-                            </View>
+                                                        return (
+                                                            <TouchableOpacity
+                                                                onPress={() => setWhippingCream(item.toString())}
+                                                                style={[basketStyles.basketThreeItem, { backgroundColor, width: 70 }]}>
+                                                                <Text style={{ color }}> {item} </Text>
+                                                            </TouchableOpacity>
+                                                        )
+                                                    }
+                                                }
+                                                numColumns={3}
+                                                keyExtractor={(item) => item.toString()}
+                                                extraData={inOrOut}
+                                                scrollEnabled={false}
+                                                contentContainerStyle={{ alignItems: 'center' }}
+                                            />
+                                        </View>
+                                    </>
+                                    :
+                                    <></>
+                            }
+                            <>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
+                                    <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
+                                    <Text style={{ fontSize: 12, marginStart: 10 }}>요청사항 (15자이내)</Text>
+                                </View>
+
+                                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                    <TextInput
+                                        style={basketStyles.offerLayout}
+                                        onChangeText={(text) => setOffers(text)}
+                                        placeholder="'완료'를 누르면 입력이됩니다 !"
+                                        returnKeyType='done'
+                                    />
+                                </TouchableWithoutFeedback>
+
+                            </>
+                            <TouchableOpacity
+                                style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#020659' }]}
+                                onPress={() => [handleOrder(item),]}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={[basketStyles.subBackground, { backgroundColor: 'snow', alignItems: 'stretch', width: '100%' }]}>
-                        <ChooseDetail subMenu={item} />
-                        <View style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: '#F2F2F2', margin: 0, borderBottomWidth:1, borderColor:'lightgray' }]}>
-                            <Text style={{ color: 'black', fontWeight: 'bold' }}>OPTIONS : 선택사항</Text>
-                        </View>
-                        {
-                            type === 'drink' && item.option_available.shot === true ?
-                                <>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
-                                        <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가</Text>
-                                    </View>
-                                    <View style={basketStyles.basketLeftColumnButtonWrapper}>
-                                        {/* TODO: 음료마다 기본 샷이 다름 */}
-                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
-                                        <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
-                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
-                                    </View>
-                                </>
-                                :
-                                <></>
-                        }
-                        {
-                            type === 'drink' && item.option_available.whipping === true ?
-                                <>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#F28B0C' }]} />
-                                        <Text style={{ fontSize: 12, marginStart: 10 }}>휘핑크림 추가</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', padding: 10 }}>
-                                        <FlatList
-                                            data={dataWhippingCream}
-                                            renderItem={
-                                                ({ item }) => {
-
-                                                    const backgroundColor = item.toString()
-                                                        === whippingCream ?
-                                                        '#F29F05' : '#F2F2F2';
-
-                                                    const color = item.toString()
-                                                        === whippingCream ?
-                                                        'white' : 'black';
-
-                                                    return (
-                                                        <TouchableOpacity
-                                                            onPress={() => setWhippingCream(item.toString())}
-                                                            style={[basketStyles.basketThreeItem, { backgroundColor, width: 70 }]}>
-                                                            <Text style={{ color }}> {item} </Text>
-                                                        </TouchableOpacity>
-                                                    )
-                                                }
-                                            }
-                                            numColumns={3}
-                                            keyExtractor={(item) => item.toString()}
-                                            extraData={inOrOut}
-                                            scrollEnabled={false}
-                                            contentContainerStyle={{ alignItems: 'center' }}
-                                        />
-                                    </View>
-                                </>
-                                :
-                                <></>
-                        }
+                    <View
+                        style={{ flexDirection: 'row', marginTop: 8 }}>
                         <TouchableOpacity
-                            style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor:'#020659' }]}
-                            onPress={() => [handleOrder(item),]}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
+                            style={basketStyles.goToBasket}
+                            onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
+                        >
+                            <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
+                            onPress={
+                                () =>
+                                handleOrder(item) === true ? navigation.navigate('Paying',{ totalCost: item.cost, shopInfo: shopInfo}) : {}
+                            }
+                            // 이 부분은 바로 결제시에는 장바구니에 관련없이 그 상품 하나만을 결제하도록 바꿨음 >> 2020.09.06
+                            // onPress={() => [
+
+                            //     totalCost > 0 ?
+
+                            //         handleOrder(item) === true ?
+
+                            //             navigation.navigate('Paying',
+                            //                 {
+                            //                     totalCost: totalCost + item.cost,
+                            //                     shopInfo: shopInfo
+                            //                 }
+                            //             ) : {}
+
+                            //         :
+                            //         handleOrder(item) === true ?
+
+                            //             navigation.navigate('Paying',
+                            //                 {
+                            //                     totalCost: item.cost,
+                            //                     shopInfo: shopInfo
+                            //                 }
+                            //             ) : {}
+                            // ]
+                            // }
+                        >
+                            <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View
-                    style={{ flexDirection: 'row', marginTop: 8 }}>
-                    <TouchableOpacity
-                        style={basketStyles.goToBasket}
-                        onPress={() => navigation.navigate('Basket', { shopInfo: shopInfo })}
-                    >
-                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>장바구니 바로가기</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-
-                        onPress={() => [
-
-                            totalCost > 0 ?
-
-                                handleOrder(item) === true ?
-
-                                    navigation.navigate('Paying',
-                                        {
-                                            totalCost: totalCost + item.cost,
-                                            shopInfo: shopInfo
-                                        }
-                                    ) : {}
-
-                                :
-                                handleOrder(item) === true ?
-
-                                    navigation.navigate('Paying',
-                                        {
-                                            totalCost: item.cost,
-                                            shopInfo: shopInfo
-                                        }
-                                    ) : {}
-                        ]
-                        }
-                    >
-                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     } else {
         return (

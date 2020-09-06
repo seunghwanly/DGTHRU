@@ -247,6 +247,18 @@ const basketStyles = StyleSheet.create({
         paddingBottom: 5,
         margin: 15,
         width: 300
+    },
+    offerLayout : {
+        width:'90%', 
+        borderWidth:1,
+        borderColor:'lightgrey', 
+        alignSelf:'center', 
+        fontSize:12, 
+        padding:10, 
+        backgroundColor:'white',
+        borderRadius:10,
+        marginTop:5,
+        marginBottom:15
     }
 
 });
