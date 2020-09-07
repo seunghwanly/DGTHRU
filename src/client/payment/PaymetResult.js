@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
-import { commonRef } from '../../utils/DatabaseRef.js';
+import { commonRef, setOrderNum } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -89,7 +89,7 @@ export default class PaymentResult extends React.Component {
             .on('value', (snapshot) => {
 
                 //init
-                this.setState({ orderState: [], isMenuReady: false });
+                this.setState({ orderState: [], isMenuReady: false, data: [] });
                 var idx = 0;
                 var li = [];
                 snapshot.forEach((childSnapShot) => {
@@ -157,6 +157,8 @@ export default class PaymentResult extends React.Component {
 
     render() {
         if (this.props.route.params.response.imp_success === 'true') {
+            
+            setOrderNum(this.props.route.params.shopInfo);
 
             if (this.state.isMenuReady === true) {
 

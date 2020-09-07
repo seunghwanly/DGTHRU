@@ -20,6 +20,7 @@ import auth from '@react-native-firebase/auth';
 
 import moment from 'moment';
 import { getCafeIcon } from '../../utils/getCafeIcon';
+import { orderNumDatabase, setOrderNum } from '../../utils/DatabaseRef';
 
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -62,6 +63,7 @@ export default Basket = ({ navigation, route }) => {
     const [offers, setOffers] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [result, setResult] = useState([]);
+    const [currentOrderNumber, setCurrentOrderNumbet] = useState(null);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -98,6 +100,12 @@ export default Basket = ({ navigation, route }) => {
                 console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
                 //}
             });
+        
+        orderNumDatabase(shopInfo)
+            .once('value', (snapshot) => {
+                const res = 'A-'+snapshot.val().number;
+                setCurrentOrderNumbet(res);
+            })
     }, []);
 
     useEffect(() => {
@@ -213,24 +221,45 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    sendOrder = (jsonOrderList, shopInfo, userPhoneNumber) => {
-        // 1.오너와 함께 공유하는 DB
-        const orderRef = database()
-            .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .push();
+    sendOrder = (jsonOrderList, shopInfo, userPhoneNumber, isMoreThanOne) => {
+        if (isMoreThanOne === false) {
+            // 1.오너와 함께 공유하는 DB
+            const orderRef = database()
+                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
+                .push();
 
-        orderRef
-            .set(jsonOrderList)
-            .then(() => console.log('Updated Shops DB'));
+            orderRef
+                .set(jsonOrderList)
+                .then(() => console.log('Updated Shops DB'));
 
-        // 2.사용자 History
-        const userRef = database()
-            .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
-            .push();
+            // 2.사용자 History
+            const userRef = database()
+                .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
+                .push();
 
-        userRef
-            .set(jsonOrderList)
-            .then(() => console.log('Updated User History'));
+            userRef
+                .set(jsonOrderList)
+                .then(() => console.log('Updated User History'));
+        }
+        else {  //장바구니에 담아서 주문하는 경우에는 묶어서 넣기
+            // 1.오너와 함께 공유하는 DB
+            const orderRef = database()
+                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + currentOrderNumber)
+                .push();
+
+            orderRef
+                .set(jsonOrderList)
+                .then(() => console.log('Updated Shops DB'));
+
+            // 2.사용자 History
+            const userRef = database()
+                .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD') + '/' + currentOrderNumber)
+                .push();
+
+            userRef
+                .set(jsonOrderList)
+                .then(() => console.log('Updated User History'));
+        }
     }
 
     handleOrder = (item) => {
@@ -393,6 +422,18 @@ export default Basket = ({ navigation, route }) => {
         }
     }
 
+    setBasicType = (hotOrIced, item) => {
+        if(hotOrIced !== null) {
+            return hotOrIced;
+        }
+        else {
+            if(item.ice_available === true && item.only_ice === true) {
+                return "ICED";
+            }
+            else return "HOT";
+        }
+    }
+
 
     if (item.sold_out === false) {
 
@@ -402,7 +443,7 @@ export default Basket = ({ navigation, route }) => {
             cost: item.cost,
             count: count,
             cup: inOrOut,
-            type: hotOrIced !== null ? hotOrIced : item.ice_available === true && item.only_ice === true ? "ICED" : "HOT",
+            type: setBasicType(hotOrIced, item),
             whipping: whippingCream,
             shotNum: shotNum,
             selected: selected,
@@ -497,7 +538,7 @@ export default Basket = ({ navigation, route }) => {
                                 <TouchableOpacity
                                     style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
                                     onPress={() => [
-                                        sendOrder(jsonOrderList, shopInfo, userPhoneNumber),
+                                        sendOrder(jsonOrderList, shopInfo, userPhoneNumber, false),
                                         navigation.navigate('Paying', { totalCost: item.cost, shopInfo: shopInfo }),
                                         setModalVisible(!modalVisible)
                                     ]}
@@ -603,7 +644,7 @@ export default Basket = ({ navigation, route }) => {
                                                 }
                                             }
                                             numColumns={3}
-                                            keyExtractor={(item) => item.toString()}
+                                            keyExtractor={(item, index) => item.toString()}
                                             extraData={inOrOut}
                                             scrollEnabled={false}
                                         />
@@ -663,7 +704,7 @@ export default Basket = ({ navigation, route }) => {
                                                         }
                                                     }
                                                     numColumns={3}
-                                                    keyExtractor={(item) => item.toString()}
+                                                    keyExtractor={(item, index) => item.toString()}
                                                     extraData={inOrOut}
                                                     scrollEnabled={false}
                                                     contentContainerStyle={{ alignItems: 'center' }}
@@ -691,7 +732,7 @@ export default Basket = ({ navigation, route }) => {
                                 </>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#020659' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(jsonOrderList, shopInfo, userPhoneNumber), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(jsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>

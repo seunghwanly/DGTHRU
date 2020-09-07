@@ -5,11 +5,12 @@ import {
     View,
     Text
 } from 'react-native';
-import { commonDatabase, getBasketLength } from '../utils/DatabaseRef';
+import { commonDatabase } from '../utils/DatabaseRef';
 
 export default class HeaderRight extends React.Component {
 
     _basketDatabase;
+    _currentOrderNumber;
 
     constructor(props) {
         super(props);
@@ -31,12 +32,17 @@ export default class HeaderRight extends React.Component {
         return count;
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState !== this.state;
+    }
+
     componentDidMount() {
         this._basketDatabase
             .on('value', (snapshot) => {
-                this.setState({
-                    amount: this.countProperties(snapshot.val())
-                });
+                this.setState({ amount : 0 })
+                snapshot.forEach((childSnapShot) => {
+                    this.setState({ amount: this.countProperties(childSnapShot.val()) });
+                })
             });
     }
 

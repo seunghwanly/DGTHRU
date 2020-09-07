@@ -12,3 +12,33 @@ export const getCafeIcon = name => {
             return require('../../image/cafe-icon/두리터.png');
     }
 }
+
+export const getCafeLocation = name => {
+    switch (name) {
+        case "main_outdoor":
+            return '본관 야외 휴게장소';
+        case "singong_1f":
+            return '신공학관 1층';
+        case "hyehwa_roof":
+            return '혜화관 옥상';
+        case "economy_outdoor":
+            return '경영관 야외'
+        case "munhwa_1f":
+            return '학술문화관 1층';
+    }
+}
+
+export const getCafeName = name => {
+    switch (name) {
+        case "main_outdoor":
+            return '가온누리카페';
+        case "singong_1f":
+            return '남산학사카페';
+        case "hyehwa_roof":
+            return '혜화디저트카페';
+        case "economy_outdoor":
+            return '그루터기'
+        case "munhwa_1f":
+            return '두리터';
+    }
+}

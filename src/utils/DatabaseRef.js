@@ -67,3 +67,28 @@ export async function popFavorite(shopInfo, key) {
         await database().ref(favoritePath).remove().then(() => alert('삭제되었습니다 !'));
     }
 }
+//==========================================================주문번호
+export function setOrderNum(shopInfo) {
+    if(auth().currentUser !== null) {
+        //결제하기할때 주문번호를 넣는게 맞는거 같은데
+        //현재 주문번호를 읽어와야지
+        const currentOrderNum = getOrderNum(shopInfo);
+        if(currentOrderNum === 999) {
+            database()
+                .ref('order_num/' + shopInfo)
+                .update({ number: 0 });
+        }
+        else{
+            database()
+                .ref('order_num/' + shopInfo)
+                .update({ number: currentOrderNum + 1 });
+        }
+    }
+}
+
+export function orderNumDatabase(shopInfo) {
+    if (auth().currentUser !== null) {
+        //현재 주문번호를 읽어오자
+        return database().ref('order_num/' + shopInfo);
+    }
+}

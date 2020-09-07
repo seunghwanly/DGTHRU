@@ -9,25 +9,25 @@ import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
-import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef } from '../../utils/DatabaseRef';
+import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-async function handleDeleteOrder(shopInfo, key) {
+async function handleDeleteOrder(shopInfo, currentOrderNumber, key) {
 
-    var orderPath = commonRef(shopInfo) + '/' + key;
+    var orderPath = commonRef(shopInfo) + '/' + currentOrderNumber + '/'+ key;
 
     await database()
         .ref(orderPath)
         .remove();
 }
 
-async function handleDeleteUser(key) {
+async function handleDeleteUser(currentOrderNumber, key) {
 
-    var userPath = userHistoryRef() + '/' + key;
+    var userPath = userHistoryRef() + '/' + currentOrderNumber + '/'+ key;
 
     await database()
         .ref(userPath)
@@ -45,7 +45,8 @@ export default class BasketDetail extends React.Component {
         this.state = {
             orderData: [],
             userData: [],
-            needRefresh : false
+            needRefresh : false,
+            currentOrderNumber : ''
         }
 
         this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);
@@ -63,18 +64,21 @@ export default class BasketDetail extends React.Component {
 
                 snapshot.forEach((childSnapShot) => {
                     //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
+                childSnapShot.forEach((dataChild) => {
 
                     var tempJSON = {
                         "idx": idx,
-                        "key": childSnapShot.key,
-                        "value": childSnapShot.val()
+                        "key": dataChild.key,
+                        "value": dataChild.val()
                     };
 
                     idx++;
-
+    
                     this.setState({
                         orderData: this.state.orderData.concat(tempJSON)
                     })
+                })
+
                     // this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
                     //console.log('\n after : ' + JSON.stringify(this.state.orderData));
                 })
@@ -87,18 +91,27 @@ export default class BasketDetail extends React.Component {
                 var idx = 0;
 
                 snapshot2.forEach((childSnapShot2) => {
-                    var tempJSON2 = {
-                        "idx": idx,
-                        "key": childSnapShot2.key,
-                        "value": childSnapShot2.val()
-                    };
-                    idx++;
-                    this.setState({
-                        userData: this.state.userData.concat(tempJSON2)
-                    });
+                    childSnapShot2.forEach((dataChild) => {
+
+                        var tempJSON2 = {
+                            "idx": idx,
+                            "key": dataChild.key,
+                            "value": dataChild.val()
+                        };
+                        idx++;
+                        this.setState({
+                            userData: this.state.userData.concat(tempJSON2)
+                        });
+                    })
                     
                 })
-            });
+            }),
+
+        orderNumDatabase(this.props.route.params.shopInfo)
+            .once('value', (snapshot) => {
+                console.log()
+                this.setState({ currentOrderNumber : 'A-'+snapshot.val().number });
+            })
 
     }
 
@@ -151,7 +164,7 @@ export default class BasketDetail extends React.Component {
                                                     'DGTHRU 알림', '삭제하시겠습니까 ?',
                                                     [
                                                         {
-                                                            text : '삭제', onPress: () => [handleDeleteOrder(this.props.route.params.shopInfo, item.key) ,handleDeleteUser(this._returnIndexFromOrderData(item.key)) ]
+                                                            text : '삭제', onPress: () => [handleDeleteOrder(this.props.route.params.shopInfo, this.state.currentOrderNumber, item.key) ,handleDeleteUser(this.state.currentOrderNumber, this._returnIndexFromOrderData(item.key)) ]
                                                         },
                                                         {
                                                             text : '취소', onPress: () => console.log('cancel delete'), style:"cancel"
