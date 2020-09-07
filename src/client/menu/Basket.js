@@ -408,7 +408,8 @@ export default Basket = ({ navigation, route }) => {
             selected: selected,
             orderState: 'request',
             shopInfo: shopInfo,
-            offers: offers
+            offers: offers,
+            hadPaid: 'false',
             //옵션추가를 배열로 할지 고민중
         }
         

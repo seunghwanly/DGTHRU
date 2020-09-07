@@ -20,6 +20,7 @@ import moment from 'moment';
 
 var currDate = moment().format('YYYY_MM_DD');
 
+// 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
 async function sendOrderWithOrdernum(orderList, shopInfo, num){
     const orderRef = database()
         .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
@@ -30,12 +31,21 @@ async function sendOrderWithOrdernum(orderList, shopInfo, num){
         .then(() => alert('주문번호 : ' + num + '번'));
 }
 
+// 석운 : 주문번호 업데이트
 async function setOrderNumber(num) {
     if(num === 999){
         database().ref('order_num/').update({number : 1});
     }
     else{
         database().ref('order_num/').update({number : num + 1});
+    }
+}
+
+async function alreadyPaid(ref, list){
+    for(var i = 0; i<list.length;i++){
+
+        console.log('\n list key is     >>>>     ' + list[i].key + '\n');
+        database().ref(ref + '/' + list[i].key).update({hadPaid: 'true'});
     }
 }
 
@@ -70,6 +80,7 @@ export default class PaymentResult extends React.Component {
     componentDidMount() {
         console.log('componentDidMount');
 
+        // 석운 : 주문번호 뽑기
         database().ref('order_num/').on('value', (snapshot) => {
             this.orderNum = snapshot.val().number;
         });
@@ -83,13 +94,15 @@ export default class PaymentResult extends React.Component {
                 var li = [];
                 snapshot.forEach((childSnapShot) => {
                     var tempJSONObject = {
+                        key: childSnapShot.key,
                         name: childSnapShot.val().name,
                         cost: childSnapShot.val().cost,
                         count: childSnapShot.val().count,
                         cup: childSnapShot.val().cup,
                         orderTime: childSnapShot.val().orderTime,
                         shotNum: childSnapShot.val().shotNum,
-                        type: childSnapShot.val().type
+                        type: childSnapShot.val().type,
+                        hadPaid: childSnapShot.val().hadPaid,
                     };
                     if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
                     //주문정보담기
@@ -98,9 +111,11 @@ export default class PaymentResult extends React.Component {
                         data: this.state.data.concat(tempJSONObject),
                     });
                     idx++;
-                    li.push(tempJSONObject);
-                        
-                    
+
+                    // 석운 : 결제를 안했으면 this.state.basket에 넣음
+                    if(tempJSONObject.hadPaid === 'false'){
+                        li.push(tempJSONObject);
+                    }
                 })
                 this.setState({basket:li});
 
@@ -241,8 +256,10 @@ export default class PaymentResult extends React.Component {
                                 marginTop: 5
                             }}
                             onPress={() => [
+                                // 석운 : 사실 홈으로 돌아가기 버튼을 안 눌러도 되게 하고 싶은데 어떻게 해야 할지 모르겠음.....
                                 sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
                                 setOrderNumber(this.orderNum),
+                                alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
                                 this.props.navigation.pop(), 
                                 this.props.navigation.navigate('Shops')
                             ]}
