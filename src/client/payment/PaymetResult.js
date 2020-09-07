@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
-import { commonRef, setOrderNum } from '../../utils/DatabaseRef.js';
+import { commonRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -20,34 +20,43 @@ import moment from 'moment';
 
 var currDate = moment().format('YYYY_MM_DD');
 
-// 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
-async function sendOrderWithOrdernum(orderList, shopInfo, num){
-    const orderRef = database()
-        .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
-        .push();
+// // 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
+// async function sendOrderWithOrdernum(orderList, shopInfo, num) {
+//     const orderRef = database()
+//         .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
+//         .push();
 
-    orderRef
-        .set(orderList)
-        .then(() => alert('주문번호 : ' + num + '번'));
+//     orderRef
+//         .set(orderList)
+//         .then(() => alert('주문번호 : ' + num + '번'));
+// }
+
+// // 석운 : 주문번호 업데이트
+// async function setOrderNumber(num) {
+//     if (num === 999) {
+//         database().ref('order_num/').update({ number: 1 });
+//     }
+//     else {
+//         database().ref('order_num/').update({ number: num + 1 });
+//     }
+// }
+// 승환 : 주문번호 업데이트
+async function setOrderNumberOverLoading(shopInfo, num) {
+    // if (num === 999) {
+    //     database().ref('order_num/' + shopInfo + '/').update({ number: 1 });
+    // }
+    // else {
+    // }
+    await database().ref('order_num/' + shopInfo + '/').update({ number: num + 1 });
 }
 
-// 석운 : 주문번호 업데이트
-async function setOrderNumber(num) {
-    if(num === 999){
-        database().ref('order_num/').update({number : 1});
-    }
-    else{
-        database().ref('order_num/').update({number : num + 1});
-    }
-}
+// async function alreadyPaid(ref, list) {
+//     for (var i = 0; i < list.length; i++) {
 
-async function alreadyPaid(ref, list){
-    for(var i = 0; i<list.length;i++){
-
-        console.log('\n list key is     >>>>     ' + list[i].key + '\n');
-        database().ref(ref + '/' + list[i].key).update({hadPaid: 'true'});
-    }
-}
+//         console.log('\n list key is     >>>>     ' + list[i].key + '\n');
+//         database().ref(ref + '/' + list[i].key).update({ hadPaid: 'true' });
+//     }
+// }
 
 export default class PaymentResult extends React.Component {
 
@@ -70,7 +79,7 @@ export default class PaymentResult extends React.Component {
             },
             data: [],
             basket: [],
-            
+            orderNumber: 0
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -103,6 +112,7 @@ export default class PaymentResult extends React.Component {
                         shotNum: childSnapShot.val().shotNum,
                         type: childSnapShot.val().type,
                         hadPaid: childSnapShot.val().hadPaid,
+                        orderNumber: childSnapShot.val().orderNumber
                     };
                     if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
                     //주문정보담기
@@ -113,11 +123,11 @@ export default class PaymentResult extends React.Component {
                     idx++;
 
                     // 석운 : 결제를 안했으면 this.state.basket에 넣음
-                    if(tempJSONObject.hadPaid === 'false'){
+                    if (tempJSONObject.hadPaid === 'false') {
                         li.push(tempJSONObject);
                     }
                 })
-                this.setState({basket:li});
+                this.setState({ basket: li });
 
 
                 var isFullyReady = 0;
@@ -133,8 +143,14 @@ export default class PaymentResult extends React.Component {
 
                 console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
+        //주문번호 하나 올리기 전에 읽어오기
+        orderNumDatabase(this.props.route.params.shopInfo)
+            .once('value', (snapshot) => {
+                this.setState({ orderNumber: snapshot.val().number });
+                console.log('payment result >> ' + this.state.orderNumber);
+            });
     }
-    
+
 
     componentWillUnmount() {
         console.log('componentWillUnmout');
@@ -153,12 +169,12 @@ export default class PaymentResult extends React.Component {
         return count;
     }
 
-    
+
 
     render() {
         if (this.props.route.params.response.imp_success === 'true') {
-            
-            setOrderNum(this.props.route.params.shopInfo);
+
+            setOrderNumberOverLoading(this.props.route.params.shopInfo, this.state.orderNumber);
 
             if (this.state.isMenuReady === true) {
 
@@ -178,13 +194,13 @@ export default class PaymentResult extends React.Component {
                 );
                 Vibration.vibrate([1000, 1000, 1000], true);
             }
-            
+
             return (
                 <ScrollView>
-                    <View style={{backgroundColor:'white'}}>
-                    <Image
-                        style={[paymentStyles.loadingGif, {alignSelf:'center'}]}
-                        source={require('../../../image/sample.gif')} />
+                    <View style={{ backgroundColor: 'white' }}>
+                        <Image
+                            style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
+                            source={require('../../../image/sample.gif')} />
                     </View>
                     <View style={paymentStyles.background}>
                         <View style={{
@@ -203,7 +219,7 @@ export default class PaymentResult extends React.Component {
                                         <>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-                                                <Text style={{ fonsSize: 14, }}> / A-12</Text>
+                                                <Text style={{ fonsSize: 14, }}> / {item.orderNumber}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
                                                 <Text style={{ color: 'gray', fontSize: 14 }}>{item.type} / </Text>
@@ -259,10 +275,10 @@ export default class PaymentResult extends React.Component {
                             }}
                             onPress={() => [
                                 // 석운 : 사실 홈으로 돌아가기 버튼을 안 눌러도 되게 하고 싶은데 어떻게 해야 할지 모르겠음.....
-                                sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
-                                setOrderNumber(this.orderNum),
-                                alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
-                                this.props.navigation.pop(), 
+                                // sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
+                                // setOrderNumber(this.orderNum),
+                                // alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
+                                this.props.navigation.pop(),
                                 this.props.navigation.navigate('Shops')
                             ]}
                         >
@@ -280,7 +296,7 @@ export default class PaymentResult extends React.Component {
 
                             }}
                         />
-                        
+
                     </View>
                 </ScrollView>
             )

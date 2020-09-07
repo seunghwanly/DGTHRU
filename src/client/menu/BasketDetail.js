@@ -66,17 +66,20 @@ export default class BasketDetail extends React.Component {
                     //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
                 childSnapShot.forEach((dataChild) => {
 
-                    var tempJSON = {
-                        "idx": idx,
-                        "key": dataChild.key,
-                        "value": dataChild.val()
-                    };
+                    if (dataChild.key.charAt(0) !== '-') {
 
-                    idx++;
-    
-                    this.setState({
-                        orderData: this.state.orderData.concat(tempJSON)
-                    })
+                        var tempJSON = {
+                            "idx": idx,
+                            "key": dataChild.key,
+                            "value": dataChild.val()
+                        };
+
+                        idx++;
+
+                        this.setState({
+                            orderData: this.state.orderData.concat(tempJSON)
+                        });
+                    }
                 })
 
                     // this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신

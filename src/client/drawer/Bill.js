@@ -136,7 +136,8 @@ export default class Bill extends React.Component {
                                 type: dataSnapShot.val().type,
                                 shopInfo: dataSnapShot.val().shopInfo,
                                 offers: dataSnapShot.val().offers,
-                                date: subObjectKey
+                                date: subObjectKey,
+                                orderNumber : dataSnapShot.val().orderNumber
                             });
 
                             tempTotalCost += dataSnapShot.val().cost;

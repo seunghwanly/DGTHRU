@@ -451,6 +451,7 @@ export default Basket = ({ navigation, route }) => {
             shopInfo: shopInfo,
             offers: offers,
             hadPaid: 'false',
+            orderNumber: currentOrderNumber,
             //옵션추가를 배열로 할지 고민중
         }
         
@@ -508,6 +509,16 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>상품명 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.name}</Text>
                                 </View>
+                                {
+                                    selected !== null ? 
+                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>세부메뉴 : </Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{selected}</Text>
+                                        </View>
+                                    :
+                                    <></>
+
+                                }
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.cost}</Text>
