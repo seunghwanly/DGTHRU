@@ -8,10 +8,9 @@ import {
     ScrollView,
     RefreshControl,
     Modal,
-    Button,
-    SafeAreaView
 } from 'react-native';
-import { ReceiptModal } from '../../utils/ReceiptModal';
+import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
+import ReceiptGroupModal from '../../utils/ReceiptGroupModal';
 import { BillStyles } from './styles';
 import { Header } from 'react-native-elements';
 import moment from 'moment';
@@ -85,7 +84,7 @@ export default class Bill extends React.Component {
             userHistory: [],
             refreshing: false,
             modalVisible: false,
-            currentItem : {}
+            currentItem: {}
         };
 
         this._userHistoryDB = userHistoryTotalDatabase();
@@ -95,12 +94,13 @@ export default class Bill extends React.Component {
         this._fetchData();
     }
 
-    setModalVisible(visible) {
+    setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     }
 
-    setCurrentItem(item) {
+    setCurrentItem = (item) => {
         this.setState({ currentItem : item });
+        this.setModalVisible(true);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -123,7 +123,7 @@ export default class Bill extends React.Component {
                     // console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
                     // 날짜 : { autokey : { values } }
                     childSnapShot.forEach((dataSnapShot) => {
-                        
+
                         if (dataSnapShot.key.charAt(0) === '-') {
                             // console.log('dataChildSnapShot >> ' + dataSnapShot.val().orderTime );
                             tempJSONArray.push({
@@ -136,7 +136,7 @@ export default class Bill extends React.Component {
                                 type: dataSnapShot.val().type,
                                 shopInfo: dataSnapShot.val().shopInfo,
                                 offers: dataSnapShot.val().offers,
-                                date : subObjectKey
+                                date: subObjectKey
                             });
 
                             tempTotalCost += dataSnapShot.val().cost;
@@ -166,21 +166,21 @@ export default class Bill extends React.Component {
                                 tempGroupTotalCost += groupChild.val().cost;
                             })  //groupChild
                             tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
-                             //to object
-                             var forPush = {
+                            //to object
+                            var forPush = {
                                 orderTime: tempItemOrderTime,
                                 orderNumber: dataSnapShot.key,
                                 group: tempSubJSONArray,
-                                shopInfo : tempItemShopInfo,
-                                totalCost : tempGroupTotalCost,
-                                date : subObjectKey
+                                shopInfo: tempItemShopInfo,
+                                totalCost: tempGroupTotalCost,
+                                date: subObjectKey
                             };
 
                             //push to main array
                             tempJSONArray.push(forPush);
                         }
                     }); //dataSnapShot
-            
+
                     //push to tempJSONArray
                     tempJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
 
@@ -208,12 +208,29 @@ export default class Bill extends React.Component {
     }, []);
 
     render() {
-
-        const userHistory = this.state.userHistory;
-        const { modalVisible } = this.state;
+        const { userHistory, modalVisible, currentItem } = this.state;
 
         return (
             <>
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalVisible}
+                >
+                    <View style={BillStyles.modalBackground}>
+                        <View style={BillStyles.modalSubBackground}>
+                            {
+                                currentItem.group !== undefined ? <ReceiptGroupModal item={currentItem}/> : <ReceiptSingleModal item={currentItem} />
+                            }
+                            <TouchableOpacity
+                                style={{ borderRadius: 10, backgroundColor: 'black', width: '90%', paddingHorizontal: 50, paddingVertical: 10 }}
+                                onPress={() => this.setModalVisible(!modalVisible)}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
                 <Header
                     containerStyle={{ backgroundColor: 'white' }}
                     centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16 }}>e-Receipt / History</Text>)}
@@ -283,76 +300,36 @@ export default class Bill extends React.Component {
                                                         data={items.item}
                                                         renderItem={
                                                             ({ item }) => {
-                                                                if(item.group === undefined) {
-                                                                    return(
-                                                                        <>
-                                                                            <Modal
-                                                                                animationType='slide'
-                                                                                transparent={true}
-                                                                                visible={modalVisible}
-                                                                            >
-                                                                                <View style={BillStyles.modalBackground}>
-                                                                                    <View style={BillStyles.modalSubBackground}>
-                                                                                        <ReceiptModal item={this.state.currentItem} group={false}/>
-                                                                                        <TouchableOpacity
-                                                                                            style={{ borderRadius: 10, backgroundColor: 'black', width: '90%', paddingHorizontal: 50, paddingVertical: 10 }}
-                                                                                            onPress={() => this.setModalVisible(!modalVisible)}
-                                                                                        >
-                                                                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                                                                                        </TouchableOpacity>
-                                                                                    </View>
-                                                                                </View>
-                                                                            </Modal>
-                                                                            <TouchableOpacity
-                                                                                style={{ flexDirection: 'row', marginVertical: 3, alignItems: 'center' }}
-                                                                                onPress={() => [this.setModalVisible(true), this.setCurrentItem(item)]}
-                                                                            >
-                                                                                <GetCafeIcon name={item.shopInfo} />
-                                                                                <Text style={{ width: '25%' }}>{item.name}</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'center' }}>{item.cup}</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
-                                                                            </TouchableOpacity>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                                else {  ///group
-                                                                    return(
-                                                                        <>
-                                                                            <Modal
-                                                                                animationType='slide'
-                                                                                transparent={true}
-                                                                                visible={modalVisible}
-                                                                            >
-                                                                                <View style={BillStyles.modalBackground}>
-                                                                                    <View style={BillStyles.modalSubBackground}>
-                                                                                        <ReceiptModal item={this.state.currentItem} group={true} />
-                                                                                        <TouchableOpacity
-                                                                                            style={{ borderRadius: 10, backgroundColor: 'black', width: '90%', paddingHorizontal: 50, paddingVertical: 10 }}
-                                                                                            onPress={() => this.setModalVisible(!modalVisible)}
-                                                                                        >
-                                                                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                                                                                        </TouchableOpacity>
-                                                                                    </View>
-                                                                                </View>
-                                                                            </Modal>
-                                                                            <TouchableOpacity
-                                                                                style={{ flexDirection: 'row', marginVertical: 3, alignItems: 'center' }}
-                                                                                onPress={() => [this.setModalVisible(true), this.setCurrentItem(item)]}
-                                                                            >
-                                                                                <GetCafeIcon name={item.shopInfo} />
-                                                                                <Text style={{ width: '25%' }}>{item.group[0].name}외 {item.group.length}건</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'center' }}>{(item.group[0].cost).toLocaleString()}원</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
-                                                                                <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
-                                                                            </TouchableOpacity>
-                                                                        </>
-                                                                    );
-                                                                }
-                                                                
+                                                                return (
+                                                                    <>
+                                                                        <TouchableOpacity
+                                                                            style={{ flexDirection: 'row', marginVertical: 3, alignItems: 'center' }}
+                                                                            onPress={() => this.setCurrentItem(item)}
+                                                                        >
+                                                                            <GetCafeIcon name={item.shopInfo} />
+                                                                            {
+                                                                                item.group === undefined ?
+
+                                                                                    <>
+                                                                                        <Text style={{ width: '25%' }}>{item.name}</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{item.cup}</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                    </>
+                                                                                    :
+                                                                                    <>
+                                                                                        <Text style={{ width: '25%' }}>{item.group[0].name}외 {item.group.length}건</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.group[0].cost).toLocaleString()}원</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                    </>
+                                                                            }
+                                                                        </TouchableOpacity>
+                                                                    </>
+                                                                );
                                                             }
                                                         }
-                                                        keyExtractor={(item, index) => item.orderTime}
+                                                        keyExtractor={(item, index) => item.key}
                                                         scrollEnabled={false}
                                                     />
                                                     <View style={{ marginBottom: 10 }} />
