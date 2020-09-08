@@ -51,14 +51,14 @@ export default class RecieptSingleModal extends React.Component {
                     alignItems: 'stretch'
                 }}>
                     <View style={{ flexDirection: 'row', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
-                        <Text style={{ fontWeight: 'bold', width: '35%', textAlign: 'left' }}>주문상품</Text>
-                        <Text style={{ fontWeight: 'bold', width: '35%', textAlign: 'center' }}>유형</Text>
+                        <Text style={{ fontWeight: 'bold', width: '40%', textAlign: 'left' }}>주문상품</Text>
+                        <Text style={{ fontWeight: 'bold', width: '30%', textAlign: 'center' }}>유형</Text>
                         <Text style={{ fontWeight: 'bold', width: '30%', textAlign: 'right' }}>가격</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 14, width: '35%' }}>{this.props.item.name}</Text>
-                        <Text style={{ fontSize: 14, textAlign: 'center', width: '35%' }}>{this.props.item.type}</Text>
+                        <Text style={{ fontSize: 14, width: '40%' }}>{this.props.item.name}</Text>
+                        <Text style={{ fontSize: 14, textAlign: 'center', width: '30%' }}>{this.props.item.type}</Text>
                         <Text style={{ fontSize: 14, width: '30%', textAlign: 'right' }}>{this.props.item.cost.toLocaleString()}원</Text>
                     </View>
 

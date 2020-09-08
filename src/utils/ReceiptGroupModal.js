@@ -57,8 +57,8 @@ export default class ReceiptGroupModal extends React.Component {
                     alignItems: 'stretch'
                 }}>
                     <View style={{ flexDirection: 'row', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
-                        <Text style={{ fontWeight: 'bold', width: '35%', textAlign: 'left' }}>주문상품</Text>
-                        <Text style={{ fontWeight: 'bold', width: '35%', textAlign: 'center' }}>유형</Text>
+                        <Text style={{ fontWeight: 'bold', width: '40%', textAlign: 'left' }}>주문상품</Text>
+                        <Text style={{ fontWeight: 'bold', width: '30%', textAlign: 'center' }}>유형</Text>
                         <Text style={{ fontWeight: 'bold', width: '30%', textAlign: 'right' }}>가격</Text>
                     </View>
                     <FlatList
@@ -66,9 +66,9 @@ export default class ReceiptGroupModal extends React.Component {
                         renderItem={({ item }) => (
                             <>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 14, width: '35%' }}>{item.name}</Text>
-                                    <Text style={{ fontSize: 14, textAlign: 'center', width: '35%' }}>{item.type}</Text>
-                                    <Text style={{ fontSize: 14, width: '30%', textAlign: 'right' }}>{item.cost.toLocaleString()}원</Text>
+                                    <Text style={{ fontSize: 13, width: '40%' }}>{item.name}</Text>
+                                    <Text style={{ fontSize: 13, textAlign: 'center', width: '30%' }}>{item.type}</Text>
+                                    <Text style={{ fontSize: 13, width: '30%', textAlign: 'right' }}>{item.cost.toLocaleString()}원</Text>
                                 </View>
                             </>
                         )}
@@ -76,7 +76,7 @@ export default class ReceiptGroupModal extends React.Component {
                     />
                     <View style={{ flexDirection: 'row', width: '100%', marginTop: 20, borderTopWidth: 1, borderBottomWidth: 1, borderStyle: 'solid', paddingVertical: 10 }}>
                         <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>총 결제금액 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>
+                        <Text style={{ fontSize: 15, fontWeight:'bold', textAlign: 'right', width: '60%' }}>
                             {totalCost.toLocaleString()} 원(VAT포함)
                         </Text>
                     </View>

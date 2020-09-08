@@ -50,9 +50,9 @@ async function alreadyPaid(ref, list) {
 }
 //승환 : 가게별 주문 번호 증가
 async function updateCurrentOrderNumber(shopInfo) {
-    
+
     var res = 0;
-    
+
     await database().ref('order_num/' + shopInfo)
         .once('value', (snapshot) => {
             snapshot.forEach((childSnapShot) => {
@@ -67,12 +67,12 @@ async function updateCurrentOrderNumber(shopInfo) {
         res += 1;
         console.log('> res : ' + res);
         await database().ref('order_num/' + shopInfo).update({ number: res });
-    } 
+    }
 }
 
 async function updateUserHistroy(data, orderNumber) {
 
-    if(data.isSet === false) { 
+    if (data.isSet === false) {
         // 2.사용자 History
         const userRef = database()
             .ref(userHistoryRef())
@@ -81,7 +81,7 @@ async function updateUserHistroy(data, orderNumber) {
         userRef
             .set(data)
             .then(() => console.log('Updated User History'));
-    } 
+    }
     else { // 장바구니로 구매한 경우
         // 2.사용자 History
         const userRef = database()
@@ -92,8 +92,8 @@ async function updateUserHistroy(data, orderNumber) {
             .set(data)
             .then(() => console.log('Updated User History'));
     }
-    
-    
+
+
 }
 
 export default class PaymentResult extends React.Component {
@@ -118,8 +118,8 @@ export default class PaymentResult extends React.Component {
             },
             data: [],
             basket: [],
-            currentOrderNumber:'',
-            isUpdated:false
+            currentOrderNumber: '',
+            isUpdated: false
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -137,13 +137,13 @@ export default class PaymentResult extends React.Component {
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
             const data = JSON.parse(this.props.route.params.itemData); // 넣을 data
-            
+
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
-            if(data.isSet === false) {
+            if (data.isSet === false) {
                 //주문번호 업데이트
                 var key = '';
-                
+
                 database()
                     .ref(commonRef(this.props.route.params.shopInfo))
                     .once('value', (snapshot) => {
@@ -170,17 +170,16 @@ export default class PaymentResult extends React.Component {
 
                                 const forPush = {
                                     ...data,
-                                    orderNumber : res
+                                    orderNumber: res
                                 };
                                 updateUserHistroy(forPush, res);
                             })
                     });
-
             }
             // 2. 장바구니일 경우
             else {
                 //group 버킷 안에 있음 { group : { autokey : {-}, autokey : {-}, ... } } 우리가 바꿔줄거는 group이름을 주문번호로 ! >> 안될듯
-                
+
                 var res = 'A-';
                 // 현재 주문번호 가져오기
                 orderNumDatabase(this.props.route.params.shopInfo)
@@ -189,35 +188,29 @@ export default class PaymentResult extends React.Component {
                         res += snapshot.val().number;
                         // this.setState({ currentOrderNumber : res });
                     }).then(() => {
-
                         //data 수정
-                        for(var i=0; i<data.length; ++i) {
-                            if(data[i].orderNumber === '-') {
+                        for (var i = 0; i < data.length; ++i) {
+                            if (data[i].orderNumber === '-') {
                                 data[i].orderNumber = res;
                             }
                         }
-
                         database()
                             .ref(commonRef(this.props.route.params.shopInfo) + '/group')
-                            .once('value', (snapshot)=>{
+                            .once('value', (snapshot) => {
                                 snapshot.forEach((childData) => {
                                     //주문번호 업데이트 : 공통 DB
                                     database()
                                         .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + childData.key)
                                         .update({ orderNumber: res });
-
                                 });
-
                                 updateUserHistroy(data, res);
                             })
                     })
             }   // else
-            
-           
 
             // 주문번호 업데이트하기
             updateCurrentOrderNumber(this.props.route.params.shopInfo);
-            this.setState({ isUpdated : true });
+            this.setState({ isUpdated: true });
         }
 
         this._isMenuReady();
@@ -239,7 +232,7 @@ export default class PaymentResult extends React.Component {
                 var li = [];
                 snapshot.forEach((childSnapShot) => {
 
-                    if( childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
+                    if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
                         var tempJSONObject = {
                             key: childSnapShot.key,
                             name: childSnapShot.val().name,
@@ -259,7 +252,7 @@ export default class PaymentResult extends React.Component {
                             data: this.state.data.concat(tempJSONObject),
                         });
                         idx++;
-    
+
                         // 석운 : 결제를 안했으면 this.state.basket에 넣음
                         if (tempJSONObject.hadPaid === 'false') {
                             li.push(tempJSONObject);
@@ -286,7 +279,7 @@ export default class PaymentResult extends React.Component {
                                 data: this.state.data.concat(tempJSONObject),
                             });
                             idx++;
-        
+
                             // 석운 : 결제를 안했으면 this.state.basket에 넣음
                             if (tempJSONObject.hadPaid === 'false') {
                                 li.push(tempJSONObject);
@@ -318,7 +311,7 @@ export default class PaymentResult extends React.Component {
     render() {
         console.log('render');
         if (this.props.route.params.response.imp_success === 'true') {
-            
+
             if (this.state.isMenuReady === true) {
 
                 console.log('menu ready !');

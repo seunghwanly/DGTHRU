@@ -148,25 +148,30 @@ export default class Bill extends React.Component {
                             var tempItemOrderTime = '';
                             var tempItemShopInfo = '';
                             var tempGroupTotalCost = 0;
+
                             dataSnapShot.forEach((groupChild) => {
-                                tempItemOrderTime = groupChild.val().orderTime; //key
-                                tempItemShopInfo = groupChild.val().shopInfo; //shopInfo
-                                //push
-                                tempSubJSONArray.push({
-                                    orderTime: groupChild.val().orderTime,
-                                    name: groupChild.val().name,
-                                    cost: groupChild.val().cost,
-                                    count: groupChild.val().count,
-                                    selected: groupChild.val().selected,
-                                    cup: groupChild.val().cup,
-                                    type: groupChild.val().type,
-                                    shopInfo: groupChild.val().shopInfo,
-                                    offers: groupChild.val().offers
-                                });
-                                tempTotalCost += groupChild.val().cost;
-                                tempGroupTotalCost += groupChild.val().cost;
+
+                                groupChild.forEach((item) => {
+                                    tempItemOrderTime = item.val().orderTime; //key
+                                    tempItemShopInfo = item.val().shopInfo; //shopInfo
+                                    //push
+                                    tempSubJSONArray.push({
+                                        orderTime: item.val().orderTime,
+                                        name: item.val().name,
+                                        cost: item.val().cost,
+                                        count: item.val().count,
+                                        selected: item.val().selected,
+                                        cup: item.val().cup,
+                                        type: item.val().type,
+                                        shopInfo: item.val().shopInfo,
+                                        offers: item.val().offers
+                                    });
+                                    tempTotalCost += item.val().cost;
+                                    tempGroupTotalCost += item.val().cost;
+
+                                })  //item
+                                tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
                             })  //groupChild
-                            tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
                             //to object
                             var forPush = {
                                 orderTime: tempItemOrderTime,
@@ -312,17 +317,17 @@ export default class Bill extends React.Component {
                                                                                 item.group === undefined ?
 
                                                                                     <>
-                                                                                        <Text style={{ width: '25%' }}>{item.name}</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{item.cup}</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '25%' }}>{item.name}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.cup}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                                     :
                                                                                     <>
-                                                                                        <Text style={{ width: '25%' }}>{item.group[0].name}외 {item.group.length}건</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                             }
                                                                         </TouchableOpacity>
