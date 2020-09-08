@@ -9,48 +9,37 @@ import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //Firebase Ref
-import { commonDatabase, userHistoryDatabase, commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef';
+import { commonDatabase, commonRef } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-async function handleDeleteOrder(shopInfo, currentOrderNumber, key) {
+async function handleDeleteOrder(shopInfo, orderKey) {
 
-    var orderPath = commonRef(shopInfo) + '/' + currentOrderNumber + '/'+ key;
+    var orderPath = commonRef(shopInfo) + '/' + 'group'+ '/' + orderKey;
 
     await database()
         .ref(orderPath)
         .remove();
-}
 
-async function handleDeleteUser(currentOrderNumber, key) {
-
-    var userPath = userHistoryRef() + '/' + currentOrderNumber + '/'+ key;
-
-    await database()
-        .ref(userPath)
-        .remove();
 }
 
 export default class BasketDetail extends React.Component {
 
     _firebaseCommonDatabase;
-    _firebaseUserDatabase;
 
     constructor(props) {
         super(props);
 
         this.state = {
             orderData: [],
-            userData: [],
-            needRefresh : false,
-            currentOrderNumber : ''
+            propsData: [],
+            needRefresh: false,
         }
 
         this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);
-        this._firebaseUserDatabase = userHistoryDatabase();
     };
 
     componentDidMount() {
@@ -58,65 +47,30 @@ export default class BasketDetail extends React.Component {
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
 
-                this.setState({ orderData: [] })   //상태가 바뀌어야 화면이 reload되는데 이게 지금은 최선임
+                this.setState({ orderData: [], propsData: [] })   //상태가 바뀌어야 화면이 reload되는데 이게 지금은 최선임
 
                 var idx = 0;    // loop
 
                 snapshot.forEach((childSnapShot) => {
                     //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
-                childSnapShot.forEach((dataChild) => {
+                    if (childSnapShot.key.charAt(0) !== '-') {
+                        childSnapShot.forEach((dataChild) => {
+                            var tempJSON = {
+                                "idx": idx,
+                                "key": dataChild.key,
+                                "value": dataChild.val()
+                            };
 
-                    if (dataChild.key.charAt(0) !== '-') {
+                            idx++;
 
-                        var tempJSON = {
-                            "idx": idx,
-                            "key": dataChild.key,
-                            "value": dataChild.val()
-                        };
-
-                        idx++;
-
-                        this.setState({
-                            orderData: this.state.orderData.concat(tempJSON)
-                        });
+                            this.setState({
+                                orderData: this.state.orderData.concat(tempJSON),
+                                propsData: this.state.propsData.concat(dataChild.val())
+                            });
+                        })
                     }
                 })
-
-                    // this.props.navigation.setParams({ amount: this.state.orderData.length }); //>>redux 를 통해서 header와 screen 통신
-                    //console.log('\n after : ' + JSON.stringify(this.state.orderData));
-                })
-            }),
-
-        this._firebaseUserDatabase
-            .on('value', (snapshot2) => {
-                this.setState({ userData: [] })
-
-                var idx = 0;
-
-                snapshot2.forEach((childSnapShot2) => {
-                    childSnapShot2.forEach((dataChild) => {
-
-                        var tempJSON2 = {
-                            "idx": idx,
-                            "key": dataChild.key,
-                            "value": dataChild.val()
-                        };
-                        idx++;
-                        this.setState({
-                            userData: this.state.userData.concat(tempJSON2)
-                        });
-                    })
-                    
-                })
-            }),
-
-        orderNumDatabase(this.props.route.params.shopInfo)
-            .once('value', (snapshot) => {
-                console.log('[ BasketDetail ] >> : ' + 'A-'+snapshot.val().number);
-                const res = 'A-'+snapshot.val().number;
-                this.setState({ currentOrderNumber : res });
             })
-
     }
 
     shouldComponentUpdate(nextState) {
@@ -125,26 +79,17 @@ export default class BasketDetail extends React.Component {
 
     componentWillUnmount() {
         this._firebaseCommonDatabase.off();
-        this._firebaseUserDatabase.off();
-    }
-
-    _returnIndexFromOrderData = (key) => {
-
-        for (var k in this.state.orderData) {
-            if (key === this.state.orderData[k].key) {
-                // console.log('_returnIndexFromOrderData >>>>>>\t' + this.state.userData[this.state.orderData[k].idx].key);
-                return this.state.userData[this.state.orderData[k].idx].key;
-            }
-        }
     }
 
     render() {
+
+        console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.propsData));
 
         var totalCost = 0;
         this.state.orderData.map(item => {
             totalCost += Number(item.value.cost) * Number(item.value.count);
         })
-        
+
         if (this.state.orderData.length > 0) {
             return (
                 <View style={basketStyles.background}>
@@ -159,7 +104,7 @@ export default class BasketDetail extends React.Component {
                                             <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.selected !== undefined ? ', ' + item.value.selected : ' '}</Text>
                                         </View>
                                         <View style={basketStyles.detailItemInfoWrapper}>
-                                            <Text style={{fontSize: 12}}>x{item.value.count}{'\t' + Number(item.value.cost) * Number(item.value.count)}원</Text>
+                                            <Text style={{ fontSize: 12 }}>x{item.value.count}{'\t' + Number(item.value.cost) * Number(item.value.count)}원</Text>
                                         </View>
                                         <TouchableOpacity
                                             style={basketStyles.detailImgButton}
@@ -168,10 +113,11 @@ export default class BasketDetail extends React.Component {
                                                     'DGTHRU 알림', '삭제하시겠습니까 ?',
                                                     [
                                                         {
-                                                            text : '삭제', onPress: () => [handleDeleteOrder(this.props.route.params.shopInfo, this.state.currentOrderNumber, item.key) ,handleDeleteUser(this.state.currentOrderNumber, this._returnIndexFromOrderData(item.key)) ]
+                                                            text: '삭제',
+                                                            onPress: () => handleDeleteOrder(this.props.route.params.shopInfo, item.key)
                                                         },
                                                         {
-                                                            text : '취소', onPress: () => console.log('cancel delete'), style:"cancel"
+                                                            text: '취소', onPress: () => console.log('cancel delete'), style: "cancel"
                                                         }
                                                     ]
                                                 )
@@ -189,7 +135,7 @@ export default class BasketDetail extends React.Component {
                         }
                         <View style={basketStyles.detailTotalInfoWrapper}>
                             <Text style={[basketStyles.smallRadiusText, { alignSelf: 'flex-start', width: '70%' }]}>TOTAL</Text>
-                            <Text style={[basketStyles.smallRadiusText, { alignSelf: 'flex-end', textAlign:'right' }]}>{totalCost.toLocaleString()}원</Text>
+                            <Text style={[basketStyles.smallRadiusText, { alignSelf: 'flex-end', textAlign: 'right' }]}>{totalCost.toLocaleString()}원</Text>
                         </View>
                     </View>
                     <TouchableOpacity
@@ -201,7 +147,8 @@ export default class BasketDetail extends React.Component {
                                     {
                                         totalCost: totalCost,
                                         quantity: this.state.orderData.length,
-                                        shopInfo: this.props.route.params.shopInfo
+                                        shopInfo: this.props.route.params.shopInfo,
+                                        itemData: JSON.stringify(this.state.propsData)
                                     }
                                 )
                             ]}

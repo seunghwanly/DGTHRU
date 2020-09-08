@@ -320,7 +320,7 @@ export default class Bill extends React.Component {
                                                                                     :
                                                                                     <>
                                                                                         <Text style={{ width: '25%' }}>{item.group[0].name}외 {item.group.length}건</Text>
-                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.group[0].cost).toLocaleString()}원</Text>
+                                                                                        <Text style={{ width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
                                                                                         <Text style={{ width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
                                                                                         <Text style={{ width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>

@@ -38,7 +38,7 @@ export default Basket = ({ navigation, route }) => {
     const { type } = route.params;
 
     const dataInOrOut = [
-        "개인컵", "매장용", "일회용"
+        "개인용", "매장용", "일회용"
     ];
 
     const dataIceHot = [
@@ -59,59 +59,8 @@ export default Basket = ({ navigation, route }) => {
     const [hotOrIced, setHotOrIced] = useState(null);
     const [whippingCream, setWhippingCream] = useState(null);
     const [shotNum, setShotNum] = useState(2);
-    const [totalCost, setTotalCost] = useState(0);
     const [offers, setOffers] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    const [result, setResult] = useState([]);
-    const [currentOrderNumber, setCurrentOrderNumbet] = useState(null);
-
-    useFocusEffect(
-        React.useCallback(() => {
-            setTotalCost(0);
-            setResult(null);
-        }, [])
-    );
-
-    useEffect(() => {
-        //TODO : basket에서 장바구니로 갔다가 지우고 돌아와서 바로주문하면 totalCost가 남아있음
-        var tempTotalCost = 0;
-
-        console.log('[Basket] init totalcost >>> ' + totalCost);
-
-        database()
-            .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            .on('value', (snapshot) => {
-                // console.log('[Basket] length >>' + countProperties(snapshot.val()));
-
-                snapshot.forEach((childSnapShot) => {
-
-                    // console.log('[Basket] childSnapShot >> ' + childSnapShot.val());
-
-                    tempTotalCost += childSnapShot.val().cost;
-
-                    // console.log('prevCost >> ' + prevCost);
-
-                    // console.log('[Basket] in loop : totalCost >> ' + totalCost);
-                    // console.log('[Basket] in loop : temptotalCost >> ' + tempTotalCost);
-                })
-                setTotalCost(() => tempTotalCost);
-                // return () => { setTotalCost(tempTotalCost);
-                console.log('[Basket] out totalCost >> ' + totalCost);
-                console.log('[Basket] out loop : temptotalCost >> ' + tempTotalCost);
-                //}
-            });
-        
-        orderNumDatabase(shopInfo)
-            .once('value', (snapshot) => {
-                console.log('[Bakset] >> ' + shopInfo + '\t' + snapshot.val().number);
-                const res = 'A-'+snapshot.val().number;
-                setCurrentOrderNumbet(res);
-            })
-    }, []);
-
-    useEffect(() => {
-        console.log('useEffect >> ' + JSON.stringify(result));
-    }, [result]);
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
@@ -232,213 +181,190 @@ export default Basket = ({ navigation, route }) => {
             orderRef
                 .set(jsonOrderList)
                 .then(() => console.log('Updated Shops DB'));
-
-            // 2.사용자 History
-            const userRef = database()
-                .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD'))
-                .push();
-
-            userRef
-                .set(jsonOrderList)
-                .then(() => console.log('Updated User History'));
         }
         else {  //장바구니에 담아서 주문하는 경우에는 묶어서 넣기
             // 1.오너와 함께 공유하는 DB
             const orderRef = database()
-                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + currentOrderNumber)
+                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + 'group')
                 .push();
 
             orderRef
                 .set(jsonOrderList)
                 .then(() => console.log('Updated Shops DB'));
-
-            // 2.사용자 History
-            const userRef = database()
-                .ref('user/user_history/' + userPhoneNumber.uid + '/' + moment().format('YYYY_MM_DD') + '/' + currentOrderNumber)
-                .push();
-
-            userRef
-                .set(jsonOrderList)
-                .then(() => console.log('Updated User History'));
         }
     }
 
     handleOrder = (item) => {
-        // HOT / ICED 기본적으로 설정해줌
-        if (item.ice_available === false && item.only_ice === false)
-            setHotOrIced('HOT');
-        if (item.ice_available === true && item.only_ice === true)
-            setHotOrIced('ICED');
-        //TODO: 가게 정보 넣기
+        // FOR DRINKS
+        if (item.option_available !== undefined) {
+            // HOT / ICED 기본적으로 설정해줌
+            if (item.ice_available === false && item.only_ice === false)
+                setHotOrIced('HOT');
+            if (item.ice_available === true && item.only_ice === true)
+                setHotOrIced('ICED');
+            //TODO: 가게 정보 넣기
 
-        //sold_out >> false 인 것 만
-        if (item.sold_out !== true) {
+            //sold_out >> false 인 것 만
+            if (item.sold_out !== true) {
 
-            //count 확인  + 매장용/일회용 선택
-            if (count >= 1 && inOrOut != null) {
-                //ice 가능과 hotOrIced 선택되있는지 확인
-                /*
-                    [ ice_available,    hotOrIced,  only_ice ]
-                    1. ice O ,  null,   T    >> pass : only ice
-                    2. ice X ,  null,   T    >> error : not exist
-                    3. ice O ,  null,   F    >> error : select menu (both avail)
-                    4. ice X ,  null,   F    >> pass : only hot
-                    5. ice O ,  HOT,    T    >> error : only ice avail
-                    6. ice O ,  HOT,    F    >> pass : hot avail
-                    7. ice X ,  HOT,    T    >> error : not exist
-                    8. ice X ,  HOT,    F    >> pass : only hot
-                    9. ice O ,  ICED,   T    >> pass : only ice
-                    10. ice O,  ICED,   F    >> pass : select menu (both avail)
-                    11. ice X,  ICED,   T    >> error : not exist
-                    12. ice X,  ICED,   F    >> error : only hot
-                */
-                if (hotOrIced === null) { // 1,4
-                    if (
-                        (item.ice_available === true && item.only_ice === true)
-                        ||
-                        (item.ice_available === false && item.only_ice === false)
-                    ) {
-                        // only HOT and ICED possible
-                        //sub_menu 확인
-                        if (item.hasOwnProperty('sub_menu')) {
-                            if (selected !== null) { //selected menu detail
+                //count 확인  + 매장용/일회용 선택
+                if (count >= 1 && inOrOut != null) {
+                    //ice 가능과 hotOrIced 선택되있는지 확인
+                    /*
+                        [ ice_available,    hotOrIced,  only_ice ]
+                        1. ice O ,  null,   T    >> pass : only ice
+                        2. ice X ,  null,   T    >> error : not exist
+                        3. ice O ,  null,   F    >> error : select menu (both avail)
+                        4. ice X ,  null,   F    >> pass : only hot
+                        5. ice O ,  HOT,    T    >> error : only ice avail
+                        6. ice O ,  HOT,    F    >> pass : hot avail
+                        7. ice X ,  HOT,    T    >> error : not exist
+                        8. ice X ,  HOT,    F    >> pass : only hot
+                        9. ice O ,  ICED,   T    >> pass : only ice
+                        10. ice O,  ICED,   F    >> pass : select menu (both avail)
+                        11. ice X,  ICED,   T    >> error : not exist
+                        12. ice X,  ICED,   F    >> error : only hot
+                    */
+                    if (hotOrIced === null) { // 1,4
+                        if (
+                            (item.ice_available === true && item.only_ice === true)
+                            ||
+                            (item.ice_available === false && item.only_ice === false)
+                        ) {
+                            // only HOT and ICED possible
+                            //sub_menu 확인
+                            if (item.hasOwnProperty('sub_menu')) {
+                                if (selected !== null) { //selected menu detail
+                                    if (item.hasOwnProperty('option_available')) {
+                                        // 선택한 옵션을 가져와서 DB에 넣어야함
+                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                        return true;
+                                    }
+                                    else {  //none option
+                                        return true;
+                                    }
+                                }
+                                else { //selected nothing
+                                    alert('모두 선택해주세요');
+                                    return false;
+                                }
+                            }   //if
+                            else {  //sub_menu none >> 단일메뉴임
                                 if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    setResult((jsonOrderList));
                                     return true;
                                 }
                                 else {  //none option
-                                    setResult((jsonOrderList));
                                     return true;
                                 }
-                            }
-                            else { //selected nothing
-                                alert('모두 선택해주세요');
-                                return false;
-                            }
+                            }   //else
                         }   //if
-                        else {  //sub_menu none >> 단일메뉴임
-                            if (item.hasOwnProperty('option_available')) {
-                                // 선택한 옵션을 가져와서 DB에 넣어야함
-                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                            else {  //none option
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                        }   //else
-                    }   //if
-                    else {  // 2, 3
-                        alert('모두 선택해주세요');
-                        return false;
-                    }
-                }    //1,2,3,4
-                else {
-                    if (hotOrIced === 'HOT' && item.only_ice === false) {  //6,8
-                        //sub_menu 확인
-                        if (item.hasOwnProperty('sub_menu')) {
-                            if (selected !== null) { //selected menu detail
+                        else {  // 2, 3
+                            alert('모두 선택해주세요');
+                            return false;
+                        }
+                    }    //1,2,3,4
+                    else {
+                        if (hotOrIced === 'HOT' && item.only_ice === false) {  //6,8
+                            //sub_menu 확인
+                            if (item.hasOwnProperty('sub_menu')) {
+                                if (selected !== null) { //selected menu detail
+                                    if (item.hasOwnProperty('option_available')) {
+                                        // 선택한 옵션을 가져와서 DB에 넣어야함
+                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                        return true;
+                                    }
+                                    else {  //none option
+                                        return true;
+                                    }
+                                }
+                                else { //selected nothing
+                                    alert('모두 선택해주세요');
+                                    return false;
+                                }
+                            }   //if
+                            else {  //sub_menu none >> 단일메뉴임
                                 if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    setResult((jsonOrderList));
                                     return true;
                                 }
                                 else {  //none option
-                                    setResult((jsonOrderList));
                                     return true;
                                 }
-                            }
-                            else { //selected nothing
-                                alert('모두 선택해주세요');
-                                return false;
-                            }
-                        }   //if
-                        else {  //sub_menu none >> 단일메뉴임
-                            if (item.hasOwnProperty('option_available')) {
-                                // 선택한 옵션을 가져와서 DB에 넣어야함
-                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                            else {  //none option
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                        }   //else
-                    }
+                            }   //else
+                        }
 
-                    else if (hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
-                        //sub_menu 확인
-                        if (item.hasOwnProperty('sub_menu')) {
-                            if (selected !== null) { //selected menu detail
+                        else if (hotOrIced === 'ICED' && item.ice_available === true) {    //9,10
+                            //sub_menu 확인
+                            if (item.hasOwnProperty('sub_menu')) {
+                                if (selected !== null) { //selected menu detail
+                                    if (item.hasOwnProperty('option_available')) {
+                                        // 선택한 옵션을 가져와서 DB에 넣어야함
+                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
+                                        return true;
+                                    }
+                                    else {  //none option
+                                        return true;
+                                    }
+                                }
+                                else { //selected nothing
+                                    alert('모두 선택해주세요');
+                                    return false;
+                                }
+                            }   //if
+
+                            else {  //sub_menu none >> 단일메뉴임
                                 if (item.hasOwnProperty('option_available')) {
                                     // 선택한 옵션을 가져와서 DB에 넣어야함
                                     // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    var temp = [
-                                        { data: jsonOrderList }
-                                    ]
-                                    setResult(temp);
                                     return true;
                                 }
                                 else {  //none option
-                                    setResult((jsonOrderList));
                                     return true;
                                 }
-                            }
-                            else { //selected nothing
-                                alert('모두 선택해주세요');
-                                return false;
-                            }
-                        }   //if
+                            }   //else
+                        }
 
-                        else {  //sub_menu none >> 단일메뉴임
-                            if (item.hasOwnProperty('option_available')) {
-                                // 선택한 옵션을 가져와서 DB에 넣어야함
-                                // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                            else {  //none option
-                                setResult((jsonOrderList));
-                                return true;
-                            }
-                        }   //else
-                    }
+                        else {   //5,7,11,12
+                            alert('선택항목을 확인해주세요 !');
+                            return false;
+                        }
+                    }    //5,6,7,8,9,10,11,12
 
-                    else {   //5,7,11,12
-                        alert('선택항목을 확인해주세요 !');
-                        return false;
-                    }
-                }    //5,6,7,8,9,10,11,12
-
+                }
+                else { //매장용/일회용 선택안한 경우
+                    alert('컵을 선택해주세요 !');
+                    return false;
+                }
             }
-            else { //매장용/일회용 선택안한 경우
-                alert('컵을 선택해주세요 !');
-                return false;
+        }   //if
+        else {
+            if(item.sold_out !== true) {
+                return true;
             }
         }
     }
 
     setBasicType = (hotOrIced, item) => {
-        if(hotOrIced !== null) {
+        if (hotOrIced !== null) {
             return hotOrIced;
         }
         else {
-            if(item.ice_available === true && item.only_ice === true) {
+            if (item.ice_available === true && item.only_ice === true) 
                 return "ICED";
-            }
-            else return "HOT";
+            else if (item.ice_available === false && item.only_ice === false)
+                return "HOT";
+                
+            else return null;
         }
     }
 
 
     if (item.sold_out === false) {
 
-        var jsonOrderList = {
+        var singleJsonOrderList = {
             name: item.name,
             orderTime: moment().format('HH:mm:ss'),
             cost: item.cost,
@@ -452,10 +378,31 @@ export default Basket = ({ navigation, route }) => {
             shopInfo: shopInfo,
             offers: offers,
             hadPaid: 'false',
-            orderNumber: currentOrderNumber,
+            orderNumber: '-',
+            isCanceled : false,
+            isSet: false
             //옵션추가를 배열로 할지 고민중
-        }
-        
+        };
+        var groupJsonOrderList = {
+            name: item.name,
+            orderTime: moment().format('HH:mm:ss'),
+            cost: item.cost,
+            count: count,
+            cup: inOrOut,
+            type: setBasicType(hotOrIced, item),
+            whipping: whippingCream,
+            shotNum: shotNum,
+            selected: selected,
+            orderState: 'request',
+            shopInfo: shopInfo,
+            offers: offers,
+            hadPaid: 'false',
+            orderNumber: '-',
+            isCanceled : false,
+            isSet: true
+            //옵션추가를 배열로 할지 고민중
+        };
+
         return (
             <>
                 <Modal
@@ -484,22 +431,22 @@ export default Basket = ({ navigation, route }) => {
                             shadowRadius: 3.84,
                             elevation: 5
                         }}>
-                            <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight:'800' }]}>주문내역확인</Text>
-                            <Image 
+                            <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight: '800' }]}>주문내역확인</Text>
+                            <Image
                                 source={getCafeIcon(shopInfo)}
                                 resizeMode='cover'
                                 style={{
-                                    width:100, 
-                                    height:100, 
-                                    alignSelf:'flex-end', 
-                                    position:'absolute', 
-                                    opacity:0.3,
-                                    right:10,
-                                    top:10,
-                                    transform: [{rotate:'330deg'}]
+                                    width: 100,
+                                    height: 100,
+                                    alignSelf: 'flex-end',
+                                    position: 'absolute',
+                                    opacity: 0.3,
+                                    right: 10,
+                                    top: 10,
+                                    transform: [{ rotate: '330deg' }]
                                 }}
                             />
-                            
+
                             <View style={{
                                 marginVertical: 50,
                                 padding: 10,
@@ -511,13 +458,13 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.name}</Text>
                                 </View>
                                 {
-                                    selected !== null ? 
+                                    selected !== null ?
                                         <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                             <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>세부메뉴 : </Text>
                                             <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{selected}</Text>
                                         </View>
-                                    :
-                                    <></>
+                                        :
+                                        <></>
 
                                 }
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
@@ -532,15 +479,20 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{inOrOut}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
-                                </View>
+                                {
+                                    hotOrIced !== null ?
+                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
+                                        </View>
+                                        :
+                                        <></>
+                                }
                                 {
                                     offers.length > 0 ?
                                         <View style={{ flexDirection: 'column', width: '100%', marginVertical: 2 }}>
                                             <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'left', width: '100%', marginTop:15, color:'dimgray' }}>{offers}</Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'left', width: '100%', marginTop: 15, color: 'dimgray' }}>{offers}</Text>
                                         </View>
                                         :
                                         <></>
@@ -550,8 +502,8 @@ export default Basket = ({ navigation, route }) => {
                                 <TouchableOpacity
                                     style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
                                     onPress={() => [
-                                        sendOrder(jsonOrderList, shopInfo, userPhoneNumber, false),
-                                        navigation.navigate('Paying', { totalCost: item.cost, shopInfo: shopInfo }),
+                                        sendOrder(singleJsonOrderList, shopInfo, userPhoneNumber, false),
+                                        navigation.navigate('Paying', { totalCost: item.cost, shopInfo: shopInfo, itemData:JSON.stringify(singleJsonOrderList) }),
                                         setModalVisible(!modalVisible)
                                     ]}
                                 >
@@ -744,7 +696,7 @@ export default Basket = ({ navigation, route }) => {
                                 </>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#020659' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(jsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(groupJsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>

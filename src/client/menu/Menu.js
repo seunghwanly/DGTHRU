@@ -151,7 +151,8 @@ export default class HyehwaDessert extends React.Component {
                                         onPress={() => this.props.navigation.navigate('MenuDetail', {
                                             items: item.menu,
                                             shopInfo: this.props.route.params.shopInfo,
-                                            type: 'bakery'
+                                            type: 'bakery',
+                                            categoryName : item.category_name
                                         })}
                                     >
                                         <Text style={menuStyles.radiusText}>

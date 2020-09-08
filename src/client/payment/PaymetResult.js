@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
-import { commonRef } from '../../utils/DatabaseRef.js';
+import auth from '@react-native-firebase/auth';
+import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
@@ -66,14 +67,39 @@ async function updateCurrentOrderNumber(shopInfo) {
         res += 1;
         console.log('> res : ' + res);
         await database().ref('order_num/' + shopInfo).update({ number: res });
+    } 
+}
+
+async function updateUserHistroy(data, orderNumber) {
+
+    if(data.isSet === false) { 
+        // 2.사용자 History
+        const userRef = database()
+            .ref(userHistoryRef())
+            .push();
+
+        userRef
+            .set(data)
+            .then(() => console.log('Updated User History'));
+    } 
+    else { // 장바구니로 구매한 경우
+        // 2.사용자 History
+        const userRef = database()
+            .ref(userHistoryRef() + '/' + orderNumber)
+            .push();
+
+        userRef
+            .set(data)
+            .then(() => console.log('Updated User History'));
     }
-        
+    
     
 }
 
 export default class PaymentResult extends React.Component {
 
     _firebaseRef;
+    _currentOrderRef;
     orderNum;
 
     constructor(props) {
@@ -92,56 +118,183 @@ export default class PaymentResult extends React.Component {
             },
             data: [],
             basket: [],
+            currentOrderNumber:'',
+            isUpdated:false
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
+        this._currentOrderRef = orderNumDatabase(this.props.route.params.shopInfo);
         this.state.timeArray.request = this.props.route.params.requestTime;
-
-        if (this.props.route.params.response.imp_success === 'true') {
-            updateCurrentOrderNumber(this.props.route.params.shopInfo);
-        }
     }
 
     componentDidMount() {
         console.log('componentDidMount');
-
         // 석운 : 주문번호 뽑기
-        database().ref('/order_num/').on('value', (snapshot) => {
-            this.orderNum = snapshot.val().number;
-        });
+        // database().ref('/order_num/').on('value', (snapshot) => {
+        //     this.orderNum = snapshot.val().number;
+        // });
 
+        if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
+
+            const data = JSON.parse(this.props.route.params.itemData); // 넣을 data
+            
+            // 디비에 주문번호 업데이트하기
+            // 1. 단일메뉴일 경우
+            if(data.isSet === false) {
+                //주문번호 업데이트
+                var key = '';
+                
+                database()
+                    .ref(commonRef(this.props.route.params.shopInfo))
+                    .once('value', (snapshot) => {
+                        snapshot.forEach((child) => {
+                            if (child.key.charAt(0) === '-')
+                                key = child.key;  //key updated
+                        });
+                    }).then(() => {
+                        console.log("... " + key);
+
+                        var res = 'A-';
+                        // 현재 주문번호 가져오기
+                        orderNumDatabase(this.props.route.params.shopInfo)
+                            .once('value', (snapshot) => {
+                                //console.log('[Bakset] >> ' + shopInfo + '\t' + snapshot.val().number);
+                                res += snapshot.val().number;
+                                // this.setState({ currentOrderNumber : res });
+                            }).then(() => {
+                                console.log('>  ' + res);
+
+                                database()
+                                    .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
+                                    .update({ orderNumber: res });
+
+                                const forPush = {
+                                    ...data,
+                                    orderNumber : res
+                                };
+                                updateUserHistroy(forPush, res);
+                            })
+                    });
+
+            }
+            // 2. 장바구니일 경우
+            else {
+                //group 버킷 안에 있음 { group : { autokey : {-}, autokey : {-}, ... } } 우리가 바꿔줄거는 group이름을 주문번호로 ! >> 안될듯
+                
+                var res = 'A-';
+                // 현재 주문번호 가져오기
+                orderNumDatabase(this.props.route.params.shopInfo)
+                    .once('value', (snapshot) => {
+                        //console.log('[Bakset] >> ' + shopInfo + '\t' + snapshot.val().number);
+                        res += snapshot.val().number;
+                        // this.setState({ currentOrderNumber : res });
+                    }).then(() => {
+
+                        //data 수정
+                        for(var i=0; i<data.length; ++i) {
+                            if(data[i].orderNumber === '-') {
+                                data[i].orderNumber = res;
+                            }
+                        }
+
+                        database()
+                            .ref(commonRef(this.props.route.params.shopInfo) + '/group')
+                            .once('value', (snapshot)=>{
+                                snapshot.forEach((childData) => {
+                                    //주문번호 업데이트 : 공통 DB
+                                    database()
+                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + childData.key)
+                                        .update({ orderNumber: res });
+
+                                });
+
+                                updateUserHistroy(data, res);
+                            })
+                    })
+            }   // else
+            
+           
+
+            // 주문번호 업데이트하기
+            updateCurrentOrderNumber(this.props.route.params.shopInfo);
+            this.setState({ isUpdated : true });
+        }
+
+        this._isMenuReady();
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmout');
+        this._firebaseRef.off();
+        this._currentOrderRef.off();
+        // this.setState({ isMenuReady : false });
+    }
+
+    _isMenuReady() {
         this._firebaseRef
             .on('value', (snapshot) => {
-
                 //init
                 this.setState({ orderState: [], isMenuReady: false, data: [] });
                 var idx = 0;
                 var li = [];
                 snapshot.forEach((childSnapShot) => {
-                    var tempJSONObject = {
-                        key: childSnapShot.key,
-                        name: childSnapShot.val().name,
-                        cost: childSnapShot.val().cost,
-                        count: childSnapShot.val().count,
-                        cup: childSnapShot.val().cup,
-                        orderTime: childSnapShot.val().orderTime,
-                        shotNum: childSnapShot.val().shotNum,
-                        type: childSnapShot.val().type,
-                        hadPaid: childSnapShot.val().hadPaid,
-                        orderNumber: childSnapShot.val().orderNumber
-                    };
-                    if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
-                    //주문정보담기
-                    this.setState({
-                        orderState: this.state.orderState.concat(childSnapShot.val().orderState),
-                        data: this.state.data.concat(tempJSONObject),
-                    });
-                    idx++;
 
-                    // 석운 : 결제를 안했으면 this.state.basket에 넣음
-                    if (tempJSONObject.hadPaid === 'false') {
-                        li.push(tempJSONObject);
+                    if( childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
+                        var tempJSONObject = {
+                            key: childSnapShot.key,
+                            name: childSnapShot.val().name,
+                            cost: childSnapShot.val().cost,
+                            count: childSnapShot.val().count,
+                            cup: childSnapShot.val().cup,
+                            orderTime: childSnapShot.val().orderTime,
+                            shotNum: childSnapShot.val().shotNum,
+                            type: childSnapShot.val().type,
+                            hadPaid: childSnapShot.val().hadPaid,
+                            orderNumber: childSnapShot.val().orderNumber
+                        };
+                        if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
+                        //주문정보담기
+                        this.setState({
+                            orderState: this.state.orderState.concat(childSnapShot.val().orderState),
+                            data: this.state.data.concat(tempJSONObject),
+                        });
+                        idx++;
+    
+                        // 석운 : 결제를 안했으면 this.state.basket에 넣음
+                        if (tempJSONObject.hadPaid === 'false') {
+                            li.push(tempJSONObject);
+                        }
                     }
+                    else {  // 장바구니 주문 건
+                        childSnapShot.forEach((dataChild) => {
+                            var tempJSONObject = {
+                                key: dataChild.key,
+                                name: dataChild.val().name,
+                                cost: dataChild.val().cost,
+                                count: dataChild.val().count,
+                                cup: dataChild.val().cup,
+                                orderTime: dataChild.val().orderTime,
+                                shotNum: dataChild.val().shotNum,
+                                type: dataChild.val().type,
+                                hadPaid: dataChild.val().hadPaid,
+                                orderNumber: dataChild.val().orderNumber
+                            };
+                            if (idx === 0) this.state.timeArray.paid = dataChild.val().orderTime;
+                            //주문정보담기
+                            this.setState({
+                                orderState: this.state.orderState.concat(dataChild.val().orderState),
+                                data: this.state.data.concat(tempJSONObject),
+                            });
+                            idx++;
+        
+                            // 석운 : 결제를 안했으면 this.state.basket에 넣음
+                            if (tempJSONObject.hadPaid === 'false') {
+                                li.push(tempJSONObject);
+                            }
+                        })
+                    }
+
+
                 })
                 this.setState({ basket: li });
 
@@ -152,6 +305,7 @@ export default class PaymentResult extends React.Component {
                     else {
                         if (isFullyReady > 0) isFullyReady--;
                     }
+                    // isCanceled 추가 하기 객체에
                 }
                 if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
                     this.setState({ isMenuReady: true });
@@ -159,31 +313,12 @@ export default class PaymentResult extends React.Component {
 
                 console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
-
     }
-
-
-    componentWillUnmount() {
-        console.log('componentWillUnmout');
-        this._firebaseRef.off();
-        // this.setState({ isMenuReady : false });
-    }
-
-    countProperties(obj) {
-        var count = 0;
-
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop))
-                ++count;
-        }
-
-        return count;
-    }
-
 
     render() {
         console.log('render');
         if (this.props.route.params.response.imp_success === 'true') {
+            
             if (this.state.isMenuReady === true) {
 
                 console.log('menu ready !');
