@@ -12,51 +12,64 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
-import { commonRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
+import { commonRef } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 
 var currDate = moment().format('YYYY_MM_DD');
 
-// // 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
-// async function sendOrderWithOrdernum(orderList, shopInfo, num) {
-//     const orderRef = database()
-//         .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
-//         .push();
+// 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
+async function sendOrderWithOrdernum(orderList, shopInfo, num) {
+    const orderRef = database()
+        .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
+        .push();
 
-//     orderRef
-//         .set(orderList)
-//         .then(() => alert('주문번호 : ' + num + '번'));
-// }
-
-// // 석운 : 주문번호 업데이트
-// async function setOrderNumber(num) {
-//     if (num === 999) {
-//         database().ref('order_num/').update({ number: 1 });
-//     }
-//     else {
-//         database().ref('order_num/').update({ number: num + 1 });
-//     }
-// }
-// 승환 : 주문번호 업데이트
-async function setOrderNumberOverLoading(shopInfo, num) {
-    // if (num === 999) {
-    //     database().ref('order_num/' + shopInfo + '/').update({ number: 1 });
-    // }
-    // else {
-    // }
-    await database().ref('order_num/' + shopInfo + '/').update({ number: num + 1 });
+    orderRef
+        .set(orderList)
+        .then(() => alert('주문번호 : ' + num + '번'));
 }
 
-// async function alreadyPaid(ref, list) {
-//     for (var i = 0; i < list.length; i++) {
+// 석운 : 주문번호 업데이트
+async function setOrderNumber(num) {
+    if (num === 999) {
+        database().ref('order_num/').update({ number: 1 });
+    }
+    else {
+        database().ref('order_num/').update({ number: num + 1 });
+    }
+}
 
-//         console.log('\n list key is     >>>>     ' + list[i].key + '\n');
-//         database().ref(ref + '/' + list[i].key).update({ hadPaid: 'true' });
-//     }
-// }
+async function alreadyPaid(ref, list) {
+    for (var i = 0; i < list.length; i++) {
+
+        console.log('\n list key is     >>>>     ' + list[i].key + '\n');
+        database().ref(ref + '/' + list[i].key).update({ hadPaid: 'true' });
+    }
+}
+//승환 : 가게별 주문 번호 증가
+async function updateCurrentOrderNumber(shopInfo) {
+    
+    var res = 0;
+    
+    await database().ref('order_num/' + shopInfo)
+        .once('value', (snapshot) => {
+            snapshot.forEach((childSnapShot) => {
+                console.log('Kakaopay ... ' + childSnapShot.val(), typeof childSnapShot.val());
+                res = childSnapShot.val();
+            })
+        });
+
+    if (res === 999)
+        await database().ref('order_num/' + shopInfo).update({ number: 1 });
+    else {
+        res += 1;
+        console.log('> res : ' + res);
+        await database().ref('order_num/' + shopInfo).update({ number: res });
+    }
+        
+    
+}
 
 export default class PaymentResult extends React.Component {
 
@@ -79,18 +92,21 @@ export default class PaymentResult extends React.Component {
             },
             data: [],
             basket: [],
-            orderNumber: 0
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
         this.state.timeArray.request = this.props.route.params.requestTime;
+
+        if (this.props.route.params.response.imp_success === 'true') {
+            updateCurrentOrderNumber(this.props.route.params.shopInfo);
+        }
     }
 
     componentDidMount() {
         console.log('componentDidMount');
 
         // 석운 : 주문번호 뽑기
-        database().ref('order_num/').on('value', (snapshot) => {
+        database().ref('/order_num/').on('value', (snapshot) => {
             this.orderNum = snapshot.val().number;
         });
 
@@ -143,12 +159,7 @@ export default class PaymentResult extends React.Component {
 
                 console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
-        //주문번호 하나 올리기 전에 읽어오기
-        orderNumDatabase(this.props.route.params.shopInfo)
-            .once('value', (snapshot) => {
-                this.setState({ orderNumber: snapshot.val().number });
-                console.log('payment result >> ' + this.state.orderNumber);
-            });
+
     }
 
 
@@ -170,12 +181,9 @@ export default class PaymentResult extends React.Component {
     }
 
 
-
     render() {
+        console.log('render');
         if (this.props.route.params.response.imp_success === 'true') {
-
-            setOrderNumberOverLoading(this.props.route.params.shopInfo, this.state.orderNumber);
-
             if (this.state.isMenuReady === true) {
 
                 console.log('menu ready !');
@@ -219,7 +227,7 @@ export default class PaymentResult extends React.Component {
                                         <>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-                                                <Text style={{ fonsSize: 14, }}> / {item.orderNumber}</Text>
+                                                <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
                                                 <Text style={{ color: 'gray', fontSize: 14 }}>{item.type} / </Text>

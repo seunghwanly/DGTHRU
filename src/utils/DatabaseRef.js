@@ -93,7 +93,8 @@ export async function popFavorite(shopInfo, key) {
 
 export function orderNumDatabase(shopInfo) {
     if (auth().currentUser !== null) {
+        console.log('orderNum >> ' + shopInfo);
         //현재 주문번호를 읽어오자
-        return database().ref('order_num/' + shopInfo + '/');
+        return database().ref('order_num/'+shopInfo);
     }
 }

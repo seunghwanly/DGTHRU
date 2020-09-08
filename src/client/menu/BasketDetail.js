@@ -112,8 +112,9 @@ export default class BasketDetail extends React.Component {
 
         orderNumDatabase(this.props.route.params.shopInfo)
             .once('value', (snapshot) => {
-                console.log()
-                this.setState({ currentOrderNumber : 'A-'+snapshot.val().number });
+                console.log('[ BasketDetail ] >> : ' + 'A-'+snapshot.val().number);
+                const res = 'A-'+snapshot.val().number;
+                this.setState({ currentOrderNumber : res });
             })
 
     }

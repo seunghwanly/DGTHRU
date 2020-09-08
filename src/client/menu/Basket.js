@@ -103,6 +103,7 @@ export default Basket = ({ navigation, route }) => {
         
         orderNumDatabase(shopInfo)
             .once('value', (snapshot) => {
+                console.log('[Bakset] >> ' + shopInfo + '\t' + snapshot.val().number);
                 const res = 'A-'+snapshot.val().number;
                 setCurrentOrderNumbet(res);
             })
