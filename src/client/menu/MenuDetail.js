@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { menuStyles } from './styles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import ImageLinker from '../../utils/ImageLinker';
 
 import { pushFavorite } from '../../utils/DatabaseRef';
 
@@ -53,9 +54,7 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                                         )}
                                         onLongPress={() => pushFavorite(shopInfo, item)}
                                     >
-                                        <View style={menuStyles.subRadiusIcon}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
-                                        </View>
+                                        <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
                                         <View style={{ flexDirection: 'column', marginStart: 10 }}>
                                             <Text style={menuStyles.subRadiusText}>{item.name}</Text>
                                             <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost}원</Text>

@@ -12,6 +12,7 @@ import {
     Keyboard,
     Image,
 } from 'react-native';
+import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -138,42 +139,43 @@ export default Basket = ({ navigation, route }) => {
         }
     }
 
-    handleCount = (id) => {
-        if (count > 0) {
-            if (count === 1) {
+    handleCount = (id, name) => {
+        if (name > 0) {
+            if (name === 1) {
                 if (id === '-') {
                     alert('다른 메뉴를 주문하시겠어요?');
                 }
                 else {
-                    setCount(count + 1);
+                    if(name === count)
+                        setCount(name + 1);
+                    else if (name === shotNum)
+                        setShotNum(shotNum + 1);
+                    else if (name === syrup)
+                        setSyrup(syrup + 1);
+                    else 
+                        console.log('ERROR : not specified object !');
                 }
             }
             else {
                 if (id === '-') {
-                    setCount(count - 1);
+                    if(name === count)
+                        setCount(name - 1);
+                    else if (name === shotNum)
+                        setShotNum(shotNum - 1);
+                    else if (name === syrup)
+                        setSyrup(syrup - 1);
+                    else 
+                        console.log('ERROR : not specified object !');
                 }
                 else {
-                    setCount(count + 1);
-                }
-            }
-        }
-    }
-    handleShotCount = (id) => {
-        if (shotNum >= 0) {
-            if (shotNum === 0) {
-                if (id === '+') {
-                    setShotNum(shotNum + 1);
-                    // setTotalCost(totalCost + 600);
-                }
-            }
-            else {
-                if (id === '+') {
-                    setShotNum(shotNum + 1);
-                    // setTotalCost(totalCost + 600);
-                }
-                else {
-                    setShotNum(shotNum - 1);
-                    // setTotalCost(totalCost - 600);
+                    if (name === count)
+                        setCount(name + 1);
+                    else if (name === shotNum)
+                        setShotNum(shotNum + 1);
+                    else if (name === syrup)
+                        setSyrup(syrup + 1);
+                    else
+                        console.log('ERROR : not specified object !');
                 }
             }
         }
@@ -584,14 +586,14 @@ export default Basket = ({ navigation, route }) => {
                                 {/* 이미지랑 갯수 조절하는 거 */}
                                 <View style={basketStyles.basketLeftColumnWrapper}>
                                     {/* 아이콘이랑 이름 */}
-                                    <View style={basketStyles.radiusIcon} />
+                                    <ImageLinker name={item.name} style={basketStyles.radiusIcon}/>
                                     <Text style={basketStyles.radiusText}>{item.name}</Text>
                                     <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost}원</Text>
                                     {/* 버튼 */}
                                     <View style={basketStyles.basketLeftColumnButtonWrapper}>
-                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-')} />
+                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', count)} />
                                         <Text >{count}</Text>
-                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+')} />
+                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', count)} />
                                     </View>
                                     {/* 왼쪽 세로 줄 */}
                                 </View>
@@ -678,13 +680,31 @@ export default Basket = ({ navigation, route }) => {
                                         <>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
                                                 <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
-                                                <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가(+600원)</Text>
+                                                <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가(+500원)</Text>
                                             </View>
                                             <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                                 {/* TODO: 음료마다 기본 샷이 다름 */}
-                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleShotCount('-')} />
+                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', shotNum)} />
                                                 <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
-                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleShotCount('+')} />
+                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', shotNum)} />
+                                            </View>
+                                            <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가되는 샷입니다.</Text>
+                                        </>
+                                        :
+                                        <></>
+                                }
+                                {
+                                    type === 'drink' && item.option_available.syrup === true ?
+                                        <>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <Text style={{ fontSize: 12, marginStart: 10 }}>시럽 추가(+500원)</Text>
+                                            </View>
+                                            <View style={basketStyles.basketLeftColumnButtonWrapper}>
+                                                {/* TODO: 음료마다 기본 샷이 다름 */}
+                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', syrup)} />
+                                                <Text style={{ width: 100, textAlign: 'center' }}>{syrup}</Text>
+                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', syrup)} />
                                             </View>
                                             <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가되는 샷입니다.</Text>
                                         </>

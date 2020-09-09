@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { menuStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import ImageLinker from '../../utils/ImageLinker';
 import { enableScreens } from 'react-native-screens';
 
 import database from '@react-native-firebase/database';

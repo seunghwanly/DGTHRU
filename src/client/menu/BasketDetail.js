@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { basketStyles } from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ImageLinker from '../../utils/ImageLinker';
 
 //Firebase Ref
 import { commonDatabase, commonRef } from '../../utils/DatabaseRef';
@@ -100,7 +101,7 @@ export default class BasketDetail extends React.Component {
                                 return (
                                     <View style={basketStyles.detailWrapper}>
                                         <View style={basketStyles.detailItemNameWrapper}>
-                                            <View style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
+                                            <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]}/>
                                             <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
                                         </View>
                                         <View style={basketStyles.detailItemInfoWrapper}>
