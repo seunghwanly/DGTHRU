@@ -99,6 +99,49 @@ const exampleStyle = StyleSheet.create({
     buttonstyle: {
         padding: 5,
     },
+    
+})
+const OrderlistStyle = StyleSheet.create({
+   OrderlistBackground:{
+        width: '100%',
+        height: '100%',
+        justifyContent:'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        // flexDirection: 'column',
+        backgroundColor: 'lightgray',
+
+    },
+    OrderlistBody_1:{
+        width: '20%' ,
+        height: '90%',
+        justifyContent:'center',
+        alignItems: 'center',
+        backgroundColor: 'lightblue',
+    },
+    OrderlistBody_2:{
+        width: '80%',
+        justifyContent:'center',
+        alignItems: 'center',
+        // flexDirection: 'column',
+        backgroundColor: 'lightgreen',
+    },
+     OrderlistBody_2_top:{
+        width: '80%',
+        height: '20%',
+        justifyContent:'center',
+        alignItems:'center',
+        // flexDirection: 'column',
+        backgroundColor: 'lightgreen',
+    },
+      OrderlistBody_2_bottom:{
+        width: '80%',
+        justifyContent:'center',
+        alignItems: 'center',
+        // flexDirection: 'column',
+        backgroundColor: 'lightgreen',
+    },
 })
 
-export {shopStyles, exampleStyle};
+
+export {shopStyles, exampleStyle,OrderlistStyle};
