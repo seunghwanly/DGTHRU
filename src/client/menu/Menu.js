@@ -69,9 +69,9 @@ export default class HyehwaDessert extends React.Component {
             <SafeAreaView style={menuStyles.background}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ alignItems: 'center', marginTop: 10, height: Dimensions.get('window').height + 100}}
+                    contentContainerStyle={{ alignItems: 'center', marginTop: 10, height: Dimensions.get('window').height + 100 }}
                     scrollsToTop={true}
-                    >
+                >
                     {
                         this.state._favoriteData.length > 0 ?
                             <View style={menuStyles.sectionHeader}>
@@ -89,15 +89,16 @@ export default class HyehwaDessert extends React.Component {
                                                     })}
                                                 onLongPress={() => popFavorite(this.props.route.params.shopInfo, item.key)}
                                             >
-                                                <View style={menuStyles.radiusIcon} />
-                                                <Text style={[menuStyles.radiusText, { color: 'black', fontWeight: 'normal', fontSize: 12 }]}>
+                                                {/* <View style={menuStyles.radiusIcon} /> */}
+                                                <ImageLinker name={item.value.name} style={menuStyles.radiusIcon} />
+                                                <Text style={[menuStyles.radiusText, { color: 'black', fontWeight: 'normal', fontSize: 12, textShadowColor:'transparent' }]}>
                                                     {item.value.name}
                                                 </Text>
                                             </TouchableOpacity>
                                         )}
                                     horizontal={true}
                                     showsHorizontalScrollIndicator={false}
-                                    contentContainerStyle={{ marginStart: 10, width : this.state._favoriteData.length > 3 ? (this.state._favoriteData.length-3)*80 +  Dimensions.get('window').width :  Dimensions.get('window').width }}
+                                    contentContainerStyle={{ marginStart: 10, width: this.state._favoriteData.length > 3 ? (this.state._favoriteData.length - 3) * 80 + Dimensions.get('window').width : Dimensions.get('window').width }}
                                 />
                             </View>
                             :
@@ -113,17 +114,23 @@ export default class HyehwaDessert extends React.Component {
                                     if (item.category_name !== 'Others') {
                                         return (
                                             <TouchableOpacity
-                                                style={menuStyles.radiusIcon}
+                                                // style={menuStyles.radiusIcon}
                                                 onPress={() => this.props.navigation.navigate('MenuDetail', {
                                                     items: item.menu,
                                                     shopInfo: this.props.route.params.shopInfo,
                                                     type: 'drink',
-                                                    categoryName : item.category_name
+                                                    categoryName: item.category_name
                                                 })}
                                             >
-                                                <Text style={menuStyles.radiusText}>
+                                                <ImageLinker 
+                                                    name={item.menu[0].name} 
+                                                    style={menuStyles.radiusIcon}
+                                                    innerStyle={menuStyles.radiusText} 
+                                                    innerText={item.category_name}
+                                                    />
+                                                {/* <Text style={menuStyles.radiusText}>
                                                     {item.category_name}
-                                                </Text>
+                                                </Text> */}
                                             </TouchableOpacity>
                                         )
                                     } else {
@@ -152,7 +159,7 @@ export default class HyehwaDessert extends React.Component {
                                             items: item.menu,
                                             shopInfo: this.props.route.params.shopInfo,
                                             type: 'bakery',
-                                            categoryName : item.category_name
+                                            categoryName: item.category_name
                                         })}
                                     >
                                         <Text style={menuStyles.radiusText}>

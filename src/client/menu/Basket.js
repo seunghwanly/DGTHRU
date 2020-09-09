@@ -60,7 +60,7 @@ export default Basket = ({ navigation, route }) => {
     //drink option
     const [whippingCream, setWhippingCream] = useState(null);
     const [shotNum, setShotNum] = useState(0);
-    const [syrup, setSyrup] = useState(null);
+    const [syrup, setSyrup] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [offers, setOffers] = useState('');
     const [waffleCream, setWaffleCream] = useState(null);
@@ -688,7 +688,7 @@ export default Basket = ({ navigation, route }) => {
                                                 <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
                                                 <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', shotNum)} />
                                             </View>
-                                            <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가되는 샷입니다.</Text>
+                                            <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가됩니다.</Text>
                                         </>
                                         :
                                         <></>
@@ -706,7 +706,7 @@ export default Basket = ({ navigation, route }) => {
                                                 <Text style={{ width: 100, textAlign: 'center' }}>{syrup}</Text>
                                                 <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', syrup)} />
                                             </View>
-                                            <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가되는 샷입니다.</Text>
+                                            <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가됩니다.</Text>
                                         </>
                                         :
                                         <></>
