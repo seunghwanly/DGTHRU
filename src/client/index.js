@@ -28,6 +28,7 @@ import PaymentResult from './payment/PaymetResult';
 
 //Supervisor
 import example from '../supervisor/example';
+import SupervisorOrderList from '../supervisor/SupervisorOrderList';
 import SupervisorShops from '../supervisor/SupervisorShops';
 
 import HeaderRight from './HeaderRight';
@@ -58,7 +59,8 @@ const payScreen = {
 
 const supervisorScreens = {
     SupervisorShops: SupervisorShops,
-    example: example
+    example: example,
+    SupervisorOrderList: SupervisorOrderList
 };
 
 export default StackContainer = ({ navigation }) => {

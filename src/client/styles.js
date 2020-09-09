@@ -113,6 +113,7 @@ const clientStyles = StyleSheet.create({
         alignItems: 'center',
         margin: '2%',
     },
+    
 });
 
 export {

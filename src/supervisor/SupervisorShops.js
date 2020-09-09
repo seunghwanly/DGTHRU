@@ -137,7 +137,7 @@ function supervisorShops({ navigation }) {
                 alert('준비중입니다!');
                 break;
             case 'munhwa_1f':
-                alert('준비중입니다!');
+                navigation.navigate('SupervisorOrderList',{ shopInfo:id });
                 break;
             case 'favorate_shop':
                 alert('준비중입니다!');
