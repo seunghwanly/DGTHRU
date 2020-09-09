@@ -124,20 +124,17 @@ export default class Bill extends React.Component {
                     // 날짜 : { autokey : { values } }
                     childSnapShot.forEach((dataSnapShot) => {
 
-                        if (dataSnapShot.key.charAt(0) === '-') {
+                        if (dataSnapShot.key.charAt(0) === '-') {   // 단일메뉴 주문
                             // console.log('dataChildSnapShot >> ' + dataSnapShot.val().orderTime );
                             tempJSONArray.push({
-                                orderTime: dataSnapShot.val().orderTime,
+                                
+                                date: subObjectKey,
                                 name: dataSnapShot.val().name,
                                 cost: dataSnapShot.val().cost,
-                                count: dataSnapShot.val().count,
-                                selected: dataSnapShot.val().selected,
-                                cup: dataSnapShot.val().cup,
-                                type: dataSnapShot.val().type,
+                                options: dataSnapShot.val().options,
+                                orderTime: dataSnapShot.val().orderTime,
+                                orderNumber : dataSnapShot.val().orderNumber,
                                 shopInfo: dataSnapShot.val().shopInfo,
-                                offers: dataSnapShot.val().offers,
-                                date: subObjectKey,
-                                orderNumber : dataSnapShot.val().orderNumber
                             });
 
                             tempTotalCost += dataSnapShot.val().cost;
@@ -156,15 +153,9 @@ export default class Bill extends React.Component {
                                     tempItemShopInfo = item.val().shopInfo; //shopInfo
                                     //push
                                     tempSubJSONArray.push({
-                                        orderTime: item.val().orderTime,
                                         name: item.val().name,
                                         cost: item.val().cost,
-                                        count: item.val().count,
-                                        selected: item.val().selected,
-                                        cup: item.val().cup,
-                                        type: item.val().type,
-                                        shopInfo: item.val().shopInfo,
-                                        offers: item.val().offers
+                                        options: item.val().options
                                     });
                                     tempTotalCost += item.val().cost;
                                     tempGroupTotalCost += item.val().cost;
@@ -319,14 +310,14 @@ export default class Bill extends React.Component {
                                                                                     <>
                                                                                         <Text style={{ fontSize:13, width: '25%' }}>{item.name}</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.cup}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.options.cup}</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                                     :
                                                                                     <>
                                                                                         <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].cup}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].options.cup}</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                             }

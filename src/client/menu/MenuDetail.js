@@ -39,29 +39,29 @@ export default HyehwaDessertDetail = ({ navigation, route }) => {
                     renderItem={
                         ({ item }) => {
                             if (item.sold_out !== true) {
-                                if (item.name !== 'Waffle') {
-                                    return (
-                                        <TouchableOpacity
-                                            style={{ alignItems: 'center', flexDirection: 'row', }}
-                                            onPress={() => navigation.navigate('SelectMenu',
-                                                {
-                                                    item: item,
-                                                    shopInfo: shopInfo,
-                                                    type: type
-                                                }
-                                            )}
-                                            onLongPress={() => pushFavorite(shopInfo, item)}
-                                        >
-                                            <View style={menuStyles.subRadiusIcon}>
-                                                <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
-                                            </View>
-                                            <View style={{ flexDirection: 'column', marginStart: 10 }}>
-                                                <Text style={menuStyles.subRadiusText}>{item.name}</Text>
-                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost}원</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    )
-                                }
+
+                                return (
+                                    <TouchableOpacity
+                                        style={{ alignItems: 'center', flexDirection: 'row', }}
+                                        onPress={() => navigation.navigate('SelectMenu',
+                                            {
+                                                item: item,
+                                                shopInfo: shopInfo,
+                                                type: type,
+                                                categoryName:categoryName
+                                            }
+                                        )}
+                                        onLongPress={() => pushFavorite(shopInfo, item)}
+                                    >
+                                        <View style={menuStyles.subRadiusIcon}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'column', marginStart: 10 }}>
+                                            <Text style={menuStyles.subRadiusText}>{item.name}</Text>
+                                            <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost}원</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                )
                             }
                             else {
                                 return (

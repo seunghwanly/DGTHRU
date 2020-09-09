@@ -87,7 +87,7 @@ export default class BasketDetail extends React.Component {
 
         var totalCost = 0;
         this.state.orderData.map(item => {
-            totalCost += Number(item.value.cost) * Number(item.value.count);
+            totalCost += Number(item.value.cost) * Number(item.value.options.count);
         })
 
         if (this.state.orderData.length > 0) {
@@ -101,10 +101,10 @@ export default class BasketDetail extends React.Component {
                                     <View style={basketStyles.detailWrapper}>
                                         <View style={basketStyles.detailItemNameWrapper}>
                                             <View style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
-                                            <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.selected !== undefined ? ', ' + item.value.selected : ' '}</Text>
+                                            <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
                                         </View>
                                         <View style={basketStyles.detailItemInfoWrapper}>
-                                            <Text style={{ fontSize: 12 }}>x{item.value.count}{'\t' + Number(item.value.cost) * Number(item.value.count)}원</Text>
+                                            <Text style={{ fontSize: 12 }}>x{item.value.options.count}{'\t' + (Number(item.value.cost) * Number(item.value.options.count)).toLocaleString()}원</Text>
                                         </View>
                                         <TouchableOpacity
                                             style={basketStyles.detailImgButton}
