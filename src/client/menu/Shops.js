@@ -88,6 +88,16 @@ class Item extends React.Component {
             this.props.onPressItem(this.props.id);
     };
 
+    _LongPress = () => {
+        if (this.props.id === 'hyehwa_roof') {
+            if (this.props.navigation !== null) {
+                this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
+            }
+        }
+        else
+            this.props.onPressItem(this.props.id);
+    }
+
     render() {
         var title = this.props.title;
         var location = this.props.location;
@@ -98,6 +108,7 @@ class Item extends React.Component {
                 <TouchableOpacity
                     style={clientStyles.imageContainer}
                     onPress={this._onPress}
+                    onLongPress={this._LongPress}
                 >
                     <Image style = {clientStyles.image} source={putpicture(picture)}/>
                 </TouchableOpacity>

@@ -16,6 +16,7 @@ import Verify from './Verify';
 //shops
 import Menu from './menu/Menu';
 import MenuDetail from './menu/MenuDetail';
+import MenuTabview from './menu/MenuTabView';
 
 //Bakset
 import Basket from './menu/Basket';
@@ -47,6 +48,7 @@ const commonScreen = {
 const menuScreen = {
     Shops: Shops,
     Menu: Menu,
+    MenuTabView: MenuTabview,
     MenuDetail: MenuDetail,
     SelectMenu: Basket
 };
@@ -104,7 +106,7 @@ export default StackContainer = ({ navigation }) => {
                             ({ navigation }) => ({
 
                                 headerRight: () => {
-                                    if (name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+                                    if (name === "Shops" || name === "MenuTabView" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
                                         return (
                                             <HeaderRight navigation={navigation} shopInfo={'hyehwa_roof'} />
                                         )
@@ -121,7 +123,7 @@ export default StackContainer = ({ navigation }) => {
                                             // }
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
-                                                    name === 'Menu' || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
+                                                    name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
@@ -146,7 +148,7 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
+                                gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' ? false : true
                                 // gestureEnabled: false
 
                             })

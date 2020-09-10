@@ -70,7 +70,7 @@ export default class HeaderRight extends React.Component {
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                    onPress={() => this.props.navigation.toggleDrawer()}
+                    onPress={() => this.props.navigation.openDrawer()}
                 >
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10 }}

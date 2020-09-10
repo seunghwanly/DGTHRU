@@ -28,11 +28,11 @@ export default App = () => {
           drawerStyle={{ width: '60%' }}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
           drawerPosition='right'
-
         >
           <DrawerStack.Screen name='Home' component={StackContainer}
             options={{
-              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')}/>)
+              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')}/>),
+              gestureEnabled: false
             }}
             
           //Home onPress () >> reset 애들한테 물어보자 이건
