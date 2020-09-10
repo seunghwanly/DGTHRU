@@ -109,7 +109,7 @@ export default StackContainer = ({ navigation }) => {
     if (user) {
         console.log('current user : ' + user.phoneNumber);
         return (
-            <Stack.Navigator initialRouteName='Shops'>
+            <Stack.Navigator initialRouteName='Shops' screenOptions={{headerTitle:'동국대학교 스마트오더'}}>
                 {Object.entries({
                     ...IntroScreen, ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
                 }).map(([name, component]) => (
