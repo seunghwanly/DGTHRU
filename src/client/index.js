@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { createStackNavigator, } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //common
 import Intro from '../Intro';
@@ -33,6 +34,21 @@ import SupervisorOrderList from '../supervisor/SupervisorOrderList';
 import SupervisorShops from '../supervisor/SupervisorShops';
 
 import HeaderRight from './HeaderRight';
+
+
+
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('shopInfo');
+        if (value !== null) {
+            console.log('....................................'+value, typeof value);
+            return value.toString();
+        }
+    } catch (e) {
+        console.log('[ERROR] client/index.js > '+ e);
+    }
+}
+  
 
 const Stack = createStackNavigator();
 
@@ -107,9 +123,11 @@ export default StackContainer = ({ navigation }) => {
 
                                 headerRight: () => {
                                     if (name === "Shops" || name === "MenuTabView" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+
                                         return (
-                                            <HeaderRight navigation={navigation} shopInfo={'hyehwa_roof'} />
+                                            <HeaderRight navigation={navigation} shopInfo={getData()} page={name} />
                                         )
+
                                     }
                                 },
 

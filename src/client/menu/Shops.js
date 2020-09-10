@@ -8,10 +8,18 @@ import {
     Image,
 } from 'react-native';
 import { clientStyles } from '../styles';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
+
+const storeData = async (value) => {
+    try {
+        await AsyncStorage.setItem('shopInfo', value)
+    } catch (e) {
+        console.log("[ERROR] Shops.js > "+e);
+    }
+}
 
 const shopData = [
     {
@@ -81,7 +89,8 @@ class Item extends React.Component {
     _onPress = () => {
         if (this.props.id === 'hyehwa_roof') {
             if (this.props.navigation !== null) {
-                this.props.navigation.navigate('Menu',{ shopInfo: this.props.id })
+                storeData(this.props.id);
+                this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
             }
         }
         else
@@ -91,7 +100,7 @@ class Item extends React.Component {
     _LongPress = () => {
         if (this.props.id === 'hyehwa_roof') {
             if (this.props.navigation !== null) {
-                this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
+                this.props.navigation.navigate('Menu',{ shopInfo: this.props.id })
             }
         }
         else

@@ -18,8 +18,8 @@ export default class HeaderRight extends React.Component {
         this.state = {
             amount: 0
         }
-
-        this._basketDatabase = commonDatabase(this.props.shopInfo);
+        
+        this._basketDatabase = commonDatabase(this.props.shopInfo._W);
     }
 
     countProperties = (obj) => {
@@ -49,9 +49,12 @@ export default class HeaderRight extends React.Component {
     render() {
         return (
             <View style={{flexDirection:'row'}}>
+            {
+                this.props.page !== 'Shops' ?
+            
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
-                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
+                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo: this.props.shopInfo._W })}
                 >
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
@@ -67,6 +70,11 @@ export default class HeaderRight extends React.Component {
                             <></>
                     }
                 </TouchableOpacity>
+
+                :
+
+                <></>
+            }
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
