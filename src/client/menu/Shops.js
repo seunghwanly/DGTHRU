@@ -26,59 +26,53 @@ const shopData = [
         id: 'main_outdoor',
         title: '가온누리',
         location: '본관 야외 휴게장소',
-        picture: '1'
     },
     {
         id: 'singong_1f',
         title: '남산학사',
         location: '신공학관 1층',
-        picture: '2'
     },
     {
         id: 'hyehwa_roof',
         title: '혜화카페',
         location: '혜화관 옥상',
-        picture: '3'
     },
     {
         id: 'economy_outdoor',
         title: '그루터기',
         location: '경영관 야외',
-        picture: '4'
     },
     {
         id: 'munhwa_1f',
         title: '카페두리터',
         location: '학술문화관 지하1층',
-        picture: '5'
     },
     {
         id: 'favorate_shop',
         title: '즐겨찾기',
         location: ' ',
-        picture: '6'
     },
 ];
 
-function putpicture(picture){
-    switch (picture) { 
-        case '1':
-            return require('../../../image/shop-image/shop.png');
+function putpicture(id){
+    switch (id) { 
+        case 'main_outdoor':
+            return require('../../../image/shop-image/outdoor.png');
             break;
-        case '2':
+        case 'singong_1f':
             return require('../../../image/shop-image/shingong.png');
             break;
-        case '3':
-            return require('../../../image/shop-image/shingong.png');
+        case 'hyehwa_roof':
+            return require('../../../image/shop-image/hyehwa.png');
             break;
-        case '4':
+        case 'economy_outdoor':
+            return require('../../../image/shop-image/economy.png');
+            break;
+        case 'munhwa_1f':
+            return require('../../../image/shop-image/munhwa.png');
+            break;
+        case 'favorate_shop':
             return require('../../../image/shop-image/shop.png');
-            break;
-        case '5':
-            return require('../../../image/shop-image/shop.png');
-            break;
-        case '6':
-            return require('../../../image/shop-image/fish.png');
             break;
         }
 }
@@ -110,7 +104,7 @@ class Item extends React.Component {
     render() {
         var title = this.props.title;
         var location = this.props.location;
-        var picture=this.props.picture;
+        var id=this.props.id;
         
         return (
             <View style = {clientStyles.itemContainer}>
@@ -119,7 +113,7 @@ class Item extends React.Component {
                     onPress={this._onPress}
                     onLongPress={this._LongPress}
                 >
-                    <Image style = {clientStyles.image} source={putpicture(picture)}/>
+                    <Image style = {clientStyles.image} source={putpicture(id)}/>
                 </TouchableOpacity>
                 <Text style={clientStyles.itemDesc}>{title}</Text>
                 <Text style={clientStyles.itemSubDesc}>{location}</Text>
