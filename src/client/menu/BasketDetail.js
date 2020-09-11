@@ -12,14 +12,29 @@ import ImageLinker from '../../utils/ImageLinker';
 //Firebase Ref
 import { commonDatabase, commonRef } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import moment from 'moment';
 
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-async function handleDeleteOrder(shopInfo, orderKey) {
+async function handleOrder(shopInfo, data) {
+    var currentTime = moment().format('YYYY_MM_DD');
+    //pop     
+    await database().ref('user/basket/' + auth().currentUser.uid + '/group').remove();
+    //push
+    await database()
+        .ref('shops/' + shopInfo + '/' + currentTime + '/' + auth().currentUser.phoneNumber + '/' + 'group')
+        .set(data);
+}
 
-    var orderPath = commonRef(shopInfo) + '/' + 'group'+ '/' + orderKey;
+
+async function handleDeleteOrder(orderKey) {
+
+    console.log('>> orderKey : ' + orderKey);
+
+    var orderPath = 'user/basket/' + auth().currentUser.uid + '/group/' + orderKey;
 
     await database()
         .ref(orderPath)
@@ -40,7 +55,7 @@ export default class BasketDetail extends React.Component {
             needRefresh: false,
         }
 
-        this._firebaseCommonDatabase = commonDatabase(this.props.route.params.shopInfo);
+        this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
     componentDidMount() {
@@ -54,23 +69,23 @@ export default class BasketDetail extends React.Component {
 
                 snapshot.forEach((childSnapShot) => {
                     //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
-                    if (childSnapShot.key.charAt(0) !== '-') {
-                        childSnapShot.forEach((dataChild) => {
-                            var tempJSON = {
-                                "idx": idx,
-                                "key": dataChild.key,
-                                "value": dataChild.val()
-                            };
 
-                            idx++;
 
-                            this.setState({
-                                orderData: this.state.orderData.concat(tempJSON),
-                                propsData: this.state.propsData.concat(dataChild.val())
-                            });
-                        })
-                    }
+                    var tempJSON = {
+                        "idx": idx,
+                        "key": childSnapShot.key,
+                        "value": childSnapShot.val()
+                    };
+
+                    idx++;
+
+                    this.setState({
+                        orderData: this.state.orderData.concat(tempJSON),
+                        propsData: this.state.propsData.concat(childSnapShot.val())
+                    });
+
                 })
+
             })
     }
 
@@ -84,7 +99,7 @@ export default class BasketDetail extends React.Component {
 
     render() {
 
-        console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.propsData));
+        console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.orderData));
 
         var totalCost = 0;
         this.state.orderData.map(item => {
@@ -101,7 +116,7 @@ export default class BasketDetail extends React.Component {
                                 return (
                                     <View style={basketStyles.detailWrapper}>
                                         <View style={basketStyles.detailItemNameWrapper}>
-                                            <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]}/>
+                                            <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
                                             <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
                                         </View>
                                         <View style={basketStyles.detailItemInfoWrapper}>
@@ -115,7 +130,7 @@ export default class BasketDetail extends React.Component {
                                                     [
                                                         {
                                                             text: '삭제',
-                                                            onPress: () => handleDeleteOrder(this.props.route.params.shopInfo, item.key)
+                                                            onPress: () => handleDeleteOrder(item.key)
                                                         },
                                                         {
                                                             text: '취소', onPress: () => console.log('cancel delete'), style: "cancel"
@@ -151,7 +166,9 @@ export default class BasketDetail extends React.Component {
                                         shopInfo: this.props.route.params.shopInfo,
                                         itemData: JSON.stringify(this.state.propsData)
                                     }
-                                )
+                                ),
+                                //pop and push
+                                handleOrder(this.props.route.params.shopInfo, this.state.propsData)
                             ]}
                     >
                         <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>

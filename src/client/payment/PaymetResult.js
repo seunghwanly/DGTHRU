@@ -198,10 +198,10 @@ export default class PaymentResult extends React.Component {
                         database()
                             .ref(commonRef(this.props.route.params.shopInfo) + '/group')
                             .once('value', (snapshot) => {
-                                snapshot.forEach((childData) => {
+                                snapshot.forEach((childData, index) => {
                                     //주문번호 업데이트 : 공통 DB
                                     database()
-                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + childData.key)
+                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index)
                                         .update({ orderNumber: res });
                                 });
                             })

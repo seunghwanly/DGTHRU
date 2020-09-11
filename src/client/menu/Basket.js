@@ -209,12 +209,21 @@ export default Basket = ({ navigation, route }) => {
                 .then(() => console.log('Updated Shops DB'));
         }
         else {  //장바구니에 담아서 주문하는 경우에는 묶어서 넣기
-            // 1.오너와 함께 공유하는 DB
-            const orderRef = database()
-                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + 'group')
+            // // 1.오너와 함께 공유하는 DB
+            // const orderRef = database()
+            //     .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + 'group')
+            //     .push();
+
+            // orderRef
+            //     .set(jsonOrderList)
+            //     .then(() => console.log('Updated Shops DB'));
+            
+            // 2. 사용자 전용 장바구니 개설
+            const orderRef2 = database()
+                .ref('user/basket/' + auth().currentUser.uid + '/' + 'group')
                 .push();
 
-            orderRef
+            orderRef2
                 .set(jsonOrderList)
                 .then(() => console.log('Updated Shops DB'));
         }
