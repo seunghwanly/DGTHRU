@@ -32,6 +32,7 @@ import SupervisorOrderList from '../supervisor/SupervisorOrderList';
 import SupervisorShops from '../supervisor/SupervisorShops';
 
 import HeaderRight from './HeaderRight';
+import SupervisorTabview from '../supervisor/SupervisorTabview';
 
 const Stack = createStackNavigator();
 
@@ -60,7 +61,8 @@ const payScreen = {
 const supervisorScreens = {
     SupervisorShops: SupervisorShops,
     example: example,
-    SupervisorOrderList: SupervisorOrderList
+    SupervisorOrderList: SupervisorOrderList,
+    SupervisorTabview: SupervisorTabview
 };
 
 export default StackContainer = ({ navigation }) => {

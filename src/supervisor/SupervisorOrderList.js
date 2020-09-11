@@ -7,7 +7,6 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 
-var currentTime = moment().format('YYYY_MM_DD');
 var shopname = '';
 var phonenumber = '';
 async function DeleteOrderList(key) {
@@ -41,7 +40,43 @@ export default class SupervisorOrderList extends Component {
             list:[],
         } }
 
-    componentDidMount(){
+
+        _onPress = () => {
+          console.log('clickTest !!!');
+        };
+
+        onPressItem = (id) => {
+
+            switch (id) {
+                case 'main_outdoor':
+                    alert('준비중입니다!');
+                    break;
+                case 'singong_1f':
+                    alert('준비중입니다!');
+                    break;
+                case 'hyehwa_roof':
+                    alert('혜화관디저트카페');
+                    break;
+                case 'economy_outdoor':
+                    alert('준비중입니다!');
+                    break;
+                case 'munhwa_1f':
+                   
+                    break;
+                case 'favorate_shop':
+                    alert('준비중입니다!');
+                    break;
+            }
+        }
+        _renderItem = ({ item }) => (
+            <Item
+                id={item.id}
+                onPressItem={onPressItem}
+            />
+        );
+        
+
+    componentDidMount = () =>{
         
         database().ref('shops/' + shopname).on('value', (snapshot) =>{
             var li = []
@@ -142,15 +177,59 @@ export default class SupervisorOrderList extends Component {
         return (
 
             <View style={OrderlistStyle.OrderlistBackground} >
+
                 <View style={OrderlistStyle.OrderlistBody_1} >
-                    <Text>BODY_1</Text>
+                <TouchableOpacity
+                        style={OrderlistStyle.OrderlistButtonContainer}
+                        onPress={this._onPress}
+                        >
+                            <View style={{width:'100%',height:'100%', 
+                            justifyContent:'center',
+                              alignItems: 'center',}}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>주문 리스트</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        style={OrderlistStyle.OrderlistButtonContainer}
+                        onPress={this._onPress}
+                        >
+                            <View style={{width:'100%',height:'100%'}}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>지난 주문</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        style={OrderlistStyle.OrderlistButtonContainer}
+                        onPress={this._onPress}
+                        >
+                            <View style={{width:'100%',height:'100%'}}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>메뉴</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        style={OrderlistStyle.OrderlistButtonContainer}
+                        onPress={this._onPress}
+                        >
+                            <View style={{width:'100%',height:'100%'}}>
+                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>모든 메뉴</Text>
+                            </View>
+                        </TouchableOpacity>
+                    
                 </View>
+
                 <View style={OrderlistStyle.OrderlistBody_2} >
-                    <View style={OrderlistStyle.OrderlistBody_2_top} >
-                     <Text>BODY_2_up</Text>
+                    <View style={OrderlistStyle.OrderlistBody_2_top} > 
+                    <Text style={{ fontSize:25,color: 'white', fontWeight: 'bold', textAlign: 'center' }}>주 문 현 황</Text>
                      </View>
+
                       <View style={OrderlistStyle.OrderlistBody_2_bottom} >
                      <Text>BODY_2_down</Text>
+                        <FlatList
+                            data={this.state.list}
+                            renderItem={_renderItem}
+                            numColumns={2}
+                            keyExtractor={keyExtractor}
+                            scrollEnabled={true}
+                        />
                      </View>
                    
                 </View>

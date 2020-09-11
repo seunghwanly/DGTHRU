@@ -104,44 +104,62 @@ const exampleStyle = StyleSheet.create({
 const OrderlistStyle = StyleSheet.create({
    OrderlistBackground:{
         width: '100%',
-        height: '100%',
+        height: '90%',
         justifyContent:'center',
         flexDirection: 'row',
         alignItems: 'center',
         // flexDirection: 'column',
         backgroundColor: 'lightgray',
+        borderColor:'black',
+
 
     },
     OrderlistBody_1:{
-        width: '20%' ,
+        width: '13%' ,
         height: '90%',
         justifyContent:'center',
         alignItems: 'center',
         backgroundColor: 'lightblue',
     },
     OrderlistBody_2:{
-        width: '80%',
+        width: '85%',
         justifyContent:'center',
         alignItems: 'center',
         // flexDirection: 'column',
-        backgroundColor: 'lightgreen',
+        backgroundColor: 'white',
     },
      OrderlistBody_2_top:{
-        width: '80%',
-        height: '20%',
+        width: '85%',
+        height: '15%',
         justifyContent:'center',
         alignItems:'center',
         // flexDirection: 'column',
         backgroundColor: 'lightgreen',
     },
       OrderlistBody_2_bottom:{
-        width: '80%',
+        width: '85%',
+        height: '75%',
         justifyContent:'center',
         alignItems: 'center',
         // flexDirection: 'column',
-        backgroundColor: 'lightgreen',
+        backgroundColor: 'gray',
+    },
+    OrderlistButton:{
+        justifyContent:'center',
+        alignItems: 'center',
+        // flexDirection: 'column',
+        backgroundColor: 'gray',
+    },
+    OrderlistButtonContainer:{
+        width: '90%',
+        margin: '2%',
+        height: '22.5%',
+        justifyContent:'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        backgroundColor: 'blue',
+        borderWidth:2,
     },
 })
-
 
 export {shopStyles, exampleStyle,OrderlistStyle};
