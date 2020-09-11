@@ -122,7 +122,7 @@ function supervisorShops({ navigation }) {
                 alert('준비중입니다!');
                 break;
             case 'singong_1f':
-                alert('준비중입니다!');
+                navigation.navigate('SupervisorTabview',{ shopInfo:id });
                 break;
             case 'hyehwa_roof':
                 alert('혜화관디저트카페');
@@ -159,7 +159,7 @@ function supervisorShops({ navigation }) {
                 </View>
                 <View style={shopStyles.body}>
                     <FlatList
-                        data={shopData}
+                        data={shopData} 
                         renderItem={renderItem}
                         numColumns={2}
                         keyExtractor={keyExtractor}
