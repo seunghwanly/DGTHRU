@@ -373,7 +373,7 @@ PODS:
     - Firebase/Database (~> 6.30.0)
     - React
     - RNFBApp
-  - RNGestureHandler (1.7.0):
+  - RNGestureHandler (1.8.0):
     - React
   - RNReanimated (1.13.0):
     - React
@@ -618,7 +618,7 @@ SPEC CHECKSUMS:
   RNFBApp: e4321cad5dd23b43b3b4f0ca060300b9f85cb7a4
   RNFBAuth: 8fd5ea881020a13deae2ca3e9810e30d15ce42ac
   RNFBDatabase: 0adc1845baee88e58ea886888763725343d41db5
-  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976

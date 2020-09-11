@@ -67,7 +67,7 @@ export default class ReceiptGroupModal extends React.Component {
                             <>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 13, width: '40%' }}>{item.name}</Text>
-                                    <Text style={{ fontSize: 13, textAlign: 'center', width: '30%' }}>{item.type}</Text>
+                                    <Text style={{ fontSize: 13, textAlign: 'center', width: '30%' }}>{item.options.type}</Text>
                                     <Text style={{ fontSize: 13, width: '30%', textAlign: 'right' }}>{item.cost.toLocaleString()}원</Text>
                                 </View>
                             </>

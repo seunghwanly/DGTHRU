@@ -11,7 +11,7 @@ const menuStyles = StyleSheet.create({
     radiusIcon: {
         width: 90,
         height: 90,
-        borderRadius: 80,
+        borderRadius: 90,
         backgroundColor: 'deepskyblue',
         justifyContent: 'center',
         alignItems: 'center',
@@ -22,6 +22,9 @@ const menuStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
+        textShadowOffset: { width: 1, height: 1 },
+        textShadowRadius: 1,
+        textShadowColor: 'gray',
         margin:2
     },
     subTitle: {

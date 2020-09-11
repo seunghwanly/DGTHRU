@@ -7,6 +7,9 @@ import {
 } from 'react-native';
 import { commonDatabase } from '../utils/DatabaseRef';
 
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+
 export default class HeaderRight extends React.Component {
 
     _basketDatabase;
@@ -16,10 +19,10 @@ export default class HeaderRight extends React.Component {
         super(props);
 
         this.state = {
-            amount: 0
+            amount: 0,
+            shopInfo: ''
         }
-
-        this._basketDatabase = commonDatabase(this.props.shopInfo);
+        this._basketDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     }
 
     countProperties = (obj) => {
@@ -32,26 +35,39 @@ export default class HeaderRight extends React.Component {
         return count;
     }
 
+    _fetchData() {
+        this._basketDatabase
+        .on('value', (snapshot) => {
+            var groupShopInfo = '';
+            snapshot.forEach((childSnapShot) => {
+                console.log('snapshot > ' + snapshot.key, snapshot.val(), childSnapShot.key, childSnapShot.val());
+                groupShopInfo = childSnapShot.val().shopInfo;
+            })
+            this.setState({ 
+                amount: this.countProperties(snapshot.val()),
+                shopInfo : groupShopInfo 
+            });
+        });
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         return nextState !== this.state;
     }
 
     componentDidMount() {
-        this._basketDatabase
-            .on('value', (snapshot) => {
-                this.setState({ amount : 0 })
-                snapshot.forEach((childSnapShot) => {
-                    this.setState({ amount: this.countProperties(childSnapShot.val()) });
-                })
-            });
+        this._fetchData();
     }
 
     render() {
+        console.log('> HeaderRight render : ' + this.state.amount);
         return (
             <View style={{flexDirection:'row'}}>
+            {
+                this.props.page !== 'Shops' ?
+            
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
-                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo: 'hyehwa_roof' })}
+                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo : this.state.shopInfo })}
                 >
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
@@ -67,10 +83,15 @@ export default class HeaderRight extends React.Component {
                             <></>
                     }
                 </TouchableOpacity>
+
+                :
+
+                <></>
+            }
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                    onPress={() => this.props.navigation.toggleDrawer()}
+                    onPress={() => this.props.navigation.openDrawer()}
                 >
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10 }}

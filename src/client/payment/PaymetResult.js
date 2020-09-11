@@ -163,16 +163,16 @@ export default class PaymentResult extends React.Component {
                                 // this.setState({ currentOrderNumber : res });
                             }).then(() => {
                                 console.log('>  ' + res);
-
+                                //update common DB
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
                                     .update({ orderNumber: res });
-
-                                const forPush = {
-                                    ...data,
-                                    orderNumber: res
-                                };
-                                updateUserHistroy(forPush, res);
+                                //get data
+                                database()
+                                    .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
+                                    .once('value', (snapshot) => {
+                                        updateUserHistroy(snapshot.val(), res); 
+                                    });
                             })
                     });
             }
@@ -194,17 +194,18 @@ export default class PaymentResult extends React.Component {
                                 data[i].orderNumber = res;
                             }
                         }
+                        // 공통 DB 작업 중
                         database()
                             .ref(commonRef(this.props.route.params.shopInfo) + '/group')
                             .once('value', (snapshot) => {
-                                snapshot.forEach((childData) => {
+                                snapshot.forEach((childData, index) => {
                                     //주문번호 업데이트 : 공통 DB
                                     database()
-                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + childData.key)
+                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index)
                                         .update({ orderNumber: res });
                                 });
-                                updateUserHistroy(data, res);
                             })
+                        updateUserHistroy(data, res);
                     })
             }   // else
 
@@ -237,13 +238,10 @@ export default class PaymentResult extends React.Component {
                             key: childSnapShot.key,
                             name: childSnapShot.val().name,
                             cost: childSnapShot.val().cost,
-                            count: childSnapShot.val().count,
-                            cup: childSnapShot.val().cup,
+                            options : childSnapShot.val().options,
                             orderTime: childSnapShot.val().orderTime,
-                            shotNum: childSnapShot.val().shotNum,
-                            type: childSnapShot.val().type,
+                            orderNumber: childSnapShot.val().orderNumber,
                             hadPaid: childSnapShot.val().hadPaid,
-                            orderNumber: childSnapShot.val().orderNumber
                         };
                         if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
                         //주문정보담기
@@ -264,13 +262,10 @@ export default class PaymentResult extends React.Component {
                                 key: dataChild.key,
                                 name: dataChild.val().name,
                                 cost: dataChild.val().cost,
-                                count: dataChild.val().count,
-                                cup: dataChild.val().cup,
+                                options: dataChild.val().options,
                                 orderTime: dataChild.val().orderTime,
-                                shotNum: dataChild.val().shotNum,
-                                type: dataChild.val().type,
+                                orderNumber: dataChild.val().orderNumber,
                                 hadPaid: dataChild.val().hadPaid,
-                                orderNumber: dataChild.val().orderNumber
                             };
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderTime;
                             //주문정보담기
@@ -295,6 +290,9 @@ export default class PaymentResult extends React.Component {
                 var isFullyReady = 0;
                 for (var i = 0; i < this.state.orderState.length; ++i) {
                     if (this.state.orderState[i] === 'ready') isFullyReady++;
+                    else if(this.state.orderState[i] === 'cancel') {
+                        alert('카운터로 와주세요 :)');
+                    }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
                     }
@@ -357,13 +355,29 @@ export default class PaymentResult extends React.Component {
                                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
                                                 <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
                                             </View>
-                                            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.type} / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cup} / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cost}원 / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.count}개 </Text>
+                                            <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.type} / </Text>
                                                 {
-                                                    item.offers !== null ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.offers}</Text> : <></>
+                                                    item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
+                                                }
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.cup} / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cost}원 / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.count}개 </Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                                {
+                                                    item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
+                                                }
+                                                {
+                                                    item.options.syrup !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>시럽 추가 : {item.options.syrup} / </Text> : <></>
+                                                }
+                                                {
+                                                    item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
+                                                }
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginTop: 2, marginBottom:5 }}>
+                                                {
+                                                    item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 14 }}>요청사항 : {item.options.offers}</Text> : <></>
                                                 }
                                             </View>
                                         </>

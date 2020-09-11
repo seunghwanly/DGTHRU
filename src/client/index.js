@@ -8,6 +8,7 @@ import {
 import { createStackNavigator, } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
 
+
 //common
 import Intro from '../Intro';
 import Shops from './menu/Shops';
@@ -16,6 +17,7 @@ import Verify from './Verify';
 //shops
 import Menu from './menu/Menu';
 import MenuDetail from './menu/MenuDetail';
+import MenuTabview from './menu/MenuTabView';
 
 //Bakset
 import Basket from './menu/Basket';
@@ -34,6 +36,10 @@ import SupervisorShops from '../supervisor/SupervisorShops';
 import HeaderRight from './HeaderRight';
 import SupervisorTabview from '../supervisor/SupervisorTabview';
 
+
+
+
+
 const Stack = createStackNavigator();
 
 const IntroScreen = {
@@ -48,6 +54,7 @@ const commonScreen = {
 const menuScreen = {
     Shops: Shops,
     Menu: Menu,
+    MenuTabView: MenuTabview,
     MenuDetail: MenuDetail,
     SelectMenu: Basket
 };
@@ -93,7 +100,7 @@ export default StackContainer = ({ navigation }) => {
     if (user) {
         console.log('current user : ' + user.phoneNumber);
         return (
-            <Stack.Navigator initialRouteName='Shops'>
+            <Stack.Navigator initialRouteName='Shops' screenOptions={{headerTitle:'동국대학교 스마트오더'}}>
                 {Object.entries({
                     ...IntroScreen, ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
                 }).map(([name, component]) => (
@@ -106,10 +113,12 @@ export default StackContainer = ({ navigation }) => {
                             ({ navigation }) => ({
 
                                 headerRight: () => {
-                                    if (name === "Shops" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+                                    if (name === "Shops" || name === "MenuTabView" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+
                                         return (
-                                            <HeaderRight navigation={navigation} shopInfo={'hyehwa_roof'} />
+                                            <HeaderRight navigation={navigation} page={name} />
                                         )
+
                                     }
                                 },
 
@@ -123,7 +132,7 @@ export default StackContainer = ({ navigation }) => {
                                             // }
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
-                                                    name === 'Menu' || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
+                                                    name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
@@ -148,7 +157,7 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' ? false : true
+                                gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' ? false : true
                                 // gestureEnabled: false
 
                             })

@@ -58,13 +58,13 @@ export default class RecieptSingleModal extends React.Component {
 
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                         <Text style={{ fontSize: 14, width: '40%' }}>{this.props.item.name}</Text>
-                        <Text style={{ fontSize: 14, textAlign: 'center', width: '30%' }}>{this.props.item.type}</Text>
+                        <Text style={{ fontSize: 14, textAlign: 'center', width: '30%' }}>{this.props.item.options.type}</Text>
                         <Text style={{ fontSize: 14, width: '30%', textAlign: 'right' }}>{this.props.item.cost.toLocaleString()}원</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row', width: '100%', marginTop: 20, borderTopWidth: 1, borderBottomWidth: 1, borderStyle: 'solid', paddingVertical: 10 }}>
                         <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>총 결제금액 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>
+                        <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '60%' }}>
                             {this.props.item.cost.toLocaleString() + '원(VAT포함)'}
                         </Text>
                     </View>
