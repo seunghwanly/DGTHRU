@@ -224,6 +224,7 @@ export default class PaymentResult extends React.Component {
         // this.setState({ isMenuReady : false });
     }
 
+
     _isMenuReady() {
         this._firebaseRef
             .on('value', (snapshot) => {

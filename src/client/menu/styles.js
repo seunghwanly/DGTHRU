@@ -198,7 +198,7 @@ const basketStyles = StyleSheet.create({
         paddingRight: 45,
     },
     goToBasket: {
-        backgroundColor: 'midnightblue',
+        backgroundColor: '#69302A',
         borderRadius: 10,
         paddingStart: 10,
         paddingEnd: 10,

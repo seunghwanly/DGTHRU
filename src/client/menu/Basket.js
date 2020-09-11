@@ -61,10 +61,12 @@ export default Basket = ({ navigation, route }) => {
     const [whippingCream, setWhippingCream] = useState(null);
     const [shotNum, setShotNum] = useState(0);
     const [syrup, setSyrup] = useState(0);
-    const [modalVisible, setModalVisible] = useState(false);
     const [offers, setOffers] = useState('');
     const [waffleCream, setWaffleCream] = useState(null);
     const [waffleSyrup, setWaffleSyrup] = useState(null);
+    
+    const [modalVisible, setModalVisible] = useState(false);
+    const [optionVisible, setOptionVisible] =useState(false);
 
     handleOptionCost = () => {
         var res = 0;
@@ -139,44 +141,29 @@ export default Basket = ({ navigation, route }) => {
         }
     }
 
-    handleCount = (id, name) => {
-        if (name > 0) {
-            if (name === 1) {
-                if (id === '-') {
-                    alert('다른 메뉴를 주문하시겠어요?');
-                }
-                else {
-                    if(name === count)
-                        setCount(name + 1);
-                    else if (name === shotNum)
-                        setShotNum(shotNum + 1);
-                    else if (name === syrup)
-                        setSyrup(syrup + 1);
-                    else 
+    handleCount = (id, item, name) => {
+        if (item >= 0) {
+            if (id === '-') {
+                if (item > 0) {
+                    if (name === 'count')
+                        setCount(count - 1);
+                    else if (name === 'shotNum')
+                        setShotNum(shotNum - 1);
+                    else if (name === 'syrup')
+                        setSyrup(syrup - 1);
+                    else
                         console.log('ERROR : not specified object !');
                 }
             }
             else {
-                if (id === '-') {
-                    if(name === count)
-                        setCount(name - 1);
-                    else if (name === shotNum)
-                        setShotNum(shotNum - 1);
-                    else if (name === syrup)
-                        setSyrup(syrup - 1);
-                    else 
-                        console.log('ERROR : not specified object !');
-                }
-                else {
-                    if (name === count)
-                        setCount(name + 1);
-                    else if (name === shotNum)
-                        setShotNum(shotNum + 1);
-                    else if (name === syrup)
-                        setSyrup(syrup + 1);
-                    else
-                        console.log('ERROR : not specified object !');
-                }
+                if (name === 'count')
+                    setCount(count + 1);
+                else if (name === 'shotNum')
+                    setShotNum(shotNum + 1);
+                else if (name === 'syrup')
+                    setSyrup(syrup + 1);
+                else
+                    console.log('ERROR : not specified object !');
             }
         }
     }
@@ -208,16 +195,7 @@ export default Basket = ({ navigation, route }) => {
                 .set(jsonOrderList)
                 .then(() => console.log('Updated Shops DB'));
         }
-        else {  //장바구니에 담아서 주문하는 경우에는 묶어서 넣기
-            // // 1.오너와 함께 공유하는 DB
-            // const orderRef = database()
-            //     .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber + '/' + 'group')
-            //     .push();
-
-            // orderRef
-            //     .set(jsonOrderList)
-            //     .then(() => console.log('Updated Shops DB'));
-            
+        else {
             // 2. 사용자 전용 장바구니 개설
             const orderRef2 = database()
                 .ref('user/basket/' + auth().currentUser.uid + '/' + 'group')
@@ -270,14 +248,7 @@ export default Basket = ({ navigation, route }) => {
                             //sub_menu 확인
                             if (item.hasOwnProperty('sub_menu')) {
                                 if (selected !== null) { //selected menu detail
-                                    if (item.hasOwnProperty('option_available')) {
-                                        // 선택한 옵션을 가져와서 DB에 넣어야함
-                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                        return true;
-                                    }
-                                    else {  //none option
-                                        return true;
-                                    }
+                                    return true;
                                 }
                                 else { //selected nothing
                                     alert('모두 선택해주세요');
@@ -285,14 +256,7 @@ export default Basket = ({ navigation, route }) => {
                                 }
                             }   //if
                             else {  //sub_menu none >> 단일메뉴임
-                                if (item.hasOwnProperty('option_available')) {
-                                    // 선택한 옵션을 가져와서 DB에 넣어야함
-                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    return true;
-                                }
-                                else {  //none option
-                                    return true;
-                                }
+                                return true;
                             }   //else
                         }   //if
                         else {  // 2, 3
@@ -305,14 +269,7 @@ export default Basket = ({ navigation, route }) => {
                             //sub_menu 확인
                             if (item.hasOwnProperty('sub_menu')) {
                                 if (selected !== null) { //selected menu detail
-                                    if (item.hasOwnProperty('option_available')) {
-                                        // 선택한 옵션을 가져와서 DB에 넣어야함
-                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                        return true;
-                                    }
-                                    else {  //none option
-                                        return true;
-                                    }
+                                    return true;
                                 }
                                 else { //selected nothing
                                     alert('모두 선택해주세요');
@@ -320,14 +277,7 @@ export default Basket = ({ navigation, route }) => {
                                 }
                             }   //if
                             else {  //sub_menu none >> 단일메뉴임
-                                if (item.hasOwnProperty('option_available')) {
-                                    // 선택한 옵션을 가져와서 DB에 넣어야함
-                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    return true;
-                                }
-                                else {  //none option
-                                    return true;
-                                }
+                                return true;
                             }   //else
                         }
 
@@ -335,14 +285,7 @@ export default Basket = ({ navigation, route }) => {
                             //sub_menu 확인
                             if (item.hasOwnProperty('sub_menu')) {
                                 if (selected !== null) { //selected menu detail
-                                    if (item.hasOwnProperty('option_available')) {
-                                        // 선택한 옵션을 가져와서 DB에 넣어야함
-                                        // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                        return true;
-                                    }
-                                    else {  //none option
-                                        return true;
-                                    }
+                                    return true;
                                 }
                                 else { //selected nothing
                                     alert('모두 선택해주세요');
@@ -351,14 +294,7 @@ export default Basket = ({ navigation, route }) => {
                             }   //if
 
                             else {  //sub_menu none >> 단일메뉴임
-                                if (item.hasOwnProperty('option_available')) {
-                                    // 선택한 옵션을 가져와서 DB에 넣어야함
-                                    // 이 항목은 필수가 아니라 선택이므로 있어도 되고 없어도 됨
-                                    return true;
-                                }
-                                else {  //none option
-                                    return true;
-                                }
+                                return true;
                             }   //else
                         }
 
@@ -600,9 +536,9 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost}원</Text>
                                     {/* 버튼 */}
                                     <View style={basketStyles.basketLeftColumnButtonWrapper}>
-                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', count)} />
+                                        <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', count, 'count')} />
                                         <Text >{count}</Text>
-                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', count)} />
+                                        <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', count, 'count')} />
                                     </View>
                                     {/* 왼쪽 세로 줄 */}
                                 </View>
@@ -679,52 +615,44 @@ export default Basket = ({ navigation, route }) => {
                                     </View>
                                 </View>
                             </View>
-                            <View style={[basketStyles.subBackground, { backgroundColor: 'snow', alignItems: 'stretch', width: '100%' }]}>
+                            <View style={[basketStyles.subBackground, { backgroundColor: '#E8A9A2', alignItems: 'stretch', width: '100%', marginBottom:8 }]}>
                                 <ChooseDetail subMenu={item} />
-                                <View style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: '#484C96', margin: 0, borderBottomWidth: 1, borderColor: 'lightgray' }]}>
-                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>OPTIONS : 선택사항</Text>
-                                </View>
+                                <TouchableOpacity 
+                                    style={[basketStyles.goToBasket, { width: '100%', marginBottom: 12, backgroundColor: '#69302A', margin: 0, borderBottomWidth: 1, borderColor: '#694C49', flexDirection: 'row' }]}
+                                    onPress={() => { optionVisible === false ? setOptionVisible(true) : setOptionVisible(false) } }
+                                    >
+                                    <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'left', width: '80%' }}>OPTIONS : 선택사항</Text>
+                                    <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'right', width: '20%' }}>▼</Text>
+                                </TouchableOpacity>
+                                
                                 {
-                                    type === 'drink' && item.option_available.shot === true ?
+                                    type === 'drink' && optionVisible === true ?
                                         <>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                                 <Text style={{ fontSize: 12, marginStart: 10 }}>에스프레소 샷 추가(+500원)</Text>
                                             </View>
                                             <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                                 {/* TODO: 음료마다 기본 샷이 다름 */}
-                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', shotNum)} />
+                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', shotNum, 'shotNum')} />
                                                 <Text style={{ width: 100, textAlign: 'center' }}>{shotNum}</Text>
-                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', shotNum)} />
+                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', shotNum, 'shotNum')} />
                                             </View>
                                             <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가됩니다.</Text>
-                                        </>
-                                        :
-                                        <></>
-                                }
-                                {
-                                    type === 'drink' && item.option_available.syrup === true ?
-                                        <>
+
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                                 <Text style={{ fontSize: 12, marginStart: 10 }}>시럽 추가(+500원)</Text>
                                             </View>
                                             <View style={basketStyles.basketLeftColumnButtonWrapper}>
                                                 {/* TODO: 음료마다 기본 샷이 다름 */}
-                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', syrup)} />
+                                                <Button style={basketStyles.amountButton} title='-' onPress={() => handleCount('-', syrup, 'syrup')} />
                                                 <Text style={{ width: 100, textAlign: 'center' }}>{syrup}</Text>
-                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', syrup)} />
+                                                <Button style={basketStyles.amountButton} title='+' onPress={() => handleCount('+', syrup, 'syrup')} />
                                             </View>
                                             <Text style={{ fontSize: 11, color:'gray', textAlign:'center', marginBottom:5 }}>기본에서 추가됩니다.</Text>
-                                        </>
-                                        :
-                                        <></>
-                                }
-                                {
-                                    type === 'drink' && item.option_available.whipping === true ?
-                                        <>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                                 <Text style={{ fontSize: 12, marginStart: 10 }}>휘핑크림 추가(+500원)</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', padding: 10 }}>
@@ -770,7 +698,7 @@ export default Basket = ({ navigation, route }) => {
                                     type === 'bakery' && categoryName === 'Waffle' && item.option_available.cream !== undefined ?
                                         <>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                                 <Text style={{ fontSize: 12, marginStart: 10 }}>생크림 추가(+500원)</Text>
                                             </View>
                                             <TouchableOpacity
@@ -799,7 +727,7 @@ export default Basket = ({ navigation, route }) => {
                                     type === 'bakery' && categoryName === 'Waffle' && item.option_available.syrup !== undefined ?
                                         <>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                                <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                                 <Text style={{ fontSize: 12, marginStart: 10 }}>시럽 추가(+500원)</Text>
                                             </View>
                                             <FlatList
@@ -843,7 +771,7 @@ export default Basket = ({ navigation, route }) => {
                                 }
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingStart: 5 }}>
-                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#484C96' }]} />
+                                        <View style={[basketStyles.smallRadiusIcon, { width: 10, height: 10, backgroundColor: '#69302A' }]} />
                                         <Text style={{ fontSize: 12, marginStart: 10 }}>요청사항 (15자이내)</Text>
                                     </View>
 
@@ -857,12 +785,12 @@ export default Basket = ({ navigation, route }) => {
                                     </TouchableWithoutFeedback>
 
                                 </>
-                                <TouchableOpacity
-                                    style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#020659' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(groupJsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
-                                    <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
-                                </TouchableOpacity>
                             </View>
+                            <TouchableOpacity
+                                style={[basketStyles.pushToBasket, { alignSelf: 'center', width: '100%', backgroundColor: '#69302A' }]}
+                                onPress={() => handleOrder(item) === true ? [sendOrder(groupJsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
+                            </TouchableOpacity>
                         </View>
                         <View
                             style={{ flexDirection: 'row', marginTop: 8 }}>
@@ -874,36 +802,7 @@ export default Basket = ({ navigation, route }) => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-                                // onPress={
-                                //     () =>
-                                //     handleOrder(item) === true ? navigation.navigate('Paying',{ totalCost: item.cost, shopInfo: shopInfo}) : {}
-                                // }
                                 onPress={() => handleOrder(item) === true ? setModalVisible(true) : setModalVisible(false)}
-                            // 이 부분은 바로 결제시에는 장바구니에 관련없이 그 상품 하나만을 결제하도록 바꿨음 >> 2020.09.06
-                            // onPress={() => [
-
-                            //     totalCost > 0 ?
-
-                            //         handleOrder(item) === true ?
-
-                            //             navigation.navigate('Paying',
-                            //                 {
-                            //                     totalCost: totalCost + item.cost,
-                            //                     shopInfo: shopInfo
-                            //                 }
-                            //             ) : {}
-
-                            //         :
-                            //         handleOrder(item) === true ?
-
-                            //             navigation.navigate('Paying',
-                            //                 {
-                            //                     totalCost: item.cost,
-                            //                     shopInfo: shopInfo
-                            //                 }
-                            //             ) : {}
-                            // ]
-                            // }
                             >
                                 <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                             </TouchableOpacity>
