@@ -11,6 +11,7 @@ import { exampleStyle } from './styles';
 import Tabs from 'react-native-tabs';
 import { color } from 'react-native-reanimated';
 import { OrderlistStyle } from './styles';
+import { TabView, TabBar } from 'react-native-tab-view';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
 var currentTime = moment().format('YYYY_MM_DD');
@@ -105,19 +106,19 @@ export default class SupervisorTabview extends Component {
                     <View style={OrderlistStyle.OrderlistBody_2_top} > 
                     <Text style={{ fontSize:25,color: 'white', fontWeight: 'bold', textAlign: 'center' }}>주 문 현 황</Text>
                      </View>
-
                       <View style={OrderlistStyle.OrderlistBody_2_bottom} >
                      <Text>BODY_2_down</Text>
                         <FlatList
                             data={this.state.list}
                         
-                            numColumns={2}
+                            numColumns={1}
                             keyExtractor={item => item.key}
                             scrollEnabled={true}
                             renderItem={({item})=>{
                               return(
-                                  <View  style={exampleStyle.listbox}>    
-                                      <Text style={exampleStyle.orderlisttext}>{item.name} {item.orderTime}</Text>
+                                  <View  style={exampleStyle.listbox}>
+                                    <View stlye={exampleStyle.listContainer} > 
+                                      <Text style={exampleStyle.orderlisttext}>{item.name}</Text>
                                       <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
                                       {/* <View style={exampleStyle.orderlistview}>
                                           <Button 
@@ -128,6 +129,7 @@ export default class SupervisorTabview extends Component {
                                           <Button  style={{margin:5}}
                                           title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
                                       </View> */}
+                                      </View>
                                   </View>)
                               }}
                         />
@@ -135,7 +137,6 @@ export default class SupervisorTabview extends Component {
                    
                 </View>
             </View>
-
           <Text style={styles.welcome}>
               Welcome to React Native
           </Text> 

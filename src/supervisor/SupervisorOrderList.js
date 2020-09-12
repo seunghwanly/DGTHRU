@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, Lis
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
 
+import { HPageViewHoc, TabView } from 'react-native-head-tab-view'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
