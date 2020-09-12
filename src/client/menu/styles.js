@@ -124,11 +124,11 @@ const basketStyles = StyleSheet.create({
         margin: 10
     },
     amountButton: {
-        backgroundColor: 'darkgray',
-        borderRadius: 10,
-        width: '5%',
-        height: '5%',
-        color: 'midnightblue'
+        backgroundColor: '#DDD',
+        borderRadius: 5,
+        marginHorizontal:10,
+        width: 20,
+        height: 20,
     },
     chooseDetailWrapper: {
         justifyContent: 'center',
@@ -154,6 +154,7 @@ const basketStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'stretch',
+        marginBottom:10
     },
     basketLeftColumnWrapper: {
         justifyContent: 'center',
@@ -164,6 +165,7 @@ const basketStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        marginVertical:3
     },
     basketRightColumnWrapper: {
         alignItems: 'center',
