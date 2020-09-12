@@ -5,6 +5,7 @@ import {
     Button,
     TextInput,
     KeyboardAvoidingView,
+    TouchableOpacity,
     ScrollView
 } from 'react-native';
 import { clientStyles } from './styles';
@@ -174,30 +175,36 @@ function Verify({ navigation, number }) {
     if (!confirm) {
         return (
             <View style={clientStyles.background}>
-
-                <View style={clientStyles.header}>
-                    <Text style={clientStyles.title}>DGTHRU</Text>
-                    <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-                </View>
-                <ScrollView>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
+                    style={{ width: '100%' }}
+                >
+                    <View style={clientStyles.header}>
+                        <Text style={clientStyles.title}>DGTHRU</Text>
+                        <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+                    </View>
                     <View style={clientStyles.body}>
                         <KeyboardAvoidingView
-                            behavior='position'
+                            behavior={Platform.OS == "ios" ? "padding" : "height"}
                             keyboardVerticalOffset={30}
                             style={clientStyles.background}
                         >
                             <TextInput
                                 style={
-                                    [clientStyles.components, clientStyles.phoneNumber]
+                                    [clientStyles.phoneNumber]
                                 }
-                                placeholder='010-1234-1234'
+                                placeholder='01012345678'
                                 onChangeText={text => onNumberChange(text)}
+                                keyboardType='phone-pad'
+                                returnKeyType='done'
                             />
-                            <Button
-                                style={[clientStyles.components, { width: '50%' }]}
-                                title='인증번호 보내기'
+                            <TouchableOpacity
+                                style={clientStyles.components}
                                 onPress={() => signInWithPhoneNumber('+82' + number)}
-                            />
+                            >
+                                <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>인증번호 보내기</Text>
+                            </TouchableOpacity>
                         </KeyboardAvoidingView>
 
                     </View>
@@ -206,7 +213,7 @@ function Verify({ navigation, number }) {
                             appleAuth.isSupported === false ?
 
                                 <View style={clientStyles.footer}>
-                                    <Text>Apple Authentication is not supported on this device.</Text>
+                                    <Text>애플로그인이 지원되지않습니다.</Text>
                                 </View>
 
                                 :
@@ -226,16 +233,20 @@ function Verify({ navigation, number }) {
 
     return (
         <View style={clientStyles.background}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={false}
+                style={{ width: '100%' }}
+            >
 
-            <View style={clientStyles.header}>
-                <Text style={clientStyles.title}>DGTHRU</Text>
-                <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-            </View>
-            <ScrollView>
+                <View style={clientStyles.header}>
+                    <Text style={clientStyles.title}>DGTHRU</Text>
+                    <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+                </View>
                 <View style={clientStyles.body}>
                     <Text style={clientStyles.subTitle}>{number}</Text>
                     <KeyboardAvoidingView
-                        behavior='position'
+                        behavior={Platform.OS == "ios" ? "padding" : "height"}
                         keyboardVerticalOffset={20}
                         style={clientStyles.background}
                     >
@@ -243,15 +254,18 @@ function Verify({ navigation, number }) {
                             style={clientStyles.phoneNumber}
                             placeholder='인증번호를 입력해주세요.'
                             onChangeText={text => setCode(text)}
+                            keyboardType='phone-pad'
                         />
-                        <Button
-                            title='인증하기'
+                        <TouchableOpacity
+                            style={clientStyles.components}
                             onPress={() => confirmCode()}
-                        />
+                        >
+                            <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>인증하기</Text>
+                        </TouchableOpacity>
                     </KeyboardAvoidingView>
                 </View>
-                <View style={[clientStyles.footer, clientStyles.subTitle]}>
-                    <Text style={{ margin: 15, textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
+                <View style={[clientStyles.footer]}>
+                    <Text style={{ color:'#ddd', textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
                 </View>
             </ScrollView>
         </View>

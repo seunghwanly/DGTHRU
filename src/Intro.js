@@ -41,7 +41,7 @@ function Intro({ navigation }) {
                     style={styles.confirmButton}
                     onPress={() => navigation.navigate('Verify')}
                 >
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#fff' }}>시작하기</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -59,7 +59,7 @@ function Intro({ navigation }) {
                     user.phoneNumber === '+821011112222' ? navigation.replace('SupervisorShops') : navigation.replace('Shops')
                 }}
             >
-                <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'white' }}>시작하기</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#260101' }}>시작하기</Text>
             </TouchableOpacity>
         </View>
     )

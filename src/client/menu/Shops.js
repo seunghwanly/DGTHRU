@@ -9,11 +9,10 @@ import {
 } from 'react-native';
 import { clientStyles } from '../styles';
 import { storeData } from '../../utils/asyncStorage';
+import ImageLinker from '../../utils/ImageLinker'
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
-
-
 
 const shopData = [
     {
@@ -102,15 +101,24 @@ class Item extends React.Component {
         
         return (
             <View style = {clientStyles.itemContainer}>
+
                 <TouchableOpacity
                     style={clientStyles.imageContainer}
                     onPress={this._onPress}
                     onLongPress={this._LongPress}
                 >
-                    <Image style = {clientStyles.image} source={putpicture(id)}/>
+                    <ImageLinker
+                        name={id}
+                        style={{
+                            width: 80,
+                            height: 80,
+                            marginVertical : 2,
+                            marginTop: 15
+                        }} />
+                    {/* <Image style = {clientStyles.image} source={putpicture(id)}/> */}
+                    <Text style={clientStyles.itemDesc}>{title}</Text>
+                    <Text style={clientStyles.itemSubDesc}>{location}</Text>
                 </TouchableOpacity>
-                <Text style={clientStyles.itemDesc}>{title}</Text>
-                <Text style={clientStyles.itemSubDesc}>{location}</Text>
             </View>
         );
     }
@@ -166,19 +174,25 @@ function Shops({ navigation }) {
     
     return (
         <>
-            <View style={clientStyles.background}>
-                <View style={clientStyles.header}>
-                    <Text style={clientStyles.title}>DGTHRU</Text>
-                    <Text style={clientStyles.subTitle}>동국대학교 CAFE LIST</Text>
-                </View>
-                <View style={clientStyles.body}>
+            <View style={[clientStyles.background,{ padding:'2%' }]}>
+                <View style={
+                    { 
+                        paddingTop:50, 
+                        paddingHorizontal:5,
+                        marginTop: '20%', 
+                        borderTopStartRadius:30, 
+                        borderTopEndRadius:30,
+                        backgroundColor:'#fff'
+                    }
+                    }
+                    >
                     <FlatList
                         data={shopData}
                         renderItem={renderItem}
                         numColumns={2}
                         keyExtractor={keyExtractor}
-                        scrollEnabled={true}
-                        contentContainerStyle={{alignItems:'stretch'}}
+                        scrollEnabled={false}
+                        contentContainerStyle={{ width : '100%'}}
                     />
                 </View>
             </View>

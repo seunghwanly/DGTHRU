@@ -2,48 +2,50 @@ import { StyleSheet } from 'react-native';
 
 const clientStyles = StyleSheet.create({
     background: {
-        width: '100%',
-        height: '100%',
         justifyContent:'center',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: 5,
-        flex: 7
+        backgroundColor: '#182335',
+        flex:1
     },
     header: {
-        flex:1,
-        width: '100%',
         marginTop:20,
         alignItems: 'center',
+        marginBottom:40
     },
     body: {
-        flex:5,
-        width: '100%',
-        margin:5,
+        marginVertical:'50%'
     },
     footer: {
-        flex:1,
         // width: '100%',
-        justifyContent:'center'
-        
+        justifyContent:'center',
+        bottom:'5%'
     },
     title: {
         fontSize: 40,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'#fff'
     },
     subTitle: {
         fontSize: 22,
-        color: 'gray',
+        color: '#ccc',
         textAlign: 'center'
     },
     components: {
-        fontSize: 20,
+        backgroundColor: '#e15546',
+        width: 240,
+        marginTop:'10%',
+        padding:10,
+        borderRadius: 10,
+        bottom:'0%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf:'center'
     },
     phoneNumber: {
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: '#eee',
         borderRadius: 8,
         backgroundColor: 'white',
         paddingBottom: 10,
@@ -84,34 +86,46 @@ const clientStyles = StyleSheet.create({
         padding: 5
     },
     itemDesc: {
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'#182355',
+        marginVertical:4
     },
     itemSubDesc: {
         textAlign: 'right',
-        color: 'gray',
-        fontSize: 10,
-        marginEnd: 10
+        color: '#555',
+        fontSize: 12,
+        marginVertical:2
     },
     image: {
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: 'lightgray',
-        borderRadius: 12,
-        width:'95%'
+        resizeMode:'cover',
+        width:'100%',
+        height:100,
+        borderTopStartRadius:20,
+        borderTopEndRadius:20
     },
     itemContainer: {
         width:'50%',
         alignItems: 'center',
-        flexWrap:'wrap',
+        backgroundColor:'#fff'
     },
     imageContainer:{
-        width: '100%',
+        width: '90%',
+        backgroundColor:'#fff',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '2%',
+        marginVertical:10,
+        paddingTop:0,
+        paddingVertical:20,
+        borderRadius:20,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:2
     },
     
 });

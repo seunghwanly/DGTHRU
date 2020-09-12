@@ -63,7 +63,7 @@ export default class TabViewExample extends React.Component {
     _setIndex = (idx) => {
         if (this.state.isDrinkMenu === true) {
             this.scrollView.scrollTo({
-                x: 435 * (idx / 8)
+                x: 500 * (idx / 8)
             });
         } else {
             this.scrollView.scrollTo({
@@ -97,7 +97,7 @@ export default class TabViewExample extends React.Component {
                 <>
                     <TabView
                         renderTabBar={(props) => (
-                            <View>
+                            <View style={{ backgroundColor:'#182335', paddingHorizontal:'5%' }}>
                                 <ScrollView
                                     horizontal={true}
                                     showsHorizontalScrollIndicator={false}
@@ -105,8 +105,19 @@ export default class TabViewExample extends React.Component {
                                 >
                                     <TabBar
                                         {...props}
-                                        indicatorStyle={{ backgroundColor: 'white' }}
-                                        style={{ backgroundColor: '#E8A9A2', height: 50, width: 810, justifyContent: 'center' }}
+                                        indicatorStyle={{ 
+                                            backgroundColor: '#EEAF9D',
+                                            borderRadius:20,
+                                            height:100,
+                                        }}
+                                        
+                                        style={{ 
+                                            marginTop:'5%',
+                                            backgroundColor: 'transparent',
+                                            height: 100, 
+                                            width: 'auto', 
+                                            justifyContent: 'center',
+                                        }}
                                         getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
                                         scrollEnabled={true}
                                         tabStyle={{ width: 90 }}
@@ -173,17 +184,17 @@ export default class TabViewExample extends React.Component {
                                 right: '10%',
                                 bottom: '12%',
                                 position: 'absolute',
-                                backgroundColor: '#E8A9A2',
+                                backgroundColor: '#EEAF9D',
                                 borderRadius: 30,
                                 justifyContent: 'center',
                                 padding: 5,
-                                shadowColor: "#000",
+                                shadowColor: "#333",
                                 shadowOffset: {
                                     width: 1,
-                                    height: 1
+                                    height: 2
                                 },
                                 shadowOpacity: 0.25,
-                                shadowRadius: 3,
+                                shadowRadius: 2,
                                 elevation: 1
                             }
                         }
@@ -208,14 +219,17 @@ class MenuChildView extends React.Component {
 
         return (
             <View style={menuStyles.background}>
-                <View style={[menuStyles.sectionHeader, { height: 'auto', width: '90%', borderColor: 'lightgray' }]}>
-                    <Text style={[menuStyles.subTitle, { color: 'black', fontSize: 16 }]}>{categoryName}</Text>
+                <View style={[menuStyles.sectionHeader, { height: 'auto'}]}>
+                    <Text style={[menuStyles.subTitle, { color: 'black', fontSize: 16, paddingStart:5, paddingTop:5 }]}>{categoryName}</Text>
                 </View>
-                <ScrollView style={[menuStyles.sectionHeader, {
-                    width: '90%',
-                    height: '100%',
-                    borderColor: 'lightgray'
-                }]}
+                <ScrollView 
+                    style={
+                        {
+                            width:'95%',
+                            padding:10,
+                            backgroundColor:'#fff'
+                        }
+                        }
                     scrollEnabled={true}
                     showsVerticalScrollIndicator={false}
                 >
@@ -261,7 +275,9 @@ class MenuChildView extends React.Component {
                         contentContainerStyle={{ alignItems: 'flex-start', margin: 5 }}
                     />
                 </ScrollView>
-                <Text style={{ marginBottom: 25, color: 'gray', fontSize: 12 }}>길게 누르시면 '즐겨찾기' 등록이 가능합니다.</Text>
+                <View style={{ backgroundColor: '#fff', width:'95%', alignItems:'center' }}>
+                    <Text style={{ marginBottom: 25, color: 'gray', fontSize: 12 }}>길게 누르시면 '즐겨찾기' 등록이 가능합니다.</Text>
+                </View>
             </View>
         )
     }

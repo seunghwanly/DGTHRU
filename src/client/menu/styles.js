@@ -7,6 +7,7 @@ const menuStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        backgroundColor:'#182335'
     },
     radiusIcon: {
         width: 90,
@@ -65,10 +66,10 @@ const menuStyles = StyleSheet.create({
     },
     sectionHeader : {
         backgroundColor:'white',
-        borderRadius:10,
-        margin:10,
-        paddingTop:10,
-        height:'22%'
+        width:'95%',
+        marginTop:'20%',
+        borderTopStartRadius:20,
+        borderTopEndRadius:20
     }
 });
 
@@ -79,17 +80,14 @@ const basketStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white',
-        padding: '5%',
+        backgroundColor: '#182335',
+        
     },
     subBackground: {
-        width: '95%',
-        height: 'auto',
-        backgroundColor: 'ghostwhite',
+        padding:'5%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        padding: 10
+        marginTop:5,        
     },
     radiusIcon: {
         width: 80,
@@ -112,16 +110,16 @@ const basketStyles = StyleSheet.create({
     radiusText: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: 'midnightblue',
+        color: '#000',
         textAlign: 'center',
         margin: 10
     },
     smallRadiusText: {
         fontSize: 12,
         fontWeight: 'bold',
-        color: 'midnightblue',
+        color: '#333',
         textAlignVertical: 'center',
-        margin: 10
+        margin: 5
     },
     amountButton: {
         backgroundColor: '#DDD',
@@ -143,54 +141,90 @@ const basketStyles = StyleSheet.create({
     },
     chooseDetailItem: {
         width: 80,
-        borderRadius: 8,
+        height: 80,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 5,
-        margin: 2,
+        margin: 4,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:1
     },
     basketWrapper: {
-        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'stretch',
         marginBottom:10
     },
-    basketLeftColumnWrapper: {
+    basketTopColumnWrapper: {
+        width:'100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginStart:5
     },
-    basketLeftColumnButtonWrapper: {
+    basketTopColumnButtonWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical:3
     },
-    basketRightColumnWrapper: {
+    basketOptionWrapper: {
+        width:'100%',
         alignItems: 'center',
-        width: '72%',
+        flexDirection :'row',
+        borderRadius:15,
+        marginVertical:2,
+        padding:5,
+        backgroundColor:'white',
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:2
+    },
+    basketPreferOptionWrapper: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        paddingStart: 5, 
+        alignSelf:'flex-start'
     },
     basketTwoItem: {
         width: 80,
-        height: 40,
-        borderRadius: 8,
+        height: 80,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 5,
         margin: 2,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:1
     },
     basketThreeItem: {
         width: 60,
-        height: 40,
-        borderRadius: 8,
+        height: 60,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 5,
         margin: 2,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:1
     },
     pushToBasket: {
-        backgroundColor: 'dodgerblue',
+        backgroundColor: '#eeaf9d',
         padding: 10,
         borderRadius: 10,
         justifyContent: 'center',
@@ -198,9 +232,11 @@ const basketStyles = StyleSheet.create({
         height: 40,
         paddingLeft: 45,
         paddingRight: 45,
+        marginVertical:5,
+        width:300
     },
     goToBasket: {
-        backgroundColor: '#69302A',
+        backgroundColor: '#EEAF9D',
         borderRadius: 10,
         paddingStart: 10,
         paddingEnd: 10,
@@ -254,12 +290,13 @@ const basketStyles = StyleSheet.create({
         width: 300
     },
     offerLayout : {
-        width:'90%', 
+        width:300,
         borderWidth:1,
         borderColor:'lightgrey', 
-        alignSelf:'center', 
+        alignSelf:'center',
         fontSize:12, 
-        padding:10, 
+        paddingVertical:10,
+        paddingStart:10,
         backgroundColor:'white',
         borderRadius:10,
         marginTop:5,
