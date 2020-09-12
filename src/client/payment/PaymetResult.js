@@ -361,29 +361,30 @@ export default class PaymentResult extends React.Component {
                                                 {
                                                     item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
                                                 }
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.cup} / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.cost}원 / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.count}개 </Text>
+                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.cup} / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.cost}원 / </Text>
+                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.count}개 </Text>
                                             </View>
-                                            <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                            <View style={{ flexDirection: 'row', marginVertical: 1 }}>
                                                 {
-                                                    item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
+                                                    item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
                                                 }
                                                 {
-                                                    item.options.syrup !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>시럽 추가 : {item.options.syrup} / </Text> : <></>
+                                                    item.options.syrup !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>시럽 추가 : {item.options.syrup} / </Text> : <></>
                                                 }
                                                 {
-                                                    item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
+                                                    item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
                                                 }
                                             </View>
-                                            <View style={{ flexDirection: 'row', marginTop: 2, marginBottom:5 }}>
+                                            <View style={{ flexDirection: 'row', marginTop: 2, marginBottom:3 }}>
                                                 {
-                                                    item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 14 }}>요청사항 : {item.options.offers}</Text> : <></>
+                                                    item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
                                                 }
                                             </View>
                                         </>
                                     )
                                 }
+                                keyExtractor={(item, index) => item.key}
                             />
                         </View>
 
@@ -441,10 +442,9 @@ export default class PaymentResult extends React.Component {
                                 width: 60,
                                 height: 60,
                                 position: 'absolute',
-                                right: '8%',
-                                top: '40%',
+                                right: '5%',
+                                top:'5%',
                                 transform: [{ rotate: '330deg' }],
-
                             }}
                         />
 

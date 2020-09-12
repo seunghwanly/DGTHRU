@@ -37,17 +37,17 @@ export default class HeaderRight extends React.Component {
 
     _fetchData() {
         this._basketDatabase
-        .on('value', (snapshot) => {
-            var groupShopInfo = '';
-            snapshot.forEach((childSnapShot) => {
-                console.log('snapshot > ' + snapshot.key, snapshot.val(), childSnapShot.key, childSnapShot.val());
-                groupShopInfo = childSnapShot.val().shopInfo;
-            })
-            this.setState({ 
-                amount: this.countProperties(snapshot.val()),
-                shopInfo : groupShopInfo 
+            .on('value', (snapshot) => {
+                var groupShopInfo = '';
+                snapshot.forEach((childSnapShot) => {
+                    //console.log('snapshot > ' + snapshot.key, snapshot.val(), childSnapShot.key, childSnapShot.val());
+                    groupShopInfo = childSnapShot.val().shopInfo;
+                })
+                this.setState({
+                    amount: this.countProperties(snapshot.val()),
+                    shopInfo: groupShopInfo
+                });
             });
-        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -61,13 +61,10 @@ export default class HeaderRight extends React.Component {
     render() {
         console.log('> HeaderRight render : ' + this.state.amount);
         return (
-            <View style={{flexDirection:'row'}}>
-            {
-                this.props.page !== 'Shops' ?
-            
+            <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
-                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo : this.state.shopInfo })}
+                    onPress={() => this.props.navigation.navigate('Basket', { shopInfo: this.state.shopInfo })}
                 >
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
@@ -76,18 +73,13 @@ export default class HeaderRight extends React.Component {
                     />
                     {
                         this.state.amount !== null ?
-                            <View style={{ backgroundColor: 'deepskyblue', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
+                            <View style={{ backgroundColor: '#E8A9A2', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
                                 <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{this.state.amount}</Text>
                             </View>
                             :
                             <></>
                     }
                 </TouchableOpacity>
-
-                :
-
-                <></>
-            }
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}

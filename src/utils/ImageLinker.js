@@ -28,6 +28,18 @@ export default ImageLinker = (item) => {
         case "카페모카":
             return (<Image style={item.style} resizeMode='cover' source={require('../../image/menu-image/cafe-mocha.jpg')} />)
 
+        case "main_outdoor":
+            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/가온누리.png')} />)
+        case "singong_1f":
+            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/남산학사.png')} />)
+        case "hyehwa_roof":
+            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/혜화.png')} />)
+        case "economy_outdoor":
+            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/그루터기.png')} />)
+        case "munhwa_1f":
+            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/두리터.png')} />)
+
+
         default:
             return (<View style={item.style}><Text style={{ color: 'white', fontSize: 12 }}>준비중</Text></View>)
     }

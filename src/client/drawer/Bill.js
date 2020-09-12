@@ -113,12 +113,12 @@ export default class Bill extends React.Component {
         this._userHistoryDB
             .once('value', (snapshot) => {
 
-                //this.setState({ userHistory: [] });
                 var tempJSONArray = [];
                 var tempSubJSONArray = [];
+                
                 // console.log('snapshot >> ' + snapshot.val());
                 snapshot.forEach((childSnapShot) => {
-                    tempJSONArray = []; tempSubJSONArray = [];
+                    tempJSONArray = [];
                     var subObjectKey = childSnapShot.key;
                     // console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
                     // 날짜 : { autokey : { values } }
@@ -147,7 +147,7 @@ export default class Bill extends React.Component {
                             var tempGroupTotalCost = 0;
 
                             dataSnapShot.forEach((groupChild) => {
-
+                                tempSubJSONArray = [];
                                 groupChild.forEach((item) => {
                                     tempItemOrderTime = item.val().orderTime; //key
                                     tempItemShopInfo = item.val().shopInfo; //shopInfo
@@ -157,24 +157,25 @@ export default class Bill extends React.Component {
                                         cost: item.val().cost,
                                         options: item.val().options
                                     });
+                                    console.log('>>>>> groupChild.forEach : ' + tempSubJSONArray.length, groupChild.key, );
                                     tempTotalCost += item.val().cost;
                                     tempGroupTotalCost += item.val().cost;
 
                                 })  //item
                                 tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
+                                //to object
+                                var forPush = {
+                                    orderTime: tempItemOrderTime,
+                                    orderNumber: dataSnapShot.key,
+                                    group: tempSubJSONArray,
+                                    shopInfo: tempItemShopInfo,
+                                    totalCost: tempGroupTotalCost,
+                                    date: subObjectKey
+                                };
+    
+                                //push to main array
+                                tempJSONArray.push(forPush);
                             })  //groupChild
-                            //to object
-                            var forPush = {
-                                orderTime: tempItemOrderTime,
-                                orderNumber: dataSnapShot.key,
-                                group: tempSubJSONArray,
-                                shopInfo: tempItemShopInfo,
-                                totalCost: tempGroupTotalCost,
-                                date: subObjectKey
-                            };
-
-                            //push to main array
-                            tempJSONArray.push(forPush);
                         }
                     }); //dataSnapShot
 
@@ -285,7 +286,7 @@ export default class Bill extends React.Component {
                                 <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />}>
                                     {
                                         userHistory.map((items) => {
-                                            {/* console.log('Bills  >> \n\n' + JSON.stringify(this.state.userHistory)); */ }
+                                            //console.log(' bills > ' + JSON.stringify(items));
                                             return (
                                                 <>
                                                     <View style={{ paddingTop: 2, paddingBottom: 2, marginBottom: 5, borderBottomColor: 'lightgray', borderBottomWidth: 1 }}>
