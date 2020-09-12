@@ -68,9 +68,7 @@ export default class BasketDetail extends React.Component {
                 var idx = 0;    // loop
 
                 snapshot.forEach((childSnapShot) => {
-                    //console.log('\nBasketDetail >> ' + JSON.stringify(childSnapShot.val()));
-
-
+                    
                     var tempJSON = {
                         "idx": idx,
                         "key": childSnapShot.key,
@@ -99,12 +97,25 @@ export default class BasketDetail extends React.Component {
 
     render() {
 
-        console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.orderData));
-
+        // console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.orderData));
+        // total cost
         var totalCost = 0;
         this.state.orderData.map(item => {
             totalCost += Number(item.value.cost) * Number(item.value.options.count);
         })
+        
+        // is items are in same shops?
+        var isSameshop = false;
+        if(this.state.orderData.length > 1) {
+            for (var i = 0; i < this.state.orderData.length-1; i++) {
+                if (this.state.orderData[i].value.shopInfo === this.state.orderData[i + 1].value.shopInfo)
+                    isSameshop = true;
+                else
+                    isSameshop = false;
+            }
+            
+        }
+        else isSameshop = true;
 
         if (this.state.orderData.length > 0) {
             return (
@@ -116,6 +127,7 @@ export default class BasketDetail extends React.Component {
                                 return (
                                     <View style={basketStyles.detailWrapper}>
                                         <View style={basketStyles.detailItemNameWrapper}>
+                                            <ImageLinker name={item.value.shopInfo} style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
                                             <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon, { marginEnd: 5 }]} />
                                             <Text style={basketStyles.smallRadiusText}>{} {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
                                         </View>
@@ -156,20 +168,33 @@ export default class BasketDetail extends React.Component {
                     </View>
                     <TouchableOpacity
                         style={basketStyles.goToPayment}
-                        onPress={() =>
-                            [
-                                alert('카카오페이로 결제합니다 !'),
-                                this.props.navigation.navigate('Paying',
-                                    {
-                                        totalCost: totalCost,
-                                        quantity: this.state.orderData.length,
-                                        shopInfo: this.props.route.params.shopInfo,
-                                        itemData: JSON.stringify(this.state.propsData)
-                                    }
-                                ),
-                                //pop and push
-                                handleOrder(this.props.route.params.shopInfo, this.state.propsData)
-                            ]}
+                        onPress={() => {
+                            isSameshop === true ?
+                                Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
+                                    [
+                                        {
+                                            text: '취소', onPress: () => console.log('canceled order')
+                                        },
+                                        {
+                                            text: '확인', onPress: () =>
+                                                [
+                                                    this.props.navigation.navigate('Paying',
+                                                        {
+                                                            totalCost: totalCost,
+                                                            quantity: this.state.orderData.length,
+                                                            shopInfo: this.props.route.params.shopInfo,
+                                                            itemData: JSON.stringify(this.state.propsData)
+                                                        }
+                                                    ),
+                                                    //pop and push
+                                                    handleOrder(this.props.route.params.shopInfo, this.state.propsData)
+                                                ]
+                                        }
+                                    ])
+                                :
+                                Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !",[{ text:'확인', onPress:()=>console.log('> set of diff shopInfo'), style:'cancel'}])
+                        }
+                        }
                     >
                         <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
                     </TouchableOpacity>
