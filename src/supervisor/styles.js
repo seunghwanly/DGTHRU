@@ -81,7 +81,7 @@ const exampleStyle = StyleSheet.create({
         alignSelf:'center',
         margin: 5, 
         backgroundColor:'dodgerblue', 
-        width: '85%', 
+        width: '100%', 
         padding:10,
         flex:1,
         borderRadius:10,
@@ -99,6 +99,13 @@ const exampleStyle = StyleSheet.create({
     buttonstyle: {
         padding: 5,
     },
+    listContainer: {
+        flex: 1, 
+        backgroundColor:'blue',
+        justifyContent: "center", 
+        alignItems: "center",
+    },
+    
     
 })
 const OrderlistStyle = StyleSheet.create({
