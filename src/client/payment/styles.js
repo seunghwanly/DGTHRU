@@ -4,7 +4,7 @@ const paymentStyles = StyleSheet.create({
     background: {
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white',
+        backgroundColor: '#eeaf9d',
         padding: '10%',
         flex: 1
     },
@@ -20,20 +20,19 @@ const paymentStyles = StyleSheet.create({
         margin: 20
     },
     orderWrapper:{
-        width:'100%',
-        justifyContent:'center',
+        width:300,
         flexDirection :'column',
         borderRadius:15,
         marginVertical:2,
-        padding:10,
+        padding:20,
         backgroundColor:'white',
         shadowColor: "#333",
         shadowOffset: {
             width: 1,
-            height: 2
+            height: 1
         },
-        shadowOpacity: 0.3,
-        shadowRadius:2
+        shadowOpacity: 0.5,
+        shadowRadius:1
     }
 });
 

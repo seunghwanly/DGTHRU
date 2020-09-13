@@ -339,24 +339,27 @@ export default class PaymentResult extends React.Component {
                 }
 
                 return (
-                    <ScrollView>
-                        <View style={{ backgroundColor: 'white' }}>
-                            <Image
-                                style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
-                                source={require('../../../image/sample.gif')} />
-                        </View>
-                        <View style={paymentStyles.background}>
-                            
+                    <View style={{ flex:1, backgroundColor: '#eeaf9d' }}>
+                        <ScrollView
+                            style={{ backgroundColor:'#eeaf9d' }}
+                        >
+                            <View style={{  }}>
+                                <Image
+                                    style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
+                                    source={require('../../../image/sample.gif')} />
+                            </View>
+                            <View style={paymentStyles.background}>
+
                                 <FlatList
                                     data={this.state.data}
                                     renderItem={
                                         ({ item }) => (
                                             <View style={paymentStyles.orderWrapper}>
-                                                <View style={{ flexDirection: 'row' }}>
+                                                <View style={{ flexDirection: 'row', width: '100%' }}>
                                                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
                                                     <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
                                                 </View>
-                                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                                <View style={{ flexDirection: 'row', marginVertical: 2, width: '100%' }}>
                                                     <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.type} / </Text>
                                                     {
                                                         item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
@@ -365,7 +368,7 @@ export default class PaymentResult extends React.Component {
                                                     <Text style={{ color: 'gray', fontSize: 12 }}>{item.cost}원 / </Text>
                                                     <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.count}개 </Text>
                                                 </View>
-                                                <View style={{ flexDirection: 'row', marginVertical: 1 }}>
+                                                <View style={{ flexDirection: 'row', marginVertical: 1, width: '100%' }}>
                                                     {
                                                         item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
                                                     }
@@ -376,7 +379,7 @@ export default class PaymentResult extends React.Component {
                                                         item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
                                                     }
                                                 </View>
-                                                <View style={{ flexDirection: 'row', marginTop: 2, marginBottom: 3 }}>
+                                                <View style={{ flexDirection: 'row', marginTop: 2, marginBottom: 3, width: '100%' }}>
                                                     {
                                                         item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
                                                     }
@@ -386,70 +389,83 @@ export default class PaymentResult extends React.Component {
                                     }
                                     keyExtractor={(item, index) => item.key}
                                 />
-                            
 
-                            <View style={{
-                                backgroundColor: '#F6F6F6',
-                                padding: 30,
-                                width: '100%',
-                                marginVertical: 5,
-                                borderRadius: 10,
-                                borderWidth: 1,
-                                borderColor: 'lightgray'
-                            }}>
-                                <View>
-                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                        <Text style={{ fontWeight: 'bold' }}>결제완료{'\t\t'}</Text>
-                                        <Text>{this.state.timeArray.paid}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                        <Text style={{ fontWeight: 'bold' }}>주문요청{'\t\t'}</Text>
-                                        <Text>{this.state.timeArray.request}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                        <Text style={{ fontWeight: 'bold' }}>주문승인{'\t\t'}</Text>
-                                        <Text>관리자에게</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                        <Text style={{ fontWeight: 'bold' }}>준비완료{'\t\t'}</Text>
-                                        <Text>관리자에게</Text>
-                                    </View>
+                                <Image
+                                    source={getCafeIcon(this.props.route.params.shopInfo)}
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        position: 'absolute',
+                                        right: '5%',
+                                        top: '5%',
+                                        transform: [{ rotate: '330deg' }],
+                                    }}
+                                />
+
+                            </View>
+                        </ScrollView>
+                        <View style={
+                            {
+                                backgroundColor:'#182335',
+                                width:'95%',
+                                borderTopStartRadius:30,
+                                borderTopEndRadius:30,
+                                alignSelf:'center',
+                                padding:20,
+                                shadowColor: "#333",
+                                shadowOffset: {
+                                    width: 1,
+                                    height: 1
+                                },
+                                shadowOpacity: 0.5,
+                                shadowRadius: 1,
+                            }
+                        }>
+                            <Text style={{ fontWeight:'bold' , fontSize:18, marginVertical:20, color:'#fff' }}>결제정보</Text>
+                            <View style={{ paddingStart:20, marginVertical:20 }}>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>결제완료{'\t\t'}</Text>
+                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.paid}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>주문요청{'\t\t'}</Text>
+                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.request}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>주문승인{'\t\t'}</Text>
+                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>준비완료{'\t\t'}</Text>
+                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
                                 </View>
                             </View>
+
                             <TouchableOpacity
                                 style={{
                                     width: '100%',
-                                    backgroundColor: '#020659',
+                                    backgroundColor: '#fff',
                                     borderRadius: 10,
                                     paddingHorizontal: 30,
                                     paddingVertical: 10,
-                                    marginTop: 5
+                                    marginTop: 5,
+                                    shadowColor: "#333",
+                                    shadowOffset: {
+                                        width: 1,
+                                        height: 1
+                                    },
+                                    shadowOpacity: 0.5,
+                                    shadowRadius: 1
                                 }}
                                 onPress={() => [
-                                    // 석운 : 사실 홈으로 돌아가기 버튼을 안 눌러도 되게 하고 싶은데 어떻게 해야 할지 모르겠음.....
-                                    // sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
-                                    // setOrderNumber(this.orderNum),
-                                    // alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
                                     this.props.navigation.pop(),
                                     this.props.navigation.navigate('Shops')
                                 ]}
                             >
-                                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
+                                <Text style={{ color: '#182335', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
                             </TouchableOpacity>
-                            <Image
-                                source={getCafeIcon(this.props.route.params.shopInfo)}
-                                style={{
-                                    width: 60,
-                                    height: 60,
-                                    position: 'absolute',
-                                    right: '5%',
-                                    top: '5%',
-                                    transform: [{ rotate: '330deg' }],
-                                }}
-                            />
-
                         </View>
-                    </ScrollView>
+                    </View>
                 )
             } else {
                 return (
