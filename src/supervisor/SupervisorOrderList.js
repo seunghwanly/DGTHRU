@@ -9,14 +9,15 @@ import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 const initialLayout = { width: Dimensions.get('window').width };
 
-var list_temp;
 
 const FirstRoute = (props) => (
     // 밑에 클래스에서 사용중인 this.state.list 를 여기 FlatList에 data에 꽂아야함 . 그걸 모르겠음.
 
     <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
-        {console.log("시발 먼데여기" + list_temp)}
-        <Text style={exampleStyle.orderlisttext}>helloo</Text>
+        <View>
+            <Text>시발?</Text>
+        </View>
+<Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
         <FlatList
             data={props.data}
             numColumns={1}
@@ -29,7 +30,7 @@ const FirstRoute = (props) => (
 
                             <Text style={exampleStyle.orderlisttext}>{item.name}</Text>
                             <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
-                            {/* <View style={exampleStyle.orderlistview}>
+                            <View style={exampleStyle.orderlistview}>
                                           <Button 
                                           style={exampleStyle.buttonstyle}
                                           title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
@@ -37,7 +38,7 @@ const FirstRoute = (props) => (
                                           title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
                                           <Button  style={{margin:5}}
                                           title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                      </View> */}
+                                      </View>
                         </View>
                     </View>)
             }}
@@ -47,11 +48,23 @@ const FirstRoute = (props) => (
     </View>
 );
 
-const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} />
+const SecondRoute = (props) => (
+    
+    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
+                <View>
+            <Text>시발?</Text>
+        </View>
+<Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
+    </View>
+    
 );
-const ThirdRoute = () => (
-    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} />
+const ThirdRoute = (props) => (
+    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
+                <View>
+            <Text>시발?</Text>
+        </View>
+<Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
+    </View>
 );
 
 var shopname = '';
@@ -85,7 +98,7 @@ export default class SupervisorOrderList extends Component {
 
         this.state = {
             index: 0,
-            routes: [{ key: 'first', title: 'First', datas: list_temp }, { key: 'second', title: 'Second' }, { key: 'third', title: 'Third' }],
+            routes: [{ key: 'first', title: '주문현황' }, { key: 'second', title: '지난주문' }, { key: 'third', title: '메뉴' }],
             list: [],
         }
     }
@@ -94,15 +107,15 @@ export default class SupervisorOrderList extends Component {
         switch(route.key) {
             case 'first':
                 return(
-                    <FirstRoute data={this.state.list}/>
+                    <FirstRoute data={this.state.list} route= {route} />
                 )
             case 'second':
                 return(
-                    <SecondRoute />
+                    <SecondRoute route= {route} />
                 )
             case 'third':
                 return(
-                    <ThirdRoute />
+                    <ThirdRoute route= {route} />
                 )
             default:
                 return null;
@@ -171,10 +184,7 @@ export default class SupervisorOrderList extends Component {
 
             li.sort((d2, d1) => new Moment(d2.orderTime, 'HH:mm:ss') - new Moment(d1.orderTime, 'HH:mm:ss'));
 
-            list_temp = li;
-            //console.log('afterㅈㅈ? : ' , list_temp);
-            this.setState({ list: li })
-            // this.sortListByTime(li)
+            this.setState({ list: li });
         })
 
     }
@@ -195,6 +205,7 @@ export default class SupervisorOrderList extends Component {
 
     render() {
         return (
+          
             <TabView
                 navigationState={{ index: this.state.index, routes: this.state.routes }}
                 renderScene={this.renderScene}
