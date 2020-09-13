@@ -74,13 +74,15 @@ const shopStyles = StyleSheet.create({
 const exampleStyle = StyleSheet.create({
     background: {
         flex: 1, 
+        backgroundColor:'lightgray',
         justifyContent: "center", 
-        alignItems: "center",
+        // alignItems: "center",
+
     },
     listbox: {
         alignSelf:'center',
         margin: 5, 
-        backgroundColor:'dodgerblue', 
+        backgroundColor:'gray', 
         width: '100%', 
         padding:10,
         flex:1,

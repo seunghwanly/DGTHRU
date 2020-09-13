@@ -13,9 +13,9 @@ const initialLayout = { width: Dimensions.get('window').width };
 const FirstRoute = (props) => (
     // 밑에 클래스에서 사용중인 this.state.list 를 여기 FlatList에 data에 꽂아야함 . 그걸 모르겠음.
 
-    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
+    <View style={exampleStyle.background} >
         <View>
-            <Text>시발?</Text>
+            <Text>안뇽ㅎㅎ?</Text>
         </View>
 <Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
         <FlatList
@@ -52,7 +52,7 @@ const SecondRoute = (props) => (
     
     <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
                 <View>
-            <Text>시발?</Text>
+            <Text>안뇽ㅎㅎ</Text>
         </View>
 <Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
     </View>
@@ -61,7 +61,7 @@ const SecondRoute = (props) => (
 const ThirdRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
                 <View>
-            <Text>시발?</Text>
+            <Text>안뇽ㅎㅎ?</Text>
         </View>
 <Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
     </View>
