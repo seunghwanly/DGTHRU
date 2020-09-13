@@ -544,7 +544,8 @@ export default Basket = ({ navigation, route }) => {
                                         :
                                         <></>
                                 }
-                                <View style={{ flexDirection: 'row', width: '100%', marginTop: 15, borderTopWidth: 1, paddingTop: 15 }}>
+                                <View style={{width:'100%', borderWidth:1, borderStyle:'dotted' , marginVertical: 5}}/>
+                                <View style={{ flexDirection: 'row', width: '100%', paddingTop: 15 }}>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left', width: '50%' }}>총 결제금액 : </Text>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>{((item.cost + handleOptionCost()) * count).toLocaleString()}원</Text>
                                 </View>

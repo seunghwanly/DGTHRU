@@ -18,6 +18,22 @@ const paymentStyles = StyleSheet.create({
         width: 200,
         height: 200,
         margin: 20
+    },
+    orderWrapper:{
+        width:'100%',
+        justifyContent:'center',
+        flexDirection :'column',
+        borderRadius:15,
+        marginVertical:2,
+        padding:10,
+        backgroundColor:'white',
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:2
     }
 });
 

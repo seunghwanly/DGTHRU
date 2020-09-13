@@ -346,20 +346,12 @@ export default class PaymentResult extends React.Component {
                                 source={require('../../../image/sample.gif')} />
                         </View>
                         <View style={paymentStyles.background}>
-                            <View style={{
-                                backgroundColor: '#F6F6F6',
-                                padding: 30,
-                                width: '100%',
-                                borderRadius: 10,
-                                borderWidth: 1,
-                                borderColor: 'lightgray',
-                                marginVertical: 5
-                            }}>
+                            
                                 <FlatList
                                     data={this.state.data}
                                     renderItem={
                                         ({ item }) => (
-                                            <>
+                                            <View style={paymentStyles.orderWrapper}>
                                                 <View style={{ flexDirection: 'row' }}>
                                                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
                                                     <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
@@ -389,12 +381,12 @@ export default class PaymentResult extends React.Component {
                                                         item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
                                                     }
                                                 </View>
-                                            </>
+                                            </View>
                                         )
                                     }
                                     keyExtractor={(item, index) => item.key}
                                 />
-                            </View>
+                            
 
                             <View style={{
                                 backgroundColor: '#F6F6F6',
