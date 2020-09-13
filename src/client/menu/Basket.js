@@ -506,6 +506,23 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{inOrOut}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>사이즈 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{cupSize}</Text>
+                                </View>
+                                <View style={{width:'100%', borderWidth:1, borderStyle:'dotted' , marginVertical: 5}}/>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>샷 추가 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{shotNum}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>시럽 추가 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{syrup}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>휘핑 추가 : </Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{whippingCream}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>추가금액 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{handleOptionCost().toLocaleString()}원</Text>
                                 </View>

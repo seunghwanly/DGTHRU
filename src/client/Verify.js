@@ -9,6 +9,7 @@ import {
     ScrollView
 } from 'react-native';
 import { clientStyles } from './styles';
+import { isPortrait } from '../utils/checkOrientation';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -173,18 +174,76 @@ function Verify({ navigation, number }) {
         }
     }
     if (!confirm) {
-        return (
-            <View style={clientStyles.background}>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={false}
-                    style={{ width: '100%' }}
-                >
-                    <View style={clientStyles.header}>
+        if (isPortrait()) {
+            return (
+                <View style={clientStyles.background}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        scrollEnabled={false}
+                        style={{ width: '100%' }}
+                    >
+                        <View style={clientStyles.header}>
+                            <Text style={clientStyles.title}>DGTHRU</Text>
+                            <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+                        </View>
+                        <View style={clientStyles.body}>
+                            <KeyboardAvoidingView
+                                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                                keyboardVerticalOffset={30}
+                                style={clientStyles.background}
+                            >
+                                <TextInput
+                                    style={
+                                        [clientStyles.phoneNumber]
+                                    }
+                                    placeholder='01012345678'
+                                    onChangeText={text => onNumberChange(text)}
+                                    keyboardType='phone-pad'
+                                    returnKeyType='done'
+                                />
+                                <TouchableOpacity
+                                    style={clientStyles.components}
+                                    onPress={() => signInWithPhoneNumber('+82' + number)}
+                                >
+                                    <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>인증번호 보내기</Text>
+                                </TouchableOpacity>
+                            </KeyboardAvoidingView>
+
+                        </View>
+                        <View style={clientStyles.footer}>
+                            {
+                                appleAuth.isSupported === false ?
+
+                                    <View style={clientStyles.footer}>
+                                        <Text>애플로그인이 지원되지않습니다.</Text>
+                                    </View>
+
+                                    :
+                                    <AppleButton
+                                        style={clientStyles.appleButton}
+                                        cornerRadius={5}
+                                        buttonStyle={AppleButton.Style.WHITE}
+                                        buttonType={AppleButton.Type.CONTINUE}
+                                        onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
+                                    />
+                            }
+                        </View>
+                    </ScrollView>
+                </View>
+            );
+        } else {
+            return (
+                <View style={clientStyles.background}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        scrollEnabled={false}
+                        style={{ width: '100%' }}
+                    >
+
                         <Text style={clientStyles.title}>DGTHRU</Text>
                         <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-                    </View>
-                    <View style={clientStyles.body}>
+
+
                         <KeyboardAvoidingView
                             behavior={Platform.OS == "ios" ? "padding" : "height"}
                             keyboardVerticalOffset={30}
@@ -207,8 +266,8 @@ function Verify({ navigation, number }) {
                             </TouchableOpacity>
                         </KeyboardAvoidingView>
 
-                    </View>
-                    <View style={clientStyles.footer}>
+
+
                         {
                             appleAuth.isSupported === false ?
 
@@ -225,25 +284,67 @@ function Verify({ navigation, number }) {
                                     onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
                                 />
                         }
+
+                    </ScrollView>
+                </View>
+            )
+        }
+    }
+
+    if (isPortrait()) {
+        return (
+            <View style={clientStyles.background}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
+                    style={{ width: '100%' }}
+                >
+
+                    <View style={clientStyles.header}>
+                        <Text style={clientStyles.title}>DGTHRU</Text>
+                        <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
+                    </View>
+                    <View style={clientStyles.body}>
+                        <Text style={clientStyles.subTitle}>{number}</Text>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS == "ios" ? "padding" : "height"}
+                            keyboardVerticalOffset={20}
+                            style={clientStyles.background}
+                        >
+                            <TextInput
+                                style={clientStyles.phoneNumber}
+                                placeholder='인증번호를 입력해주세요.'
+                                onChangeText={text => setCode(text)}
+                                keyboardType='phone-pad'
+                            />
+                            <TouchableOpacity
+                                style={clientStyles.components}
+                                onPress={() => confirmCode()}
+                            >
+                                <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>인증하기</Text>
+                            </TouchableOpacity>
+                        </KeyboardAvoidingView>
+                    </View>
+                    <View style={[clientStyles.footer]}>
+                        <Text style={{ color: '#ddd', textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
                     </View>
                 </ScrollView>
             </View>
         );
-    }
+    } else {
+        return (
+            <View style={clientStyles.background}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
+                    style={{ width: '100%' }}
+                >
 
-    return (
-        <View style={clientStyles.background}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={false}
-                style={{ width: '100%' }}
-            >
 
-                <View style={clientStyles.header}>
                     <Text style={clientStyles.title}>DGTHRU</Text>
                     <Text style={clientStyles.subTitle}>동국대학교 스마트오더</Text>
-                </View>
-                <View style={clientStyles.body}>
+
+
                     <Text style={clientStyles.subTitle}>{number}</Text>
                     <KeyboardAvoidingView
                         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -263,13 +364,14 @@ function Verify({ navigation, number }) {
                             <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>인증하기</Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>
-                </View>
-                <View style={[clientStyles.footer]}>
-                    <Text style={{ color:'#ddd', textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
-                </View>
-            </ScrollView>
-        </View>
-    );
+
+                    <View style={[clientStyles.footer]}>
+                        <Text style={{ color: '#ddd', textAlign: 'center' }}>위 번호로 로그인을 진행합니다.</Text>
+                    </View>
+                </ScrollView>
+            </View>
+        )
+    }
 }
 
 export default Verify;
