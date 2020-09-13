@@ -67,7 +67,7 @@ export default class TabViewExample extends React.Component {
             });
         } else {
             this.scrollView.scrollTo({
-                x: 0
+                x: 200 * (idx / 4)
             })
         }
         this.setState({ index: idx });
@@ -112,10 +112,10 @@ export default class TabViewExample extends React.Component {
                                         }}
                                         
                                         style={{ 
-                                            marginTop:'5%',
+                                            marginTop:'10%',
                                             backgroundColor: 'transparent',
                                             height: 100, 
-                                            width: 'auto', 
+                                            width: Dimensions.get('window').width,
                                             justifyContent: 'center',
                                         }}
                                         getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
@@ -270,7 +270,7 @@ class MenuChildView extends React.Component {
                                 }
                             }
                         }
-                        keyExtractor={(item, index) => item.key}
+                        keyExtractor={(item) => item.name}
                         scrollEnabled={false}
                         contentContainerStyle={{ alignItems: 'flex-start', margin: 5 }}
                     />

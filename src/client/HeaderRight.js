@@ -8,6 +8,7 @@ import {
 
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import { DrawerActions } from '@react-navigation/native';
 
 export default class HeaderRight extends React.Component {
 
@@ -91,7 +92,7 @@ export default class HeaderRight extends React.Component {
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                    onPress={() => this.props.navigation.openDrawer()}
+                    onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
                 >
                 {
                     this.props.page === 'Shops' || this.props.page === 'MenuTabView' ?

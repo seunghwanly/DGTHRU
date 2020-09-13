@@ -33,7 +33,7 @@ const clientStyles = StyleSheet.create({
         textAlign: 'center'
     },
     components: {
-        backgroundColor: '#e15546',
+        backgroundColor: '#eeaf9d',
         width: 240,
         marginTop:'10%',
         padding:10,

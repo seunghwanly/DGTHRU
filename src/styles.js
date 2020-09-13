@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         color:'#ccc'
     },
     confirmButton:{
-        backgroundColor: '#e15546',
+        backgroundColor: '#eeaf9d',
         width: 180,
         marginTop:'50%',
         padding:10,

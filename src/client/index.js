@@ -6,6 +6,8 @@ import {
     View,
 } from 'react-native';
 import { createStackNavigator, } from '@react-navigation/stack';
+import 'react-native-gesture-handler';
+
 import auth from '@react-native-firebase/auth';
 
 
@@ -177,8 +179,7 @@ export default StackContainer = ({ navigation }) => {
                                 headerTitleStyle: {
                                     color : name === "Shops" || name === "MenuTabView" ? '#fff' : '#000',
                                     fontWeight:'bold'
-                                }
-                                
+                                },    
                             })
                         }
                     />
