@@ -9,7 +9,7 @@ export default Loading = (props) => {
     if(props.style !== null) {
         return(
             <View style={[paymentStyles.background, { justifyContent: 'center' }, props.style]}>
-                <Text style={paymentStyles.notifyText}>잠시만{'\n'}기다려주세요 !</Text>
+                <Text style={[paymentStyles.notifyText,{color:'#fff'}]}>잠시만{'\n'}기다려주세요 !</Text>
             </View>
         )
     }

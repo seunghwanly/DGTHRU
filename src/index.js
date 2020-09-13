@@ -31,7 +31,7 @@ export default App = () => {
         >
           <DrawerStack.Screen name='Home' component={StackContainer}
             options={{
-              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')}/>),
+              drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/home-white.png') : require('../image/home-outline.png')} />)
             }}
             
           //Home onPress () >> reset 애들한테 물어보자 이건
@@ -39,13 +39,13 @@ export default App = () => {
           <DrawerStack.Screen name='Receipt/History' component={Bill}
             options={
               {
-                drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/reader-outline.png')} />)
+                drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/reader-white.png') : require('../image/reader-outline.png')} />)
               }
             }
           />
           <DrawerStack.Screen name='Coupon' component={Coupon}
             options={{
-              drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/star-outline.png')} />),
+              drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/star-white.png') : require('../image/star-outline.png')} />),
             }}
           />
         </DrawerStack.Navigator>

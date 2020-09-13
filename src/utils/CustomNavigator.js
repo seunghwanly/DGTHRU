@@ -23,27 +23,46 @@ function CustomDrawerContent(props) {
     return (
       <>
         <DrawerContentScrollView {...props}
-          style={{ flex: 1, backgroundColor:'#eeaf9d' }}
+          style={{ flex: 1, backgroundColor:'#182335'}}
+          contentContainerStyle={{backgroundColor:'#fff', borderBottomStartRadius:30}}
           >
           <DrawerItem
-            label={() => <Text style={{ fontSize: 14, fontWeight:'bold' }}>{
-              auth().currentUser !== null ?
-                auth().currentUser.phoneNumber + ' 님'
-                :
-                ''
-            }</Text>}
+            style={{backgroundColor:'#fff'}}
+            label={() => (
+              <>
+                <Image
+                  style={{
+                    width:180,
+                    margin: 10
+                  }}
+                  resizeMode='contain'
+                  source={require('../../image/dgu.jpg')}
+                />
+                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
+                  {
+                    auth().currentUser !== null ?
+                      auth().currentUser.phoneNumber + ' 님'
+                      :
+                      ''
+                  }
+                </Text>
+              </>
+            )
+            }
           />
           <DrawerItemList {...props}
+            activeTintColor='white'
+            activeBackgroundColor='#eeaf9d'
           />
         </DrawerContentScrollView>
         <SafeAreaView style={
           {
-            backgroundColor: '#eeaf9d'
+            backgroundColor: '#182335',
           }
         }>
         <TouchableOpacity style={{justifyContent:'flex-start', alignItems:'center', paddingStart:20, flexDirection:'row'}} onPress={() => signOut()}>
-            <Image source={require('../../image/close-outline.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
-            <Text>로그아웃</Text>
+            <Image source={require('../../image/close-white.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
+            <Text style={{width:'60%' ,textAlign:'right', color:'#fff'}}>로그아웃</Text>
         </TouchableOpacity>
         </SafeAreaView>
       </>
