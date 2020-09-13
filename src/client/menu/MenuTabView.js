@@ -119,8 +119,8 @@ export default class TabViewExample extends React.Component {
                                             justifyContent: 'center',
                                         }}
                                         getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
-                                        scrollEnabled={true}
                                         tabStyle={{ width: 90 }}
+                                        scrollEnabled={true}
                                     />
                                 </ScrollView>
                             </View>
@@ -237,6 +237,7 @@ class MenuChildView extends React.Component {
                         data={items[0].menu}
                         renderItem={
                             ({ item }) => {
+                                console.log(item.name)
                                 if (item.sold_out !== true) {
 
                                     return (
@@ -270,7 +271,7 @@ class MenuChildView extends React.Component {
                                 }
                             }
                         }
-                        keyExtractor={(item) => item.name}
+                        keyExtractor={item => item.name}
                         scrollEnabled={false}
                         contentContainerStyle={{ alignItems: 'flex-start', margin: 5 }}
                     />
