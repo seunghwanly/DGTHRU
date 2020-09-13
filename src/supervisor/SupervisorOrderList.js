@@ -14,10 +14,7 @@ const FirstRoute = (props) => (
     // 밑에 클래스에서 사용중인 this.state.list 를 여기 FlatList에 data에 꽂아야함 . 그걸 모르겠음.
 
     <View style={exampleStyle.background} >
-        <View>
-            <Text>안뇽ㅎㅎ?</Text>
-        </View>
-<Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
+<Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
         <FlatList
             data={props.data}
             numColumns={1}
@@ -25,22 +22,45 @@ const FirstRoute = (props) => (
             scrollEnabled={true}
             renderItem={({ item }) => {
                 return (
-                    <View style={exampleStyle.listbox}>
-                        <View stlye={exampleStyle.listContainer} >
-
-                            <Text style={exampleStyle.orderlisttext}>{item.name}</Text>
-                            <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
-                            <View style={exampleStyle.orderlistview}>
-                                          <Button 
-                                          style={exampleStyle.buttonstyle}
-                                          title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                          <Button  style={{margin:5}}
-                                          title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                          <Button  style={{margin:5}}
-                                          title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                      </View>
+                    <View style={exampleStyle.body}>
+                    <View style={exampleStyle.listbox_left}>
+                    <View stlye={exampleStyle.listContainer} >
+                            <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.shotnum}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.count}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.phonenumber}</Text>
+                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate} {item.orderTime}</Text>
+                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.cup} / {item.type}</Text>
+                            
                         </View>
-                    </View>)
+                        
+   
+                        </View>
+                    <View style={exampleStyle.listbox_center}>
+                    <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
+                    </View>
+                    <View style={exampleStyle.listbox_right}>
+                    <View style={exampleStyle.orderlistview}>
+                                        <View style={exampleStyle.buttonstyle}>
+                                          <Button color="#EEAF9D" width="20%" height="50%"
+                                          title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                          </View>
+                                          
+                                        <View style={exampleStyle.buttonstyle}>
+                                          <Button color="#EEAF9D"
+                                          title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                          </View>
+                                          
+                                        <View style={exampleStyle.buttonstyle}>
+                                          <Button color="#EEAF9D"
+                                          title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                         </View>
+                                      </View>
+                    </View>
+
+
+                    </View>
+                    )
             }}
         />
 
@@ -174,7 +194,8 @@ export default class SupervisorOrderList extends Component {
                             cost: menuChild.val().cost,
                             count: menuChild.val().count,
                             cup: menuChild.val().cup,
-                            shotnum: menuChild.val().shotnum,
+                            shotnum: menuChild.val().shotNum,
+                            type: menuChild.val().type,
                         })
                     })
                 })
@@ -207,10 +228,38 @@ export default class SupervisorOrderList extends Component {
         return (
           
             <TabView
+                style={{backgroundColor:'#182335'}}
                 navigationState={{ index: this.state.index, routes: this.state.routes }}
                 renderScene={this.renderScene}
                 onIndexChange={this._setIndex}
                 initialLayout={initialLayout}
+                
+                // renderTabBar={(props) => (
+                //     <View style={{ backgroundColor:'#182335', }}>
+                       
+                //             <TabBar
+                //                 {...props}
+                //                 indicatorStyle={{ 
+                //                     backgroundColor: '#EEAF9D',
+                //                     borderRadius:20,
+                //                     height:5,
+                //                     justifyContent:'center',
+                                    
+                //                 }}
+                                
+                //                 style={{ 
+                //                     backgroundColor: '#182335',
+                //                     height: 50,
+                //                     width: Dimensions.get('window').width,
+                //                     justifyContent: 'center',
+                //                 }}
+                                
+                //                 getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                //                 tabStyle={{ width: '20%', }}
+                              
+                //             />
+                //     </View>
+                // )}
             />
         );
     }
