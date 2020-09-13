@@ -32,7 +32,6 @@ export default App = () => {
           <DrawerStack.Screen name='Home' component={StackContainer}
             options={{
               drawerIcon: () => (<Image style={{ width: 20, height: 20 }} source={require('../image/home-outline.png')}/>),
-              gestureEnabled: false
             }}
             
           //Home onPress () >> reset 애들한테 물어보자 이건

@@ -8,7 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function CustomDrawerContent(props) {
 
-    console.log('Custom Navigator >>'+props.state.routes, props.state.index);
+    // console.log('Custom Navigator >>'+ JSON.stringify(props.descriptor));
 
     signOut = () => {
       auth()
@@ -23,7 +23,7 @@ function CustomDrawerContent(props) {
     return (
       <>
         <DrawerContentScrollView {...props}
-          style={{ flex: 1 }}
+          style={{ flex: 1, backgroundColor:'#eeaf9d' }}
           >
           <DrawerItem
             label={() => <Text style={{ fontSize: 14, fontWeight:'bold' }}>{
@@ -36,7 +36,11 @@ function CustomDrawerContent(props) {
           <DrawerItemList {...props}
           />
         </DrawerContentScrollView>
-        <SafeAreaView>
+        <SafeAreaView style={
+          {
+            backgroundColor: '#eeaf9d'
+          }
+        }>
         <TouchableOpacity style={{justifyContent:'flex-start', alignItems:'center', paddingStart:20, flexDirection:'row'}} onPress={() => signOut()}>
             <Image source={require('../../image/close-outline.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
             <Text>로그아웃</Text>

@@ -2,31 +2,33 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     background: {
-        width: '100%',
-        height: '100%',
+        flex:1,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white'
+        backgroundColor: '#182335'
     },
     title: {
         fontSize: 44,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'#fff'
     },
     subTitle: {
         fontSize: 20,
         color: 'gray',
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'#ccc'
     },
     confirmButton:{
-        margin: 15,
-        backgroundColor: 'dodgerblue',
+        backgroundColor: '#eeaf9d',
         width: 180,
-        padding: 10,
+        marginTop:'50%',
+        padding:10,
         borderRadius: 10,
+        bottom:'0%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     }
 });
 

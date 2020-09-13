@@ -5,10 +5,10 @@ import {
     View,
     Text
 } from 'react-native';
-import { commonDatabase } from '../utils/DatabaseRef';
 
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import { DrawerActions } from '@react-navigation/native';
 
 export default class HeaderRight extends React.Component {
 
@@ -66,14 +66,23 @@ export default class HeaderRight extends React.Component {
                     style={{ flexDirection: 'row-reverse' }}
                     onPress={() => this.props.navigation.navigate('Basket', { shopInfo: this.state.shopInfo })}
                 >
+                {
+                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' ?
+                    <Image 
+                        style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
+                        resizeMode='cover'
+                        source={require('../../image/cart-white.png')}
+                    />
+                    :
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
                         resizeMode='cover'
                         source={require('../../image/cart-outline.png')}
                     />
+                }
                     {
                         this.state.amount !== null ?
-                            <View style={{ backgroundColor: '#E8A9A2', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
+                            <View style={{ backgroundColor: '#EEAF9D', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
                                 <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{this.state.amount}</Text>
                             </View>
                             :
@@ -83,13 +92,22 @@ export default class HeaderRight extends React.Component {
                 <TouchableOpacity
                     style={{ flexDirection: 'row-reverse' }}
                     // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-                    onPress={() => this.props.navigation.openDrawer()}
+                    onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
                 >
+                {
+                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' ?
+                    <Image
+                        style={{ height: 30, width: 30, marginEnd: 10 }}
+                        resizeMode='cover'
+                        source={require('../../image/menu-white.png')}
+                    />
+                    :
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10 }}
                         resizeMode='cover'
                         source={require('../../image/menu-outline.png')}
                     />
+                }
                 </TouchableOpacity>
             </View>
         )
