@@ -90,7 +90,7 @@ const exampleStyle = StyleSheet.create({
     },
     orderlisttext: {
         fontWeight:'bold', 
-        fontSize:15, 
+        fontSize:25, 
         color:'white',
     },
     orderlistview: {

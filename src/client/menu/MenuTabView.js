@@ -22,11 +22,11 @@ export default class TabViewExample extends React.Component {
             drinkRoutes: [],
             bakeryRoutes: [],
             isDrinkMenu: true,
-            isLoading: true
+            isLoading: true,
         }
         console.log('> constructor');
     }
-
+    
     _fetchData() {
 
         database()

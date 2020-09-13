@@ -1,19 +1,72 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform,Dimensions, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
-
-import { HPageViewHoc, TabView } from 'react-native-head-tab-view'
+import { TabView, TabBar,SceneMap  } from 'react-native-tab-view';
+import { exampleStyle } from './styles';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
+const initialLayout = { width: Dimensions.get('window').width };
+
+var list_temp ;
+
+    const FirstRoute = () => (
+// 밑에 클래스에서 사용중인 this.state.list 를 여기 FlatList에 data에 꽂아야함 . 그걸 모르겠음.
+
+    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
+        {console.log("시발 먼데여기" + list_temp)}
+        <Text style={exampleStyle.orderlisttext}>helloo</Text>
+        <FlatList
+                            data={list_temp}
+                            numColumns={1}
+                            keyExtractor={item => item.key}
+                            scrollEnabled={true}
+                            renderItem={({item})=>{
+                              return(
+                                  <View  style={exampleStyle.listbox}>
+                                    <View stlye={exampleStyle.listContainer} > 
+                                    
+                                      <Text style={exampleStyle.orderlisttext}>{item.name}</Text>
+                                      <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
+                                      {/* <View style={exampleStyle.orderlistview}>
+                                          <Button 
+                                          style={exampleStyle.buttonstyle}
+                                          title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                          <Button  style={{margin:5}}
+                                          title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                          <Button  style={{margin:5}}
+                                          title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
+                                      </View> */}
+                                      </View>
+                                  </View>)
+                              }}
+                        />
+
+
+        </View>
+    );
+  
+  const SecondRoute = () => (
+    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} />
+  );
+  const ThirdRoute = () => (
+    <View style={[styles.scene, { backgroundColor: 'lightblue' }]} />
+  );
+
+  const renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+    third: ThirdRoute,
+  });
+
+
 
 var shopname = '';
 var phonenumber = '';
 async function DeleteOrderList(key) {
     var userPath = 'hyehwa_roof/' + currentTime + '/+821012341234/' + key + '/';
 
-    console.log(userPath);
 
     await database()
         .ref(userPath)
@@ -37,7 +90,10 @@ export default class SupervisorOrderList extends Component {
     constructor(props){
         super(props);
         shopname = "hyehwa_roof";
+        
         this.state={ 
+            index: 0,
+            routes: [{key : 'first' , title: 'First' , datas: list_temp } ,{key : 'second' , title: 'Second' }, {key : 'third' , title: 'Third' }],
             list:[],
         } }
 
@@ -45,6 +101,10 @@ export default class SupervisorOrderList extends Component {
         _onPress = () => {
           console.log('clickTest !!!');
         };
+
+        _setIndex = (idx) => {
+            this.setState({ index: idx });
+        }
 
         onPressItem = (id) => {
 
@@ -69,12 +129,6 @@ export default class SupervisorOrderList extends Component {
                     break;
             }
         }
-        _renderItem = ({ item }) => (
-            <Item
-                id={item.id}
-                onPressItem={onPressItem}
-            />
-        );
         
 
     componentDidMount = () =>{
@@ -86,7 +140,6 @@ export default class SupervisorOrderList extends Component {
             childSnapShot.forEach((child)=>{
                 var phonenumber = child.key
                 child.forEach((menuChild)=>{
-                    console.log('orderTime2 : ' , menuChild.val().orderTime)
                     li.push({
                         key: menuChild.key,
                         phonenum: phonenumber,
@@ -103,63 +156,17 @@ export default class SupervisorOrderList extends Component {
             
             })
             const Moment = require('moment')
-            console.log('what? : ' , li);
+
             li.sort((d2, d1) => new Moment(d2.orderTime,'HH:mm:ss') - new Moment(d1.orderTime,'HH:mm:ss'));
-            console.log('after? : ' , li);
+         
+            list_temp = li;
+            //console.log('afterㅈㅈ? : ' , list_temp);
             this.setState({list:li})
            // this.sortListByTime(li)
         })
      
     }
 
-    //deleteItem(k) {
-    //    let forward = this.state.list.slice(0,k)
-    //    //console.log(`for : `,forward);
-      
-        
-
-    //    for(var i = k + 1;k<this.state.list.length;i++){
-    //        this.state.list[i].index = this.state.list[i].index - 1;
-    //    }
-
-    //    let back = this.state.list.slice(k+1,this.state.list.length)
-    //    //console.log(`back : `,back);
-      
-    //    let total = forward.concat(back)	//forward¿¡ back ºÙÀÌ±ë
-    //    //console.log(`total : `,total);
-    //    this.setState({
-    //        list:total
-    //    })
-    //}
-
-    //deleteorderlist(k){
-    //    var arr = this.state.list;
-    //    this.setState({
-    //        list: arr.filter(arr => arr.key !== k)
-    //    })
-
-    //    await database()
-    //    .ref('hyehwa_roof/2020_08_22/+821012341234/' + k)
-    //    .remove();
-    //}
-
-    
-
-    // componentDidMount() {
-    //   //const currentUser = auth().currentUser.uid;
-    //   database().ref('hyehwa_roof/2020_08_21')
-    //     .on('value', snapshot => {
-    //       const lists = _.map(snapshot.val(), (uid) => {
-    //         return {uid}
-    //       });
-    //       this.setState({lists, loading: false})
-    //     })
-    // } 
-    //  renderItem({item}) {
-    //   return (
-    //       <ListItem item={item} />
-    //     )
-    // }
 
     sortListByTime(){
         this.state.list.sort(function(obj1, obj2) {
@@ -176,89 +183,18 @@ export default class SupervisorOrderList extends Component {
   
     render() {
         return (
-
-            <View style={OrderlistStyle.OrderlistBackground} >
-
-                <View style={OrderlistStyle.OrderlistBody_1} >
-                <TouchableOpacity
-                        style={OrderlistStyle.OrderlistButtonContainer}
-                        onPress={this._onPress}
-                        >
-                            <View style={{width:'100%',height:'100%', 
-                            justifyContent:'center',
-                              alignItems: 'center',}}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>주문 리스트</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        style={OrderlistStyle.OrderlistButtonContainer}
-                        onPress={this._onPress}
-                        >
-                            <View style={{width:'100%',height:'100%'}}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>지난 주문</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        style={OrderlistStyle.OrderlistButtonContainer}
-                        onPress={this._onPress}
-                        >
-                            <View style={{width:'100%',height:'100%'}}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>메뉴</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        style={OrderlistStyle.OrderlistButtonContainer}
-                        onPress={this._onPress}
-                        >
-                            <View style={{width:'100%',height:'100%'}}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>모든 메뉴</Text>
-                            </View>
-                        </TouchableOpacity>
-                    
-                </View>
-
-                <View style={OrderlistStyle.OrderlistBody_2} >
-                    <View style={OrderlistStyle.OrderlistBody_2_top} > 
-                    <Text style={{ fontSize:25,color: 'white', fontWeight: 'bold', textAlign: 'center' }}>주 문 현 황</Text>
-                     </View>
-
-                      <View style={OrderlistStyle.OrderlistBody_2_bottom} >
-                     <Text>BODY_2_down</Text>
-                        <FlatList
-                            data={this.state.list}
-                            renderItem={_renderItem}
-                            numColumns={2}
-                            keyExtractor={keyExtractor}
-                            scrollEnabled={true}
-                        />
-                     </View>
-                   
-                </View>
-            </View>
-            
-            // <View style={exampleStyle.background}>
-            //     <Text>[{shopname}] : Order List</Text>
-            //         <FlatList style={{width:'100%'}}
-            //         data={this.state.list}
-            //         keyExtractor={item => item.key}
-            //         renderItem={({item})=>{
-            //         return(
-            //             <View  style={exampleStyle.listbox}>    
-            //                 <Text style={exampleStyle.orderlisttext}>{item.name}  {item.cup} {item.count}</Text>
-            //                 <Text style={exampleStyle.orderlisttext}> {item.orderTime}</Text>
-            //                 <View style={exampleStyle.orderlistview}>
-            //                     <Button 
-            //                     style={exampleStyle.buttonstyle}
-            //                     title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-            //                     <Button  style={{margin:5}}
-            //                     title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-            //                     <Button  style={{margin:5}}
-            //                     title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
-            //                 </View>
-            //             </View>)
-            //         }}
-            //     />
-            // </View>
+            <TabView
+            navigationState={{ index: this.state.index, routes: this.state.routes }}
+            renderScene={renderScene}
+            onIndexChange={this._setIndex}
+            initialLayout={initialLayout}
+          />
         );
     }
 }
+
+const styles = StyleSheet.create({
+    scene: {
+      flex: 1,
+    },
+  });

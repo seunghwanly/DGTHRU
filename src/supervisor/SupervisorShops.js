@@ -128,7 +128,6 @@ function supervisorShops({ navigation }) {
                 alert('혜화관디저트카페');
                 break;
             case 'economy_outdoor':
-                alert('준비중입니다!');
                 break;
             case 'munhwa_1f':
                 navigation.navigate('SupervisorOrderList',{ shopInfo:id });

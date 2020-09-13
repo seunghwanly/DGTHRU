@@ -110,7 +110,6 @@ export default class SupervisorTabview extends Component {
                      <Text>BODY_2_down</Text>
                         <FlatList
                             data={this.state.list}
-                        
                             numColumns={1}
                             keyExtractor={item => item.key}
                             scrollEnabled={true}
