@@ -116,7 +116,8 @@ export default StackContainer = ({ navigation }) => {
                             ({ navigation }) => ({
 
                                 headerRight: () => {
-                                    if (name === "Shops" || name === "MenuTabView" || name === "Menu" || name === "MenuDetail" || name === "SelectMenu") {
+                                    if ( name === "Shops" || name === "MenuTabView" || name === "Menu" || 
+                                         name === "MenuDetail" || name === "SelectMenu" || name === "Result") {
 
                                         return (
                                             <HeaderRight navigation={navigation} page={name} />
@@ -143,7 +144,7 @@ export default StackContainer = ({ navigation }) => {
                                                             onPress={() => [navigation.goBack(), setRefresh(true)]}
                                                         >
                                                         {
-                                                            name === 'MenuTabView' ?
+                                                            name === 'MenuTabView' || name === "Result" ?
                                                             <Image
                                                                 style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
                                                                 resizeMode='cover'
@@ -169,14 +170,14 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' ? false : true,
+                                gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' || name === "Result" ? false : true,
                                 // gestureEnabled: false
                                 headerStyle: { 
-                                    backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : '#fff', 
+                                    backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : name === 'Result' ? '#eeaf9d' : '#fff', 
                                     shadowColor:'transparent'
                                 },
                                 headerTitleStyle: {
-                                    color : name === "Shops" || name === "MenuTabView" ? '#fff' : '#000',
+                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" ? '#fff' : '#000',
                                     fontWeight:'bold'
                                 },    
                             })

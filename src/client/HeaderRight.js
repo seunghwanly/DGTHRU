@@ -67,7 +67,7 @@ export default class HeaderRight extends React.Component {
                     onPress={() => this.props.navigation.navigate('Basket', { shopInfo: this.state.shopInfo })}
                 >
                 {
-                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' ?
+                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' || this.props.page === "Result"?
                     <Image 
                         style={{ height: 30, width: 30, marginEnd: 10, position: "absolute", alignSelf: 'center' }}
                         resizeMode='cover'
@@ -82,7 +82,7 @@ export default class HeaderRight extends React.Component {
                 }
                     {
                         this.state.amount !== null ?
-                            <View style={{ backgroundColor: '#EEAF9D', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
+                            <View style={{ backgroundColor: this.props.page === 'Result' ? '#182335' : '#EEAF9D', width: 15, height: 15, borderRadius: 15, marginEnd: 8, marginBottom: 20, position: 'relative' }}>
                                 <Text style={{ textAlign: 'center', color: 'white', fontSize: 10, fontWeight: 'bold' }}>{this.state.amount}</Text>
                             </View>
                             :
@@ -95,7 +95,7 @@ export default class HeaderRight extends React.Component {
                     onPress={() => this.props.navigation.dispatch(DrawerActions.openDrawer())}
                 >
                 {
-                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' ?
+                    this.props.page === 'Shops' || this.props.page === 'MenuTabView' || this.props.page === 'Result'?
                     <Image
                         style={{ height: 30, width: 30, marginEnd: 10 }}
                         resizeMode='cover'
