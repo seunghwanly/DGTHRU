@@ -51,12 +51,14 @@ function Intro({ navigation }) {
         else {
             return (
                 <View style={styles.background}>
-                    <View style={{}}>
-                        <Text style={styles.title}>DGTHRU</Text>
-                        <Text style={styles.subTitle}>동국대학교 스마트오더</Text>
+                    <View style={{
+                        alignItems:'center'
+                    }}>
+                        <Text style={{color:'white'}}>DGTHRU</Text>
+                        <Text style={{color:'white'}}>동국대학교 스마트오더</Text>
                     </View>
                     <TouchableOpacity
-                        style={styles.confirmButton}
+                        style={{marginVertical:10, width:300, backgroundColor:'#eeaf9d', alignItems:'center', borderRadius:8, padding:10}}
                         onPress={() => navigation.navigate('Verify')}
                     >
                         <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#FFF' }}>시작하기</Text>
@@ -65,6 +67,8 @@ function Intro({ navigation }) {
             )
         }
     }
+
+
     if (isPortrait()) {
         return (
             <View style={styles.background}>
