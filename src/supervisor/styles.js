@@ -19,9 +19,10 @@ const shopStyles = StyleSheet.create({
         alignItems: 'center',
     },
     body: {
+        
         flex:5,
         width: '100%',
-        margin:5,
+        margin:2,
         alignItems: 'center',
     },
     title: {
@@ -73,37 +74,94 @@ const shopStyles = StyleSheet.create({
 
 const exampleStyle = StyleSheet.create({
     background: {
-        flex: 1, 
-        backgroundColor:'lightgray',
+        flex:1,
+        backgroundColor:'darkgray',
         justifyContent: "center", 
-        // alignItems: "center",
+        alignItems: "center",
 
     },
-    listbox: {
-        alignSelf:'center',
-        margin: 5, 
-        backgroundColor:'gray', 
-        width: '100%', 
-        padding:10,
-        flex:1,
+    body: {
+        flexDirection: 'row',
+        flex: 9,
+        margin: 3,
         borderRadius:10,
+        borderWidth:2,
+        borderColor:'white',
+        width: '100%',
+        height:'100%',
+        backgroundColor:'white',
+        justifyContent: "center", 
+        alignItems: "center",
+        padding:5,
+
+    },
+   
+    listbox_left: {
+        alignSelf:'center',
+        flex:4,
+        backgroundColor:'lightblue', 
+        width: '30%', 
+        height:'95%',
+        padding:5,
         alignItems:'center',
         justifyContent:'center',
     },
-    orderlisttext: {
+    listbox_center: {
+        alignSelf:'center',
+        backgroundColor:'#182335', 
+        width: '30%',
+        height:'95%',
+        flex:2,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    listbox_right: {
+        alignSelf:'center',
+        height:'95%',
+        flex:3,
+        backgroundColor:'lightgray', 
+        width: '35%', 
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    orderlistText_Bold: {
+        fontWeight:'bold',
+        fontSize:22, 
+        color:'black',
+    },
+    orderlistText_Thin: {
+        fontWeight:'400',
+        fontSize:16, 
+        color:'#2e2e2e',
+    },
+    
+    orderlistTitle: {
+       
+        textAlign:'center',
         fontWeight:'bold', 
-        fontSize:25, 
+        fontSize:35, 
+        color:'white',
+    },
+    orderlistPastTime: {
+        textAlign:'center',
+        fontWeight:'bold', 
+        fontSize:25,
         color:'white',
     },
     orderlistview: {
+        justifyContent: "center", 
+        alignItems: "center",
         flexDirection : 'row',
     },
-    buttonstyle: {
-        padding: 5,
-    },
+    
     listContainer: {
         flex: 1, 
-        backgroundColor:'blue',
+        justifyContent: "center", 
+        alignItems: "center",
+    },
+    buttonstyle: {
+        flex: 1, 
+        backgroundColor:'lightgray',
         justifyContent: "center", 
         alignItems: "center",
     },
