@@ -89,7 +89,7 @@ export default class TabViewExample extends React.Component {
         // console.log('> render ' + this.state.isDrinkMenu, JSON.stringify(this.state.bakeryData));
         if (this.state.isLoading) {
             return (
-                <Loading />
+                <Loading style={{backgroundColor:'#182335'}} />
             )
         }
         else {
@@ -237,7 +237,6 @@ class MenuChildView extends React.Component {
                         data={items[0].menu}
                         renderItem={
                             ({ item }) => {
-                                console.log(item.name)
                                 if (item.sold_out !== true) {
 
                                     return (

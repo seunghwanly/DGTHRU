@@ -2,12 +2,11 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     Vibration,
     ScrollView,
-    Dimensions,
     Alert,
     Image,
+    TouchableOpacity,
     FlatList
 } from 'react-native';
 import { paymentStyles } from './styles';
@@ -15,7 +14,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Loading from './Loading';
 import moment from 'moment';
 
 var currDate = moment().format('YYYY_MM_DD');
@@ -119,7 +118,8 @@ export default class PaymentResult extends React.Component {
             data: [],
             basket: [],
             currentOrderNumber: '',
-            isUpdated: false
+            isUpdated: false,
+            isLoading: true
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -127,8 +127,10 @@ export default class PaymentResult extends React.Component {
         this.state.timeArray.request = this.props.route.params.requestTime;
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         console.log('componentDidMount');
+
+        setTimeout(() => { this.setState({ isLoading: false }) }, 1000);
         // 석운 : 주문번호 뽑기
         // database().ref('/order_num/').on('value', (snapshot) => {
         //     this.orderNum = snapshot.val().number;
@@ -171,7 +173,7 @@ export default class PaymentResult extends React.Component {
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
                                     .once('value', (snapshot) => {
-                                        updateUserHistroy(snapshot.val(), res); 
+                                        updateUserHistroy(snapshot.val(), res);
                                     });
                             })
                     });
@@ -239,7 +241,7 @@ export default class PaymentResult extends React.Component {
                             key: childSnapShot.key,
                             name: childSnapShot.val().name,
                             cost: childSnapShot.val().cost,
-                            options : childSnapShot.val().options,
+                            options: childSnapShot.val().options,
                             orderTime: childSnapShot.val().orderTime,
                             orderNumber: childSnapShot.val().orderNumber,
                             hadPaid: childSnapShot.val().hadPaid,
@@ -291,7 +293,7 @@ export default class PaymentResult extends React.Component {
                 var isFullyReady = 0;
                 for (var i = 0; i < this.state.orderState.length; ++i) {
                     if (this.state.orderState[i] === 'ready') isFullyReady++;
-                    else if(this.state.orderState[i] === 'cancel') {
+                    else if (this.state.orderState[i] === 'cancel') {
                         alert('카운터로 와주세요 :)');
                     }
                     else {
@@ -308,114 +310,159 @@ export default class PaymentResult extends React.Component {
     }
 
     render() {
-        console.log('render');
-        if (this.props.route.params.response.imp_success === 'true') {
-
-            if (this.state.isMenuReady === true) {
-
-                console.log('menu ready !');
-                Alert.alert(
-                    'DGHTRU 알림', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
-                    [
-                        {
-                            text: '확인',
-                            // onPress: () => [ Vibration.cancel(), this.props.navigation.pop(), this.props.navigation.navigate('Shops') ]
-                            onPress: () =>
-                                [
-                                    Vibration.cancel(), this.props.navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
-                                ]
-                        }
-                    ]
-                );
-                Vibration.vibrate([1000, 1000, 1000], true);
-            }
-
+        if (this.state.isLoading) {
             return (
-                <ScrollView>
-                    <View style={{ backgroundColor: 'white' }}>
-                        <Image
-                            style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
-                            source={require('../../../image/sample.gif')} />
-                    </View>
-                    <View style={paymentStyles.background}>
-                        <View style={{
-                            backgroundColor: '#F6F6F6',
-                            padding: 30,
-                            width: '100%',
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            borderColor: 'lightgray',
-                            marginVertical: 5
-                        }}>
-                            <FlatList
-                                data={this.state.data}
-                                renderItem={
-                                    ({ item }) => (
-                                        <>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-                                                <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                                <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.type} / </Text>
-                                                {
-                                                    item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
-                                                }
-                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.cup} / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.cost}원 / </Text>
-                                                <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.count}개 </Text>
-                                            </View>
-                                            <View style={{ flexDirection: 'row', marginVertical: 1 }}>
-                                                {
-                                                    item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
-                                                }
-                                                {
-                                                    item.options.syrup !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>시럽 추가 : {item.options.syrup} / </Text> : <></>
-                                                }
-                                                {
-                                                    item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
-                                                }
-                                            </View>
-                                            <View style={{ flexDirection: 'row', marginTop: 2, marginBottom:3 }}>
-                                                {
-                                                    item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
-                                                }
-                                            </View>
-                                        </>
-                                    )
-                                }
-                                keyExtractor={(item, index) => item.key}
-                            />
-                        </View>
+                <Loading />
+            )
+        }
+        else {
+            console.log('render');
+            if (this.props.route.params.response.imp_success === 'true') {
 
-                        <View style={{
-                            backgroundColor: '#F6F6F6',
-                            padding: 30,
-                            width: '100%',
-                            marginVertical: 5,
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            borderColor: 'lightgray'
-                        }}>
-                            <View>
-                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>결제완료{'\t\t'}</Text>
-                                    <Text>{this.state.timeArray.paid}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>주문요청{'\t\t'}</Text>
-                                    <Text>{this.state.timeArray.request}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>주문승인{'\t\t'}</Text>
-                                    <Text>관리자에게</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>준비완료{'\t\t'}</Text>
-                                    <Text>관리자에게</Text>
+                if (this.state.isMenuReady === true) {
+
+                    console.log('menu ready !');
+                    Alert.alert(
+                        'DGHTRU 알림', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
+                        [
+                            {
+                                text: '확인',
+                                // onPress: () => [ Vibration.cancel(), this.props.navigation.pop(), this.props.navigation.navigate('Shops') ]
+                                onPress: () =>
+                                    [
+                                        Vibration.cancel(), this.props.navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
+                                    ]
+                            }
+                        ]
+                    );
+                    Vibration.vibrate([1000, 1000, 1000], true);
+                }
+
+                return (
+                    <ScrollView>
+                        <View style={{ backgroundColor: 'white' }}>
+                            <Image
+                                style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
+                                source={require('../../../image/sample.gif')} />
+                        </View>
+                        <View style={paymentStyles.background}>
+                            <View style={{
+                                backgroundColor: '#F6F6F6',
+                                padding: 30,
+                                width: '100%',
+                                borderRadius: 10,
+                                borderWidth: 1,
+                                borderColor: 'lightgray',
+                                marginVertical: 5
+                            }}>
+                                <FlatList
+                                    data={this.state.data}
+                                    renderItem={
+                                        ({ item }) => (
+                                            <>
+                                                <View style={{ flexDirection: 'row' }}>
+                                                    <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
+                                                    <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                                    <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.type} / </Text>
+                                                    {
+                                                        item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
+                                                    }
+                                                    <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.cup} / </Text>
+                                                    <Text style={{ color: 'gray', fontSize: 12 }}>{item.cost}원 / </Text>
+                                                    <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.count}개 </Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', marginVertical: 1 }}>
+                                                    {
+                                                        item.options.shotNum !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>샷 추가 : {item.options.shotNum} / </Text> : <></>
+                                                    }
+                                                    {
+                                                        item.options.syrup !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>시럽 추가 : {item.options.syrup} / </Text> : <></>
+                                                    }
+                                                    {
+                                                        item.options.whipping !== undefined ? <Text style={{ color: 'gray', fontSize: 12 }}>휘핑크림 : {item.options.whipping} / </Text> : <></>
+                                                    }
+                                                </View>
+                                                <View style={{ flexDirection: 'row', marginTop: 2, marginBottom: 3 }}>
+                                                    {
+                                                        item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
+                                                    }
+                                                </View>
+                                            </>
+                                        )
+                                    }
+                                    keyExtractor={(item, index) => item.key}
+                                />
+                            </View>
+
+                            <View style={{
+                                backgroundColor: '#F6F6F6',
+                                padding: 30,
+                                width: '100%',
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                borderWidth: 1,
+                                borderColor: 'lightgray'
+                            }}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                        <Text style={{ fontWeight: 'bold' }}>결제완료{'\t\t'}</Text>
+                                        <Text>{this.state.timeArray.paid}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                        <Text style={{ fontWeight: 'bold' }}>주문요청{'\t\t'}</Text>
+                                        <Text>{this.state.timeArray.request}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                        <Text style={{ fontWeight: 'bold' }}>주문승인{'\t\t'}</Text>
+                                        <Text>관리자에게</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginVertical: 2 }}>
+                                        <Text style={{ fontWeight: 'bold' }}>준비완료{'\t\t'}</Text>
+                                        <Text>관리자에게</Text>
+                                    </View>
                                 </View>
                             </View>
+                            <TouchableOpacity
+                                style={{
+                                    width: '100%',
+                                    backgroundColor: '#020659',
+                                    borderRadius: 10,
+                                    paddingHorizontal: 30,
+                                    paddingVertical: 10,
+                                    marginTop: 5
+                                }}
+                                onPress={() => [
+                                    // 석운 : 사실 홈으로 돌아가기 버튼을 안 눌러도 되게 하고 싶은데 어떻게 해야 할지 모르겠음.....
+                                    // sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
+                                    // setOrderNumber(this.orderNum),
+                                    // alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
+                                    this.props.navigation.pop(),
+                                    this.props.navigation.navigate('Shops')
+                                ]}
+                            >
+                                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
+                            </TouchableOpacity>
+                            <Image
+                                source={getCafeIcon(this.props.route.params.shopInfo)}
+                                style={{
+                                    width: 60,
+                                    height: 60,
+                                    position: 'absolute',
+                                    right: '5%',
+                                    top: '5%',
+                                    transform: [{ rotate: '330deg' }],
+                                }}
+                            />
+
                         </View>
+                    </ScrollView>
+                )
+            } else {
+                return (
+                    <View style={paymentStyles.background}>
+                        <Text style={paymentStyles.notifyText}>결제 실패{'\n'}관리자에게 문의하세요.</Text>
                         <TouchableOpacity
                             style={{
                                 width: '100%',
@@ -425,51 +472,13 @@ export default class PaymentResult extends React.Component {
                                 paddingVertical: 10,
                                 marginTop: 5
                             }}
-                            onPress={() => [
-                                // 석운 : 사실 홈으로 돌아가기 버튼을 안 눌러도 되게 하고 싶은데 어떻게 해야 할지 모르겠음.....
-                                // sendOrderWithOrdernum(this.state.basket, this.props.route.params.shopInfo, this.orderNum),
-                                // setOrderNumber(this.orderNum),
-                                // alreadyPaid(commonRef(this.props.route.params.shopInfo), this.state.basket),
-                                this.props.navigation.pop(),
-                                this.props.navigation.navigate('Shops')
-                            ]}
+                            onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
                         </TouchableOpacity>
-                        <Image
-                            source={getCafeIcon(this.props.route.params.shopInfo)}
-                            style={{
-                                width: 60,
-                                height: 60,
-                                position: 'absolute',
-                                right: '5%',
-                                top:'5%',
-                                transform: [{ rotate: '330deg' }],
-                            }}
-                        />
-
                     </View>
-                </ScrollView>
-            )
-        } else {
-            return (
-                <View style={paymentStyles.background}>
-                    <Text style={paymentStyles.notifyText}>결제 실패{'\n'}관리자에게 문의하세요.</Text>
-                    <TouchableOpacity
-                        style={{
-                            width: '100%',
-                            backgroundColor: '#020659',
-                            borderRadius: 10,
-                            paddingHorizontal: 30,
-                            paddingVertical: 10,
-                            marginTop: 5
-                        }}
-                        onPress={() => [this.props.navigation.pop(), this.props.navigation.navigate('Shops')]}
-                    >
-                        <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
-                    </TouchableOpacity>
-                </View>
-            )
+                )
+            }
         }
     }
 

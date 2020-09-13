@@ -3,14 +3,13 @@ import {
     View,
     Text,
     Image,
-    Alert
+    Alert,
+    TouchableOpacity
 } from 'react-native';
 import { basketStyles } from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import ImageLinker from '../../utils/ImageLinker';
 
 //Firebase Ref
-import { commonDatabase, commonRef } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
@@ -116,6 +115,7 @@ export default class BasketDetail extends React.Component {
 
         }
         else isSameshop = true;
+
 
         if (this.state.orderData.length > 0) {
             return (
