@@ -112,14 +112,14 @@ export default class TabViewExample extends React.Component {
                                         }}
                                         
                                         style={{ 
-                                            marginTop:'10%',
-                                            backgroundColor: 'transparent',
-                                            height: 100, 
+                                            marginVertical:'10%',
+                                            backgroundColor: '#182335',
+                                            height: 100,
                                             width: Dimensions.get('window').width,
                                             justifyContent: 'center',
                                         }}
                                         getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
-                                        tabStyle={{ width: 90 }}
+                                        tabStyle={{ width: 90, }}
                                         scrollEnabled={true}
                                     />
                                 </ScrollView>

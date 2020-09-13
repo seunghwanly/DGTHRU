@@ -7,7 +7,7 @@ const menuStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor:'#182335'
+        backgroundColor:'#182335',
     },
     radiusIcon: {
         width: 90,
@@ -67,7 +67,6 @@ const menuStyles = StyleSheet.create({
     sectionHeader : {
         backgroundColor:'white',
         width:'95%',
-        marginTop:'20%',
         borderTopStartRadius:20,
         borderTopEndRadius:20
     }
