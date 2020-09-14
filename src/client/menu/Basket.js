@@ -53,22 +53,23 @@ export default Basket = ({ navigation, route }) => {
         "많이", "보통", "적게"
     ];
 
+    //option
     const [count, setCount] = useState(1);
     const [selected, setSelected] = useState(null);
     const [inOrOut, setInOrOut] = useState(null);
     const [hotOrIced, setHotOrIced] = useState(null);
     const [cupSize, setCupSize] = useState(null);
     const iceCost = item.ice_cost;
-
     //drink option
     const [whippingCream, setWhippingCream] = useState(null);
     const [shotNum, setShotNum] = useState(0);
     const [syrup, setSyrup] = useState(0);
     const [offers, setOffers] = useState('');
     const [steamMilk, setSteamMilk] = useState(false);
+    //bakery option
     const [waffleCream, setWaffleCream] = useState(null);
     const [waffleSyrup, setWaffleSyrup] = useState(null);
-
+    //modal
     const [modalVisible, setModalVisible] = useState(false);
     const [optionVisible, setOptionVisible] = useState(false);
 
@@ -218,7 +219,36 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    sendOrder = (jsonOrderList, shopInfo, userPhoneNumber, isMoreThanOne) => {
+    sendOrder = (shopInfo, userPhoneNumber, isMoreThanOne) => {
+
+        var forPush = {
+            name: item.name,
+            cost: (item.cost + handleOptionCost()) * count,
+            options: {
+                count: count,
+                cup: inOrOut,
+                type: setBasicType(hotOrIced, item),
+                selected: selected,
+                size:cupSize,
+                whipping: whippingCream,
+                shotNum: shotNum,
+                syrup: syrup,
+                waffleCream: waffleCream,
+                waffleSyrup: waffleSyrup,
+                offers: offers,
+                addedCost:handleOptionCost() * count
+            },
+            orderInfo : {
+                orderTime: moment().format('HH:mm:ss'),
+                orderState: 'request',
+                orderNumber: '-',
+                clientPhoneNumber: auth().currentUser.phoneNumber,
+                isCanceled: false,
+                isSet: isMoreThanOne,
+                shopInfo: shopInfo,
+            },
+        }
+        
         if (isMoreThanOne === false) {
             // 1.오너와 함께 공유하는 DB
             const orderRef = database()
@@ -226,8 +256,15 @@ export default Basket = ({ navigation, route }) => {
                 .push();
 
             orderRef
-                .set(jsonOrderList)
+                .set(forPush)
                 .then(() => console.log('Updated Shops DB'));
+
+            // navigate to KaokaoPay.js
+            navigation.navigate('Paying', {
+                totalCost: (item.cost + handleOptionCost()) * count,
+                shopInfo: shopInfo,
+                itemData : JSON.stringify(forPush)
+            });
         }
         else {
             // 2. 사용자 전용 장바구니 개설
@@ -236,7 +273,7 @@ export default Basket = ({ navigation, route }) => {
                 .push();
 
             orderRef2
-                .set(jsonOrderList)
+                .set(forPush)
                 .then(() => console.log('Updated Shops DB'));
         }
     }
@@ -375,60 +412,6 @@ export default Basket = ({ navigation, route }) => {
 
     if (item.sold_out === false) {
 
-        var singleJsonOrderList = {
-            name: item.name,
-            cost: (item.cost + handleOptionCost()) * count,
-            options: {
-                count: count,
-                cup: inOrOut,
-                type: setBasicType(hotOrIced, item),
-                selected: selected,
-                size:cupSize,
-                whipping: whippingCream,
-                shotNum: shotNum,
-                syrup: syrup,
-                waffleCream: waffleCream,
-                waffleSyrup: waffleSyrup,
-                offers: offers,
-                addedCost:handleOptionCost() * count
-            },
-            orderTime: moment().format('HH:mm:ss'),
-            orderState: 'request',
-            orderNumber: '-',
-            hadPaid: 'false',
-            isCanceled: false,
-            shopInfo: shopInfo,
-            isSet: false
-            //옵션추가를 배열로 할지 고민중
-        };
-
-        var groupJsonOrderList = {
-            name: item.name,
-            cost: (item.cost + handleOptionCost()) * count,
-            options: {
-                count: count,
-                cup: inOrOut,
-                type: setBasicType(hotOrIced, item),
-                selected: selected,
-                size:cupSize,
-                whipping: whippingCream,
-                shotNum: shotNum,
-                syrup: syrup,
-                waffleCream: waffleCream,
-                waffleSyrup: waffleSyrup,
-                offers: offers,
-                addedCost:handleOptionCost() * count
-            },
-            orderTime: moment().format('HH:mm:ss'),
-            orderState: 'request',
-            orderNumber: '-',
-            hadPaid: 'false',
-            isCanceled: false,
-            shopInfo: shopInfo,
-            isSet: true
-            //옵션추가를 배열로 할지 고민중
-        };
-
         return (
             <>
                 <Modal
@@ -555,12 +538,7 @@ export default Basket = ({ navigation, route }) => {
                                 <TouchableOpacity
                                     style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
                                     onPress={() => [
-                                        sendOrder(singleJsonOrderList, shopInfo, userPhoneNumber, false),
-                                        navigation.navigate('Paying', {
-                                            totalCost: (item.cost + handleOptionCost()) * count,
-                                            shopInfo: shopInfo,
-                                            itemData: JSON.stringify(singleJsonOrderList)
-                                        }),
+                                        sendOrder(shopInfo, userPhoneNumber, false),
                                         setModalVisible(!modalVisible)
                                     ]}
                                 >
@@ -943,7 +921,7 @@ export default Basket = ({ navigation, route }) => {
                                 </View>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(groupJsonOrderList, shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>

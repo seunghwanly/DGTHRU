@@ -107,7 +107,7 @@ export default class BasketDetail extends React.Component {
         var isSameshop = false;
         if (this.state.orderData.length > 1) {
             for (var i = 0; i < this.state.orderData.length - 1; i++) {
-                if (this.state.orderData[i].value.shopInfo === this.state.orderData[i + 1].value.shopInfo)
+                if (this.state.orderData[i].value.orderInfo.shopInfo === this.state.orderData[i + 1].value.orderInfo.shopInfo)
                     isSameshop = true;
                 else
                     isSameshop = false;
@@ -127,7 +127,7 @@ export default class BasketDetail extends React.Component {
                                     //key 값 부여하기 !
                                     return (
                                         <View style={basketStyles.detailWrapper}>
-                                            <ImageLinker name={item.value.shopInfo} style={[basketStyles.smallRadiusIcon, { alignSelf: 'center' }]} />
+                                            <ImageLinker name={item.value.orderInfo.shopInfo} style={[basketStyles.smallRadiusIcon, { alignSelf: 'center' }]} />
                                             <View style={{ padding: 5 }}>
                                                 <View style={[basketStyles.detailItemNameWrapper, {}]}>
                                                     <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon]} />
