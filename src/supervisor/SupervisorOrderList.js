@@ -7,6 +7,7 @@ import { exampleStyle } from './styles';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
+import imageLinker from '../utils/ImageLinker';
 const initialLayout = { width: Dimensions.get('window').width };
 
 
@@ -42,17 +43,17 @@ const FirstRoute = (props) => (
 
                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}>
                       
-                            <Text style={exampleStyle.orderlistText_Thin}>승인취소</Text>
+                            <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}>
                        
-                            <Text style={exampleStyle.orderlistText_Thin}>주문승인</Text>
+                            <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                         
                     </TouchableOpacity>
                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}>
                       
-                            <Text style={exampleStyle.orderlistText_Thin}>준비완료</Text>
+                            <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
                       
                     </TouchableOpacity>
                     </View>

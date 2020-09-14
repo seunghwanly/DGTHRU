@@ -134,6 +134,12 @@ const exampleStyle = StyleSheet.create({
         fontSize:18, 
         color:'#2e2e2e',
     },
+
+    orderlistButtonText: {
+        fontWeight:'bold',
+        fontSize:20, 
+        color:'white',
+    },
     
     orderlistTitle: {
        
@@ -158,17 +164,20 @@ const exampleStyle = StyleSheet.create({
     },
     
     listContainer: {
-        flex: 1, 
+        flexDirection:'row',
+        flex: 1,
         justifyContent: "center", 
         alignItems: "center",
     },
     buttonstyle: {
         justifyContent: 'center',
         alignItems: 'center',
-        height:'60%',
+        height:'100%',
         margin:5,
-        borderWidth:1,
-        borderColor:'#e2e2e2',
+        padding:10,
+        borderWidth:2,
+        borderColor:'#182335',
+        backgroundColor:'#EEAF9D',
         borderRadius:12,
         marginHorizontal:1
     },
