@@ -23,7 +23,12 @@ const FirstRoute = (props) => (
                 return (
                     <View style={exampleStyle.body}>
                     <View style={exampleStyle.listbox_left}>
+                    <View stlye={exampleStyle.listLeftContainer}>
+                            <ImageLinker style={exampleStyle.listImage} name="아메리카노"/>
+                    </View>
                     <View stlye={exampleStyle.listContainer} >
+                    
+                            <View>
                             <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
                             <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.shotnum}</Text>
                             <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.count}</Text>
@@ -31,8 +36,8 @@ const FirstRoute = (props) => (
                 <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate} {item.orderTime}</Text>
                 <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.cup} / {item.type}</Text>
                             
-                        </View>
-                        
+                             </View>
+                    </View>
    
                         </View>
                     <View style={exampleStyle.listbox_center}>

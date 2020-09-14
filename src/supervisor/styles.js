@@ -99,12 +99,13 @@ const exampleStyle = StyleSheet.create({
     listbox_left: {
         alignSelf:'center',
         flex:4,
-        backgroundColor:'lightblue', 
+        flexDirection:'row',
+        backgroundColor:'#EEAF9D', 
         width: '30%', 
         height:'95%',
-        padding:5,
+        padding:10,
         alignItems:'center',
-        justifyContent:'center',
+       
     },
     listbox_center: {
         alignSelf:'center',
@@ -164,10 +165,22 @@ const exampleStyle = StyleSheet.create({
     },
     
     listContainer: {
-        flexDirection:'row',
-        flex: 1,
+        margin:15,
+        flexDirection:'column',
+        flex: 3,
         justifyContent: "center", 
         alignItems: "center",
+    },
+    listLeftContainer: {
+        margin:15,
+        alignSelf:'center',
+        justifyContent: "center", 
+        alignItems: "center",
+    },
+    listImage:{
+        borderRadius: 10,
+        width:100,
+        height:100,
     },
     buttonstyle: {
         justifyContent: 'center',
