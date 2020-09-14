@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Platform, Dimensions, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Platform, Dimensions, TouchableOpacity,StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+//import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { exampleStyle } from './styles';
@@ -11,8 +11,6 @@ const initialLayout = { width: Dimensions.get('window').width };
 
 
 const FirstRoute = (props) => (
-    // 밑에 클래스에서 사용중인 this.state.list 를 여기 FlatList에 data에 꽂아야함 . 그걸 모르겠음.
-
     <View style={exampleStyle.background} >
 <Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
         <FlatList
@@ -41,21 +39,23 @@ const FirstRoute = (props) => (
                     </View>
                     <View style={exampleStyle.listbox_right}>
                     <View style={exampleStyle.orderlistview}>
-                                        <View style={exampleStyle.buttonstyle}>
-                                          <Button color="#EEAF9D" width="20%" height="50%"
-                                          title="승인취소" onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                          </View>
-                                          
-                                        <View style={exampleStyle.buttonstyle}>
-                                          <Button color="#EEAF9D"
-                                          title="주문승인" onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                          </View>
-                                          
-                                        <View style={exampleStyle.buttonstyle}>
-                                          <Button color="#EEAF9D"
-                                          title="준비완료" onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}></Button> 
-                                         </View>
-                                      </View>
+
+                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}>
+                      
+                            <Text style={exampleStyle.orderlistText_Thin}>승인취소</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}>
+                       
+                            <Text style={exampleStyle.orderlistText_Thin}>주문승인</Text>
+                        
+                    </TouchableOpacity>
+                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}>
+                      
+                            <Text style={exampleStyle.orderlistText_Thin}>준비완료</Text>
+                      
+                    </TouchableOpacity>
+                    </View>
                     </View>
 
 
@@ -196,6 +196,7 @@ export default class SupervisorOrderList extends Component {
                             cup: menuChild.val().cup,
                             shotnum: menuChild.val().shotNum,
                             type: menuChild.val().type,
+                            orderDate: orderDate,
                         })
                     })
                 })
@@ -205,7 +206,9 @@ export default class SupervisorOrderList extends Component {
 
             li.sort((d2, d1) => new Moment(d2.orderTime, 'HH:mm:ss') - new Moment(d1.orderTime, 'HH:mm:ss'));
 
+            
             this.setState({ list: li });
+            console.log("여기 !"+ JSON.stringify(li));
         })
 
     }
@@ -234,32 +237,37 @@ export default class SupervisorOrderList extends Component {
                 onIndexChange={this._setIndex}
                 initialLayout={initialLayout}
                 
-                // renderTabBar={(props) => (
-                //     <View style={{ backgroundColor:'#182335', }}>
-                       
-                //             <TabBar
-                //                 {...props}
-                //                 indicatorStyle={{ 
-                //                     backgroundColor: '#EEAF9D',
-                //                     borderRadius:20,
-                //                     height:5,
-                //                     justifyContent:'center',
+                renderTabBar={(props) => (
+                    <View style={{ backgroundColor:'white', }}>
+                            <TabBar
+                                {...props}
+                                indicatorStyle={{ 
+                                    marginHorizontal: (Dimensions.get('window').width/3-Dimensions.get('window').width/7 )/2,
+                                    justifyContent:'center',
+                                    backgroundColor: '#EEAF9D',
+                                    borderRadius:3,
+                                    height:5,
+                                    margin:0.5,
+                                    width : Dimensions.get('window').width/7,
                                     
-                //                 }}
+                                }}
                                 
-                //                 style={{ 
-                //                     backgroundColor: '#182335',
-                //                     height: 50,
-                //                     width: Dimensions.get('window').width,
-                //                     justifyContent: 'center',
-                //                 }}
+                                style={{ 
+                                    backgroundColor: '#182335',
+                                    height: 50,
+                                    width: Dimensions.get('window').width/3*3,
+                                    justifyContent: 'center',
+                                }}
                                 
-                //                 getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
-                //                 tabStyle={{ width: '20%', }}
+                                getLabelText={({ route }) => (<Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                                tabStyle={{ width : Dimensions.get('window').width/3 ,
+                                borderRightColor:'white' ,borderWidth:1,borderLeftColor:'white'
+                        
+                            }}
                               
-                //             />
-                //     </View>
-                // )}
+                            />
+                    </View>
+                )}
             />
         );
     }

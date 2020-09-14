@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { ScreenStackHeaderCenterView } from 'react-native-screens';
 
 const shopStyles = StyleSheet.create({
@@ -75,19 +75,19 @@ const shopStyles = StyleSheet.create({
 const exampleStyle = StyleSheet.create({
     background: {
         flex:1,
-        backgroundColor:'darkgray',
+        backgroundColor:'#dadada',
         justifyContent: "center", 
         alignItems: "center",
 
     },
     body: {
         flexDirection: 'row',
-        flex: 9,
+        flex: 10,
         margin: 3,
         borderRadius:10,
         borderWidth:2,
         borderColor:'white',
-        width: '100%',
+        width: Dimensions.get('window').width/4*3,
         height:'100%',
         backgroundColor:'white',
         justifyContent: "center", 
@@ -118,7 +118,7 @@ const exampleStyle = StyleSheet.create({
     listbox_right: {
         alignSelf:'center',
         height:'95%',
-        flex:3,
+        flex:4,
         backgroundColor:'lightgray', 
         width: '35%', 
         alignItems:'center',
@@ -131,7 +131,7 @@ const exampleStyle = StyleSheet.create({
     },
     orderlistText_Thin: {
         fontWeight:'400',
-        fontSize:16, 
+        fontSize:18, 
         color:'#2e2e2e',
     },
     
@@ -149,7 +149,10 @@ const exampleStyle = StyleSheet.create({
         color:'white',
     },
     orderlistview: {
+        width:'100%',
+        backgroundColor:'white',
         justifyContent: "center", 
+        alignContent:'center',
         alignItems: "center",
         flexDirection : 'row',
     },
@@ -160,10 +163,14 @@ const exampleStyle = StyleSheet.create({
         alignItems: "center",
     },
     buttonstyle: {
-        flex: 1, 
-        backgroundColor:'lightgray',
-        justifyContent: "center", 
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
+        height:'60%',
+        margin:5,
+        borderWidth:1,
+        borderColor:'#e2e2e2',
+        borderRadius:12,
+        marginHorizontal:1
     },
     
     
