@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
+import moment from 'moment';
 import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
@@ -40,7 +41,7 @@ async function updateCurrentOrderNumber(shopInfo) {
 
 async function updateUserHistroy(data, orderNumber) {
 
-    if (data.orderInfo.isSet === false) {
+    if (data[0].orderInfo.isSet === false) {
         // 2.사용자 History
         const userRef = database()
             .ref(userHistoryRef())
@@ -103,11 +104,11 @@ export default class PaymentResult extends React.Component {
 
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
-            const data = JSON.parse(this.props.route.params.itemData); // 넣을 data
-
+            var data = JSON.parse(this.props.route.params.itemData); // 넣을 data
+            
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
-            if (data.orderInfo.isSet === false) {
+            if (data[0].orderInfo.isSet === false) {
                 //주문번호 업데이트
                 var key = '';
 
@@ -146,7 +147,7 @@ export default class PaymentResult extends React.Component {
             // 2. 장바구니일 경우
             else {
                 //group 버킷 안에 있음 { group : { autokey : {-}, autokey : {-}, ... } } 우리가 바꿔줄거는 group이름을 주문번호로 ! >> 안될듯
-
+                console.log('> init group ####')
                 var res = 'A-';
                 // 현재 주문번호 가져오기
                 orderNumDatabase(this.props.route.params.shopInfo)
@@ -166,11 +167,13 @@ export default class PaymentResult extends React.Component {
                             .ref(commonRef(this.props.route.params.shopInfo) + '/group')
                             .once('value', (snapshot) => {
                                 snapshot.forEach((childData, index) => {
+                                    console.log('> ref : \n' + commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo');
                                     //주문번호 업데이트 : 공통 DB
-                                    var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
-                                    updateOrderInfo.update({ orderNumber: res });
-                                });
-                            })
+                                   database()
+                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
+                                        .update({ orderNumber: res });
+                                })
+                            });
                         updateUserHistroy(data, res);
                     })
             }   // else
@@ -244,22 +247,42 @@ export default class PaymentResult extends React.Component {
                         isFullyReady++;
                     } 
                     else if (this.state.orderState[i] === 'cancel') {
-                        alert('카운터로 와주세요 :)');
                         // DB update 해야함
                         // isCanceled --> true
-                        if (!this.state.data.orderInfo.isSet) { // single menu
+                        if (!this.state.data[i].orderInfo.isSet) { // single menu
+                            var ukey = '';
                             //get key
                             database()
                                 .ref(userHistoryRef())
                                 .once('value', snapshot => {
-                                    const key = snapshot.key;
+                                    ukey = snapshot.key;
                                 }).then(() => { // update
                                     database()
-                                        .ref(userHistoryRef() + '/' + key + '/orderInfo')
+                                        .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
                                         .update({ isCanceled: true });
+
+                                        alert('카운터로 와주세요 :)');
                                 });
                         } else { // group menu
-                            
+                            var okey ='';
+                            var ukey ='';
+                            //get key
+                            database()
+                                .ref(userHistoryRef())
+                                .once('value', snapshot => {
+                                    snapshot.forEach(childSnapShot => {
+                                        okey = childSnapShot.key;
+                                        childSnapShot.forEach(data => {
+                                            ukey = data.key;
+                                        })
+                                    })
+                                }).then(() => {
+                                    database()
+                                        .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                        .update({ isCanceled : true });
+
+                                        alert('카운터로 와주세요 :)');
+                                })
                         }
                     }
                     else if (this.state.orderState[i] === 'confirm') {

@@ -173,11 +173,11 @@ export default StackContainer = ({ navigation }) => {
                                 gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' || name === "Result" ? false : true,
                                 // gestureEnabled: false
                                 headerStyle: { 
-                                    backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : name === 'Result' ? '#eeaf9d' : '#fff', 
+                                    backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
                                     shadowColor:'transparent'
                                 },
                                 headerTitleStyle: {
-                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" ? '#fff' : '#000',
+                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Loading' ? '#fff' : '#000',
                                     fontWeight:'bold'
                                 },    
                             })

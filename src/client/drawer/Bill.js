@@ -319,7 +319,7 @@ export default class Bill extends React.Component {
                                                                                         <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].options.cup}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderInfo.orderTime}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                             }
                                                                         </TouchableOpacity>
