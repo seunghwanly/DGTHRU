@@ -132,9 +132,9 @@ export default class Bill extends React.Component {
                                 name: dataSnapShot.val().name,
                                 cost: dataSnapShot.val().cost,
                                 options: dataSnapShot.val().options,
-                                orderTime: dataSnapShot.val().orderTime,
-                                orderNumber : dataSnapShot.val().orderNumber,
-                                shopInfo: dataSnapShot.val().shopInfo,
+                                orderInfo : dataSnapShot.val().orderInfo,
+                                orderTime : dataSnapShot.val().orderInfo.orderTime,
+                                shopInfo: dataSnapShot.val().orderInfo.shopInfo
                             });
 
                             tempTotalCost += dataSnapShot.val().cost;
@@ -149,8 +149,8 @@ export default class Bill extends React.Component {
                             dataSnapShot.forEach((groupChild) => {
                                 tempSubJSONArray = [];
                                 groupChild.forEach((item) => {
-                                    tempItemOrderTime = item.val().orderTime; //key
-                                    tempItemShopInfo = item.val().shopInfo; //shopInfo
+                                    tempItemOrderTime = item.val().orderInfo.orderTime; //key
+                                    tempItemShopInfo = item.val().orderInfo.shopInfo; //shopInfo
                                     //push
                                     tempSubJSONArray.push({
                                         name: item.val().name,
@@ -162,7 +162,7 @@ export default class Bill extends React.Component {
                                     tempGroupTotalCost += item.val().cost;
 
                                 })  //item
-                                tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
+                                
                                 //to object
                                 var forPush = {
                                     orderTime: tempItemOrderTime,
@@ -319,7 +319,7 @@ export default class Bill extends React.Component {
                                                                                         <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].options.cup}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderInfo.orderTime}</Text>
                                                                                     </>
                                                                             }
                                                                         </TouchableOpacity>

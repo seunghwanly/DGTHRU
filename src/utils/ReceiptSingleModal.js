@@ -31,7 +31,7 @@ export default class RecieptSingleModal extends React.Component {
                     }}
                 />
                 <View style={{ borderBottomWidth: 1, borderTopWidth: 1, borderStyle: 'solid', marginTop: 20, width: 250 }}>
-                    <Text style={{ fontWeight: '700', fontSize: 18, margin: 10, textAlign: 'center' }}>주문번호 {this.props.item.orderNumber}</Text>
+                    <Text style={{ fontWeight: '700', fontSize: 18, margin: 10, textAlign: 'center' }}>주문번호 {this.props.item.orderInfo.orderNumber}</Text>
                 </View>
                 <View style={{ padding: 10, marginTop: 20 }}>
                     <Text style={{ fontSize: 14, marginVertical: 2 }}>{getCafeName(this.props.item.shopInfo)}</Text>

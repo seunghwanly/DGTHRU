@@ -15,38 +15,7 @@ import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import Loading from './Loading';
-import moment from 'moment';
 
-var currDate = moment().format('YYYY_MM_DD');
-
-// 석운 : 주문번호 부여, 주문번호에 따른 디비 생성
-async function sendOrderWithOrdernum(orderList, shopInfo, num) {
-    const orderRef = database()
-        .ref('with_order_num/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber + '/' + num)
-        .push();
-
-    orderRef
-        .set(orderList)
-        .then(() => alert('주문번호 : ' + num + '번'));
-}
-
-// 석운 : 주문번호 업데이트
-async function setOrderNumber(num) {
-    if (num === 999) {
-        database().ref('order_num/').update({ number: 1 });
-    }
-    else {
-        database().ref('order_num/').update({ number: num + 1 });
-    }
-}
-
-async function alreadyPaid(ref, list) {
-    for (var i = 0; i < list.length; i++) {
-
-        console.log('\n list key is     >>>>     ' + list[i].key + '\n');
-        database().ref(ref + '/' + list[i].key).update({ hadPaid: 'true' });
-    }
-}
 //승환 : 가게별 주문 번호 증가
 async function updateCurrentOrderNumber(shopInfo) {
 
@@ -71,7 +40,7 @@ async function updateCurrentOrderNumber(shopInfo) {
 
 async function updateUserHistroy(data, orderNumber) {
 
-    if (data.isSet === false) {
+    if (data.orderInfo.isSet === false) {
         // 2.사용자 History
         const userRef = database()
             .ref(userHistoryRef())
@@ -131,10 +100,6 @@ export default class PaymentResult extends React.Component {
         console.log('componentDidMount');
 
         setTimeout(() => { this.setState({ isLoading: false }) }, 1000);
-        // 석운 : 주문번호 뽑기
-        // database().ref('/order_num/').on('value', (snapshot) => {
-        //     this.orderNum = snapshot.val().number;
-        // });
 
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
@@ -142,7 +107,7 @@ export default class PaymentResult extends React.Component {
 
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
-            if (data.isSet === false) {
+            if (data.orderInfo.isSet === false) {
                 //주문번호 업데이트
                 var key = '';
 
@@ -166,9 +131,9 @@ export default class PaymentResult extends React.Component {
                             }).then(() => {
                                 console.log('>  ' + res);
                                 //update common DB
-                                database()
-                                    .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
-                                    .update({ orderNumber: res });
+                                var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
+                                updateOrderInfo.update({ orderNumber : res });
+                                    
                                 //get data
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
@@ -192,8 +157,8 @@ export default class PaymentResult extends React.Component {
                     }).then(() => {
                         //data 수정
                         for (var i = 0; i < data.length; ++i) {
-                            if (data[i].orderNumber === '-') {
-                                data[i].orderNumber = res;
+                            if (data[i].orderInfo.orderNumber === '-') {
+                                data[i].orderInfo.orderNumber = res;
                             }
                         }
                         // 공통 DB 작업 중
@@ -202,9 +167,8 @@ export default class PaymentResult extends React.Component {
                             .once('value', (snapshot) => {
                                 snapshot.forEach((childData, index) => {
                                     //주문번호 업데이트 : 공통 DB
-                                    database()
-                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index)
-                                        .update({ orderNumber: res });
+                                    var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
+                                    updateOrderInfo.update({ orderNumber: res });
                                 });
                             })
                         updateUserHistroy(data, res);
@@ -233,7 +197,6 @@ export default class PaymentResult extends React.Component {
                 //init
                 this.setState({ orderState: [], isMenuReady: false, data: [] });
                 var idx = 0;
-                var li = [];
                 snapshot.forEach((childSnapShot) => {
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
@@ -242,22 +205,15 @@ export default class PaymentResult extends React.Component {
                             name: childSnapShot.val().name,
                             cost: childSnapShot.val().cost,
                             options: childSnapShot.val().options,
-                            orderTime: childSnapShot.val().orderTime,
-                            orderNumber: childSnapShot.val().orderNumber,
-                            hadPaid: childSnapShot.val().hadPaid,
+                            orderInfo: childSnapShot.val().orderInfo
                         };
-                        if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderTime;
+                        if (idx === 0) this.state.timeArray.paid = childSnapShot.val().orderInfo.orderTime;
                         //주문정보담기
                         this.setState({
-                            orderState: this.state.orderState.concat(childSnapShot.val().orderState),
+                            orderState: this.state.orderState.concat(childSnapShot.val().orderInfo.orderState),
                             data: this.state.data.concat(tempJSONObject),
                         });
                         idx++;
-
-                        // 석운 : 결제를 안했으면 this.state.basket에 넣음
-                        if (tempJSONObject.hadPaid === 'false') {
-                            li.push(tempJSONObject);
-                        }
                     }
                     else {  // 장바구니 주문 건
                         childSnapShot.forEach((dataChild) => {
@@ -266,35 +222,48 @@ export default class PaymentResult extends React.Component {
                                 name: dataChild.val().name,
                                 cost: dataChild.val().cost,
                                 options: dataChild.val().options,
-                                orderTime: dataChild.val().orderTime,
-                                orderNumber: dataChild.val().orderNumber,
-                                hadPaid: dataChild.val().hadPaid,
+                                orderInfo: dataChild.val().orderInfo
                             };
-                            if (idx === 0) this.state.timeArray.paid = dataChild.val().orderTime;
+                            if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
                             //주문정보담기
                             this.setState({
-                                orderState: this.state.orderState.concat(dataChild.val().orderState),
+                                orderState: this.state.orderState.concat(dataChild.val().orderInfo.orderState),
                                 data: this.state.data.concat(tempJSONObject),
                             });
                             idx++;
-
-                            // 석운 : 결제를 안했으면 this.state.basket에 넣음
-                            if (tempJSONObject.hadPaid === 'false') {
-                                li.push(tempJSONObject);
-                            }
                         })
                     }
 
 
                 })
-                this.setState({ basket: li });
-
 
                 var isFullyReady = 0;
                 for (var i = 0; i < this.state.orderState.length; ++i) {
-                    if (this.state.orderState[i] === 'ready') isFullyReady++;
+                    if (this.state.orderState[i] === 'ready') {
+                        this.state.timeArray.ready = moment().format('HH:mm:ss');
+                        isFullyReady++;
+                    } 
                     else if (this.state.orderState[i] === 'cancel') {
                         alert('카운터로 와주세요 :)');
+                        // DB update 해야함
+                        // isCanceled --> true
+                        if (!this.state.data.orderInfo.isSet) { // single menu
+                            //get key
+                            database()
+                                .ref(userHistoryRef())
+                                .once('value', snapshot => {
+                                    const key = snapshot.key;
+                                }).then(() => { // update
+                                    database()
+                                        .ref(userHistoryRef() + '/' + key + '/orderInfo')
+                                        .update({ isCanceled: true });
+                                });
+                        } else { // group menu
+                            
+                        }
+                    }
+                    else if (this.state.orderState[i] === 'confirm') {
+                        this.state.timeArray.confirm = moment().format('HH:mm:ss');
                     }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
@@ -357,7 +326,7 @@ export default class PaymentResult extends React.Component {
                                             <View style={paymentStyles.orderWrapper}>
                                                 <View style={{ flexDirection: 'row', width: '100%' }}>
                                                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
-                                                    <Text style={{ fontSize: 14, }}> / {item.orderNumber}</Text>
+                                                    <Text style={{ fontSize: 14, }}> / {item.orderInfo.orderNumber}</Text>
                                                 </View>
                                                 <View style={{ flexDirection: 'row', marginVertical: 2, width: '100%' }}>
                                                     <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.type} / </Text>
