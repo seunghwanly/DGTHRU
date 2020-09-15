@@ -219,7 +219,7 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    sendOrder = (shopInfo, userPhoneNumber, isMoreThanOne) => {
+    sendOrder = (userPhoneNumber, isMoreThanOne) => {
 
         var forPush = {
             name: item.name,
@@ -257,14 +257,17 @@ export default Basket = ({ navigation, route }) => {
 
             orderRef
                 .set(forPush)
-                .then(() => console.log('Updated Shops DB'));
-
-            // navigate to KaokaoPay.js
-            navigation.navigate('Paying', {
-                totalCost: (item.cost + handleOptionCost()) * count,
-                shopInfo: shopInfo,
-                itemData : JSON.stringify(forPush)
-            });
+                .then(() => 
+                    [
+                        console.log('Updated Shops DB'),
+                        // navigate to KaokaoPay.js
+                        navigation.navigate('Paying', {
+                            totalCost: (item.cost + handleOptionCost()) * count,
+                            shopInfo: shopInfo,
+                            itemData: JSON.stringify(forPush)
+                        })
+                    ]
+                )
         }
         else {
             // 2. 사용자 전용 장바구니 개설
@@ -538,7 +541,7 @@ export default Basket = ({ navigation, route }) => {
                                 <TouchableOpacity
                                     style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
                                     onPress={() => [
-                                        sendOrder(shopInfo, userPhoneNumber, false),
+                                        sendOrder(userPhoneNumber, false),
                                         setModalVisible(!modalVisible)
                                     ]}
                                 >
@@ -921,7 +924,7 @@ export default Basket = ({ navigation, route }) => {
                                 </View>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(shopInfo, userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>

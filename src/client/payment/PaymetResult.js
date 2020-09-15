@@ -39,9 +39,9 @@ async function updateCurrentOrderNumber(shopInfo) {
     }
 }
 
-async function updateUserHistroy(data, orderNumber) {
+async function updateUserHistroy(data, orderNumber, isGroup) {
 
-    if (data[0].orderInfo.isSet === false) {
+    if (isGroup === false) {
         // 2.사용자 History
         const userRef = database()
             .ref(userHistoryRef())
@@ -139,7 +139,7 @@ export default class PaymentResult extends React.Component {
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
                                     .once('value', (snapshot) => {
-                                        updateUserHistroy(snapshot.val(), res);
+                                        updateUserHistroy(snapshot.val(), res, false);
                                     });
                             })
                     });
@@ -174,7 +174,7 @@ export default class PaymentResult extends React.Component {
                                         .update({ orderNumber: res });
                                 })
                             });
-                        updateUserHistroy(data, res);
+                        updateUserHistroy(data, res, true);
                     })
             }   // else
 
