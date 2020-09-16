@@ -104,18 +104,20 @@ export default class BasketDetail extends React.Component {
         })
 
         // is items are in same shops?
+        var sameShopInfo = '';
         var isSameshop = false;
         if (this.state.orderData.length > 1) {
             for (var i = 0; i < this.state.orderData.length - 1; i++) {
-                if (this.state.orderData[i].value.orderInfo.shopInfo === this.state.orderData[i + 1].value.orderInfo.shopInfo)
+                if (this.state.orderData[i].value.orderInfo.shopInfo === this.state.orderData[i + 1].value.orderInfo.shopInfo) {
+                    sameShopInfo = this.state.orderData[i].value.orderInfo.shopInfo;
                     isSameshop = true;
+                }
                 else
                     isSameshop = false;
             }
 
         }
         else isSameshop = true;
-
 
         if (this.state.orderData.length > 0) {
             return (
@@ -211,12 +213,12 @@ export default class BasketDetail extends React.Component {
                                                         {
                                                             totalCost: totalCost,
                                                             quantity: this.state.orderData.length,
-                                                            shopInfo: this.props.route.params.shopInfo,
+                                                            shopInfo: sameShopInfo,
                                                             itemData: JSON.stringify(this.state.propsData)
                                                         }
                                                     ),
                                                     //pop and push
-                                                    handleOrder(this.props.route.params.shopInfo, this.state.propsData)
+                                                    handleOrder(sameShopInfo, this.state.propsData)
                                                 ]
                                         }
                                     ])
