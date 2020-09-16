@@ -74,7 +74,7 @@ export default class PaymentResult extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('constructor >> ');
+        console.log('constructor >> ' + this.props.route.params.shopInfo);
 
         this.state = {
             isMenuReady: false,
@@ -105,10 +105,10 @@ export default class PaymentResult extends React.Component {
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
             var data = JSON.parse(this.props.route.params.itemData); // 넣을 data
-            
+            console.log(this.props.route.params.itemData + '\n\n\n\n\n' + this.props.route.params.itemData.length, data.hasOwnProperty('options'));
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
-            if (data[0].orderInfo.isSet === false) {
+            if (data.hasOwnProperty('options')) {
                 //주문번호 업데이트
                 var key = '';
 

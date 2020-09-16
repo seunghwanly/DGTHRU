@@ -53,7 +53,7 @@ export default class BasketDetail extends React.Component {
             propsData: [],
             needRefresh: false,
         }
-
+        console.log('> constructor : '+ this.props.route.params.shopInfo);
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
