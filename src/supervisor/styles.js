@@ -75,20 +75,18 @@ const shopStyles = StyleSheet.create({
 const exampleStyle = StyleSheet.create({
     background: {
         flex:1,
-        backgroundColor:'#dadada',
+        backgroundColor:'#f2f2f2',
         justifyContent: "center", 
         alignItems: "center",
 
     },
     body: {
         flexDirection: 'row',
-        flex: 10,
-        margin: 3,
+        marginVertical:10,
         borderRadius:10,
         borderWidth:2,
         borderColor:'#EEAF9D',
         width: Dimensions.get('window').width/4*3,
-        height:'100%',
         backgroundColor:'white',
         justifyContent: "center", 
         alignItems: "center",
@@ -97,42 +95,38 @@ const exampleStyle = StyleSheet.create({
     },
    
     listbox_left: {
+        width:'40%',
         alignSelf:'center',
-        flex:4,
         flexDirection:'row',
         backgroundColor:'#EEAF9D', 
-        width: '30%', 
-        height:'100%',
-        padding:10,
+        padding:15,
         alignItems:'center',
-       
+        
     },
     listbox_center: {
+        width:'20%',
         alignSelf:'center',
         backgroundColor:'#182335', 
-        width: '30%',
-        height:'95%',
-        flex:2,
         alignItems:'center',
         justifyContent:'center',
+        
     },
     listbox_right: {
+        width:'40%',
         alignSelf:'center',
-        height:'95%',
-        flex:4,
-        backgroundColor:'lightgray', 
-        width: '35%', 
+        backgroundColor:'lightgray',
         alignItems:'center',
         justifyContent:'center',
+        
     },
     orderlistText_Bold: {
         fontWeight:'bold',
-        fontSize:22, 
+        fontSize:20, 
         color:'black',
     },
     orderlistText_Thin: {
         fontWeight:'400',
-        fontSize:18, 
+        fontSize:16, 
         color:'#2e2e2e',
     },
 
@@ -143,10 +137,9 @@ const exampleStyle = StyleSheet.create({
     },
     
     orderlistTitle: {
-       
         textAlign:'center',
         fontWeight:'bold', 
-        fontSize:35, 
+        fontSize:28, 
         color:'white',
     },
     orderlistPastTime: {
@@ -158,14 +151,12 @@ const exampleStyle = StyleSheet.create({
     orderlistview: {
         width:'100%',
         backgroundColor:'white',
-        justifyContent: "center", 
-        alignContent:'center',
+        justifyContent: "center",
         alignItems: "center",
         flexDirection : 'row',
     },
     
     listContainer: {
-        margin:15,
         flexDirection:'column',
         flex: 3,
         justifyContent: "center", 
@@ -186,15 +177,18 @@ const exampleStyle = StyleSheet.create({
         height:'100%',
     },
     innerContainer: {
-        backgroundColor:'white',
-        
+        backgroundColor:'green',
+        flexDirection:'row',
+        borderWidth:10,
+        padding:10
+
     },
     outerContainer: {
         width:'100%',
-        flexDirection:'row',
-        backgroundColor:'gray',
-        borderColor:'red',
-        borderWidth:2,
+        marginVertical:2,
+        borderWidth:5,
+        borderColor:'green',
+        backgroundColor:'blue',
     },
 
     listImage:{
@@ -205,14 +199,18 @@ const exampleStyle = StyleSheet.create({
     buttonstyle: {
         justifyContent: 'center',
         alignItems: 'center',
-        height:'100%',
         margin:5,
         padding:10,
-        borderWidth:2,
-        borderColor:'#182335',
         backgroundColor:'#EEAF9D',
         borderRadius:12,
-        marginHorizontal:1
+        marginHorizontal:5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,                  
+        shadowRadius: 2
     },
     
     

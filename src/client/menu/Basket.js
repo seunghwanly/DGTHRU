@@ -126,7 +126,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         keyExtractor={(item) => item.toString()}
                         extraData={selected}
-                        contentContainerStyle={{ flexDirection: 'row-reverse', width:340 }}
+                        contentContainerStyle={{paddingHorizontal:10,justifyContent:'flex-end', flexDirection: 'row', width: subMenu.sub_menu.length >= 5 ? subMenu.sub_menu.length * 65 : 340}}
                         scrollEnabled={true}
                         alwaysBounceVertical={false}
                         showsHorizontalScrollIndicator={false}

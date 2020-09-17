@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Dimensions, TouchableOpacity,StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
@@ -13,156 +13,250 @@ const initialLayout = { width: Dimensions.get('window').width };
 
 const FirstRoute = (props) => (
     <View style={exampleStyle.background} >
-<Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
+        <Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
         <FlatList
             data={props.data}
-            numColumns={1}
             keyExtractor={item => item.key}
+            contentContainerStyle={
+                {
+                    paddingHorizontal: '5%',
+                    width: Dimensions.get('window').width,
+
+                }
+            }
             scrollEnabled={true}
-            renderItem={({ item,index }) => {
+            renderItem={({ item, index }) => {
                 return (
 
-                    <View style={exampleStyle.body}>
-                        
-                         { item.hasOwnProperty('groupOrder') == 
-                    true ?
-                    <View style={exampleStyle.outerContainer}>
-                        {/* {console.log("TTT: " + JSON.stringify(props.data[index].groupOrder))} */}
-                        <FlatList
-                             data={props.data[index].groupOrder}
-                             numColumns={1}
-                             keyExtractor={item => item.key}
-                             scrollEnabled={true}
-                             renderItem={({ item, index }) => {
-                                 return (
-                                    <View style={exampleStyle.innerContainer}>
-                                <View style={exampleStyle.listbox_left}>
-                                <View stlye={exampleStyle.listLeftContainer}>
-
-                                <ImageLinker style={exampleStyle.listImage} name="아메리카노"/>
-                                 <Text textAlign="center">{
-                                     item.orderInfo.orderNumber
-                                 }</Text>
-                               
-                                    </View>
-                        <View stlye={exampleStyle.listContainer} >
+                    <>
+                        {item.hasOwnProperty('groupOrder') === true ?
+                            <FlatList
+                                data={props.data[index].groupOrder}
+                                keyExtractor={item => item.key}
+                                style={
+                                    {
+                                        width: '100%',
+                                        backgroundColor:'#182335',
+                                        marginVertical: 5,
+                                        alignSelf: 'center',
+                                        borderRadius: 20,
+                                        padding:'2%',
+                                        shadowColor: "#000",
+                                                shadowOffset: {
+                                                    width: 1,
+                                                    height: 2
+                                                },
+                                                shadowOpacity: 0.3,
+                                                shadowRadius: 2
+                                    }
+                                }
+                                contentContainerStyle={
+                                    {
+                                        flexDirection: 'row',
                                         
-                                        <View>
-                                <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
-                                <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum}</Text>
-                                <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.options.count}</Text>
-                                <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.orderInfo.clientPhoneNumber}</Text>
-                                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate}{item.orderInfo.orderTime}</Text>
-                                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup}/ {item.options.type}</Text>
+                                    }
+                                }
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={
+                                            {
+                                                marginVertical:10,
+                                                backgroundColor: '#fff',
+                                                flexDirection: 'row',
+                                                borderRadius: 20,
+                                                
+                                            }
+                                        }>
+                                            <View style={
+                                                {
+                                                    flexDirection: 'row',
+                                                    width: '35%',
+                                                    marginEnd: 5,
+                                                }
+                                            }>
+
+                                                <View style={
+                                                    {
+                                                        justifyContent:'center',
+                                                        alignItems: 'center',
+                                                        marginEnd: 5,
+                                                        marginStart:5,
+                                                    }
+                                                }>
+                                                    <ImageLinker style={exampleStyle.listImage} name="아메리카노" />
+                                                    <Text textAlign="center">
+                                                        {
+                                                            item.orderInfo.orderNumber
+                                                        }
+                                                    </Text>
+                                                </View>
+
+
+                                                <View style={
+                                                    {
+                                                        padding: 10
+                                                    }
+                                                }>
+                                                    <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.options.count}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.orderInfo.clientPhoneNumber}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate}{item.orderInfo.orderTime}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup}/ {item.options.type}</Text>
+                                                </View>
+
+
                                             </View>
+
+
+
+                                            <View style={
+                                                {
+                                                    width: '20%',
+                                                    backgroundColor: '#182335',
+                                                    justifyContent: 'center',
+                                                    marginHorizontal: '5%',
+                                                    marginVertical:'1%',
+                                                    borderRadius: 20
+                                                }
+                                            }>
+                                                <Text style={exampleStyle.orderlistPastTime}>z</Text>
+                                                <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
+                                                <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
+                                            </View>
+
+
+
+
+                                            <View style={
+                                                {
+                                                    flexDirection: 'row',
+                                                    width: '35%'
+                                                }
+                                            }>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                                    <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                                    <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
+                                                    <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
+                                                </TouchableOpacity>
+                                            </View>
+
+                                        </View>
+                                    )
+                                }}
+                            />
+
+
+
+                            : <View style={
+                                {
+                                    width: '100%',
+                                    flexDirection: 'row',
+                                    borderRadius: 20,
+                                    backgroundColor: '#fff',
+                                    padding: 10,
+                                    marginVertical: 4,
+                                    alignSelf: 'center',
+                                    shadowColor: "#000",
+                                    shadowOffset: {
+                                        width: 1,
+                                        height: 2
+                                    },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2
+                                }
+                            }>
+
+
+
+                                <View style={
+                                    {
+                                        flexDirection: 'row',
+                                        width: '35%',
+                                        marginEnd: 5,
+                                    }
+                                }
+                                >
+                                    <View style={
+                                        {
+                                            alignItems: 'center',
+                                            marginEnd: 5,
+                                        }
+                                    }
+                                    >
+                                        <ImageLinker style={exampleStyle.listImage} name="아메리카노" />
+                                        <Text textAlign="center">ㅋㅋ</Text>
+                                    </View>
+                                    <View style={
+                                        {
+                                            padding: 10
+                                        }
+                                    }
+                                    >
+                                        {item.listSize === 1 ?
+                                            <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
+                                        <Text style={exampleStyle.orderlistText_Bold}></Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : ㅋ</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 수량 : ㅋ</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : ㅋ</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : ㅋ</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : ㅋ/ ㅋ</Text>
+                                    </View>
                                 </View>
 
-                                    </View>
 
-                                    <View style={exampleStyle.listbox_center}>
-                            <Text style={exampleStyle.orderlistPastTime}>z</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
-                    </View>
-                    <View style={exampleStyle.listbox_right}>
-                    <View style={exampleStyle.orderlistview}>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
-                    </TouchableOpacity>
+                                <View style={
+                                    {
+                                        width: '20%',
+                                        backgroundColor: '#182335',
+                                        justifyContent: 'center',
+                                        marginHorizontal: '5%',
+                                        borderRadius: 20
+                                    }
+                                }>
+                                    <Text style={exampleStyle.orderlistPastTime}>z</Text>
+                                    <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
+                                    <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
+                                </View>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}>
-                       
-                            <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
-                        
-                    </TouchableOpacity>
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
-                      
-                    </TouchableOpacity>
-                    </View>
-                    </View>
-                                    </View>
-                         
 
-                                    
-                                 )}}
-                        
-                        />
-                    
-                    </View> 
 
-                    
-                    : <View style={exampleStyle.innerContainer}>
-                    <View style={exampleStyle.listbox_left}>
-                    <View stlye={exampleStyle.listLeftContainer}>
-                            <ImageLinker style={exampleStyle.listImage} name="아메리카노"/>
-                <Text textAlign="center">ㅋㅋ</Text>
-                    </View>
-                    <View stlye={exampleStyle.listContainer} >
-                   
-                            <View>
-                            
-                            {item.listSize === 1 ?
-                            
-                            <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
-                            
-                            <Text style={exampleStyle.orderlistText_Bold}></Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : ㅋ</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 수량 : ㅋ</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : ㅋ</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : ㅋ</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : ㅋ/ ㅋ</Text>
-                            
-                             </View>
-                    </View>
-   
-                        </View>
-                    <View style={exampleStyle.listbox_center}>
-                            <Text style={exampleStyle.orderlistPastTime}>z</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
-                    </View>
-                    <View style={exampleStyle.listbox_right}>
-                    <View style={exampleStyle.orderlistview}>
+                                <View style={
+                                    {
+                                        flexDirection: 'row',
+                                        width: '35%'
+                                    }
+                                }>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                        <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                        <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
+                                        <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}>
-                       
-                            <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
-                        
-                    </TouchableOpacity>
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
-                      
-                    </TouchableOpacity>
-                    </View>
-                    </View>
-                    </View>
 
-                        
-                    }
-                    
-
-                    </View>
-                    )
+                            </View>
+                        }
+                    </>
+                )
             }}
         />
-
-
     </View>
 );
 
 const SecondRoute = (props) => (
     <View style={exampleStyle.background} >
-<Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
+        <Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
         <FlatList
             data={props.data}
             numColumns={1}
@@ -170,66 +264,66 @@ const SecondRoute = (props) => (
             scrollEnabled={true}
             renderItem={({ item }) => {
                 return (
-                    
-                  
+
+
                     <View style={exampleStyle.body}>
-                    <View style={exampleStyle.listbox_left}>
-                    <View stlye={exampleStyle.listLeftContainer}>
-                            <ImageLinker style={exampleStyle.listImage} name="아메리카노"/>
-                <Text textAlign="center">ㅋㅋ</Text>
-                    </View>
-                    <View stlye={exampleStyle.listContainer} >
-                    { item.hasOwnProperty('groupOrder') == 
-                    true ?
-                    <Text> 트루</Text> 
-                    
-                    : <Text>폴스</Text>}
-                            <View>
-                            
-                            {item.listSize === 1 ?
-                            
-                            <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
-                            
-                            <Text style={exampleStyle.orderlistText_Bold}></Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : ㅋ</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 수량 : ㅋ</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : ㅋ</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : ㅋ</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : ㅋ/ ㅋ</Text>
-                            
-                             </View>
-                    </View>
-   
+                        <View style={exampleStyle.listbox_left}>
+                            <View stlye={exampleStyle.listLeftContainer}>
+                                <ImageLinker style={exampleStyle.listImage} name="아메리카노" />
+                                <Text textAlign="center">ㅋㅋ</Text>
+                            </View>
+                            <View stlye={exampleStyle.listContainer} >
+                                {item.hasOwnProperty('groupOrder') ==
+                                    true ?
+                                    <Text> 트루</Text>
+
+                                    : <Text>폴스</Text>}
+                                <View>
+
+                                    {item.listSize === 1 ?
+
+                                        <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
+
+                                    <Text style={exampleStyle.orderlistText_Bold}></Text>
+                                    <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : ㅋ</Text>
+                                    <Text style={exampleStyle.orderlistText_Thin}> 수량 : ㅋ</Text>
+                                    <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : ㅋ</Text>
+                                    <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : ㅋ</Text>
+                                    <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : ㅋ/ ㅋ</Text>
+
+                                </View>
+                            </View>
+
                         </View>
-                    <View style={exampleStyle.listbox_center}>
+                        <View style={exampleStyle.listbox_center}>
                             <Text style={exampleStyle.orderlistPastTime}>z</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
-                    <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
-                    </View>
-                    <View style={exampleStyle.listbox_right}>
-                    <View style={exampleStyle.orderlistview}>
+                            <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
+                            <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
+                        </View>
+                        <View style={exampleStyle.listbox_right}>
+                            <View style={exampleStyle.orderlistview}>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
-                    </TouchableOpacity>
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
 
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date , item.phonenum, item.key)}>
-                       
-                            <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
-                        
-                    </TouchableOpacity>
-                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date , item.phonenum, item.key)}>
-                      
-                            <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
-                      
-                    </TouchableOpacity>
-                    </View>
-                    </View>
+                                    <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
+
+                                    <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
+
+                                </TouchableOpacity>
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
+
+                                    <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
 
 
                     </View>
-                    )
+                )
             }}
         />
 
@@ -238,10 +332,10 @@ const SecondRoute = (props) => (
 );
 const ThirdRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: 'lightblue' }]} >
-                <View>
+        <View>
             <Text>안뇽ㅎㅎ?</Text>
         </View>
-<Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
+        <Text style={exampleStyle.orderlisttext}>{props.route.title}</Text>
     </View>
 );
 
@@ -282,24 +376,24 @@ export default class SupervisorOrderList extends Component {
     }
 
     renderScene = ({ route }) => {
-        switch(route.key) {
+        switch (route.key) {
             case 'first':
-                return(
-                    <FirstRoute data={this.state.list} route= {route} />
+                return (
+                    <FirstRoute data={this.state.list} route={route} />
                 )
             case 'second':
-                return(
-                    <SecondRoute data={this.state.list} route= {route} />
+                return (
+                    <SecondRoute data={this.state.list} route={route} />
                 )
             case 'third':
-                return(
-                    <ThirdRoute route= {route} />
+                return (
+                    <ThirdRoute route={route} />
                 )
             default:
                 return null;
         }
     }
-    
+
 
     _onPress = () => {
         console.log('clickTest !!!');
@@ -339,51 +433,51 @@ export default class SupervisorOrderList extends Component {
 
         database().ref('shops/' + shopname).on('value', (snapshot) => {
             var li = []
-            var index =0;
+            var index = 0;
             //snapshot: 날짜
-           
+
             snapshot.forEach((childSnapShot) => {
                 //ChildSnapshot : 주문 날짜
                 var orderDate = childSnapShot.key;
-               
+
                 childSnapShot.forEach((child) => {
                     var phoneNumber = child.key;
-                   
-                    
-                    child.forEach((menuChild) =>{
+
+
+                    child.forEach((menuChild) => {
                         var keyName = menuChild.key;
-                        
-                        if(keyName.charAt(0) ==='-'){
+
+                        if (keyName.charAt(0) === '-') {
                             li.push({
                                 //key : index++,
                                 listSize: 1,
                                 isGroup: false,
-                                cost : menuChild.val().cost,
-                                name :  menuChild.val().name,
-                                options :  menuChild.val().options,
-                                orderInfo :  menuChild.val().orderInfo,
+                                cost: menuChild.val().cost,
+                                name: menuChild.val().name,
+                                options: menuChild.val().options,
+                                orderInfo: menuChild.val().orderInfo,
                                 //key : orderInfo.orderTime,
                             })
-                            
+
                         }
-                        else{
+                        else {
                             var groupSize = 1;
                             var monoMenu = [];
-                            menuChild.forEach((groupMenu) =>{
+                            menuChild.forEach((groupMenu) => {
                                 monoMenu.push({
                                     //key : index++,
                                     isGroup: true,
                                     listSize: groupSize++,
-                                    cost : groupMenu.val().cost,
-                                    name :  groupMenu.val().name,
-                                    options :  groupMenu.val().options,
-                                    orderInfo :  groupMenu.val().orderInfo,
+                                    cost: groupMenu.val().cost,
+                                    name: groupMenu.val().name,
+                                    options: groupMenu.val().options,
+                                    orderInfo: groupMenu.val().orderInfo,
                                     //key : orderInfo.orderTime,
                                 })
                             })
-                            li.push({groupOrder: monoMenu,});
+                            li.push({ groupOrder: monoMenu, });
                         }
-                       
+
                     })
 
                 })
@@ -404,19 +498,19 @@ export default class SupervisorOrderList extends Component {
                 //         orderInfo :  group[0].orderInfo,
                 //         //key : orderInfo.orderTime,
                 //     })
-                
+
                 // })
 
             })
             const Moment = require('moment')
-            for(var k = 0; k < li.length; k++){
+            for (var k = 0; k < li.length; k++) {
                 console.log("Test : ", li[k].hasOwnProperty('groupOrder'));
             }
-            
+
             //li.sort((d2, d1) => new Moment(d2.orderTime, 'HH:mm:ss') - new Moment(d1.orderTime, 'HH:mm:ss'));
-            
+
             this.setState({ list: li });
-          
+
         })
 
     }
@@ -437,44 +531,45 @@ export default class SupervisorOrderList extends Component {
 
     render() {
         return (
-          
+
             <TabView
-                style={{backgroundColor:'#182335'}}
+                style={{ backgroundColor: '#182335' }}
                 navigationState={{ index: this.state.index, routes: this.state.routes }}
                 renderScene={this.renderScene}
                 onIndexChange={this._setIndex}
                 initialLayout={initialLayout}
-                
+
                 renderTabBar={(props) => (
-                    <View style={{ backgroundColor:'white', }}>
-                            <TabBar
-                                {...props}
-                                indicatorStyle={{ 
-                                    marginHorizontal: (Dimensions.get('window').width/3-Dimensions.get('window').width/7 )/2,
-                                    justifyContent:'center',
-                                    backgroundColor: '#EEAF9D',
-                                    borderRadius:3,
-                                    height:5,
-                                    zIndex:3,
-                                    margin:0.5,
-                                    width : Dimensions.get('window').width/7,
-                                    
-                                }}
-                                
-                                style={{ 
-                                    backgroundColor: '#182335',
-                                    height: 50,
-                                    width: Dimensions.get('window').width/3*3,
-                                    justifyContent: 'center',
-                                }}
-                                
-                                getLabelText={({ route }) => (<Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
-                                tabStyle={{ width : Dimensions.get('window').width/3 ,
-                                borderRightColor:'white' ,borderWidth:1,borderLeftColor:'white'
-                        
+                    <View style={{ backgroundColor: 'white', }}>
+                        <TabBar
+                            {...props}
+                            indicatorStyle={{
+                                marginHorizontal: (Dimensions.get('window').width / 3 - Dimensions.get('window').width / 7) / 2,
+                                justifyContent: 'center',
+                                backgroundColor: '#EEAF9D',
+                                borderRadius: 3,
+                                height: 5,
+                                zIndex: 3,
+                                margin: 0.5,
+                                width: Dimensions.get('window').width / 7,
+
                             }}
-                              
-                            />
+
+                            style={{
+                                backgroundColor: '#182335',
+                                height: 50,
+                                width: Dimensions.get('window').width / 3 * 3,
+                                justifyContent: 'center',
+                            }}
+
+                            getLabelText={({ route }) => (<Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                            tabStyle={{
+                                width: Dimensions.get('window').width / 3,
+                                borderRightColor: 'white', borderWidth: 1, borderLeftColor: 'white'
+
+                            }}
+
+                        />
                     </View>
                 )}
             />
