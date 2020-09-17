@@ -86,7 +86,7 @@ const exampleStyle = StyleSheet.create({
         margin: 3,
         borderRadius:10,
         borderWidth:2,
-        borderColor:'white',
+        borderColor:'#EEAF9D',
         width: Dimensions.get('window').width/4*3,
         height:'100%',
         backgroundColor:'white',
@@ -102,7 +102,7 @@ const exampleStyle = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:'#EEAF9D', 
         width: '30%', 
-        height:'95%',
+        height:'100%',
         padding:10,
         alignItems:'center',
        
@@ -177,6 +177,26 @@ const exampleStyle = StyleSheet.create({
         justifyContent: "center", 
         alignItems: "center",
     },
+    groupContainer: {
+        flex:12,
+        flexDirection:'row',
+        borderColor:'black',
+        borderWidth:2,
+        width:'100%',
+        height:'100%',
+    },
+    innerContainer: {
+        backgroundColor:'white',
+        
+    },
+    outerContainer: {
+        width:'100%',
+        flexDirection:'row',
+        backgroundColor:'gray',
+        borderColor:'red',
+        borderWidth:2,
+    },
+
     listImage:{
         borderRadius: 10,
         width:100,
@@ -197,6 +217,11 @@ const exampleStyle = StyleSheet.create({
     
     
 })
+
+// const pastListStyle = StyleSheet.create({
+    
+
+// }
 const OrderlistStyle = StyleSheet.create({
    OrderlistBackground:{
         width: '100%',
