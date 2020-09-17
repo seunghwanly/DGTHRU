@@ -25,16 +25,22 @@ const FirstRoute = (props) => (
                     <View style={exampleStyle.listbox_left}>
                     <View stlye={exampleStyle.listLeftContainer}>
                             <ImageLinker style={exampleStyle.listImage} name="아메리카노"/>
+                <Text textAlign="center">{item.orderInfo.orderNumber}</Text>
                     </View>
                     <View stlye={exampleStyle.listContainer} >
-                    
+                   
                             <View>
+
+                            {item.listSize === 1 ?
+                            
+                            <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
+                            
                             <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.shotnum}</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.count}</Text>
-                            <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.phonenumber}</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate} {item.orderTime}</Text>
-                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.cup} / {item.type}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.options.count}</Text>
+                            <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.orderInfo.phonenumber}</Text>
+                <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderInfo.orderDate} {item.orderInfo.orderTime}</Text>
+                <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup} / {item.options.type}</Text>
                             
                              </View>
                     </View>
@@ -183,38 +189,44 @@ export default class SupervisorOrderList extends Component {
 
 
     componentDidMount = () => {
+        //console.log('key: ' + shopname);
 
         database().ref('shops/' + shopname).on('value', (snapshot) => {
             var li = []
+            var index =0;
+            //snapshot: 날짜
             snapshot.forEach((childSnapShot) => {
-                var orderDate = childSnapShot.key
+                //ChildSnapshot : 폰번호
+                var orderDate = childSnapShot.key;
+                
+                //console.log('key: '+ childSnapShot.key);
                 childSnapShot.forEach((child) => {
-                    var phonenumber = child.key
-                    child.forEach((menuChild) => {
-                        li.push({
-                            key: menuChild.key,
-                            phonenum: phonenumber,
-                            date: orderDate,
-                            name: menuChild.val().name,
-                            orderTime: menuChild.val().orderTime,
-                            cost: menuChild.val().cost,
-                            count: menuChild.val().count,
-                            cup: menuChild.val().cup,
-                            shotnum: menuChild.val().shotNum,
-                            type: menuChild.val().type,
-                            orderDate: orderDate,
-                        })
+                    //child : group
+                    //console.log('key: '+ child.key);
+                    //console.log('child !: ' + JSON.stringify(child));
+                    var group = [];
+                    group = child.val().group;
+                    //console.log('group !!: ' + JSON.stringify(group[0].orderInfo));
+                    //console.log('size : ',group.length)
+                    li.push({
+                        //key : index++,
+                        listSize: group.length,
+                        cost : group[0].cost,
+                        name :  group[0].name,
+                        options :  group[0].options,
+                        orderInfo :  group[0].orderInfo,
+                        //key : orderInfo.orderTime,
                     })
+                
                 })
 
             })
             const Moment = require('moment')
 
-            li.sort((d2, d1) => new Moment(d2.orderTime, 'HH:mm:ss') - new Moment(d1.orderTime, 'HH:mm:ss'));
-
+            //li.sort((d2, d1) => new Moment(d2.orderTime, 'HH:mm:ss') - new Moment(d1.orderTime, 'HH:mm:ss'));
             
             this.setState({ list: li });
-            console.log("여기 !"+ JSON.stringify(li));
+          
         })
 
     }
@@ -253,6 +265,7 @@ export default class SupervisorOrderList extends Component {
                                     backgroundColor: '#EEAF9D',
                                     borderRadius:3,
                                     height:5,
+                                    zIndex:3,
                                     margin:0.5,
                                     width : Dimensions.get('window').width/7,
                                     
