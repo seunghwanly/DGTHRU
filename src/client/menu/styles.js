@@ -171,7 +171,7 @@ const basketStyles = StyleSheet.create({
         marginVertical:3
     },
     basketOptionWrapper: {
-        width:'100%',
+        width:340,
         justifyContent:'center',
         alignItems: 'center',
         flexDirection :'row',

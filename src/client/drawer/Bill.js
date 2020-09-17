@@ -22,19 +22,24 @@ const GetCafeIcon = ({ name }) => {
 
     if (name === 'main_outdoor') {
         return (
-            <Image
-                style={{ width: 25, height: 25 }}
-                resizeMode='cover'
-                source={require('../../../image/cafe-icon/가온누리.png')}
-            />
+            <View style={{ width: '15%', paddingStart: 5 }}>
+                <Image
+                    style={{ width: 25, height: 25 }}
+                    resizeMode='cover'
+                    source={require('../../../image/cafe-icon/가온누리.png')}
+                />
+            </View>
         );
     }
     else if (name === 'singong_1f') {
         return (
-            <Image
-                resizeMode='cover'
-                source={require('../../../image/cafe-icon/남산학사.png')}
-            />
+            <View style={{ width: '15%', paddingStart: 5 }}>
+                <Image
+                    style={{ width: 25, height: 25 }}
+                    resizeMode='cover'
+                    source={require('../../../image/cafe-icon/남산학사.png')}
+                />
+            </View>
         );
     }
     else if (name === "hyehwa_roof") {
@@ -50,18 +55,24 @@ const GetCafeIcon = ({ name }) => {
     }
     else if (name === 'economy_outdoor') {
         return (
-            <Image
-                resizeMode='cover'
-                source={require('../../../image/cafe-icon/그루터기.png')}
-            />
+            <View style={{ width: '15%', paddingStart: 5 }}>
+                <Image
+                    style={{ width: 25, height: 25 }}
+                    resizeMode='cover'
+                    source={require('../../../image/cafe-icon/그루터기.png')}
+                />
+            </View>
         );
     }
     else if (name === 'munhwa_1f') {
         return (
-            <Image
-                resizeMode='cover'
-                source={require('../../../image/cafe-icon/두리터.png')}
-            />
+            <View style={{ width: '15%', paddingStart: 5 }}>
+                <Image
+                    style={{ width: 25, height: 25 }}
+                    resizeMode='cover'
+                    source={require('../../../image/cafe-icon/두리터.png')}
+                />
+            </View>
         );
     }
     else {
@@ -319,7 +330,7 @@ export default class Bill extends React.Component {
                                                                                         <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
                                                                                         <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].options.cup}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderInfo.orderTime}</Text>
+                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
                                                                                     </>
                                                                             }
                                                                         </TouchableOpacity>

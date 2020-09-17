@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
+import moment from 'moment';
 import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
@@ -38,9 +39,9 @@ async function updateCurrentOrderNumber(shopInfo) {
     }
 }
 
-async function updateUserHistroy(data, orderNumber) {
+async function updateUserHistroy(data, orderNumber, isGroup) {
 
-    if (data.orderInfo.isSet === false) {
+    if (isGroup === false) {
         // 2.사용자 History
         const userRef = database()
             .ref(userHistoryRef())
@@ -73,7 +74,7 @@ export default class PaymentResult extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('constructor >> ');
+        console.log('constructor >> ' + this.props.route.params.shopInfo);
 
         this.state = {
             isMenuReady: false,
@@ -103,11 +104,11 @@ export default class PaymentResult extends React.Component {
 
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
-            const data = JSON.parse(this.props.route.params.itemData); // 넣을 data
-
+            var data = JSON.parse(this.props.route.params.itemData); // 넣을 data
+            console.log(this.props.route.params.itemData + '\n\n\n\n\n' + this.props.route.params.itemData.length, data.hasOwnProperty('options'));
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
-            if (data.orderInfo.isSet === false) {
+            if (data.hasOwnProperty('options')) {
                 //주문번호 업데이트
                 var key = '';
 
@@ -132,13 +133,13 @@ export default class PaymentResult extends React.Component {
                                 console.log('>  ' + res);
                                 //update common DB
                                 var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
-                                updateOrderInfo.update({ orderNumber : res });
-                                    
+                                updateOrderInfo.update({ orderNumber: res });
+
                                 //get data
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
                                     .once('value', (snapshot) => {
-                                        updateUserHistroy(snapshot.val(), res);
+                                        updateUserHistroy(snapshot.val(), res, false);
                                     });
                             })
                     });
@@ -146,7 +147,7 @@ export default class PaymentResult extends React.Component {
             // 2. 장바구니일 경우
             else {
                 //group 버킷 안에 있음 { group : { autokey : {-}, autokey : {-}, ... } } 우리가 바꿔줄거는 group이름을 주문번호로 ! >> 안될듯
-
+                console.log('> init group ####')
                 var res = 'A-';
                 // 현재 주문번호 가져오기
                 orderNumDatabase(this.props.route.params.shopInfo)
@@ -166,12 +167,14 @@ export default class PaymentResult extends React.Component {
                             .ref(commonRef(this.props.route.params.shopInfo) + '/group')
                             .once('value', (snapshot) => {
                                 snapshot.forEach((childData, index) => {
+                                    console.log('> ref : \n' + commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo');
                                     //주문번호 업데이트 : 공통 DB
-                                    var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
-                                    updateOrderInfo.update({ orderNumber: res });
-                                });
-                            })
-                        updateUserHistroy(data, res);
+                                    database()
+                                        .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
+                                        .update({ orderNumber: res });
+                                })
+                            });
+                        updateUserHistroy(data, res, true);
                     })
             }   // else
 
@@ -242,24 +245,44 @@ export default class PaymentResult extends React.Component {
                     if (this.state.orderState[i] === 'ready') {
                         this.state.timeArray.ready = moment().format('HH:mm:ss');
                         isFullyReady++;
-                    } 
+                    }
                     else if (this.state.orderState[i] === 'cancel') {
-                        alert('카운터로 와주세요 :)');
                         // DB update 해야함
                         // isCanceled --> true
-                        if (!this.state.data.orderInfo.isSet) { // single menu
+                        if (!this.state.data[i].orderInfo.isSet) { // single menu
+                            var ukey = '';
                             //get key
                             database()
                                 .ref(userHistoryRef())
                                 .once('value', snapshot => {
-                                    const key = snapshot.key;
+                                    ukey = snapshot.key;
                                 }).then(() => { // update
                                     database()
-                                        .ref(userHistoryRef() + '/' + key + '/orderInfo')
+                                        .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
                                         .update({ isCanceled: true });
+
+                                    alert('카운터로 와주세요 :)');
                                 });
                         } else { // group menu
-                            
+                            var okey = '';
+                            var ukey = '';
+                            //get key
+                            database()
+                                .ref(userHistoryRef())
+                                .once('value', snapshot => {
+                                    snapshot.forEach(childSnapShot => {
+                                        okey = childSnapShot.key;
+                                        childSnapShot.forEach(data => {
+                                            ukey = data.key;
+                                        })
+                                    })
+                                }).then(() => {
+                                    database()
+                                        .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                        .update({ isCanceled: true });
+
+                                    alert('카운터로 와주세요 :)');
+                                })
                         }
                     }
                     else if (this.state.orderState[i] === 'confirm') {
@@ -308,15 +331,15 @@ export default class PaymentResult extends React.Component {
                 }
 
                 return (
-                    <View style={{ flex:1, backgroundColor: '#eeaf9d' }}>
+                    <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
+                        <View style={{}}>
+                            <Image
+                                style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
+                                source={require('../../../image/sample.gif')} />
+                        </View>
                         <ScrollView
-                            style={{ backgroundColor:'#eeaf9d' }}
+                            style={{ backgroundColor: '#eeaf9d' }}
                         >
-                            <View style={{  }}>
-                                <Image
-                                    style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
-                                    source={require('../../../image/sample.gif')} />
-                            </View>
                             <View style={paymentStyles.background}>
 
                                 <FlatList
@@ -375,12 +398,12 @@ export default class PaymentResult extends React.Component {
                         </ScrollView>
                         <View style={
                             {
-                                backgroundColor:'#182335',
-                                width:'95%',
-                                borderTopStartRadius:30,
-                                borderTopEndRadius:30,
-                                alignSelf:'center',
-                                padding:20,
+                                backgroundColor: '#182335',
+                                width: '95%',
+                                borderTopStartRadius: 30,
+                                borderTopEndRadius: 30,
+                                alignSelf: 'center',
+                                padding: 20,
                                 shadowColor: "#333",
                                 shadowOffset: {
                                     width: 1,
@@ -390,23 +413,23 @@ export default class PaymentResult extends React.Component {
                                 shadowRadius: 1,
                             }
                         }>
-                            <Text style={{ fontWeight:'bold' , fontSize:18, marginVertical:20, color:'#fff' }}>결제정보</Text>
-                            <View style={{ paddingStart:20, marginVertical:20 }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginVertical: 20, color: '#fff' }}>결제정보</Text>
+                            <View style={{ paddingStart: 20, marginVertical: 20 }}>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>결제완료{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.paid}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>결제완료{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.paid}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>주문요청{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.request}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문요청{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.request}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>주문승인{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문승인{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>준비완료{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>준비완료{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
                                 </View>
                             </View>
 
