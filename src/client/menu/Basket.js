@@ -82,7 +82,6 @@ export default Basket = ({ navigation, route }) => {
                 {
                     flexDirection: 'column',
                     width: '100%',
-                    padding:10
                 }
                 ]}>
                     <Text style={
@@ -127,7 +126,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         keyExtractor={(item) => item.toString()}
                         extraData={selected}
-                        contentContainerStyle={{ flexDirection: 'row' }}
+                        contentContainerStyle={{ flexDirection: 'row-reverse', width:340 }}
                         scrollEnabled={true}
                         alwaysBounceVertical={false}
                         showsHorizontalScrollIndicator={false}
@@ -716,7 +715,10 @@ export default Basket = ({ navigation, route }) => {
                                 }
                                 </View>
 
+
                                 <ChooseDetail subMenu={item} />
+
+
                                 <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', padding:1}]}>
                                     <TouchableOpacity
                                         style={{ width: '100%', flexDirection: 'row', padding: 10 }}

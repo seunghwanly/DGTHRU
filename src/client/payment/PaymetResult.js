@@ -133,8 +133,8 @@ export default class PaymentResult extends React.Component {
                                 console.log('>  ' + res);
                                 //update common DB
                                 var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
-                                updateOrderInfo.update({ orderNumber : res });
-                                    
+                                updateOrderInfo.update({ orderNumber: res });
+
                                 //get data
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
@@ -169,7 +169,7 @@ export default class PaymentResult extends React.Component {
                                 snapshot.forEach((childData, index) => {
                                     console.log('> ref : \n' + commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo');
                                     //주문번호 업데이트 : 공통 DB
-                                   database()
+                                    database()
                                         .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
                                         .update({ orderNumber: res });
                                 })
@@ -245,7 +245,7 @@ export default class PaymentResult extends React.Component {
                     if (this.state.orderState[i] === 'ready') {
                         this.state.timeArray.ready = moment().format('HH:mm:ss');
                         isFullyReady++;
-                    } 
+                    }
                     else if (this.state.orderState[i] === 'cancel') {
                         // DB update 해야함
                         // isCanceled --> true
@@ -261,11 +261,11 @@ export default class PaymentResult extends React.Component {
                                         .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
                                         .update({ isCanceled: true });
 
-                                        alert('카운터로 와주세요 :)');
+                                    alert('카운터로 와주세요 :)');
                                 });
                         } else { // group menu
-                            var okey ='';
-                            var ukey ='';
+                            var okey = '';
+                            var ukey = '';
                             //get key
                             database()
                                 .ref(userHistoryRef())
@@ -279,9 +279,9 @@ export default class PaymentResult extends React.Component {
                                 }).then(() => {
                                     database()
                                         .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
-                                        .update({ isCanceled : true });
+                                        .update({ isCanceled: true });
 
-                                        alert('카운터로 와주세요 :)');
+                                    alert('카운터로 와주세요 :)');
                                 })
                         }
                     }
@@ -331,15 +331,15 @@ export default class PaymentResult extends React.Component {
                 }
 
                 return (
-                    <View style={{ flex:1, backgroundColor: '#eeaf9d' }}>
+                    <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
+                        <View style={{}}>
+                            <Image
+                                style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
+                                source={require('../../../image/sample.gif')} />
+                        </View>
                         <ScrollView
-                            style={{ backgroundColor:'#eeaf9d' }}
+                            style={{ backgroundColor: '#eeaf9d' }}
                         >
-                            <View style={{  }}>
-                                <Image
-                                    style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
-                                    source={require('../../../image/sample.gif')} />
-                            </View>
                             <View style={paymentStyles.background}>
 
                                 <FlatList
@@ -398,12 +398,12 @@ export default class PaymentResult extends React.Component {
                         </ScrollView>
                         <View style={
                             {
-                                backgroundColor:'#182335',
-                                width:'95%',
-                                borderTopStartRadius:30,
-                                borderTopEndRadius:30,
-                                alignSelf:'center',
-                                padding:20,
+                                backgroundColor: '#182335',
+                                width: '95%',
+                                borderTopStartRadius: 30,
+                                borderTopEndRadius: 30,
+                                alignSelf: 'center',
+                                padding: 20,
                                 shadowColor: "#333",
                                 shadowOffset: {
                                     width: 1,
@@ -413,23 +413,23 @@ export default class PaymentResult extends React.Component {
                                 shadowRadius: 1,
                             }
                         }>
-                            <Text style={{ fontWeight:'bold' , fontSize:18, marginVertical:20, color:'#fff' }}>결제정보</Text>
-                            <View style={{ paddingStart:20, marginVertical:20 }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginVertical: 20, color: '#fff' }}>결제정보</Text>
+                            <View style={{ paddingStart: 20, marginVertical: 20 }}>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>결제완료{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.paid}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>결제완료{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.paid}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold' , color:'#fff'}}>주문요청{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>{this.state.timeArray.request}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문요청{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.request}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>주문승인{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문승인{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
-                                    <Text style={{ fontWeight: 'bold', color:'#fff' }}>준비완료{'\t\t'}</Text>
-                                    <Text style={{ color:'#fff' }}>관리자에게</Text>
+                                    <Text style={{ fontWeight: 'bold', color: '#fff' }}>준비완료{'\t\t'}</Text>
+                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
                                 </View>
                             </View>
 

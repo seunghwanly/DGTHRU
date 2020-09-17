@@ -8,7 +8,6 @@ import {
     Image,
 } from 'react-native';
 import { clientStyles } from '../styles';
-import { storeData } from '../../utils/asyncStorage';
 import ImageLinker from '../../utils/ImageLinker'
 import { enableScreens } from 'react-native-screens';
 
@@ -74,9 +73,8 @@ function putpicture(id){
 class Item extends React.Component {
 
     _onPress = () => {
-        if (this.props.id === 'hyehwa_roof') {
+        if (this.props.id === 'hyehwa_roof' || this.props.id === 'singong_1f') {
             if (this.props.navigation !== null) {
-                storeData(this.props.id.toString());
                 this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
             }
         }
