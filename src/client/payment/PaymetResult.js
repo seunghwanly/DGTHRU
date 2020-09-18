@@ -425,11 +425,11 @@ export default class PaymentResult extends React.Component {
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문승인{'\t\t'}</Text>
-                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.confirm}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>준비완료{'\t\t'}</Text>
-                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.ready}</Text>
                                 </View>
                             </View>
 

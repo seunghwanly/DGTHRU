@@ -154,6 +154,11 @@ export default class TabViewExample extends React.Component {
                                         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
                                     case 8:
                                         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
+                                    case 9:
+                                        if(route.title === 'Cold Brew')
+                                            return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
+                                        else
+                                            return null;
 
                                     default:
                                         return null;
