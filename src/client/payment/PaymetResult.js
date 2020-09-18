@@ -16,6 +16,7 @@ import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
 import { getCafeIcon } from '../../utils/getCafeIcon';
 import Loading from './Loading';
+import LocalNotification from '../../utils/pushNotification';
 
 //승환 : 가게별 주문 번호 증가
 async function updateCurrentOrderNumber(shopInfo) {
@@ -102,7 +103,11 @@ export default class PaymentResult extends React.Component {
 
         setTimeout(() => { this.setState({ isLoading: false }) }, 1000);
 
-        if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
+        // if (this.state.isMenuReady === true)
+        //     LocalNotification.register('메뉴가 준비되었습니다 ! 픽업대로 와주세요.');
+        LocalNotification.register(this.props.route.params.shopInfo);
+
+        if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false && this.state.isMenuReady === false) {
 
             var data = JSON.parse(this.props.route.params.itemData); // 넣을 data
             console.log(this.props.route.params.itemData + '\n\n\n\n\n' + this.props.route.params.itemData.length, data.hasOwnProperty('options'));
@@ -140,6 +145,9 @@ export default class PaymentResult extends React.Component {
                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + key)
                                     .once('value', (snapshot) => {
                                         updateUserHistroy(snapshot.val(), res, false);
+                                        // 주문번호 업데이트하기
+                                        updateCurrentOrderNumber(this.props.route.params.shopInfo);
+                                        this.setState({ isUpdated: true });
                                     });
                             })
                     });
@@ -175,12 +183,11 @@ export default class PaymentResult extends React.Component {
                                 })
                             });
                         updateUserHistroy(data, res, true);
+                        // 주문번호 업데이트하기
+                        updateCurrentOrderNumber(this.props.route.params.shopInfo);
+                        this.setState({ isUpdated: true });
                     })
             }   // else
-
-            // 주문번호 업데이트하기
-            updateCurrentOrderNumber(this.props.route.params.shopInfo);
-            this.setState({ isUpdated: true });
         }
 
         this._isMenuReady();
@@ -188,8 +195,9 @@ export default class PaymentResult extends React.Component {
 
     componentWillUnmount() {
         console.log('componentWillUnmout');
-        this._firebaseRef.off();
+        //this._firebaseRef.off();
         this._currentOrderRef.off();
+        LocalNotification.unregister(this.props.route.params.shopInfo);
         // this.setState({ isMenuReady : false });
     }
 
@@ -294,6 +302,7 @@ export default class PaymentResult extends React.Component {
                     // isCanceled 추가 하기 객체에
                 }
                 if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
+                    
                     this.setState({ isMenuReady: true });
                 }
 
@@ -425,7 +434,7 @@ export default class PaymentResult extends React.Component {
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문승인{'\t\t'}</Text>
-                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.confirm}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>준비완료{'\t\t'}</Text>
