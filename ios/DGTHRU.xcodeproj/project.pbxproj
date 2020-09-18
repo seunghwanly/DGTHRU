@@ -19,6 +19,7 @@
 		5CBB45F824E30E38008F8918 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CBB45F724E30E38008F8918 /* GoogleService-Info.plist */; };
 		763D2BCD986806207ABEAF68 /* libPods-DGTHRU-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB09673E16E9BDB9C8C4E194 /* libPods-DGTHRU-tvOS.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9136CD1B25134AE6000016F7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		91E0BFAF684816DB7D793F86 /* libPods-DGTHRU.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0C8A09E3A518CBEFBCCEB65 /* libPods-DGTHRU.a */; };
 		DC714F35081F56883AF10007 /* libPods-DGTHRU-DGTHRUTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 592FCAF43D907AA19C10E7A2 /* libPods-DGTHRU-DGTHRUTests.a */; };
 /* End PBXBuildFile section */
@@ -384,6 +385,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9136CD1B25134AE6000016F7 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5CBB45F824E30E38008F8918 /* GoogleService-Info.plist in Resources */,

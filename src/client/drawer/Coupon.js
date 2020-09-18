@@ -17,6 +17,7 @@ import moment from 'moment';
 
 //firebase
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
+
 const ViewCoupon = () => {
     if (true) {
         <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>

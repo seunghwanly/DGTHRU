@@ -10,7 +10,7 @@ import {
     FlatList
 } from 'react-native';
 import { paymentStyles } from './styles';
-import database from '@react-native-firebase/database';
+import database, { firebase } from '@react-native-firebase/database';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
@@ -245,6 +245,7 @@ export default class PaymentResult extends React.Component {
                     if (this.state.orderState[i] === 'ready') {
                         this.state.timeArray.ready = moment().format('HH:mm:ss');
                         isFullyReady++;
+                        
                     }
                     else if (this.state.orderState[i] === 'cancel') {
                         // DB update 해야함
@@ -255,7 +256,7 @@ export default class PaymentResult extends React.Component {
                             database()
                                 .ref(userHistoryRef())
                                 .once('value', snapshot => {
-                                    ukey = snapshot.key;
+                                     ukey = snapshot.key;
                                 }).then(() => { // update
                                     database()
                                         .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
@@ -287,6 +288,16 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
+                        
+                        // database().ref('user/coupons' + '/' + auth().currentUser.uid).set({
+                        //     "shopInfo" : this.props.route.params.shopInfo
+                        // });
+
+                    }
+                    else if (this.state.orderState[i] === 'request'){
+                        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
+                            "shopInfo" : this.props.route.params.shopInfo
+                        });
                     }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
