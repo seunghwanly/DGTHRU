@@ -6,6 +6,7 @@ import { menuStyles } from './styles';
 import Loading from '../payment/Loading';
 
 import database from '@react-native-firebase/database';
+import { pushFavorite } from '../../utils/DatabaseRef';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -255,7 +256,7 @@ class MenuChildView extends React.Component {
                                                     categoryName: categoryName
                                                 }
                                             )}
-                                            onLongPress={() => pushFavorite(shopInfo, item)}
+                                            onLongPress={() => pushFavorite(shopInfo, item, type, categoryName)}
                                         >
                                             <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
                                             <View style={{ flexDirection: 'column', marginStart: 10 }}>

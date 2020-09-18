@@ -20,6 +20,7 @@ import Verify from './Verify';
 import Menu from './menu/Menu';
 import MenuDetail from './menu/MenuDetail';
 import MenuTabview from './menu/MenuTabView';
+import Favorites from './menu/Favorites';
 
 //Bakset
 import Basket from './menu/Basket';
@@ -54,6 +55,7 @@ const commonScreen = {
 
 const menuScreen = {
     Shops: Shops,
+    Favorites: Favorites,
     Menu: Menu,
     MenuTabView: MenuTabview,
     MenuDetail: MenuDetail,
@@ -117,7 +119,8 @@ export default StackContainer = ({ navigation }) => {
 
                                 headerRight: () => {
                                     if ( name === "Shops" || name === "MenuTabView" || name === "Menu" || 
-                                         name === "MenuDetail" || name === "SelectMenu" || name === "Result") {
+                                         name === "MenuDetail" || name === "SelectMenu" || name === "Result" ||
+                                         name === "Favorites") {
 
                                         return (
                                             <HeaderRight navigation={navigation} page={name} />
@@ -136,7 +139,8 @@ export default StackContainer = ({ navigation }) => {
                                             // }
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
-                                                    name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' || name === 'SelectMenu' || name === 'Basket' ?
+                                                    name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' ||
+                                                    name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
