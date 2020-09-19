@@ -5,7 +5,6 @@ import {
     Text,
     FlatList,
     View,
-
     Modal,
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
@@ -19,36 +18,6 @@ import database from '@react-native-firebase/database'
 //firebase
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
 import { firebase } from '@react-native-firebase/database';
-var rows = [];
-var i = 0;
-function ViewCoupon() {
-
-    database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
-        snapshot.forEach(function (childSnapshot) {
-            var childData = childSnapshot.val().shopInfo;
-            rows.push(childData);
-            console.log("rows:" + rows[1]);
-        });
-
-    });
-
-    if (rows[i] === 'hyehwa_roof') {
-        return (
-            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                <GetCafeIcon name={'hyehwa_roof'} />
-            </View>
-        );
-    }
-    else {
-
-        return (
-            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                <GetCafeIcon name={'singong_1f'} />
-            </View>
-        );
-    }
-
-}
 
 const GetCafeIcon = ({ name }) => {
 
@@ -140,7 +109,10 @@ export default class Coupon extends React.Component {
         super(props);
 
         this.state = {
-            shopInfo: []
+            shopInfo: [],
+            refreshing: false,
+            modalVisible: false,
+            currentItem: {}
         };
 
         this._userHistoryDB = userHistoryTotalDatabase();
@@ -165,12 +137,14 @@ export default class Coupon extends React.Component {
 
     _fetchData() {
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
-            snapshot.forEach(function (childSnapshot) {
+
+            snapshot.forEach((childSnapshot) => {
                 var childData = childSnapshot.val().shopInfo;
                 this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
             });
         });
     }
+
     _onRefresh = React.Component(() => {
         console.log('onRefresh !!');
         this.setState({ refreshing: true });
@@ -179,6 +153,7 @@ export default class Coupon extends React.Component {
     }, []);
 
     render() {
+        const { shopInfo, modalVisible, currentItem } = this.state;
 
         return (
             <>
@@ -271,7 +246,6 @@ export default class Coupon extends React.Component {
 
                         <View style={{ flexDirection: 'column', marginBottom: 5, padding: 8 }}>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                {/* 여기에 coffee_icon 대신 가게 이름 넣으면 될듯! */}
                                 <GetCafeIcon name={'coffee_icon'} />
                                 <GetCafeIcon name={'coffee_icon'} />
                                 <GetCafeIcon name={'coffee_icon'} />
@@ -287,26 +261,22 @@ export default class Coupon extends React.Component {
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                                 <FlatList
-                                    data={ this.state.shopInfo }
-                                    keyExtractor={ item => item.key }
+                                    data={this.state.shopInfo}
+                                    keyExtractor={item => item.key}
                                     renderItem={
-                                        ({ item }) => {
-                                            return (
-                                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                                    <GetCafeIcon name={ item } />
-                                                </View>
-                                            )
-                                        }
+                                        ({ item }) => (
+                                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                                                <GetCafeIcon name={item} />
+                                            </View>
+                                        )
                                     }
                                 >
                                 </FlatList>
                             </View>
                         </View>
                     </View>
-
                 </View>
             </>
         )
     }
-
 }
