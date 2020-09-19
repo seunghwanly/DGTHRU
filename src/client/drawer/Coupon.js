@@ -13,17 +13,48 @@ import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
 import ReceiptGroupModal from '../../utils/ReceiptGroupModal';
 import { Header } from 'react-native-elements';
 import { BillStyles, CircleStyles } from './styles';
+import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 
 //firebase
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
+import { firebase } from '@react-native-firebase/database';
 
-const ViewCoupon = () => {
-    if (true) {
-        <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-            <GetCafeIcon name={'hyehwa_roof'} />
-            <Text style={{ fontWeight: 'bold', width: '100%' }}>혜화디저트 카페  2260-8966</Text>
-        </View>
+const ViewCoupon = ({ name }) => {
+    //여기서 hyehwa가 맞으면
+
+
+    firebase.database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+        var rows = [];
+        snapshot.forEach(function (childSnapshot) {
+            var childData = childSnapshot.val();
+            rows.push(childData);
+            console.log(rows);
+        });
+    });
+
+
+    // database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+    //     snapshot.forEach((childSnapShot) => {
+    //         childSnapShot.forEach((dataSnapShot) => {
+    //             console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
+    //         });
+    //     });
+    // });
+
+    if (shopInfo === 'hyehwa_roof') {
+        return (
+            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                <GetCafeIcon name={'hyehwa_roof'} />
+            </View>
+        );
+    }
+    else if (shopInfo === 'singong_1f') {
+        return (
+            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                <GetCafeIcon name={'singong_1f'} />
+            </View>
+        );
     }
 }
 
@@ -351,11 +382,9 @@ export default class Coupon extends React.Component {
                                 <GetCafeIcon name={'coffee_icon'} />
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
+                                <ViewCoupon name={auth().currentUser.uid} />
+
+
                             </View>
                         </View>
                     </View>

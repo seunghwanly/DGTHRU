@@ -241,6 +241,7 @@ export default class PaymentResult extends React.Component {
                 })
 
                 var isFullyReady = 0;
+                
                 for (var i = 0; i < this.state.orderState.length; ++i) {
                     if (this.state.orderState[i] === 'ready') {
                         this.state.timeArray.ready = moment().format('HH:mm:ss');
@@ -289,15 +290,15 @@ export default class PaymentResult extends React.Component {
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
                         
-                        // database().ref('user/coupons' + '/' + auth().currentUser.uid).set({
-                        //     "shopInfo" : this.props.route.params.shopInfo
-                        // });
+                        database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + this.props.route.params.shopInfo).push({
+                            "shopInfo" : this.props.route.params.shopInfo
+                        });
 
                     }
                     else if (this.state.orderState[i] === 'request'){
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
-                            "shopInfo" : this.props.route.params.shopInfo
-                        });
+                        // database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
+                        //     "shopInfo" : this.props.route.params.shopInfo
+                        // });
                     }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
