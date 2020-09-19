@@ -290,7 +290,7 @@ export default class PaymentResult extends React.Component {
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
                         
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + this.props.route.params.shopInfo).push({
+                        database().ref('user/coupons' + '/' + auth().currentUser.uid + '/').push({
                             "shopInfo" : this.props.route.params.shopInfo
                         });
 

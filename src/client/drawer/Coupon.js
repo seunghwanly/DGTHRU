@@ -23,13 +23,12 @@ import { firebase } from '@react-native-firebase/database';
 const ViewCoupon = ({ name }) => {
     //여기서 hyehwa가 맞으면
 
-
-    firebase.database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-        var rows = [];
+    var rows = [];
+    firebase.database().ref('user/coupons' + '/' + auth().currentUser.uid ).once('value', (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
-            var childData = childSnapshot.val();
-            rows.push(childData);
-            console.log(rows);
+            var childData = childSnapshot.val().shopInfo;
+                rows.push(childData);
+                console.log("rows:" + rows[1]);
         });
     });
 
@@ -42,20 +41,21 @@ const ViewCoupon = ({ name }) => {
     //     });
     // });
 
-    if (shopInfo === 'hyehwa_roof') {
+    if (rows[0] === 'hyehwa_roof') {
         return (
             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                 <GetCafeIcon name={'hyehwa_roof'} />
             </View>
         );
     }
-    else if (shopInfo === 'singong_1f') {
+    else {
         return (
             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                 <GetCafeIcon name={'singong_1f'} />
             </View>
         );
     }
+    
 }
 
 const GetCafeIcon = ({ name }) => {
