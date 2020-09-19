@@ -5,8 +5,7 @@ import {
     Text,
     FlatList,
     View,
-    ScrollView,
-    RefreshControl,
+
     Modal,
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
@@ -15,33 +14,25 @@ import { Header } from 'react-native-elements';
 import { BillStyles, CircleStyles } from './styles';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
+import database from '@react-native-firebase/database'
 
 //firebase
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
 import { firebase } from '@react-native-firebase/database';
+var rows = [];
+var i = 0;
+function ViewCoupon() {
 
-const ViewCoupon = ({ name }) => {
-    //여기서 hyehwa가 맞으면
-
-    var rows = [];
-    firebase.database().ref('user/coupons' + '/' + auth().currentUser.uid ).once('value', (snapshot) => {
+    database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
         snapshot.forEach(function (childSnapshot) {
             var childData = childSnapshot.val().shopInfo;
-                rows.push(childData);
-                console.log("rows:" + rows[1]);
+            rows.push(childData);
+            console.log("rows:" + rows[1]);
         });
+
     });
 
-
-    // database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-    //     snapshot.forEach((childSnapShot) => {
-    //         childSnapShot.forEach((dataSnapShot) => {
-    //             console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
-    //         });
-    //     });
-    // });
-
-    if (rows[0] === 'hyehwa_roof') {
+    if (rows[i] === 'hyehwa_roof') {
         return (
             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                 <GetCafeIcon name={'hyehwa_roof'} />
@@ -49,13 +40,14 @@ const ViewCoupon = ({ name }) => {
         );
     }
     else {
+
         return (
             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                 <GetCafeIcon name={'singong_1f'} />
             </View>
         );
     }
-    
+
 }
 
 const GetCafeIcon = ({ name }) => {
@@ -148,12 +140,7 @@ export default class Coupon extends React.Component {
         super(props);
 
         this.state = {
-            totalCost: 0,
-            couponNum: 0,
-            userHistory: [],
-            refreshing: false,
-            modalVisible: false,
-            currentItem: {}
+            shopInfo: []
         };
 
         this._userHistoryDB = userHistoryTotalDatabase();
@@ -177,95 +164,13 @@ export default class Coupon extends React.Component {
     }
 
     _fetchData() {
-        var tempTotalCost = 0;
-
-        this._userHistoryDB
-            .once('value', (snapshot) => {
-
-                var tempJSONArray = [];
-                var tempSubJSONArray = [];
-
-                // console.log('snapshot >> ' + snapshot.val());
-                snapshot.forEach((childSnapShot) => {
-                    tempJSONArray = [];
-                    var subObjectKey = childSnapShot.key;
-                    // console.log('childSnapShot >> ' + childSnapShot.key, childSnapShot.val());
-                    // 날짜 : { autokey : { values } }
-                    childSnapShot.forEach((dataSnapShot) => {
-
-                        if (dataSnapShot.key.charAt(0) === '-') {   // 단일메뉴 주문
-                            // console.log('dataChildSnapShot >> ' + dataSnapShot.val().orderTime );
-                            tempJSONArray.push({
-
-                                date: subObjectKey,
-                                name: dataSnapShot.val().name,
-                                cost: dataSnapShot.val().cost,
-                                options: dataSnapShot.val().options,
-                                orderTime: dataSnapShot.val().orderTime,
-                                orderNumber: dataSnapShot.val().orderNumber,
-                                shopInfo: dataSnapShot.val().shopInfo,
-                            });
-
-                            tempTotalCost += dataSnapShot.val().cost;
-                        }
-                        //autokey : { values }
-                        else {
-                            //A-1 그룹 계산한 것들 출력
-                            var tempItemOrderTime = '';
-                            var tempItemShopInfo = '';
-                            var tempGroupTotalCost = 0;
-
-                            dataSnapShot.forEach((groupChild) => {
-                                tempSubJSONArray = [];
-                                groupChild.forEach((item) => {
-                                    tempItemOrderTime = item.val().orderTime; //key
-                                    tempItemShopInfo = item.val().shopInfo; //shopInfo
-                                    //push
-                                    tempSubJSONArray.push({
-                                        name: item.val().name,
-                                        cost: item.val().cost,
-                                        options: item.val().options
-                                    });
-                                    console.log('>>>>> groupChild.forEach : ' + tempSubJSONArray.length, groupChild.key,);
-                                    tempTotalCost += item.val().cost;
-                                    tempGroupTotalCost += item.val().cost;
-
-                                })  //item
-                                tempSubJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
-                                //to object
-                                var forPush = {
-                                    orderTime: tempItemOrderTime,
-                                    orderNumber: dataSnapShot.key,
-                                    group: tempSubJSONArray,
-                                    shopInfo: tempItemShopInfo,
-                                    totalCost: tempGroupTotalCost,
-                                    date: subObjectKey
-                                };
-
-                                //push to main array
-                                tempJSONArray.push(forPush);
-                            })  //groupChild
-                        }
-                    }); //dataSnapShot
-
-                    //push to tempJSONArray
-                    tempJSONArray.sort((d1, d2) => new moment(d2.orderTime, 'HH:mm:ss') - new moment(d1.orderTime, 'HH:mm:ss'));
-
-                    // tempJSONArray.sort((i, j) => (i.orderTime,moment().format('HH:mm:ss')) - (j.orderTime,moment().format('HH:mm:ss')));
-                    var tempSubObject = {
-                        'date': subObjectKey,
-                        'item': tempJSONArray
-                    };
-
-                    this.setState({
-                        userHistory: this.state.userHistory.concat(tempSubObject),
-                        totalCost: tempTotalCost
-                    });
-                });
-                this.setState({ userHistory: this.state.userHistory.reverse() });
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
+            snapshot.forEach(function (childSnapshot) {
+                var childData = childSnapshot.val().shopInfo;
+                this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
             });
+        });
     }
-
     _onRefresh = React.Component(() => {
         console.log('onRefresh !!');
         this.setState({ refreshing: true });
@@ -274,7 +179,6 @@ export default class Coupon extends React.Component {
     }, []);
 
     render() {
-        const { userHistory, modalVisible, currentItem } = this.state;
 
         return (
             <>
@@ -382,9 +286,20 @@ export default class Coupon extends React.Component {
                                 <GetCafeIcon name={'coffee_icon'} />
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <ViewCoupon name={auth().currentUser.uid} />
-
-
+                                <FlatList
+                                    data={ this.state.shopInfo }
+                                    keyExtractor={ item => item.key }
+                                    renderItem={
+                                        ({ item }) => {
+                                            return (
+                                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                                                    <GetCafeIcon name={ item } />
+                                                </View>
+                                            )
+                                        }
+                                    }
+                                >
+                                </FlatList>
                             </View>
                         </View>
                     </View>
