@@ -140,7 +140,8 @@ export default StackContainer = ({ navigation }) => {
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
                                                     name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' ||
-                                                    name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ?
+                                                    name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ||
+                                                    name === 'SupervisorOrderList' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
@@ -148,7 +149,7 @@ export default StackContainer = ({ navigation }) => {
                                                             onPress={() => [navigation.goBack(), setRefresh(true)]}
                                                         >
                                                         {
-                                                            name === 'MenuTabView' || name === "Result" ?
+                                                            name === 'MenuTabView' || name === "Result" || name === 'SupervisorOrderList' ?
                                                             <Image
                                                                 style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
                                                                 resizeMode='cover'
@@ -177,11 +178,11 @@ export default StackContainer = ({ navigation }) => {
                                 gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' || name === "Result" ? false : true,
                                 // gestureEnabled: false
                                 headerStyle: { 
-                                    backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
+                                    backgroundColor : name === "Shops" || name === 'MenuTabView' || name === 'SupervisorOrderList' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
                                     shadowColor:'transparent',
                                 },
                                 headerTitleStyle: {
-                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Loading' ? '#fff' : '#000',
+                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Loading' || name === 'SupervisorOrderList' ? '#fff' : '#000',
                                     fontWeight:'bold',
                                 },
                             })

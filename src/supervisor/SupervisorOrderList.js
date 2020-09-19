@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, } from 'react';
 import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
@@ -11,9 +11,11 @@ import imageLinker from '../utils/ImageLinker';
 const initialLayout = { width: Dimensions.get('window').width };
 
 
-const FirstRoute = (props) => (
-    <View style={exampleStyle.background} >
-        <Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text>
+const FirstRoute = (props) => {
+
+    return(
+    <View style={[exampleStyle.background,{ borderTopStartRadius:30, borderTopEndRadius:30, marginTop:20, paddingTop:20, backgroundColor:'#fff' }]} >
+        {/* <Text style={exampleStyle.orderlistTitle}>{props.route.title}</Text> */}
         <FlatList
             data={props.data}
             keyExtractor={item => item.key}
@@ -41,14 +43,14 @@ const FirstRoute = (props) => (
                                         marginVertical: 5,
                                         alignSelf: 'center',
                                         borderRadius: 20,
-                                        padding:'2%',
+                                        padding:'1%',
                                         shadowColor: "#000",
-                                                shadowOffset: {
-                                                    width: 1,
-                                                    height: 2
-                                                },
-                                                shadowOpacity: 0.3,
-                                                shadowRadius: 2
+                                        shadowOffset: {
+                                            width: 2,
+                                            height: 2
+                                        },
+                                        shadowOpacity: 0.5,
+                                        shadowRadius: 3
                                     }
                                 }
                                 contentContainerStyle={
@@ -61,18 +63,17 @@ const FirstRoute = (props) => (
                                     return (
                                         <View style={
                                             {
-                                                marginVertical:10,
+                                                margin:10,
                                                 backgroundColor: '#fff',
                                                 flexDirection: 'row',
                                                 borderRadius: 20,
-                                                
                                             }
                                         }>
                                             <View style={
                                                 {
                                                     flexDirection: 'row',
-                                                    width: '35%',
-                                                    marginEnd: 5,
+                                                    width: '40%',
+                                                    marginEnd: '5%',
                                                 }
                                             }>
 
@@ -84,8 +85,8 @@ const FirstRoute = (props) => (
                                                         marginStart:5,
                                                     }
                                                 }>
-                                                    <ImageLinker style={exampleStyle.listImage} name="아메리카노" />
-                                                    <Text textAlign="center">
+                                                    <ImageLinker style={exampleStyle.listImage} name={item.name} />
+                                                    <Text textAlign="center" style={{fontWeight:'bold'}}>
                                                         {
                                                             item.orderInfo.orderNumber
                                                         }
@@ -99,11 +100,13 @@ const FirstRoute = (props) => (
                                                     }
                                                 }>
                                                     <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
-                                                    <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum}</Text>
                                                     <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.options.count}</Text>
                                                     <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.orderInfo.clientPhoneNumber}</Text>
                                                     <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate}{item.orderInfo.orderTime}</Text>
-                                                    <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup}/ {item.options.type}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup} / {item.options.type} / {item.options.size}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum} / 시럽 추가 : {item.options.syrup} / 크림 추가 : {item.options.whipping}</Text>
+                                                    <Text style={exampleStyle.orderlistText_Thin}> 요청사항 : {item.options.offers}</Text>
+                                                    
                                                 </View>
 
 
@@ -116,14 +119,19 @@ const FirstRoute = (props) => (
                                                     width: '10%',
                                                     backgroundColor: '#182335',
                                                     justifyContent: 'center',
-                                                    marginHorizontal: '5%',
-                                                    marginVertical:'1%',
-                                                    borderRadius: 20
+                                                    alignItems:'center',
+                                                    margin:5,
+                                                    borderRadius: 20,
+                                                    padding:10
                                                 }
                                             }>
-                                                <Text style={exampleStyle.orderlistPastTime}>z</Text>
-                                                <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
-                                                <Text style={exampleStyle.orderlistPastTime}>1분 경과</Text>
+                                                <Image style={{ width:24, height:24, marginBottom:5 }} source={require('../../image/alarm-white.png')}/>
+                                                <Text style={[exampleStyle.orderlistPastTime,{ color:'#ddd' }]}>경과시간</Text>
+                                                <Text style={exampleStyle.orderlistPastTime}>
+                                                {
+                                                    moment().diff(new moment(item.orderInfo.orderTime, 'HH:mm:ss'),'minutes') + '분'
+                                                }
+                                                </Text>
                                             </View>
 
 
@@ -203,17 +211,17 @@ const FirstRoute = (props) => (
                                         {
                                             padding: 10
                                         }
-                                    }
-                                    >
-                                        {item.listSize === 1 ?
-                                            <Text>이거 되나? </Text> : <Text>어 되네? </Text>}
-                                        <Text style={exampleStyle.orderlistText_Bold}></Text>
-                                        <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : ㅋ</Text>
-                                        <Text style={exampleStyle.orderlistText_Thin}> 수량 : ㅋ</Text>
-                                        <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : ㅋ</Text>
-                                        <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : ㅋ</Text>
-                                        <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : ㅋ/ ㅋ</Text>
+                                    }>
+                                        <Text style={exampleStyle.orderlistText_Bold}>{item.name}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 수량 : {item.options.count}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 주문자 번호 : {item.orderInfo.clientPhoneNumber}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 주문시간 : {item.orderDate}{item.orderInfo.orderTime}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 옵 션 : {item.options.cup} / {item.options.type} / {item.options.size}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 샷 추가 : {item.options.shotNum} / 시럽 추가 : {item.options.syrup} / 크림 추가 : {item.options.whipping}</Text>
+                                        <Text style={exampleStyle.orderlistText_Thin}> 요청사항 : {item.options.offers}</Text>
+
                                     </View>
+
                                 </View>
 
 
@@ -263,7 +271,8 @@ const FirstRoute = (props) => (
             }}
         />
     </View>
-);
+    )
+}
 
 const SecondRoute = (props) => (
     <View style={exampleStyle.background} >
@@ -393,7 +402,7 @@ export default class SupervisorOrderList extends Component {
 
         this.state = {
             index: 0,
-            routes: [{ key: 'first', title: '주문현황' }, { key: 'second', title: '지난주문' }, { key: 'third', title: '메뉴' }],
+            routes: [{ key: 'first', title: '주문'+'\n'+'현황' }, { key: 'second', title: '지난'+'\n'+'주문' }, { key: 'third', title: '메뉴'+'\n'+'관리' }],
             list: [],
         }
     }
@@ -560,42 +569,37 @@ export default class SupervisorOrderList extends Component {
         return (
 
             <TabView
-                style={{ backgroundColor: '#182335' }}
+                style={{ backgroundColor: '#182335', }}
                 navigationState={{ index: this.state.index, routes: this.state.routes }}
                 renderScene={this.renderScene}
                 onIndexChange={this._setIndex}
                 initialLayout={initialLayout}
 
                 renderTabBar={(props) => (
-                    <View style={{ backgroundColor: 'white', }}>
+                    <View style={{ backgroundColor: '#182335',}}>
                         <TabBar
                             {...props}
                             indicatorStyle={{
-                                marginHorizontal: (Dimensions.get('window').width / 3 - Dimensions.get('window').width / 7) / 2,
-                                justifyContent: 'center',
                                 backgroundColor: '#EEAF9D',
-                                borderRadius: 3,
-                                height: 5,
-                                zIndex: 3,
-                                margin: 0.5,
-                                width: Dimensions.get('window').width / 7,
-
+                                borderRadius: 20,
+                                height: 80,
+                                width: Dimensions.get('window').width / 9,
+                                marginHorizontal: Dimensions.get('window').width / 9,
                             }}
 
                             style={{
                                 backgroundColor: '#182335',
-                                height: 50,
-                                width: Dimensions.get('window').width / 3 * 3,
+                                height: 80,
+                                width: Dimensions.get('window').width,
                                 justifyContent: 'center',
+                                marginTop:20,
                             }}
 
-                            getLabelText={({ route }) => (<Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                            getLabelText={({ route }) => (<Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
                             tabStyle={{
                                 width: Dimensions.get('window').width / 3,
-                                borderRightColor: 'white', borderWidth: 1, borderLeftColor: 'white'
-
+                                // borderRightColor: 'white', borderWidth: 1, borderLeftColor: 'white'
                             }}
-
                         />
                     </View>
                 )}

@@ -145,8 +145,9 @@ const exampleStyle = StyleSheet.create({
     orderlistPastTime: {
         textAlign:'center',
         fontWeight:'bold', 
-        fontSize:25,
+        fontSize:20,
         color:'white',
+        marginVertical:5
     },
     orderlistview: {
         width:'100%',
@@ -192,9 +193,10 @@ const exampleStyle = StyleSheet.create({
     },
 
     listImage:{
-        borderRadius: 10,
+        borderRadius: 30,
         width:100,
         height:100,
+        marginVertical:5
     },
     buttonstyle: {
         justifyContent: 'center',
