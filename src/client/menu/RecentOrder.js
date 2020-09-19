@@ -10,6 +10,8 @@ import ImageLinker from '../../utils/ImageLinker';
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
 import database from '@react-native-firebase/database';
 
+import Loading from '../payment/Loading';
+
 export default class RecentOrder extends React.Component {
     _userHistoryDatabase;
 
@@ -17,13 +19,16 @@ export default class RecentOrder extends React.Component {
         super(props);
 
         this.state = {
-            data: []
+            data: [],
+            isLoading : true
         }
 
         this._userHistoryDatabase = userHistoryTotalDatabase();
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
+
+        setTimeout(() => { this.setState({ isLoading : false })}, 1000);
 
         var recentOrder = [];
 
@@ -84,6 +89,7 @@ export default class RecentOrder extends React.Component {
     }
 
     render() {
+        if(!this.state.isLoading) {
         return (
             <SafeAreaView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: '10%', }}>
@@ -107,7 +113,7 @@ export default class RecentOrder extends React.Component {
                         메뉴
                         </Text>
                 </View>
-                <ScrollView horizontal={true} style={{ marginStart:'5%' }}>
+                <ScrollView horizontal={true} style={{ paddingStart:'5%'}} showsHorizontalScrollIndicator={false}>
                 {
                     this.state.data.map((item, index) => {
                         return (
@@ -132,7 +138,7 @@ export default class RecentOrder extends React.Component {
                                         shadowRadius: 2
                                     }
                                 }>   
-                                    <ImageLinker name={item.menu.name} style={{ width: 60, height: 60, borderRadius: 50 }} />
+                                    <ImageLinker name={item.menu.name} style={{ width: 60, height: 60, borderRadius: 50, marginTop:10 }} />
                                     <View
                                         style={
                                             {
@@ -165,7 +171,7 @@ export default class RecentOrder extends React.Component {
                                         <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 12, paddingVertical: 5, paddingHorizontal: 15 }}>주문하기</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <ImageLinker name={item.shopInfo} style={{ width: 40, height: 40, position:'absolute', left:10}} />
+                                <ImageLinker name={item.shopInfo} style={{ width: 40, height: 40, position:'absolute'}} />
                             </View>
                         )
                     })
@@ -173,5 +179,11 @@ export default class RecentOrder extends React.Component {
                 </ScrollView>
             </SafeAreaView>
         )
+            }
+            else {
+                return(
+                    <Loading style={{ backgroundColor : '#fff' }} fontStyle={{ color:'#aaa' }} />
+                )
+            }
     }
 }

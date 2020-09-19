@@ -178,12 +178,12 @@ export default StackContainer = ({ navigation }) => {
                                 // gestureEnabled: false
                                 headerStyle: { 
                                     backgroundColor : name === "Shops" || name === 'MenuTabView' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
-                                    shadowColor:'transparent'
+                                    shadowColor:'transparent',
                                 },
                                 headerTitleStyle: {
                                     color : name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Loading' ? '#fff' : '#000',
-                                    fontWeight:'bold'
-                                },    
+                                    fontWeight:'bold',
+                                },
                             })
                         }
                     />

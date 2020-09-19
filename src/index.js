@@ -31,7 +31,7 @@ export default App = () => {
         >
           <DrawerStack.Screen name='Home' component={StackContainer}
             options={{
-              drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/home-white.png') : require('../image/home-outline.png')} />)
+              drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/home-white.png') : require('../image/home-outline.png')} />),
             }}
             
           //Home onPress () >> reset 애들한테 물어보자 이건

@@ -73,16 +73,17 @@ export default class Favorites extends React.Component {
                         data={this.state.data}
                         style={
                             {
-                                marginTop: '5%',
-                                padding: '5%',
+                                height:'30%',
+                                marginVertical:'10%'
                             }
                         }
                         contentContainerStyle={
                             {
-                                width: this.state.data.length * 165,
-                                height:210,                                
+                                padding: '5%',
+                                width: this.state.data.length * 165,                               
                             }
                         }
+                        showsHorizontalScrollIndicator={false}
                         horizontal={true}
                         renderItem={
                             ({ item }) => {
@@ -93,7 +94,7 @@ export default class Favorites extends React.Component {
                                             {
                                                 marginStart: 15,
                                                 marginTop: 15,
-                                                height: 180,
+                                                height: 190,
                                                 width:135,
                                                 borderRadius: 20,
                                                 backgroundColor: '#fff',

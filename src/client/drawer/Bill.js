@@ -241,8 +241,9 @@ export default class Bill extends React.Component {
                     </View>
                 </Modal>
                 <Header
-                    containerStyle={{ backgroundColor: 'white' }}
-                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16 }}>e-Receipt / History</Text>)}
+                    barStyle='light-content'
+                    containerStyle={{ backgroundColor: '#182335', borderBottomColor:'transparent' }}
+                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16, color:'#fff'}}>e-Receipt / History</Text>)}
                     leftComponent={
                         () => (
                             <TouchableOpacity
@@ -253,7 +254,7 @@ export default class Bill extends React.Component {
                                 <Image
                                     style={{ height: 30, width: 30, }}
                                     resizeMode='cover'
-                                    source={require('../../../image/chevron-back-outline.png')}
+                                    source={require('../../../image/chevron-back-white.png')}
                                 />
                             </TouchableOpacity>
                         )
@@ -268,7 +269,7 @@ export default class Bill extends React.Component {
                                 <Image
                                     style={{ height: 30, width: 30, }}
                                     resizeMode='cover'
-                                    source={require('../../../image/menu-outline.png')}
+                                    source={require('../../../image/menu-white.png')}
                                 />
                             </TouchableOpacity>
                         )
@@ -278,10 +279,10 @@ export default class Bill extends React.Component {
                         flex: 1,
                         justifyContent: 'center',
                         alignItems: 'stretch',
-                        backgroundColor: '#F2F2F2',
+                        backgroundColor: '#182335',
                         paddingTop: 20,
-                        paddingLeft: 15,
-                        paddingRight: 15
+                        paddingLeft: 20,
+                        paddingRight: 20
                     }}>
                     {
                         this.state.userHistory !== null ?
@@ -296,7 +297,7 @@ export default class Bill extends React.Component {
                                 </View>
                                 <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />}>
                                     {
-                                        userHistory.map((items) => {
+                                        userHistory.map((items, indx) => {
                                             //console.log(' bills > ' + JSON.stringify(items));
                                             return (
                                                 <>

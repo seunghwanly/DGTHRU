@@ -7,7 +7,8 @@ import {
     Alert,
     Image,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    StatusBar
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database from '@react-native-firebase/database';
@@ -332,6 +333,7 @@ export default class PaymentResult extends React.Component {
 
                 return (
                     <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
+                    <StatusBar barStyle='light-content' />
                         <View style={{}}>
                             <Image
                                 style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}

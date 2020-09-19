@@ -11,6 +11,7 @@ import {
     Keyboard,
     Image,
     ScrollView,
+    StatusBar,
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
@@ -76,7 +77,7 @@ export default Basket = ({ navigation, route }) => {
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
 
-        if (subMenu.hasOwnProperty('sub_menu')) {
+        if (subMenu.hasOwnProperty('sub_menu') && subMenu.name !== '플레인') {
             return (
                 <View style={[basketStyles.basketOptionWrapper,
                 {
@@ -579,11 +580,13 @@ export default Basket = ({ navigation, route }) => {
                     </View>
                 </Modal>
 
+
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     keyboardVerticalOffset={95}
                     style={{ backgroundColor: '#2C4061', flex: 1 }}
                 >
+                    <StatusBar barStyle='dark-content'/>
 
                     <View style={[basketStyles.basketTopColumnWrapper, { backgroundColor: '#fff', borderBottomEndRadius: 30, borderBottomStartRadius: 30, paddingBottom: 10 }]}>
                         {/* 아이콘이랑 이름 */}
@@ -868,7 +871,7 @@ export default Basket = ({ navigation, route }) => {
                                         <></>
                                     }
                                     {   // 와플 크림 추가
-                                        type === 'bakery' && categoryName === 'Waffle' && item.option_available.cream !== undefined ?
+                                        type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
                                                 <View style={[basketStyles.basketOptionWrapper, {justifyContent:'flex-start'}]}>
                                                     <View style={[basketStyles.basketOptionDesc,{width:'80%'}]}>
@@ -898,14 +901,14 @@ export default Basket = ({ navigation, route }) => {
                                             <></>
                                     }
                                     {   // 와플 시럽 추가
-                                        type === 'bakery' && categoryName === 'Waffle' && item.option_available.syrup !== undefined ?
+                                        type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
                                                 <View style={basketStyles.basketOptionWrapper}>
                                                     <View style={basketStyles.basketOptionDesc}>
                                                         <Text style={{ fontSize: 12, fontWeight:'bold' }}>시럽 추가{'\n'}(+500원)</Text>
                                                     </View>
                                                     <FlatList
-                                                        data={item.option_available.syrup}
+                                                        data={item.sub_menu[1].sub_menu}
                                                         renderItem={
                                                             ({ item }) => {
                                                                 const backgroundColor = item.toString()

@@ -26,12 +26,13 @@ const FirstRoute = (props) => (
             }
             scrollEnabled={true}
             renderItem={({ item, index }) => {
+                
                 return (
 
                     <>
-                        {item.hasOwnProperty('groupOrder') === true ?
+                        {item.hasOwnProperty('groupOrder') ?
                             <FlatList
-                                data={props.data[index].groupOrder}
+                                data={item.groupOrder}
                                 keyExtractor={item => item.key}
                                 style={
                                     {
@@ -112,7 +113,7 @@ const FirstRoute = (props) => (
 
                                             <View style={
                                                 {
-                                                    width: '20%',
+                                                    width: '10%',
                                                     backgroundColor: '#182335',
                                                     justifyContent: 'center',
                                                     marginHorizontal: '5%',
@@ -131,17 +132,20 @@ const FirstRoute = (props) => (
                                             <View style={
                                                 {
                                                     flexDirection: 'row',
-                                                    width: '35%'
+                                                    width: '40%'
                                                 }
                                             }>
-                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
                                                     <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
                                                     <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
                                                     <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={[exampleStyle.buttonstyle,{ backgroundColor:'#ea5517' }]} onPress={() => SetRemove(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
+                                                    <Text style={exampleStyle.orderlistButtonText}>픽업완료</Text>
                                                 </TouchableOpacity>
                                             </View>
 
@@ -152,7 +156,11 @@ const FirstRoute = (props) => (
 
 
 
-                            : <View style={
+                            : 
+                            
+                            
+                            
+                            <View style={
                                 {
                                     width: '100%',
                                     flexDirection: 'row',
@@ -212,7 +220,7 @@ const FirstRoute = (props) => (
 
                                 <View style={
                                     {
-                                        width: '20%',
+                                        width: '10%',
                                         backgroundColor: '#182335',
                                         justifyContent: 'center',
                                         marginHorizontal: '5%',
@@ -229,17 +237,20 @@ const FirstRoute = (props) => (
                                 <View style={
                                     {
                                         flexDirection: 'row',
-                                        width: '35%'
+                                        width: '40%'
                                     }
                                 }>
-                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetRemove(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
+                                        <Text style={exampleStyle.orderlistButtonText}>픽업완료</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -302,21 +313,14 @@ const SecondRoute = (props) => (
                         </View>
                         <View style={exampleStyle.listbox_right}>
                             <View style={exampleStyle.orderlistview}>
-
-                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(shopname, item.date, item.phonenum, item.key)}>
-
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                     <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                 </TouchableOpacity>
-
-                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(shopname, item.date, item.phonenum, item.key)}>
-
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                     <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
-
                                 </TouchableOpacity>
-                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(shopname, item.date, item.phonenum, item.key)}>
-
+                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                     <Text style={exampleStyle.orderlistButtonText}>준비완료</Text>
-
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -350,16 +354,35 @@ async function DeleteOrderList(key) {
         .remove();
 }
 
-async function Setconfirm(shopname, date, phonenum, key) {
-    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({ orderState: 'confirm' });
+async function Setconfirm(shopname, date, phonenum, key, isGroup) {
+    if(!isGroup)
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key + '/orderInfo').update({ orderState: 'confirm' });
+    else{
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/group/' + key + '/orderInfo').update({ orderState: 'confirm' });
+    }
 }
 
-async function SetUnconfirm(shopname, date, phonenum, key) {
-    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({ orderState: 'request' });
+async function SetUnconfirm(shopname, date, phonenum, key, isGroup) {
+    if(!isGroup)
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key + '/orderInfo').update({ orderState: 'cancel' });
+    else {
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/group/' + key + '/orderInfo').update({ orderState: 'cancel' });
+    }
 }
 
-async function SetReady(shopname, date, phonenum, key) {
-    database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).update({ orderState: 'ready' });
+async function SetReady(shopname, date, phonenum, key, isGroup) {
+    if(!isGroup)
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key + '/orderInfo').update({ orderState: 'ready' });
+    else {
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/group/' + key + '/orderInfo').update({ orderState: 'ready' });
+    }
+}
+async function SetRemove(shopname, date, phonenum, key, isGroup) {
+    if(!isGroup)
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/' + key).remove();
+    else {
+        database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/group/').remove();
+    }
 }
 
 export default class SupervisorOrderList extends Component {
@@ -457,6 +480,8 @@ export default class SupervisorOrderList extends Component {
                                 options: menuChild.val().options,
                                 orderInfo: menuChild.val().orderInfo,
                                 //key : orderInfo.orderTime,
+                                key: keyName,
+                                date:orderDate
                             })
 
                         }
@@ -473,6 +498,8 @@ export default class SupervisorOrderList extends Component {
                                     options: groupMenu.val().options,
                                     orderInfo: groupMenu.val().orderInfo,
                                     //key : orderInfo.orderTime,
+                                    key: groupMenu.key,
+                                    date: orderDate
                                 })
                             })
                             li.push({ groupOrder: monoMenu, });
