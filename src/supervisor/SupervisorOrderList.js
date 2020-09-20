@@ -66,7 +66,8 @@ const FirstRoute = (props) => {
                                             height: 2
                                         },
                                         shadowOpacity: 0.5,
-                                        shadowRadius: 3
+                                        shadowRadius: 3,
+                                        elevation: 2,
                                     }
                                 }
                                 contentContainerStyle={
@@ -107,11 +108,13 @@ const FirstRoute = (props) => {
                                                             item.orderInfo.orderNumber
                                                         }
                                                     </Text>
+                                                    <Text style={{fontSize:16,fontWeight:"bold",}} textAlign="center">{_stringConverter(item.orderInfo.orderState)}</Text>
                                                 </View>
 
 
                                                 <View style={
                                                     {
+
                                                         padding: 10
                                                     }
                                                 }>
@@ -155,6 +158,7 @@ const FirstRoute = (props) => {
 
                                             <View style={
                                                 {
+                                                    
                                                     flexDirection: 'row',
                                                     width: '40%'
                                                 }
@@ -187,36 +191,46 @@ const FirstRoute = (props) => {
                             <View style={
                                 {
                                     width: '100%',
-                                    flexDirection: 'row',
-                                    borderRadius: 20,
-                                    backgroundColor: '#fff',
-                                    padding: 10,
-                                    marginVertical: 4,
+                                    backgroundColor:'#182335',
+                                    marginVertical: 5,
                                     alignSelf: 'center',
+                                    borderRadius: 20,
+                                    padding:'1%',
                                     shadowColor: "#000",
                                     shadowOffset: {
-                                        width: 1,
+                                        width: 2,
                                         height: 2
                                     },
-                                    shadowOpacity: 0.3,
-                                    shadowRadius: 2
+                                    shadowOpacity: 0.5,
+                                    shadowRadius: 3,
+                                    elevation: 2,
+                                    
                                 }
                             }>
 
+                            <View style={{
 
+                                    margin:10,
+                                    backgroundColor: '#fff',
+                                    flexDirection: 'row',
+                                    borderRadius: 20,
+                                    }} >
 
                                 <View style={
                                     {
+                                        
                                         flexDirection: 'row',
-                                        width: '35%',
+                                        width: '40%',
                                         marginEnd: 5,
                                     }
                                 }
                                 >
                                     <View style={
                                         {
+                                            justifyContent:'center',
                                             alignItems: 'center',
                                             marginEnd: 5,
+                                            marginStart:5,
                                         }
                                     }
                                     >
@@ -248,8 +262,10 @@ const FirstRoute = (props) => {
                                         width: '10%',
                                         backgroundColor: '#182335',
                                         justifyContent: 'center',
-                                        marginHorizontal: '5%',
-                                        borderRadius: 20
+                                        alignItems:'center',
+                                        margin:5,
+                                        borderRadius: 20,
+                                        padding:10
                                     }
                                 }>
                                     <Image style={{alignSelf:"center", width:24, height:24, marginBottom:5 }} source={require('../../image/alarm-white.png')}/>
@@ -265,12 +281,14 @@ const FirstRoute = (props) => {
 
                                 <View style={
                                     {
+                                        
+                                       
                                         flexDirection: 'row',
                                         width: '40%'
                                     }
                                 }>
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
-                                        <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
+                                        <Text style={exampleStyle.orderlistButtonText}>승인취소2</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
@@ -281,6 +299,8 @@ const FirstRoute = (props) => {
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetRemove(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>픽업완료</Text>
                                     </TouchableOpacity>
+                                </View>
+
                                 </View>
 
 
@@ -294,6 +314,7 @@ const FirstRoute = (props) => {
     </View>
     )
 }
+
 
 const SecondRoute = (props) => {
 
