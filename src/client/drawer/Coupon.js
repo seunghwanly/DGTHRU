@@ -253,23 +253,29 @@ export default class Coupon extends React.Component {
 
                             </View>
                             <View style={{ marginBottom: 5, padding: 8 }}>
-                                {
-                                    this.state.shopInfo.map((shopInfo, i) => {
-                                        return (
-                                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                                <FlatList
+                                    data={this.state.shopInfo}
+                                    keyExtractor={item => item.key}
+                                    horizontal={true}
+                                    contentContainerStyle={{ margin: 5 }}
+                                    numOfColumns={3}
+
+                                    renderItem={
+                                        ({ item }) => (
+                                            <View>
                                                 <ImageLinker
-                                                    name={shopInfo}
+                                                    name={ item }
                                                     style={{
-                                                        width: 55,
-                                                        height: 55,
+                                                        width: 50,
+                                                        height: 50,
                                                         marginVertical: 2,
                                                         marginTop: 15
                                                     }} />
-                                                </View>
-                                        );
-                                    })
-                                }
-                                
+                                            </View>
+                                        )
+                                    }
+                                >
+                                </FlatList>
                             </View>
                         </View>
                     </View>
