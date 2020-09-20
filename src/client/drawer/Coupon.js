@@ -137,7 +137,6 @@ export default class Coupon extends React.Component {
 
     _fetchData() {
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
-
             snapshot.forEach((childSnapshot) => {
                 var childData = childSnapshot.val().shopInfo;
                 this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
@@ -223,7 +222,7 @@ export default class Coupon extends React.Component {
                     <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
                         <View style={{ flexDirection: 'column', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'main_outdoor'} />
+                                <GetCafeIcon name={'main_outdoor'} style={{ width: 25, height: 25 }} />
                                 <Text style={{ fontWeight: 'bold', width: '100%' }}>가온누리    2260-8961</Text>
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
@@ -244,34 +243,33 @@ export default class Coupon extends React.Component {
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'column', marginBottom: 5, padding: 8 }}>
+                        <View >
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                                 <GetCafeIcon name={'coffee_icon'} />
                                 <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
+
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
+
                             </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <FlatList
-                                    data={this.state.shopInfo}
-                                    keyExtractor={item => item.key}
-                                    renderItem={
-                                        ({ item }) => (
+                            <View style={{ marginBottom: 5, padding: 8 }}>
+                                {
+                                    this.state.shopInfo.map((shopInfo, i) => {
+                                        return (
                                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                                <GetCafeIcon name={item} />
-                                            </View>
-                                        )
-                                    }
-                                >
-                                </FlatList>
+                                                <ImageLinker
+                                                    name={shopInfo}
+                                                    style={{
+                                                        width: 55,
+                                                        height: 55,
+                                                        marginVertical: 2,
+                                                        marginTop: 15
+                                                    }} />
+                                                </View>
+                                        );
+                                    })
+                                }
+                                
                             </View>
                         </View>
                     </View>
