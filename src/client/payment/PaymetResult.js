@@ -293,11 +293,6 @@ export default class PaymentResult extends React.Component {
                             "shopInfo": this.props.route.params.shopInfo
                         });
                     }
-                    else if (this.state.orderState[i] === 'request') {
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
-                            "shopInfo": this.props.route.params.shopInfo
-                        });
-                    }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
                     }
