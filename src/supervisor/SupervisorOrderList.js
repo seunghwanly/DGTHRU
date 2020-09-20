@@ -166,7 +166,10 @@ const FirstRoute = (props) => {
                                                 <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
                                                     <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => [
+                                                    Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true),
+                                                    addToAdmin(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, item)
+                                                ]}>
                                                     <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
@@ -290,7 +293,10 @@ const FirstRoute = (props) => {
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>승인취소2</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => [
+                                        Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false),
+                                        addToAdmin(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, item)
+                                    ]}>
                                         <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
@@ -469,7 +475,10 @@ const SecondRoute = (props) => {
                                                 <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
                                                     <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
+                                                <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => [
+                                                    Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true),
+                                                    addToAdmin(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, item)
+                                                ]}>
                                                     <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, true)}>
@@ -579,7 +588,10 @@ const SecondRoute = (props) => {
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetUnconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
                                         <Text style={exampleStyle.orderlistButtonText}>승인취소</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
+                                    <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => [
+                                        Setconfirm(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false),
+                                        addToAdmin(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, item)
+                                    ]}>
                                         <Text style={exampleStyle.orderlistButtonText}>주문승인</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={exampleStyle.buttonstyle} onPress={() => SetReady(item.orderInfo.shopInfo, item.date, item.orderInfo.clientPhoneNumber, item.key, false)}>
@@ -653,6 +665,14 @@ async function SetRemove(shopname, date, phonenum, key, isGroup) {
     else {
         database().ref('shops/' + shopname + '/' + date + '/' + phonenum + '/group/').remove();
     }
+}
+
+async function addToAdmin(shopname, date, phonenum, key, menu) {
+    console.log(date);
+    var adminPath = 'admin/' + shopname + '/' + date;
+
+    const adminRef = database().ref(adminPath).push();
+    adminRef.set(menu).then(()=>console.log('push to admin'));
 }
 
 export default class SupervisorOrderList extends Component {
