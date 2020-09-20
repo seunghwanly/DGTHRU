@@ -288,13 +288,14 @@ PODS:
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
-  - react-native-apple-authentication (1.0.6):
+  - react-native-apple-authentication (1.0.8):
     - React
   - react-native-safe-area-context (3.1.7):
     - React
   - react-native-viewpager (4.1.6):
     - React
-  - react-native-webview (10.8.2):
+  - react-native-webview (10.9.0):
+
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -364,14 +365,14 @@ PODS:
     - React
   - RNDeviceInfo (5.6.5):
     - React
-  - RNFBApp (8.4.1):
+  - RNFBApp (8.4.2):
     - Firebase/CoreOnly (~> 6.30.0)
     - React
   - RNFBAuth (8.3.3):
     - Firebase/Auth (~> 6.30.0)
     - React
     - RNFBApp
-  - RNFBDatabase (7.5.4):
+  - RNFBDatabase (7.5.6):
     - Firebase/Database (~> 6.30.0)
     - React
     - RNFBApp
@@ -379,9 +380,9 @@ PODS:
     - React
   - RNReanimated (1.13.0):
     - React
-  - RNScreens (2.10.1):
+  - RNScreens (2.11.0):
     - React
-  - RNVectorIcons (7.0.0):
+  - RNVectorIcons (7.1.0):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -474,7 +475,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
-    - OpenSSL-Universal
+    - OpenSaSL-Universal
     - PromisesObjC
     - YogaKit
 
@@ -603,10 +604,11 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
-  react-native-apple-authentication: f0317f01addb58a91cc8c1a2d41ca258ccf7eca0
+  react-native-apple-authentication: be849b8aefe45de190f8125126ef8cf8b02674ec
   react-native-safe-area-context: fcece23844742b6f7f0627c3715b806a7deff946
   react-native-viewpager: 0dbb6df18e3d56a0eee2908c5401fadf9a6b57f8
-  react-native-webview: 5c41ea867f6928bea865bd49a2d379161d6643e9
+  react-native-webview: 6ee7868ca8eba635dbf7963986d1ab7959da0391
+
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -621,16 +623,17 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 3eea36d9460c5159b592f9ecbe5a77f8aca98006
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
-  RNFBApp: e4321cad5dd23b43b3b4f0ca060300b9f85cb7a4
+  RNFBApp: 373cce42559cc7a9a42afc876746e3946de3e32e
+
   RNFBAuth: 8fd5ea881020a13deae2ca3e9810e30d15ce42ac
-  RNFBDatabase: 0adc1845baee88e58ea886888763725343d41db5
+  RNFBDatabase: ebd3d8ff04166f01ca30aeb6359a4db2de427644
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
-  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
-  RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
+  RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 3c3a693fd7545004cb81e16de01634011754fb2c
 
-COCOAPODS: 1.10.0.beta.2
+COCOAPODS: 1.9.3

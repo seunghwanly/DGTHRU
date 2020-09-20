@@ -35,6 +35,21 @@ export const userHistoryTotalDatabase = () => {
         return database().ref('user/user_history' + '/' + auth().currentUser.uid);
 }
 
+export const userCouponRef = () => {
+    if (auth().currentUser !== null)
+        return 'user/coupons' + '/' + auth().currentUser.uid + '/' + shopInfo;
+}
+
+export const userCouponDatabase = () => {
+    if (auth().currentUser !== null)
+        return database().ref(userCouponRef());
+}
+
+export const userCouponTotalDatabase = () => {
+    if (auth().currentUser !== null)
+        return database().ref('user/coupons' + '/' + auth().currentUser.uid);
+}
+
 export const userFavoriteDatabase = (shopInfo) => {
     if (auth().currentUser !== null)
         return database().ref(favoriteRef(shopInfo));
