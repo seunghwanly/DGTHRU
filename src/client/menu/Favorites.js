@@ -25,13 +25,24 @@ export default class Favorites extends React.Component {
         this._favoriteDatabase = userFavoriteDatabase();
     }
 
-    componentDidMount() {
+    shouldComponentUpdate(nextState) {
+        console.log('> Favorites shouldComponentUpdate');
+        return nextState.data !== this.state.data;
+    }
+
+    componentDidMount = async() => {
+        console.log('> Favorites constructor');
+        this._fetchData();
+    }
+
+    _fetchData() {
         this._favoriteDatabase
-            .on('value', snapshot => {
-                snapshot.forEach(child => {
+            .on('value', (snapshot) => {
+                this.setState({ data : [] });
+                snapshot.forEach((child) => {
                     this.setState({ data: this.state.data.concat(child.val()) });
-                })
-            })
+                });
+            });
     }
 
     componentWillUnmount() {
@@ -39,6 +50,7 @@ export default class Favorites extends React.Component {
     }
 
     render() {
+        console.log('> Favorites render');
         if (this.state.data.length > 0) {
             return (
                 <View style={
@@ -94,7 +106,7 @@ export default class Favorites extends React.Component {
                                             {
                                                 marginStart: 15,
                                                 marginTop: 15,
-                                                height: 190,
+                                                height: 200,
                                                 width:135,
                                                 borderRadius: 20,
                                                 backgroundColor: '#fff',
@@ -132,8 +144,8 @@ export default class Favorites extends React.Component {
                                                 style={
                                                     {
                                                         height: '20%',
-                                                        margin: 10,
-                                                        alignItems: 'center'
+                                                        marginVertical:'10%',
+                                                        alignItems: 'center',
                                                     }
                                                 }>
                                                 <Text style={{ fontSize: 14, color: '#333', fontWeight: 'bold' }}>{item.value.name}</Text>
@@ -167,7 +179,7 @@ export default class Favorites extends React.Component {
                         }
                         keyExtractor={item => item.key}
                     />
-                   <RecentOrder navigation={this.props.navigation}/>
+                   <RecentOrder navigation={this.props.navigation} favorites={this.state.data}/>
                 </View>
             );
         }
@@ -212,6 +224,7 @@ export default class Favorites extends React.Component {
                             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16, paddingVertical: 5, paddingHorizontal: 15 }}>등록하러 가기</Text>
                         </TouchableOpacity>
                     </View>
+                    <RecentOrder navigation={this.props.navigation} favorites={this.state.data}/>
                 </>
             );
         }

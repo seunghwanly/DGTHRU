@@ -12,10 +12,10 @@ import {
     Image,
     ScrollView,
     StatusBar,
+    TouchableOpacity
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MinusButton, PlusButton } from './components/CountButton';
 
 import database from '@react-native-firebase/database';
