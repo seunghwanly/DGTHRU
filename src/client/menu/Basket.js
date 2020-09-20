@@ -592,7 +592,7 @@ export default Basket = ({ navigation, route }) => {
                         {/* 아이콘이랑 이름 */}
                         <ImageLinker name={item.name} style={basketStyles.radiusIcon} />
                         <Text style={basketStyles.radiusText}>{item.name}</Text>
-                        <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost}원</Text>
+                        <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost.toLocaleString()}원</Text>
                         {/* 버튼 */}
                         <View style={basketStyles.basketTopColumnButtonWrapper}>
                             <MinusButton

@@ -95,7 +95,6 @@ const basketStyles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 5
     },
     smallRadiusIcon: {
         width: 30,
@@ -124,8 +123,8 @@ const basketStyles = StyleSheet.create({
         backgroundColor: '#e2e2e2',
         borderRadius: 5,
         marginHorizontal:10,
-        width: 20,
-        height: 20,
+        width: 26,
+        height: 26,
     },
     chooseDetailWrapper: {
         justifyContent: 'center',
@@ -204,7 +203,8 @@ const basketStyles = StyleSheet.create({
         flexDirection: 'row', 
         marginStart: 10, 
         width: '65%',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        alignItems:'center'
     },
     basketTwoItem: {
         width: 80,

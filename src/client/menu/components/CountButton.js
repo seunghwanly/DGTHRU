@@ -13,7 +13,7 @@ export const MinusButton = (props) => {
                 onPress={props.onPress}
             >
                 <Text style={{ 
-                fontSize: 14, 
+                fontSize: 20, 
                 color: '#FFF', 
                 textAlign: 'center',
                 fontWeight:'bold'
@@ -28,7 +28,7 @@ export const PlusButton = (props) => {
             onPress={props.onPress}
         >
             <Text style={{ 
-                fontSize: 14, 
+                fontSize: 20, 
                 color: '#FFF', 
                 textAlign: 'center',
                 fontWeight:'bold'
