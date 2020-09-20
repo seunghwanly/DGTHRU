@@ -29,15 +29,17 @@ export default ImageLinker = (item) => {
             return (<Image style={item.style} resizeMode='cover' source={require('../../image/menu-image/cafe-mocha.jpg')} />)
 
         case "main_outdoor":
-            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/가온누리.png')} />)
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/가온누리.png')} />)
         case "singong_1f":
-            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/남산학사.png')} />)
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/남산학사.png')} />)
         case "hyehwa_roof":
-            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/혜화.png')} />)
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/혜화.png')} />)
         case "economy_outdoor":
-            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/그루터기.png')} />)
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/그루터기.png')} />)
         case "munhwa_1f":
-            return (<Image style={[item.style, {backgroundColor:null}]} resizeMode='cover' source={require('../../image/cafe-icon/두리터.png')} />)
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/두리터.png')} />)
+        case "favorite_shop":
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/star-outline.png')} />)
 
 
         default:

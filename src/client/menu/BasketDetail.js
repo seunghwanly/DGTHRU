@@ -4,7 +4,8 @@ import {
     Text,
     Image,
     Alert,
-    TouchableOpacity
+    TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import { basketStyles } from './styles';
 import ImageLinker from '../../utils/ImageLinker';
@@ -106,22 +107,33 @@ export default class BasketDetail extends React.Component {
         // is items are in same shops?
         var sameShopInfo = '';
         var isSameshop = false;
-        if (this.state.orderData.length > 1) {
-            for (var i = 0; i < this.state.orderData.length - 1; i++) {
-                if (this.state.orderData[i].value.orderInfo.shopInfo === this.state.orderData[i + 1].value.orderInfo.shopInfo) {
-                    sameShopInfo = this.state.orderData[i].value.orderInfo.shopInfo;
-                    isSameshop = true;
+        console.log('> render : ' + this.state.orderData.length);
+        if (this.state.orderData.length >= 2) {
+            for (var i = 0; i < this.state.orderData.length; i++) {
+                if (i + 1 < this.state.orderData.length) {
+                    if (this.state.orderData[i].value.orderInfo.shopInfo === this.state.orderData[i + 1].value.orderInfo.shopInfo) {
+                        sameShopInfo = this.state.orderData[i].value.orderInfo.shopInfo;
+                        console.log('> basketDetail : ' + this.state.orderData[i].value.orderInfo.shopInfo);
+                        isSameshop = true;
+                    }
+                    else
+                        isSameshop = false;
                 }
-                else
-                    isSameshop = false;
             }
 
         }
-        else isSameshop = true;
+        else {
+            isSameshop = true;
+            this.state.orderData.forEach(item => {
+                sameShopInfo = item.value.orderInfo.shopInfo;
+            })
+        }
+        
 
         if (this.state.orderData.length > 0) {
             return (
                 <>
+                <StatusBar barStyle='dark-content'/>
                     <View style={[basketStyles.background, { backgroundColor: '#fff' }]}>
                         <View style={[basketStyles.subBackground, {}]}>
                             {

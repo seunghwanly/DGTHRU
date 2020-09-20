@@ -295,6 +295,7 @@ PODS:
   - react-native-viewpager (4.1.6):
     - React
   - react-native-webview (10.9.0):
+
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -474,7 +475,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
-    - OpenSSL-Universal
+    - OpenSaSL-Universal
     - PromisesObjC
     - YogaKit
 
@@ -607,6 +608,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: fcece23844742b6f7f0627c3715b806a7deff946
   react-native-viewpager: 0dbb6df18e3d56a0eee2908c5401fadf9a6b57f8
   react-native-webview: 6ee7868ca8eba635dbf7963986d1ab7959da0391
+
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -622,6 +624,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
   RNFBApp: 373cce42559cc7a9a42afc876746e3946de3e32e
+
   RNFBAuth: 8fd5ea881020a13deae2ca3e9810e30d15ce42ac
   RNFBDatabase: ebd3d8ff04166f01ca30aeb6359a4db2de427644
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39

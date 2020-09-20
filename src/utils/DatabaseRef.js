@@ -15,9 +15,9 @@ export function commonRef(shopInfo) {
         return 'shops/' + shopInfo + '/' + currDate + '/' + auth().currentUser.phoneNumber;
 }
 
-export const favoriteRef = (shopInfo) => {
+export const favoriteRef = () => {
     if (auth().currentUser !== null)
-        return 'user/favorites' + '/' + shopInfo + '/' + auth().currentUser.uid;
+        return 'user/favorites' + '/' + auth().currentUser.uid;
 }
 
 export function commonDatabase(shopInfo) {
@@ -55,16 +55,19 @@ export const userFavoriteDatabase = (shopInfo) => {
         return database().ref(favoriteRef(shopInfo));
 }
 
-export const pushFavorite = (shopInfo, menu) => {
+export const pushFavorite = (shopInfo, menu, type, categoryName) => {
     if (auth().currentUser !== null) {
 
         const newItem = database()
-            .ref(favoriteRef(shopInfo))
+            .ref(favoriteRef())
             .push();
 
 
         const data = {
             'key': newItem.key,
+            'shopInfo' : shopInfo,
+            'type' : type,
+            'categoryName' : categoryName,
             'value': menu
         }
 
@@ -74,10 +77,10 @@ export const pushFavorite = (shopInfo, menu) => {
     }
 }
 
-export async function popFavorite(shopInfo, key) {
+export async function popFavorite(key) {
     if (auth().currentUser !== null) {
 
-        var favoritePath = favoriteRef(shopInfo) + '/' + key;
+        var favoritePath = favoriteRef() + '/' + key;
 
         await database().ref(favoritePath).remove().then(() => alert('삭제되었습니다 !'));
     }

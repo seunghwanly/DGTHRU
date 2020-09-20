@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ImageLinker from '../../utils/ImageLinker';
 import { menuStyles } from './styles';
 import Loading from '../payment/Loading';
 
 import database from '@react-native-firebase/database';
+import { pushFavorite } from '../../utils/DatabaseRef';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -95,6 +96,7 @@ export default class TabViewExample extends React.Component {
         else {
             return (
                 <>
+                    <StatusBar barStyle='light-content' />
                     <TabView
                         renderTabBar={(props) => (
                             <View style={{ backgroundColor:'#182335', paddingHorizontal:'5%' }}>
@@ -118,7 +120,25 @@ export default class TabViewExample extends React.Component {
                                             width: Dimensions.get('window').width,
                                             justifyContent: 'center',
                                         }}
-                                        getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                                        getLabelText={({ route }) => (
+                                            <Text style={
+                                                {
+                                                    fontSize: 14,
+                                                    fontWeight: '900',
+                                                    color: 'white',
+                                                    paddingBottom: 5,
+                                                    textAlign: 'center',
+                                                    textShadowColor:'#182335',
+                                                    textShadowOffset : {
+                                                        width:1,
+                                                        height:1
+                                                    },
+                                                    textShadowRadius:1
+                                                }
+                                            }>
+                                                {route.title}
+                                            </Text>
+                                        )}
                                         tabStyle={{ width: 90, }}
                                         scrollEnabled={true}
                                     />
@@ -154,6 +174,11 @@ export default class TabViewExample extends React.Component {
                                         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
                                     case 8:
                                         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
+                                    case 9:
+                                        if(route.title === 'Cold Brew')
+                                            return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
+                                        else
+                                            return null;
 
                                     default:
                                         return null;
@@ -250,12 +275,12 @@ class MenuChildView extends React.Component {
                                                     categoryName: categoryName
                                                 }
                                             )}
-                                            onLongPress={() => pushFavorite(shopInfo, item)}
+                                            onLongPress={() => pushFavorite(shopInfo, item, type, categoryName)}
                                         >
                                             <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
                                             <View style={{ flexDirection: 'column', marginStart: 10 }}>
                                                 <Text style={menuStyles.subRadiusText}>{item.name}</Text>
-                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost}원</Text>
+                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost.toLocaleString()}원</Text>
                                             </View>
                                         </TouchableOpacity>
                                     )

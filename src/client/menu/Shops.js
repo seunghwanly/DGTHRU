@@ -40,7 +40,7 @@ const shopData = [
         location: '학술문화관 지하1층',
     },
     {
-        id: 'favorate_shop',
+        id: 'favorite_shop',
         title: '즐겨찾기',
         location: ' ',
     },
@@ -77,6 +77,10 @@ class Item extends React.Component {
             if (this.props.navigation !== null) {
                 this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
             }
+        }
+        else if(this.props.id === 'favorite_shop') {
+            if(this.props.navigation !== null)
+                this.props.navigation.navigate('Favorites');
         }
         else
             this.props.onPressItem(this.props.id);

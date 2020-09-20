@@ -11,10 +11,11 @@ import {
     Keyboard,
     Image,
     ScrollView,
+    StatusBar,
+    TouchableOpacity
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MinusButton, PlusButton } from './components/CountButton';
 
 import database from '@react-native-firebase/database';
@@ -76,7 +77,7 @@ export default Basket = ({ navigation, route }) => {
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
 
-        if (subMenu.hasOwnProperty('sub_menu')) {
+        if (subMenu.hasOwnProperty('sub_menu') && subMenu.name !== '플레인') {
             return (
                 <View style={[basketStyles.basketOptionWrapper,
                 {
@@ -126,7 +127,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         keyExtractor={(item) => item.toString()}
                         extraData={selected}
-                        contentContainerStyle={{ flexDirection: 'row-reverse', width:340 }}
+                        contentContainerStyle={{paddingHorizontal:10,justifyContent:'flex-end', flexDirection: 'row', width: subMenu.sub_menu.length >= 5 ? subMenu.sub_menu.length * 65 : 340}}
                         scrollEnabled={true}
                         alwaysBounceVertical={false}
                         showsHorizontalScrollIndicator={false}
@@ -167,10 +168,32 @@ export default Basket = ({ navigation, route }) => {
         if (steamMilk === true)
             res += 2300;
 
-        if (cupSize === "사이즈업")
-            res += 3000;
+        if (cupSize === "사이즈업")           
+            res += handleSizeUp();
 
         return res;
+    }
+
+    handleSizeUp = () => {
+        /*
+         *  아메리카노, 차 종류 1000(hot) / 1000(ice) 추가
+            프라푸치노, 주스, 스무디 1500 추가
+            에이드 아마 1000원??
+            나머지 1500(hot) / 1000(ice) 추가
+         */
+        var result = 0;
+        if (item.name === '아메리카노' || categoryName === 'Tea')
+            result = 1000;
+        if (categoryName === 'Frappucino' || categoryName === 'Fruit Juice' || categoryName === 'Juice' || categoryName === 'Smoothie')
+            result = 1500;
+        if (categoryName === 'Ade')
+            result = 1000;
+        else {
+            if (hotOrIced === 'HOT') result = 1500;
+            else result = 1000;
+        }
+
+        return result;
     }
 
 
@@ -557,17 +580,19 @@ export default Basket = ({ navigation, route }) => {
                     </View>
                 </Modal>
 
+
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     keyboardVerticalOffset={95}
                     style={{ backgroundColor: '#2C4061', flex: 1 }}
                 >
+                    <StatusBar barStyle='dark-content'/>
 
                     <View style={[basketStyles.basketTopColumnWrapper, { backgroundColor: '#fff', borderBottomEndRadius: 30, borderBottomStartRadius: 30, paddingBottom: 10 }]}>
                         {/* 아이콘이랑 이름 */}
                         <ImageLinker name={item.name} style={basketStyles.radiusIcon} />
                         <Text style={basketStyles.radiusText}>{item.name}</Text>
-                        <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost}원</Text>
+                        <Text style={[basketStyles.radiusText, { margin: 0, fontWeight: 'normal' }]}>{item.cost.toLocaleString()}원</Text>
                         {/* 버튼 */}
                         <View style={basketStyles.basketTopColumnButtonWrapper}>
                             <MinusButton
@@ -679,7 +704,7 @@ export default Basket = ({ navigation, route }) => {
                                     <View style={basketStyles.basketOptionWrapper}>
                                         <View style={basketStyles.basketOptionDesc}>
                                             <Text style={{ fontWeight: 'bold', fontSize: 14, marginBottom: 3 }}>SIZE</Text>
-                                            <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>SIZE-UP은 3000원{'\n'}추가 가격이 적용됩니다.</Text>
+                                            <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>SIZE-UP은 메뉴 별로{'\n'}추가 가격이 다릅니다.</Text>
                                         </View>
                                         <FlatList
                                             data={dataCupSize}
@@ -698,7 +723,21 @@ export default Basket = ({ navigation, route }) => {
                                                         <TouchableOpacity
                                                             onPress={() => setCupSize(item.toString())}
                                                             style={[{ backgroundColor }, basketStyles.basketTwoItem]}>
-                                                            <Text style={{ color }}> {item} </Text>
+                                                            {
+                                                                item === '사이즈업' ?
+                                                                    <>
+                                                                        <Text style={{ color }}>
+                                                                            {item}
+                                                                        </Text>
+                                                                        <Text style={{ color, fontSize:10, marginTop:2 }}>
+                                                                            + {handleSizeUp()}원
+                                                                        </Text>
+                                                                    </>
+                                                                    :
+                                                                    <Text style={{ color }}>
+                                                                        {item}
+                                                                    </Text>
+                                                            }
                                                         </TouchableOpacity>
                                                     )
                                                 }
@@ -832,7 +871,7 @@ export default Basket = ({ navigation, route }) => {
                                         <></>
                                     }
                                     {   // 와플 크림 추가
-                                        type === 'bakery' && categoryName === 'Waffle' && item.option_available.cream !== undefined ?
+                                        type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
                                                 <View style={[basketStyles.basketOptionWrapper, {justifyContent:'flex-start'}]}>
                                                     <View style={[basketStyles.basketOptionDesc,{width:'80%'}]}>
@@ -862,14 +901,14 @@ export default Basket = ({ navigation, route }) => {
                                             <></>
                                     }
                                     {   // 와플 시럽 추가
-                                        type === 'bakery' && categoryName === 'Waffle' && item.option_available.syrup !== undefined ?
+                                        type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
                                                 <View style={basketStyles.basketOptionWrapper}>
                                                     <View style={basketStyles.basketOptionDesc}>
                                                         <Text style={{ fontSize: 12, fontWeight:'bold' }}>시럽 추가{'\n'}(+500원)</Text>
                                                     </View>
                                                     <FlatList
-                                                        data={item.option_available.syrup}
+                                                        data={item.sub_menu[1].sub_menu}
                                                         renderItem={
                                                             ({ item }) => {
                                                                 const backgroundColor = item.toString()

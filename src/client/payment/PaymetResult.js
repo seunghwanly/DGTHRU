@@ -7,7 +7,8 @@ import {
     Alert,
     Image,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    StatusBar
 } from 'react-native';
 import { paymentStyles } from './styles';
 import database, { firebase } from '@react-native-firebase/database';
@@ -320,7 +321,7 @@ export default class PaymentResult extends React.Component {
 
                     console.log('menu ready !');
                     Alert.alert(
-                        'DGHTRU 알림', '메뉴가 준비되었습니다 ! 얼른 가져가세요.',
+                        'DGHTRU 알림', '메뉴가 준비되었습니다 ! 직원에게 위 화면을 보여주세요 !',
                         [
                             {
                                 text: '확인',
@@ -337,6 +338,7 @@ export default class PaymentResult extends React.Component {
 
                 return (
                     <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
+                    <StatusBar barStyle='light-content' />
                         <View style={{}}>
                             <Image
                                 style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
@@ -430,15 +432,15 @@ export default class PaymentResult extends React.Component {
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>주문승인{'\t\t'}</Text>
-                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.confirm}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginVertical: 2 }}>
                                     <Text style={{ fontWeight: 'bold', color: '#fff' }}>준비완료{'\t\t'}</Text>
-                                    <Text style={{ color: '#fff' }}>관리자에게</Text>
+                                    <Text style={{ color: '#fff' }}>{this.state.timeArray.ready}</Text>
                                 </View>
                             </View>
 
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 style={{
                                     width: '100%',
                                     backgroundColor: '#fff',
@@ -460,7 +462,7 @@ export default class PaymentResult extends React.Component {
                                 ]}
                             >
                                 <Text style={{ color: '#182335', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     </View>
                 )

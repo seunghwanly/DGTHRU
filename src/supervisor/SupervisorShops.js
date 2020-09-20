@@ -10,43 +10,53 @@ import {
     Image
 } from 'react-native';
 import { shopStyles } from './styles';
+import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import CustomNavigator from '../utils/CustomNavigator';
+import database from '@react-native-firebase/database';
 
 enableScreens();
 
 const shopData = [
     {
         id: 'main_outdoor',
+        adminPhoneNumber : '+821033333333',
         title: '가온누리',
         location: '본관 야외 휴게장소',
     },
     {
         id: 'singong_1f',
+        adminPhoneNumber : '+821044444444',
         title: '남산학사',
         location: '신공학관 1층',
     },
     {
         id: 'hyehwa_roof',
+        adminPhoneNumber : '+821011112222',
         title: '혜화카페',
         location: '혜화관 옥상',
     },
     {
         id: 'economy_outdoor',
-        title: '그루터기',
+        adminPhoneNumber : '+821022222222',
+        title: '그루터기',
         location: '경영관 야외',
     },
     {
         id: 'munhwa_1f',
         title: '카페두리터',
+        adminPhoneNumber : '+821041282470',
         location: '학술문화관 지하1층',
     },
     {
         id: 'favorate_shop',
+        adminPhoneNumber : '0000',
         title: '즐겨찾기',
         location: ' ',
     },
 ];
+
+
 
 function putpicture(id){
     switch (id) { 
@@ -72,7 +82,21 @@ function putpicture(id){
 }
 
 class Item extends React.Component {
+    componentDidMount(){
+        var li = [];
+      
 
+        var shopInfoRef = database().ref().child('adminInfo');
+        for(var i = 0; i<shopData.length; i++){
+            shopInfoRef.child(shopData[i].adminPhoneNumber).set({
+                id : shopData[i].id,
+                title : shopData[i].title,
+                location : shopData[i].location,
+            })
+
+        }
+
+    }
     _onPress = () => {
         if (this.props.id === 'hyehwa_roof') {
             if (this.props.navigation !== null) {
@@ -148,6 +172,13 @@ function supervisorShops({ navigation }) {
             
         />
     );
+    function logOut(){
+        // auth()
+        // .signOut()
+        // .then(() => [ console.log('User Signed Out !'),])
+        // .catch(() => console.log('already signed out !'));
+    }
+    
     const keyExtractor = (item) => item.id;
     return (
         <>
@@ -155,6 +186,9 @@ function supervisorShops({ navigation }) {
                 <View style={shopStyles.header}>
                     <Text style={shopStyles.title}>DGTHRU SUPERVISOR</Text>
                     <Text style={shopStyles.subTitle}>동국대학교 CAFE LIST</Text>
+                    <TouchableOpacity onPress={logOut()}>
+                        <Text>로 그 아 웃 !</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={shopStyles.body}>
                     <FlatList
