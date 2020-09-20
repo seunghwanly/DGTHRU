@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, Image } from 'react-native';
+import { SafeAreaView, Text, Image, StatusBar } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import auth from '@react-native-firebase/auth';
@@ -22,9 +22,10 @@ function CustomDrawerContent(props) {
   
     return (
       <>
+        <StatusBar barStyle='dark-content'/>
         <DrawerContentScrollView {...props}
           style={{ flex: 1, backgroundColor:'#182335'}}
-          contentContainerStyle={{backgroundColor:'#fff', borderBottomStartRadius:30}}
+          contentContainerStyle={{backgroundColor:'#fff', borderBottomStartRadius:30, paddingBottom:10}}
           >
           <DrawerItem
             style={{backgroundColor:'#fff'}}
@@ -53,6 +54,9 @@ function CustomDrawerContent(props) {
           <DrawerItemList {...props}
             activeTintColor='white'
             activeBackgroundColor='#eeaf9d'
+            itemStyle={{ borderTopStartRadius:30, borderBottomStartRadius:30, borderColor:'transparent', paddingStart:10}}
+            inactiveBackgroundColor='transparent'
+            inactiveTintColor='#182335'
           />
         </DrawerContentScrollView>
         <SafeAreaView style={

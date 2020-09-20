@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ImageLinker from '../../utils/ImageLinker';
 import { menuStyles } from './styles';
@@ -96,6 +96,7 @@ export default class TabViewExample extends React.Component {
         else {
             return (
                 <>
+                    <StatusBar barStyle='light-content' />
                     <TabView
                         renderTabBar={(props) => (
                             <View style={{ backgroundColor:'#182335', paddingHorizontal:'5%' }}>
@@ -119,7 +120,25 @@ export default class TabViewExample extends React.Component {
                                             width: Dimensions.get('window').width,
                                             justifyContent: 'center',
                                         }}
-                                        getLabelText={({ route }) => (<Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
+                                        getLabelText={({ route }) => (
+                                            <Text style={
+                                                {
+                                                    fontSize: 14,
+                                                    fontWeight: '900',
+                                                    color: 'white',
+                                                    paddingBottom: 5,
+                                                    textAlign: 'center',
+                                                    textShadowColor:'#182335',
+                                                    textShadowOffset : {
+                                                        width:1,
+                                                        height:1
+                                                    },
+                                                    textShadowRadius:1
+                                                }
+                                            }>
+                                                {route.title}
+                                            </Text>
+                                        )}
                                         tabStyle={{ width: 90, }}
                                         scrollEnabled={true}
                                     />
@@ -261,7 +280,7 @@ class MenuChildView extends React.Component {
                                             <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
                                             <View style={{ flexDirection: 'column', marginStart: 10 }}>
                                                 <Text style={menuStyles.subRadiusText}>{item.name}</Text>
-                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost}원</Text>
+                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost.toLocaleString()}원</Text>
                                             </View>
                                         </TouchableOpacity>
                                     )

@@ -20,11 +20,16 @@ export default class RecentOrder extends React.Component {
 
         this.state = {
             data: [],
-            isLoading : true
+            isLoading : true,
+            
         }
 
         this._userHistoryDatabase = userHistoryTotalDatabase();
     }
+
+    // shouldComponentUpdate(nextProps) {
+    //     return nextProps.favorites !== this.props.favorites;
+    // }
 
     componentDidMount = async () => {
 
@@ -36,23 +41,45 @@ export default class RecentOrder extends React.Component {
             .once('value', snapshot => {
 
                 snapshot.forEach((item, index) => {
-                    if (index === snapshot.numChildren() - 1) {
+                    if (index <= snapshot.numChildren() - 1) {
                         item.forEach((childItem, idx) => {
-                            if (idx >= item.numChildren() - 4 && idx <= item.numChildren() - 1) {
-
-                                // set type
-                                var type = 'categories_drink';
-                                if (childItem.val().options.hasOwnProperty('type') === false)
-                                    type = 'categories_bakery';
-                                // for push
-                                var temp = {
-                                    name: childItem.val().name,
-                                    cost: childItem.val().cost,
-                                    shopInfo: childItem.val().orderInfo.shopInfo,
-                                    type: type
-                                };
-                                recentOrder.push(temp);
-                                // console.log('> before set : ' + JSON.stringify(recentOrder));
+                            if (idx >= item.numChildren() - 3 && idx <= item.numChildren() - 1) {
+                                console.log('> RecentOrder : ' + childItem.key);
+                                // single menu
+                                if (childItem.key.charAt(0) === '-') {
+                                    // set type
+                                    var type = 'categories_drink';
+                                    if (childItem.val().options.hasOwnProperty('type') === false)
+                                        type = 'categories_bakery';
+                                    // for push
+                                    var temp = {
+                                        name: childItem.val().name,
+                                        cost: childItem.val().cost,
+                                        shopInfo: childItem.val().orderInfo.shopInfo,
+                                        type: type
+                                    };
+                                    recentOrder.push(temp);
+                                }
+                                // group menu
+                                else {
+                                    childItem.forEach(groupItem => {
+                                        groupItem.forEach(groupChild => {
+                                            console.log('> RecentOrder : ' + groupChild.key)
+                                            // set type
+                                            var type = 'categories_drink';
+                                            if (groupChild.val().options.hasOwnProperty('type') === false)
+                                                type = 'categories_bakery';
+                                            // for push
+                                            var temp = {
+                                                name: groupChild.val().name,
+                                                cost: groupChild.val().cost,
+                                                shopInfo: groupChild.val().orderInfo.shopInfo,
+                                                type: type
+                                            };
+                                            recentOrder.push(temp);
+                                        })
+                                    })
+                                }
                             }
                         })
                     }
@@ -91,7 +118,7 @@ export default class RecentOrder extends React.Component {
     render() {
         if(!this.state.isLoading) {
         return (
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor:'#fff' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: '10%', }}>
                     <Text style={
                         {
@@ -143,7 +170,7 @@ export default class RecentOrder extends React.Component {
                                         style={
                                             {
                                                 height: '20%',
-                                                margin: 10,
+                                                marginVertical:'10%',
                                                 alignItems: 'center'
                                             }
                                         }>

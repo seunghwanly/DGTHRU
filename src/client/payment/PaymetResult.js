@@ -435,7 +435,7 @@ export default class PaymentResult extends React.Component {
                                 </View>
                             </View>
 
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 style={{
                                     width: '100%',
                                     backgroundColor: '#fff',
@@ -457,7 +457,7 @@ export default class PaymentResult extends React.Component {
                                 ]}
                             >
                                 <Text style={{ color: '#182335', fontWeight: 'bold', textAlign: 'center' }}>홈으로 돌아가기</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     </View>
                 )

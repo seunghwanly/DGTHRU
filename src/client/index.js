@@ -175,7 +175,7 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === "MenuTabView" || name === 'SupervisorShops' || name === "Result" ? false : true,
+                                gestureEnabled: name === 'Shops'  || name === 'SupervisorShops' || name === "Result" ? false : true,
                                 // gestureEnabled: false
                                 headerStyle: { 
                                     backgroundColor : name === "Shops" || name === 'MenuTabView' || name === 'SupervisorOrderList' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
