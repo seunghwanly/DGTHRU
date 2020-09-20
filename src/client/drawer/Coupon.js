@@ -5,7 +5,7 @@ import {
     Text,
     FlatList,
     View,
-    Modal,
+    Modal, Button
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
 import ReceiptGroupModal from '../../utils/ReceiptGroupModal';
@@ -16,7 +16,7 @@ import moment from 'moment';
 import database from '@react-native-firebase/database'
 
 //firebase
-import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
+import { userCouponTotalDatabase } from '../../utils/DatabaseRef';
 import { firebase } from '@react-native-firebase/database';
 
 const GetCafeIcon = ({ name }) => {
@@ -103,7 +103,7 @@ const GetCafeIcon = ({ name }) => {
 
 export default class Coupon extends React.Component {
 
-    _userHistoryDB;
+    _userCouponDB;
 
     constructor(props) {
         super(props);
@@ -115,7 +115,7 @@ export default class Coupon extends React.Component {
             currentItem: {}
         };
 
-        this._userHistoryDB = userHistoryTotalDatabase();
+        this._userCouponDB = userCouponTotalDatabase();
     }
 
     componentDidMount() {
@@ -136,10 +136,17 @@ export default class Coupon extends React.Component {
     }
 
     _fetchData() {
+        var i=0;
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
             snapshot.forEach((childSnapshot) => {
                 var childData = childSnapshot.val().shopInfo;
-                this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
+                i++;
+                if(i <= 15){
+                    this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
+                }
+                else{
+                    alert('you can use coupon');
+                }
             });
         });
     }
@@ -245,35 +252,31 @@ export default class Coupon extends React.Component {
 
                         <View >
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'coffee_icon'} />
-                                <GetCafeIcon name={'coffee_icon'} />
-
                             </View>
                             <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
 
                             </View>
                             <View style={{ marginBottom: 5, padding: 8 }}>
                                 <FlatList
+                                    contentContainerStyle={{ margin: 4 }}
+                                    horizontal={false}
+                                    numColumns={5}
                                     data={this.state.shopInfo}
-                                    keyExtractor={item => item.key}
-                                    horizontal={true}
-                                    contentContainerStyle={{ margin: 5 }}
-                                    numOfColumns={3}
-
                                     renderItem={
                                         ({ item }) => (
                                             <View>
                                                 <ImageLinker
-                                                    name={ item }
+                                                    name={item}
                                                     style={{
-                                                        width: 50,
-                                                        height: 50,
+                                                        width: 68,
+                                                        height: 68,
                                                         marginVertical: 2,
                                                         marginTop: 15
                                                     }} />
                                             </View>
                                         )
                                     }
+                                    keyExtractor={item => item.key}
                                 >
                                 </FlatList>
                             </View>
