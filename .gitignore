@@ -62,3 +62,7 @@ buck-out/
 /ios/Podfile
 /ios/Podfile.lock
 yarn.lock
+
+*.lock
+*.xcodeproj
+Podfile
