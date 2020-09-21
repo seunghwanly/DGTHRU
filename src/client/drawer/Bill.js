@@ -11,77 +11,13 @@ import {
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
 import ReceiptGroupModal from '../../utils/ReceiptGroupModal';
-import { BillStyles } from './styles';
+import ImageLinker from '../../utils/ImageLinker';
+import { BillStyles, MainBillStyle } from './styles';
 import { Header } from 'react-native-elements';
 import moment from 'moment';
 
 //firebase
 import { userHistoryTotalDatabase } from '../../utils/DatabaseRef';
-
-const GetCafeIcon = ({ name }) => {
-
-    if (name === 'main_outdoor') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5 }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    source={require('../../../image/cafe-icon/가온누리.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'singong_1f') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5 }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    source={require('../../../image/cafe-icon/남산학사.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === "hyehwa_roof") {
-        return (
-            <View style={{ width: '15%', paddingStart: 5 }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    source={require('../../../image/cafe-icon/혜화.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'economy_outdoor') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5 }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    source={require('../../../image/cafe-icon/그루터기.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'munhwa_1f') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5 }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    source={require('../../../image/cafe-icon/두리터.png')}
-                />
-            </View>
-        );
-    }
-    else {
-        return (
-            <Text>None</Text>
-        );
-    }
-
-}
 
 export default class Bill extends React.Component {
 
@@ -110,7 +46,7 @@ export default class Bill extends React.Component {
     }
 
     setCurrentItem = (item) => {
-        this.setState({ currentItem : item });
+        this.setState({ currentItem: item });
         this.setModalVisible(true);
     }
 
@@ -126,7 +62,7 @@ export default class Bill extends React.Component {
 
                 var tempJSONArray = [];
                 var tempSubJSONArray = [];
-                
+
                 // console.log('snapshot >> ' + snapshot.val());
                 snapshot.forEach((childSnapShot) => {
                     tempJSONArray = [];
@@ -138,17 +74,17 @@ export default class Bill extends React.Component {
                         if (dataSnapShot.key.charAt(0) === '-') {   // 단일메뉴 주문
                             // console.log('dataChildSnapShot >> ' + dataSnapShot.val().orderTime );
                             tempJSONArray.push({
-                                
+
                                 date: subObjectKey,
                                 name: dataSnapShot.val().name,
                                 cost: dataSnapShot.val().cost,
                                 options: dataSnapShot.val().options,
-                                orderInfo : dataSnapShot.val().orderInfo,
-                                orderTime : dataSnapShot.val().orderInfo.orderTime,
+                                orderInfo: dataSnapShot.val().orderInfo,
+                                orderTime: dataSnapShot.val().orderInfo.orderTime,
                                 shopInfo: dataSnapShot.val().orderInfo.shopInfo
                             });
-
-                            tempTotalCost += dataSnapShot.val().cost;
+                            if (!dataSnapShot.val().orderInfo.isCanceled)
+                                tempTotalCost += dataSnapShot.val().cost;
                         }
                         //autokey : { values }
                         else {
@@ -166,14 +102,17 @@ export default class Bill extends React.Component {
                                     tempSubJSONArray.push({
                                         name: item.val().name,
                                         cost: item.val().cost,
-                                        options: item.val().options
+                                        options: item.val().options,
+                                        orderInfo: item.val().orderInfo
                                     });
-                                    console.log('>>>>> groupChild.forEach : ' + tempSubJSONArray.length, groupChild.key, );
-                                    tempTotalCost += item.val().cost;
-                                    tempGroupTotalCost += item.val().cost;
+                                    console.log('>>>>> groupChild.forEach : ' + tempSubJSONArray.length, groupChild.key,);
+                                    if (!item.val().orderInfo.isCanceled) {
+                                        tempTotalCost += item.val().cost;
+                                        tempGroupTotalCost += item.val().cost;
+                                    }
 
                                 })  //item
-                                
+
                                 //to object
                                 var forPush = {
                                     orderTime: tempItemOrderTime,
@@ -183,7 +122,7 @@ export default class Bill extends React.Component {
                                     totalCost: tempGroupTotalCost,
                                     date: subObjectKey
                                 };
-    
+
                                 //push to main array
                                 tempJSONArray.push(forPush);
                             })  //groupChild
@@ -229,10 +168,10 @@ export default class Bill extends React.Component {
                     <View style={BillStyles.modalBackground}>
                         <View style={BillStyles.modalSubBackground}>
                             {
-                                currentItem.group !== undefined ? <ReceiptGroupModal item={currentItem}/> : <ReceiptSingleModal item={currentItem} />
+                                currentItem.group !== undefined ? <ReceiptGroupModal item={currentItem} /> : <ReceiptSingleModal item={currentItem} />
                             }
                             <TouchableOpacity
-                                style={{ borderRadius: 10, backgroundColor: 'black', width: '90%', paddingHorizontal: 50, paddingVertical: 10 }}
+                                style={BillStyles.modalButton}
                                 onPress={() => this.setModalVisible(!modalVisible)}
                             >
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
@@ -242,8 +181,8 @@ export default class Bill extends React.Component {
                 </Modal>
                 <Header
                     barStyle='light-content'
-                    containerStyle={{ backgroundColor: '#182335', borderBottomColor:'transparent' }}
-                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16, color:'#fff'}}>e-Receipt / History</Text>)}
+                    containerStyle={{ backgroundColor: '#182335', borderBottomColor: 'transparent' }}
+                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16, color: '#fff' }}>e-Receipt / History</Text>)}
                     leftComponent={
                         () => (
                             <TouchableOpacity
@@ -275,20 +214,12 @@ export default class Bill extends React.Component {
                         )
                     } />
                 <View
-                    style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'stretch',
-                        backgroundColor: '#182335',
-                        paddingTop: 20,
-                        paddingLeft: 20,
-                        paddingRight: 20
-                    }}>
+                    style={MainBillStyle.mainBackground}>
                     {
                         this.state.userHistory !== null ?
-                            <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
-                                <Text style={{ alignSelf: 'flex-end', marginBottom: 20, fontWeight: 'bold', fontSize: 16, paddingTop: 10 }}>총 사용금액 : {this.state.totalCost.toLocaleString()}원</Text>
-                                <View style={{ flexDirection: 'row', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
+                            <View style={MainBillStyle.mainTopCategory}>
+                                <Text style={MainBillStyle.mainTopCategoryTotalCostText}>총 사용금액 : {this.state.totalCost.toLocaleString()}원</Text>
+                                <View style={MainBillStyle.mainTopCategoryInfoWrapper}>
                                     <Text style={{ fontWeight: 'bold', width: '15%' }}>가게</Text>
                                     <Text style={{ fontWeight: 'bold', width: '25%', textAlign: 'center' }}>주문상품</Text>
                                     <Text style={{ fontWeight: 'bold', width: '20%', textAlign: 'center' }}>가격</Text>
@@ -301,7 +232,7 @@ export default class Bill extends React.Component {
                                             //console.log(' bills > ' + JSON.stringify(items));
                                             return (
                                                 <>
-                                                    <View style={{ paddingTop: 2, paddingBottom: 2, marginBottom: 5, borderBottomColor: 'lightgray', borderBottomWidth: 1 }}>
+                                                    <View style={MainBillStyle.subDateWrapper}>
                                                         <Text style={{ textAlign: 'right' }}>
                                                             {items.date.substr(0, 4)}년 {items.date.substr(5, 2)}월 {items.date.substr(8, 2)}일
                                                     </Text>
@@ -313,28 +244,41 @@ export default class Bill extends React.Component {
                                                                 return (
                                                                     <>
                                                                         <TouchableOpacity
-                                                                            style={{ flexDirection: 'row', marginVertical: 3, alignItems: 'center' }}
+                                                                            style={MainBillStyle.subItemsWrapper}
                                                                             onPress={() => this.setCurrentItem(item)}
                                                                         >
-                                                                            <GetCafeIcon name={item.shopInfo} />
+                                                                            <View style={{ width: '15%', paddingStart: 5 }}>
+                                                                                <ImageLinker name={item.shopInfo} style={MainBillStyle.imageLinkerSmall} />
+                                                                            </View>
                                                                             {
                                                                                 item.group === undefined ?
 
                                                                                     <>
-                                                                                        <Text style={{ fontSize:13, width: '25%' }}>{item.name}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.cost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.options.cup}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
+                                                                                        <Text style={MainBillStyle.subItemsTextLeft  }>{item.name}</Text>
+                                                                                        <Text style={MainBillStyle.subItemsTextCenter  }>{(item.cost).toLocaleString()}원</Text>
+                                                                                        <Text style={MainBillStyle.subItemsTextCenter}>{item.options.cup}</Text>
+                                                                                        <Text style={MainBillStyle.subItemsTextRight}>{item.orderTime}</Text>
                                                                                     </>
                                                                                     :
-                                                                                    <>
-                                                                                        <Text style={{ fontSize:13, width: '25%' }}>{item.group[0].name}외 {item.group.length - 1}건</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{(item.totalCost).toLocaleString()}원</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'center' }}>{item.group[0].options.cup}</Text>
-                                                                                        <Text style={{ fontSize:13, width: '20%', textAlign: 'right' }}>{item.orderTime}</Text>
-                                                                                    </>
+
+                                                                                    item.group.length > 1 ?
+                                                                                        <>
+                                                                                            <Text style={MainBillStyle.subItemsTextLeft}>{item.group[0].name} 외 {item.group.length - 1}건</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextCenter}>{(item.totalCost).toLocaleString()}원</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextCenter}>{item.group[0].options.cup}</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextRight}>{item.orderTime}</Text>
+                                                                                        </>
+
+                                                                                        :
+                                                                                        <>
+                                                                                            <Text style={MainBillStyle.subItemsTextLeft}>{item.group[0].name}</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextCenter}>{(item.totalCost).toLocaleString()}원</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextCenter}>{item.group[0].options.cup}</Text>
+                                                                                            <Text style={MainBillStyle.subItemsTextRight}>{item.orderTime}</Text>
+                                                                                        </>
                                                                             }
                                                                         </TouchableOpacity>
+                                                                        <View style={MainBillStyle.subItemBottomBorder} />
                                                                     </>
                                                                 );
                                                             }
@@ -342,6 +286,7 @@ export default class Bill extends React.Component {
                                                         keyExtractor={(item, index) => item.key}
                                                         scrollEnabled={false}
                                                     />
+
                                                     <View style={{ marginBottom: 10 }} />
                                                 </>
                                             )

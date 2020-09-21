@@ -15,7 +15,7 @@ import database, { firebase } from '@react-native-firebase/database';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
 import { commonRef, userHistoryRef, orderNumDatabase } from '../../utils/DatabaseRef.js';
-import { getCafeIcon } from '../../utils/getCafeIcon';
+import ImageLinker from '../../utils/ImageLinker';
 import Loading from './Loading';
 
 //승환 : 가게별 주문 번호 증가
@@ -389,17 +389,19 @@ export default class PaymentResult extends React.Component {
                                     keyExtractor={(item, index) => item.key}
                                 />
 
-                                <Image
-                                    source={getCafeIcon(this.props.route.params.shopInfo)}
-                                    style={{
+                                <ImageLinker style={
+                                    {
                                         width: 60,
                                         height: 60,
                                         position: 'absolute',
                                         right: '5%',
                                         top: '5%',
                                         transform: [{ rotate: '330deg' }],
-                                    }}
+                                    }
+                                } 
+                                    name={this.props.route.params.shopInfo}
                                 />
+                                
 
                             </View>
                         </ScrollView>

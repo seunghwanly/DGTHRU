@@ -42,3 +42,18 @@ export const getCafeName = name => {
             return '두리터';
     }
 }
+
+export const getCafeTelNumber = name => {
+    switch (name) {
+        case "main_outdoor":
+            return '02-2260-8961';
+        case "singong_1f":
+            return '02-2260-8509';
+        case "hyehwa_roof":
+            return '02-2260-8966';
+        case "economy_outdoor":
+            return '02-2260-1478'
+        case "munhwa_1f":
+            return '02-2260-1478';
+    }
+}

@@ -5,7 +5,7 @@ import {
     Button,
     FlatList,
     TouchableOpacity,
-    Image,
+    StatusBar
 } from 'react-native';
 import { clientStyles } from '../styles';
 import ImageLinker from '../../utils/ImageLinker'
@@ -103,7 +103,7 @@ class Item extends React.Component {
         
         return (
             <View style = {clientStyles.itemContainer}>
-
+                <StatusBar barStyle='light-content' />
                 <TouchableOpacity
                     style={clientStyles.imageContainer}
                     onPress={this._onPress}

@@ -23,7 +23,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 import moment from 'moment';
-import { getCafeIcon } from '../../utils/getCafeIcon';
+import { getCafeIcon } from '../../utils/cafeInformation';
 
 import { enableScreens } from 'react-native-screens';
 
