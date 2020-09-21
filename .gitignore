@@ -64,6 +64,17 @@ buck-out/
 yarn.lock
 
 *.lock
-*.xcodeproj
-Podfile
+
+ios/
+DGTHRU.xcodeproj/
 *.pbxproj
+
+ios/
+Podfile
+
+ios/
+GoogleService-Info.plist
+
+*.plist
+
+ios/**
