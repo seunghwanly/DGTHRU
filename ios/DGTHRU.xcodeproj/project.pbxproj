@@ -19,7 +19,6 @@
 		5CBB45F824E30E38008F8918 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CBB45F724E30E38008F8918 /* GoogleService-Info.plist */; };
 		763D2BCD986806207ABEAF68 /* libPods-DGTHRU-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB09673E16E9BDB9C8C4E194 /* libPods-DGTHRU-tvOS.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9136CD1B25134AE6000016F7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		91E0BFAF684816DB7D793F86 /* libPods-DGTHRU.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0C8A09E3A518CBEFBCCEB65 /* libPods-DGTHRU.a */; };
 		DC714F35081F56883AF10007 /* libPods-DGTHRU-DGTHRUTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 592FCAF43D907AA19C10E7A2 /* libPods-DGTHRU-DGTHRUTests.a */; };
 /* End PBXBuildFile section */
@@ -42,7 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* DGTHRUTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DGTHRUTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* DGTHRUTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DGTHRUTests.m; sourceTree = "<group>"; };
@@ -144,8 +142,7 @@
 		13B07FAE1A68108700A75B9A /* DGTHRU */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+                13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -338,7 +335,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 7VD3DRZ7QS;
+						DevelopmentTeam = JQJUD8NTHN;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -385,7 +382,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9136CD1B25134AE6000016F7 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5CBB45F824E30E38008F8918 /* GoogleService-Info.plist in Resources */,
@@ -777,7 +773,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7VD3DRZ7QS;
+				DEVELOPMENT_TEAM = JQJUD8NTHN;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DGTHRU/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -786,7 +782,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.DGTHRU123;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.DGTHRU;
 				PRODUCT_NAME = DGTHRU;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -802,7 +798,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7VD3DRZ7QS;
+				DEVELOPMENT_TEAM = JQJUD8NTHN;
 				INFOPLIST_FILE = DGTHRU/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -810,7 +806,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.DGTHRU123;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.DGTHRU;
 				PRODUCT_NAME = DGTHRU;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1036,6 +1032,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
