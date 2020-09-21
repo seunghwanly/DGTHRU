@@ -15,6 +15,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
+import { Picker } from '@react-native-community/picker';
 import { basketStyles } from './styles';
 import { MinusButton, PlusButton } from './components/CountButton';
 
@@ -70,6 +71,9 @@ export default Basket = ({ navigation, route }) => {
     //bakery option
     const [waffleCream, setWaffleCream] = useState(null);
     const [waffleSyrup, setWaffleSyrup] = useState(null);
+    //discount
+    const [useCoupon, setUseCoupon] = useState(null);
+
     //modal
     const [modalVisible, setModalVisible] = useState(false);
     const [optionVisible, setOptionVisible] = useState(false);
@@ -171,6 +175,9 @@ export default Basket = ({ navigation, route }) => {
         if (cupSize === "사이즈업")           
             res += handleSizeUp();
 
+        if (useCoupon !== null)
+            res -= useCoupon;
+
         return res;
     }
 
@@ -245,7 +252,7 @@ export default Basket = ({ navigation, route }) => {
 
         var forPush = {
             name: item.name,
-            cost: (item.cost + handleOptionCost()) * count,
+            cost: item.cost + handleOptionCost() > 0 ? (item.cost + handleOptionCost()) * count : 0,
             options: {
                 count: count,
                 cup: inOrOut,
@@ -501,9 +508,18 @@ export default Basket = ({ navigation, route }) => {
                                         <></>
 
                                 }
+                                {
+                                    hotOrIced !== null ?
+                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
+                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
+                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
+                                        </View>
+                                        :
+                                        <></>
+                                }
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.cost}</Text>
+                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.cost.toLocaleString()}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
@@ -517,7 +533,9 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>사이즈 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{cupSize}</Text>
                                 </View>
+
                                 <View style={{width:'100%', borderWidth:1, borderStyle:'dotted' , marginVertical: 5}}/>
+
                                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
                                     <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>샷 추가 : </Text>
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{shotNum}</Text>
@@ -535,15 +553,6 @@ export default Basket = ({ navigation, route }) => {
                                     <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{handleOptionCost().toLocaleString()}원</Text>
                                 </View>
                                 {
-                                    hotOrIced !== null ?
-                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
-                                        </View>
-                                        :
-                                        <></>
-                                }
-                                {
                                     offers.length > 0 ?
                                         <View style={{ flexDirection: 'column', width: '100%', marginVertical: 2 }}>
                                             <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
@@ -552,10 +561,14 @@ export default Basket = ({ navigation, route }) => {
                                         :
                                         <></>
                                 }
+                                
                                 <View style={{width:'100%', borderWidth:1, borderStyle:'dotted' , marginVertical: 5}}/>
+                                
                                 <View style={{ flexDirection: 'row', width: '100%', paddingTop: 15 }}>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left', width: '50%' }}>총 결제금액 : </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>{((item.cost + handleOptionCost()) * count).toLocaleString()}원</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>
+                                        {item.cost + handleOptionCost() > 0 ? ((item.cost + handleOptionCost()) * count).toLocaleString() + '원' : 0 + '원'}
+                                    </Text>
                                 </View>
                             </View>
                             <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color:'dimgray', marginBottom:10 }}>주의사항 : 신청하신 옵션은 컵 용량에 맞춰서 나갑니다.</Text>
@@ -579,6 +592,11 @@ export default Basket = ({ navigation, route }) => {
                         </View>
                     </View>
                 </Modal>
+
+
+
+
+                
 
 
                 <KeyboardAvoidingView
@@ -962,6 +980,32 @@ export default Basket = ({ navigation, route }) => {
                                             </TouchableWithoutFeedback>
                                         </View>
                                     </>
+                                </View>
+                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'row', marginVertical: 5 }]} >
+                                    <View style={basketStyles.basketOptionDesc}>
+                                        <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom:5 }}>쿠폰선택</Text>
+                                        <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                                    </View>
+                                    <Picker
+                                        style={{ width: '53%', height: 80, marginHorizontal:20, justifyContent: 'center' }}
+                                        selectedValue={useCoupon}
+                                        onValueChange={(itemValue, itemIndex) => {
+                                            setUseCoupon(itemValue);
+                                        }}
+                                        mode='dropdown'
+                                        itemStyle={{ fontSize: 12, marginHorizontal:20 }}
+
+                                    >
+                                        {
+                                            // if i have coupon ~~
+                                            // 아래 있는 거 들어가고  
+                                            // :
+                                            // 쿠폰이 10개 안채워졌으면 쿠폰이 부족해요 분발해주세요 ! 
+
+                                        }
+                                        <Picker.Item label='10잔 모았네요 !' value={2000} />
+                                        <Picker.Item label='15잔 모았네요 !' value={2600} />
+                                    </Picker>
                                 </View>
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
