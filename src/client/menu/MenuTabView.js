@@ -4,7 +4,7 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import ImageLinker from '../../utils/ImageLinker';
 import { menuStyles } from './styles';
 import Loading from '../payment/Loading';
-
+import { translateCategoryName } from '../../utils/cafeInformation';
 import database from '@react-native-firebase/database';
 import { pushFavorite } from '../../utils/DatabaseRef';
 
@@ -123,20 +123,20 @@ export default class TabViewExample extends React.Component {
                                         getLabelText={({ route }) => (
                                             <Text style={
                                                 {
-                                                    fontSize: 14,
-                                                    fontWeight: '900',
+                                                    fontSize: 16,
+                                                    fontWeight: 'bold',
                                                     color: 'white',
                                                     paddingBottom: 5,
                                                     textAlign: 'center',
-                                                    textShadowColor:'#182335',
-                                                    textShadowOffset : {
-                                                        width:1,
-                                                        height:1
-                                                    },
-                                                    textShadowRadius:1
+                                                    // textShadowColor:'#182335',
+                                                    // textShadowOffset : {
+                                                    //     width:1,
+                                                    //     height:1
+                                                    // },
+                                                    // textShadowRadius:2
                                                 }
                                             }>
-                                                {route.title}
+                                                {translateCategoryName(route.title)}
                                             </Text>
                                         )}
                                         tabStyle={{ width: 90, }}
@@ -204,13 +204,13 @@ export default class TabViewExample extends React.Component {
                     <TouchableOpacity
                         style={
                             {
-                                width: 60,
-                                height: 60,
+                                width: 80,
+                                height: 80,
                                 right: '10%',
                                 bottom: '12%',
                                 position: 'absolute',
                                 backgroundColor: '#EEAF9D',
-                                borderRadius: 30,
+                                borderRadius: 40,
                                 justifyContent: 'center',
                                 padding: 5,
                                 shadowColor: "#333",
@@ -226,7 +226,7 @@ export default class TabViewExample extends React.Component {
                         onPress={() => this._setMenu(!this.state.isDrinkMenu)}
                     >
                         {
-                            this.state.isDrinkMenu === true ? <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>디저트{'\n'}메뉴가기</Text> : <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>음료{'\n'}메뉴가기</Text>
+                            this.state.isDrinkMenu === true ? <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>디저트{'\n'}메뉴가기</Text> : <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>음료{'\n'}메뉴가기</Text>
                         }
                     </TouchableOpacity>
                 </>
