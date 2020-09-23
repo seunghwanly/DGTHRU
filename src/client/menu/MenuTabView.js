@@ -126,7 +126,6 @@ export default class TabViewExample extends React.Component {
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
                                                     color: 'white',
-                                                    paddingBottom: 5,
                                                     textAlign: 'center',
                                                     // textShadowColor:'#182335',
                                                     // textShadowOffset : {
