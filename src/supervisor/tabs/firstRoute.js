@@ -11,9 +11,11 @@ const FirstRoute = (props) => {
 
     return(
     <View style={[exampleStyle.background,{ borderTopStartRadius:30, borderTopEndRadius:30, marginTop:5, paddingTop:5, backgroundColor:'#182335' }]} >
-        <View style={{ width:'100%',flexDirection: 'column', alignItems:'flex-end' ,marginRight:'4%'}}>
-    <View style={{ backgroundColor:'#182335',  width:'20%', borderColor : '#182335', borderBottomColor:"white" , borderWidth : 2.5, }}>
-    <Text style={{ alignSelf:'flex-end', paddingRight:'2%', fontSize: 24, fontWeight:'bold', color: 'white', }}>{props.route.title}</Text>
+        <View style={{ width:'100%',flexDirection: 'column', alignItems:'flex-end' ,marginRight:'10%' ,marginBottom:10,}}>
+    <View style={{ backgroundColor:'#182335',  width:'25%', borderColor : '#182335', borderBottomColor:"white" , borderWidth : 2.5, }}>
+    <Text style={{ alignSelf:'flex-end', paddingRight:'2%', fontSize: 22, fontWeight:'bold', color: 'white', }}>
+    총  {props.data.length}개의 주문이 있습니다.
+        </Text>
     </View>
 
 
