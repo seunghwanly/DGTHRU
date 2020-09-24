@@ -57,3 +57,28 @@ export const getCafeTelNumber = name => {
             return '02-2260-1478';
     }
 }
+
+export const translateCategoryName = name => {
+    switch(name) {
+        case "Espresso":
+            return "에스프레소";
+        case "Coffee Beverage":
+            return "커피";
+        case "Tea":
+            return "차";
+        case "Latte":
+            return "라떼";
+        case "Smoothie":
+            return "스무디";
+        case "Frappucino":
+            return "프라푸치노";
+        case "Fresh Juice":
+            return "생과일주스";
+        case "Juice":
+            return "주스";
+        case "Ade":
+            return "에이드";
+        default:
+            return "뭘까요?";
+    }
+}

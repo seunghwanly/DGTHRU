@@ -78,3 +78,6 @@ GoogleService-Info.plist
 *.plist
 
 ios/**
+package-lock.json
+ios/GoogleService-Info.plist
+ios/Podfile.lock
