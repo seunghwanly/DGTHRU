@@ -58,6 +58,7 @@ const shopData = [
 
 
 
+
 function putpicture(id){
     switch (id) { 
         case 'main_outdoor':
@@ -97,6 +98,9 @@ class Item extends React.Component {
         }
 
     }
+
+  
+
     _onPress = () => {
         if (this.props.id === 'hyehwa_roof') {
             if (this.props.navigation !== null) {
@@ -172,12 +176,16 @@ function supervisorShops({ navigation }) {
             
         />
     );
-    function logOut(){
-        // auth()
-        // .signOut()
-        // .then(() => [ console.log('User Signed Out !'),])
-        // .catch(() => console.log('already signed out !'));
+
+    function _logOut(test){
+       
+        auth()
+        .signOut()
+        .then(() => [ console.log('User Signed Out !'),])
+        .catch(() => console.log('already signed out !'));
     }
+
+    
     
     const keyExtractor = (item) => item.id;
     return (
@@ -186,7 +194,7 @@ function supervisorShops({ navigation }) {
                 <View style={shopStyles.header}>
                     <Text style={shopStyles.title}>DGTHRU SUPERVISOR</Text>
                     <Text style={shopStyles.subTitle}>동국대학교 CAFE LIST</Text>
-                    <TouchableOpacity onPress={logOut()}>
+                    <TouchableOpacity onPress={() => _logOut()}>
                         <Text>로 그 아 웃 !</Text>
                     </TouchableOpacity>
                 </View>
