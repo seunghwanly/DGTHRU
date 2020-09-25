@@ -28,6 +28,7 @@ import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
+
 export default Basket = ({ navigation, route }) => {
 
     const userPhoneNumber = auth().currentUser;
@@ -72,43 +73,21 @@ export default Basket = ({ navigation, route }) => {
     const [waffleSyrup, setWaffleSyrup] = useState(null);
     //discount
     const [useCoupon, setUseCoupon] = useState(null);
+    const [couponNum, setCouponNum] = useState(0);
 
     //modal
     const [modalVisible, setModalVisible] = useState(false);
     const [optionVisible, setOptionVisible] = useState(false);
 
+
     function GetCouponNum() {
-        var count=0;
-        console.log("count : "+ count);
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
             snapshot.forEach((childSnapshot) => {
-                // var childData = childSnapshot.val().shopInfo;
-                count++;
-                console.log('i값은 : ' + count);
-                console.log('hello');
-                if (count <= 15) {
-                    if (count >= 10) {
-                        return (
-                            <View>
-                                                               <Picker.Item label='10잔 모았네요 !' value={2000} />
-                                                               </View>
-                        )
-                    }
-                    else {
-                        return (
-                                <Picker.Item label='쿠폰이 부족해요 분발해주세요!' value={2600} />
-                        )
-                    }
-                }
-                else {
-                    return (
-                            <Picker.Item label='15잔 모았네요 !' value={2600} />
-                    )
-                }
-
+                setCouponNum(couponNum + 1);
                 //이거 state에 저장해서 쿠폰으로 결제할 때 쓸 수 있도록!
             });
         })
+        return couponNum;
     }
 
     function ChooseDetail(props) {
@@ -1019,7 +998,6 @@ export default Basket = ({ navigation, route }) => {
                                         <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
                                         <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
                                     </View>
-
                                     <Picker
                                         style={{ width: '53%', height: 80, marginHorizontal: 20, justifyContent: 'center' }}
                                         selectedValue={useCoupon}
@@ -1028,9 +1006,23 @@ export default Basket = ({ navigation, route }) => {
                                         }}
                                         mode='dropdown'
                                         itemStyle={{ fontSize: 12, marginHorizontal: 20 }}
-
                                     >
-                                        <GetCouponNum  />
+                                        <GetCouponNum />
+                                        {
+                                            couponNum === 10 ?
+                                                <>
+                                                    <Picker.Item label='10잔 모았네요 !' value={2600} />
+                                                </>
+                                                :
+                                                couponNum === 15 ?
+                                                    <>
+                                                        <Picker.Item label='10잔 사용!' value={2600} />
+                                                        <Picker.Item label='15잔 모았네요!' value={2600} />
+                                                    </>
+                                                    :
+                                                    <Picker.Item label='사용 가능한 쿠폰 없음' value={2600} />
+
+                                        }
                                     </Picker>
                                 </View>
                                 <TouchableOpacity
