@@ -42,33 +42,9 @@ const shopData = [
     {
         id: 'favorite_shop',
         title: '즐겨찾기',
-        location: ' ',
+        location: '줄겨찾기 및 최근주문',
     },
 ];
-
-function putpicture(id){
-    switch (id) { 
-        case 'main_outdoor':
-            return require('../../../image/shop-image/outdoor.png');
-            break;
-        case 'singong_1f':
-            return require('../../../image/shop-image/shingong.png');
-            break;
-        case 'hyehwa_roof':
-            return require('../../../image/shop-image/hyehwa.png');
-            break;
-        case 'economy_outdoor':
-            return require('../../../image/shop-image/economy.png');
-            break;
-        case 'munhwa_1f':
-            return require('../../../image/shop-image/munhwa.png');
-            break;
-        case 'favorate_shop':
-            return require('../../../image/shop-image/shop.png');
-            break;
-        }
-}
-
 
 class Item extends React.Component {
 
@@ -117,7 +93,6 @@ class Item extends React.Component {
                             marginVertical : 2,
                             marginTop: 15
                         }} />
-                    {/* <Image style = {clientStyles.image} source={putpicture(id)}/> */}
                     <Text style={clientStyles.itemDesc}>{title}</Text>
                     <Text style={clientStyles.itemSubDesc}>{location}</Text>
                 </TouchableOpacity>
