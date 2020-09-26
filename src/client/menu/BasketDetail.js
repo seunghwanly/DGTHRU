@@ -4,7 +4,9 @@ import {
     Text,
     Image,
     Alert,
+    ScrollView,
     TouchableOpacity,
+    FlatList,
     StatusBar
 } from 'react-native';
 import { basketStyles } from './styles';
@@ -13,34 +15,10 @@ import ImageLinker from '../../utils/ImageLinker';
 //Firebase Ref
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import moment from 'moment';
+import { handleDeleteOrder, handleOrder } from '../../utils/DatabaseRef';
 
 import { enableScreens } from 'react-native-screens';
 enableScreens();
-
-
-async function handleOrder(shopInfo, data) {
-    var currentTime = moment().format('YYYY_MM_DD');
-    //pop     
-    await database().ref('user/basket/' + auth().currentUser.uid + '/group').remove();
-    //push
-    await database()
-        .ref('shops/' + shopInfo + '/' + currentTime + '/' + auth().currentUser.phoneNumber + '/' + 'group')
-        .set(data);
-}
-
-
-async function handleDeleteOrder(orderKey) {
-
-    console.log('>> orderKey : ' + orderKey);
-
-    var orderPath = 'user/basket/' + auth().currentUser.uid + '/group/' + orderKey;
-
-    await database()
-        .ref(orderPath)
-        .remove();
-
-}
 
 export default class BasketDetail extends React.Component {
 
@@ -53,13 +31,27 @@ export default class BasketDetail extends React.Component {
             orderData: [],
             propsData: [],
             needRefresh: false,
+            chooseCoupon: null,
+            totalCost: 0
         }
-        console.log('> constructor : '+ this.props.route.params.shopInfo);
+        console.log('> constructor : ' + this.props.route.params.shopInfo);
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
     componentDidMount() {
+        this.fetchData();
+        this.chosenCoupon();
+    }
 
+    shouldComponentUpdate(nextState) {
+        return this.state !== nextState;
+    }
+
+    componentWillUnmount() {
+        this._firebaseCommonDatabase.off();
+    }
+
+    fetchData() {
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
 
@@ -87,22 +79,56 @@ export default class BasketDetail extends React.Component {
             })
     }
 
-    shouldComponentUpdate(nextState) {
-        return this.state.orderData !== nextState.orderData;
+    chosenCoupon = (name, _totalCost) => {
+        if (name === '10잔') { // 10잔 짜리
+            console.log('10 cups');
+            this.setState({
+                totalCost: _totalCost - 2000,
+                chooseCoupon: name,
+            });
+        } else if (name === '15잔') {  // 15잔 짜리
+            console.log('15 cups');
+            this.setState({
+                totalCost: _totalCost - 2600,
+                chooseCoupon: name
+            });
+        } else { // 쿠폰없음
+            console.log('no coupons');
+            this.setState({
+                totalCost: _totalCost - 0,
+                chooseCoupon: name
+            });
+        }
     }
+    
+    updateAndSendData(shopInfo) {
+        //set data fixed
+        if(this.state.chooseCoupon !== null){
+            if(this.state.chooseCoupon === '10잔')
+                this.state.propsData[0].cost -= 2000;
+            else if(this.state.chooseCoupon === '15잔')
+                this.state.propsData[0].cost -= 2600;
+        }
 
-    componentWillUnmount() {
-        this._firebaseCommonDatabase.off();
+        this.props.navigation.navigate('Paying',
+            {
+                totalCost: this.state.totalCost,
+                quantity: this.state.orderData.length,
+                shopInfo: shopInfo,
+                itemData: JSON.stringify(this.state.propsData),
+                coupon: this.state.chooseCoupon
+            }
+        );
     }
 
     render() {
 
         // console.log('\n\n> BasketDetail : ' + JSON.stringify(this.state.orderData));
         // total cost
-        var totalCost = 0;
+        var _totalCost = 0;
         this.state.orderData.map(item => {
-            totalCost += Number(item.value.cost) * Number(item.value.options.count);
-        })
+            _totalCost += Number(item.value.cost) * Number(item.value.options.count);
+        });
 
         // is items are in same shops?
         var sameShopInfo = '';
@@ -128,126 +154,173 @@ export default class BasketDetail extends React.Component {
                 sameShopInfo = item.value.orderInfo.shopInfo;
             })
         }
-        
+
 
         if (this.state.orderData.length > 0) {
             return (
                 <>
-                <StatusBar barStyle='dark-content'/>
-                    <View style={[basketStyles.background, { backgroundColor: '#fff' }]}>
-                        <View style={[basketStyles.subBackground, {}]}>
+                    <StatusBar barStyle='light-content' />
+
+                    <View style={[basketStyles.background, { backgroundColor: '#182335' }]}>
+                        <ScrollView>
+                            <View style={[basketStyles.subBackground, {}]}>
+                                {
+                                    this.state.orderData.map(item => {
+                                        //key 값 부여하기 !
+                                        return (
+                                            <View style={basketStyles.detailWrapper}>
+                                                <ImageLinker name={item.value.orderInfo.shopInfo} style={[basketStyles.smallRadiusIcon, { alignSelf: 'center' }]} />
+                                                <View style={{ padding: 5 }}>
+                                                    <View style={[basketStyles.detailItemNameWrapper, {}]}>
+                                                        <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon]} />
+                                                        <Text style={basketStyles.smallRadiusText}> {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
+                                                    </View>
+                                                    <View style={{ paddingStart: 5 }}>
+                                                        <View style={{ flexDirection: "row", width: 200 }}>
+                                                            <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.cup} / </Text>
+                                                            <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.type} / </Text>
+                                                            <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.size} </Text>
+                                                        </View>
+                                                        <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 4 }}>추가사항 </Text>
+                                                        <View style={{ flexDirection: "row", width: 200 }}>
+                                                            <Text style={{ fontSize: 10 }}>샷 추가 : {item.value.options.shotNum} / </Text>
+                                                            <Text style={{ fontSize: 10 }}>시럽 추가 : {item.value.options.syrup} / </Text>
+                                                            <Text style={{ fontSize: 10 }}>휘핑크림 추가 : {item.value.options.whipping > 0 ? item.value.options.whipping : 0} </Text>
+                                                        </View>
+                                                        <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 4 }}>추가금액 </Text>
+                                                        <View style={{ flexDirection: "row", width: 200 }}>
+                                                            <Text style={{ fontSize: 10 }}>{item.value.options.addedCost}원</Text>
+                                                        </View>
+                                                        {
+                                                            item.value.options.offers.length > 0 ?
+                                                                <Text style={{ fontSize: 10 }}>요청사항 : {item.value.options.offers} </Text>
+                                                                :
+                                                                <></>
+                                                        }
+                                                    </View>
+                                                </View>
+                                                <View style={basketStyles.detailItemInfoWrapper}>
+                                                    <Text style={{ fontSize: 12, marginVertical: 2 }}>{item.value.options.count}개</Text>
+                                                    <Text style={{ fontSize: 12, marginVertical: 2, fontWeight: '600' }}>{(Number(item.value.cost) * Number(item.value.options.count)).toLocaleString()}원</Text>
+                                                </View>
+                                                <TouchableOpacity
+                                                    style={basketStyles.detailImgButton}
+                                                    onPress={() => {
+                                                        Alert.alert(
+                                                            'DGTHRU 알림', '삭제하시겠습니까 ?',
+                                                            [
+                                                                {
+                                                                    text: '삭제',
+                                                                    onPress: () => handleDeleteOrder(item.key, true)
+                                                                },
+                                                                {
+                                                                    text: '취소', onPress: () => console.log('cancel delete'), style: "cancel"
+                                                                }
+                                                            ]
+                                                        )
+                                                    }}>
+                                                    <Image
+                                                        style={{ width: 20, height: 20 }}
+                                                        resizeMode='cover'
+                                                        source={require('../../../image/trash-outline.png')}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </View>
+                        </ScrollView>
+                        <View style={
                             {
-                                this.state.orderData.map(item => {
-                                    //key 값 부여하기 !
-                                    return (
-                                        <View style={basketStyles.detailWrapper}>
-                                            <ImageLinker name={item.value.orderInfo.shopInfo} style={[basketStyles.smallRadiusIcon, { alignSelf: 'center' }]} />
-                                            <View style={{ padding: 5 }}>
-                                                <View style={[basketStyles.detailItemNameWrapper, {}]}>
-                                                    <ImageLinker name={item.value.name} style={[basketStyles.smallRadiusIcon]} />
-                                                    <Text style={basketStyles.smallRadiusText}> {item.value.name} {item.value.options.selected !== undefined ? ', ' + item.value.options.selected : ' '}</Text>
-                                                </View>
-                                                <View style={{ paddingStart: 5 }}>
-                                                    <View style={{ flexDirection: "row", width: 200 }}>
-                                                        <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.cup} / </Text>
-                                                        <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.type} / </Text>
-                                                        <Text style={{ fontSize: 12, fontWeight: '600' }}>{item.value.options.size} </Text>
-                                                    </View>
-                                                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 4 }}>추가사항 </Text>
-                                                    <View style={{ flexDirection: "row", width: 200 }}>
-                                                        <Text style={{ fontSize: 10 }}>샷 추가 : {item.value.options.shotNum} / </Text>
-                                                        <Text style={{ fontSize: 10 }}>시럽 추가 : {item.value.options.syrup} / </Text>
-                                                        <Text style={{ fontSize: 10 }}>휘핑크림 추가 : {item.value.options.whipping > 0 ? item.value.options.whipping : 0} </Text>
-                                                    </View>
-                                                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginTop: 4 }}>추가금액 </Text>
-                                                    <View style={{ flexDirection: "row", width: 200 }}>
-                                                        <Text style={{ fontSize: 10 }}>{item.value.options.addedCost}원</Text>
-                                                    </View>
-                                                    {
-                                                        item.value.options.offers.length > 0 ?
-                                                            <Text style={{ fontSize: 10 }}>요청사항 : {item.value.options.offers} </Text>
-                                                            :
-                                                            <></>
-                                                    }
-                                                </View>
-                                            </View>
-                                            <View style={basketStyles.detailItemInfoWrapper}>
-                                                <Text style={{ fontSize: 12, marginVertical: 2 }}>{item.value.options.count}개</Text>
-                                                <Text style={{ fontSize: 12, marginVertical: 2, fontWeight: '600' }}>{(Number(item.value.cost) * Number(item.value.options.count)).toLocaleString()}원</Text>
-                                            </View>
-                                            <TouchableOpacity
-                                                style={basketStyles.detailImgButton}
-                                                onPress={() => {
-                                                    Alert.alert(
-                                                        'DGTHRU 알림', '삭제하시겠습니까 ?',
-                                                        [
-                                                            {
-                                                                text: '삭제',
-                                                                onPress: () => handleDeleteOrder(item.key)
-                                                            },
-                                                            {
-                                                                text: '취소', onPress: () => console.log('cancel delete'), style: "cancel"
-                                                            }
-                                                        ]
-                                                    )
-                                                }}>
-                                                <Image
-                                                    style={{ width: 20, height: 20 }}
-                                                    resizeMode='cover'
-                                                    source={require('../../../image/trash-outline.png')}
-
-                                                />
-                                            </TouchableOpacity>
-
-                                        </View>
-                                    )
-                                })
+                                borderTopStartRadius:30, 
+                                borderTopEndRadius:30, 
+                                borderTopColor:'gray', 
+                                paddingTop:20,
+                                alignItems:'center',
+                                backgroundColor:'#fff'
                             }
+                            }>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 25,}} >
+                            <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
+                                <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
+                                <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                            </View>
+
+                            <FlatList
+                                data={['적용안함', '10잔', '15잔']}
+                                keyExtractor={item => item.key}
+                                horizontal={true}
+                                scrollEnabled={false}
+                                renderItem={({ item, index }) => {
+
+                                    const backgroundColor = item.toString()
+                                        === this.state.chooseCoupon ?
+                                        '#EEAF9D' : '#F2F2F2';
+
+                                    const color = item.toString()
+                                        === this.state.chooseCoupon ?
+                                        'white' : 'black';
+                                    return (
+
+                                        <TouchableOpacity
+                                            style={[basketStyles.basketThreeItem, { backgroundColor }]}
+                                            onPress={() => this.chosenCoupon(item, _totalCost)}
+                                        >
+                                            <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
+                                                {
+                                                    index === 0 ? item : item + '\n적용하기'
+                                                }
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )
+                                }}
+                            />
                         </View>
+
                         <View style={basketStyles.detailTotalInfoWrapper}>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>{totalCost.toLocaleString()}원</Text>
+                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
+                                {
+                                    this.state.totalCost.toString() === 'NaN' ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
+                                }원
+                            </Text>
+                        </View>
+                        <TouchableOpacity
+                            style={basketStyles.goToPayment}
+                            onPress={() => {
+                                isSameshop === true ?
+                                    Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
+                                        [
+                                            {
+                                                text: '취소', onPress: () => console.log('canceled order')
+                                            },
+                                            {
+                                                text: '확인', onPress: () =>
+                                                    [
+                                                        this.updateAndSendData(sameShopInfo)
+                                                        ,
+                                                        //pop and push
+                                                        handleOrder(sameShopInfo, this.state.propsData, true)
+                                                    ]
+                                            }
+                                        ])
+                                    :
+                                    Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
+                            }
+                            }
+                        >
+                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                        </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity
-                        style={basketStyles.goToPayment}
-                        onPress={() => {
-                            isSameshop === true ?
-                                Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
-                                    [
-                                        {
-                                            text: '취소', onPress: () => console.log('canceled order')
-                                        },
-                                        {
-                                            text: '확인', onPress: () =>
-                                                [
-                                                    this.props.navigation.navigate('Paying',
-                                                        {
-                                                            totalCost: totalCost,
-                                                            quantity: this.state.orderData.length,
-                                                            shopInfo: sameShopInfo,
-                                                            itemData: JSON.stringify(this.state.propsData)
-                                                        }
-                                                    ),
-                                                    //pop and push
-                                                    handleOrder(sameShopInfo, this.state.propsData)
-                                                ]
-                                        }
-                                    ])
-                                :
-                                Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
-                        }
-                        }
-                    >
-                        <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
-                    </TouchableOpacity>
                 </>
             );
         } //if
         else {
             return (
-                <View style={[basketStyles.background, { backgroundColor: '#fff' }]}>
-                    <Text>장바구니가 비어있어요 !</Text>
+                <View style={[basketStyles.background, { backgroundColor: '#182335' }]}>
+                    <Text style={{color:'#fff'}}>장바구니가 비어있어요 !</Text>
                 </View>
             );
         }

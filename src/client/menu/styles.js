@@ -306,14 +306,13 @@ const basketStyles = StyleSheet.create({
     },
     goToPayment: {
         backgroundColor: 'gold',
-        position:'absolute',
         alignSelf:'center',
-        bottom:50,
         borderRadius: 10,
         paddingStart: 10,
         paddingEnd: 10,
         paddingTop: 5,
         paddingBottom: 5,
+        marginBottom:40,
         width: 300
     },
     offerLayout : {

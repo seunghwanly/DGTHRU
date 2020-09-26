@@ -16,6 +16,7 @@ export function Payment({ navigation, route }) {
     const { shopInfo } = route.params;
     const { itemData } = route.params;
     const { itemKey } = route.params;
+    const { coupon } = route.params;
 
     console.log('totalCost :' + totalCost + '\tshopInfo : ' + shopInfo);
     // const { quantity } = route.params;
@@ -28,7 +29,8 @@ export function Payment({ navigation, route }) {
                 shopInfo: shopInfo,
                 itemData: itemData,
                 requestTime: moment().format('HH:mm:ss'),
-                itemKey: itemKey
+                itemKey: itemKey,
+                coupon : coupon
             });
     }
 

@@ -33,7 +33,7 @@ export default class RecentOrder extends React.Component {
 
     componentDidMount = async () => {
 
-        setTimeout(() => { this.setState({ isLoading : false })}, 1000);
+        setTimeout(() => { this.setState({ isLoading : false })}, 3000);
 
         var recentOrder = [];
 
