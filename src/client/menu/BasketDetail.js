@@ -34,7 +34,7 @@ export default class BasketDetail extends React.Component {
             chooseCoupon: null,
             totalCost: 0
         }
-        console.log('> constructor : ' + this.props.route.params.shopInfo);
+        
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
@@ -44,7 +44,7 @@ export default class BasketDetail extends React.Component {
     }
 
     shouldComponentUpdate(nextState) {
-        return this.state !== nextState;
+        return this.state.orderData !== nextState.orderData;
     }
 
     componentWillUnmount() {
@@ -54,7 +54,10 @@ export default class BasketDetail extends React.Component {
     fetchData() {
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
-
+                
+                var tempOrderJSONArray = [];
+                var tempPropsJSONArray = [];
+                var totalCostforSave = 0;
                 this.setState({ orderData: [], propsData: [] })   //상태가 바뀌어야 화면이 reload되는데 이게 지금은 최선임
 
                 var idx = 0;    // loop
@@ -67,15 +70,18 @@ export default class BasketDetail extends React.Component {
                         "value": childSnapShot.val()
                     };
 
+                    totalCostforSave += Number(childSnapShot.val().cost) * Number(childSnapShot.val().options.count);
+
                     idx++;
 
-                    this.setState({
-                        orderData: this.state.orderData.concat(tempJSON),
-                        propsData: this.state.propsData.concat(childSnapShot.val())
-                    });
-
+                    tempOrderJSONArray.push(tempJSON);
+                    tempPropsJSONArray.push(childSnapShot.val());
                 })
-
+                this.setState({
+                    orderData: tempOrderJSONArray,
+                    propsData: tempPropsJSONArray,
+                    totalCost : totalCostforSave
+                });
             })
     }
 
@@ -95,7 +101,7 @@ export default class BasketDetail extends React.Component {
         } else { // 쿠폰없음
             console.log('no coupons');
             this.setState({
-                totalCost: _totalCost - 0,
+                totalCost: _totalCost,
                 chooseCoupon: name
             });
         }
@@ -113,7 +119,7 @@ export default class BasketDetail extends React.Component {
                 this.state.propsData[0].options.coupon = this.state.chooseCoupon;
             }
         }
-
+        
         this.props.navigation.navigate('Paying',
             {
                 totalCost: this.state.totalCost,
@@ -133,6 +139,7 @@ export default class BasketDetail extends React.Component {
         this.state.orderData.map(item => {
             _totalCost += Number(item.value.cost) * Number(item.value.options.count);
         });
+        console.log('> basketdetail totalcost : ' + _totalCost);
 
         // is items are in same shops?
         var sameShopInfo = '';
@@ -286,7 +293,7 @@ export default class BasketDetail extends React.Component {
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
                                 {
-                                    this.state.totalCost.toString() === 'NaN' ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
+                                    this.state.totalCost === 0 ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
                                 }원
                             </Text>
                         </View>

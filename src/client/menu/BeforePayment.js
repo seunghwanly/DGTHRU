@@ -67,7 +67,7 @@ export default class BeforePayment extends React.Component {
                 alignItems: "center",
                 backgroundColor: '#fff',
             }}>
-                <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight: '800' }]}>주문내역확인-단일건결제</Text>
+                <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight: '800' }]}>주문내역확인 : 단품결제</Text>
                 <ImageLinker name={shopInfo} style={
                     {
                         width: 100,
@@ -88,14 +88,14 @@ export default class BeforePayment extends React.Component {
                     alignItems: 'stretch'
                 }}>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>상품명 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{itemDataJSON.name}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '40%' }}>상품명 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '60%' }}>{itemDataJSON.name}</Text>
                     </View>
                     {
                         itemDataJSON.options.selected !== null ?
                             <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>세부메뉴 : </Text>
-                                <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{itemDataJSON.options.selected}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '40%' }}>세부메뉴 : </Text>
+                                <Text style={{ fontSize: 14, textAlign: 'right', width: '60%' }}>{itemDataJSON.options.selected}</Text>
                             </View>
                             :
                             <></>
@@ -104,56 +104,56 @@ export default class BeforePayment extends React.Component {
                     {
                         itemDataJSON.options.hotOrIced !== null ?
                             <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
-                                <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.type}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
+                                <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.type}</Text>
                             </View>
                             :
                             <></>
                     }
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{itemDataJSON.cost.toLocaleString()}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '60%' }}>{itemDataJSON.cost.toLocaleString()}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.count}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.count}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.cup}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.cup}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>사이즈 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.size}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>사이즈 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.size}</Text>
                     </View>
 
                     <View style={{ width: '100%', borderWidth: 1, borderStyle: 'dotted', marginVertical: 5 }} />
 
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>샷 추가 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.shotNum}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>샷 추가 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.shotNum}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>시럽 추가 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.syrup}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>시럽 추가 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.syrup}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>휘핑 추가 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>휘핑 추가 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>
                             {
                                 itemDataJSON.options.whipping !== null ? itemDataJSON.options.whipping : '없음'
                             }
                         </Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>추가금액 : </Text>
-                        <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.addedCost.toLocaleString()}원</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>추가금액 : </Text>
+                        <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.addedCost.toLocaleString()}원</Text>
                     </View>
                     {
                         itemDataJSON.options.offers.length > 0 ?
                             <View style={{ flexDirection: 'column', width: '100%', marginVertical: 2 }}>
-                                <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
-                                <Text style={{ fontSize: 15, textAlign: 'left', width: '100%', marginTop: 15, color: 'dimgray' }}>{itemDataJSON.options.offers}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
+                                <Text style={{ fontSize: 14, textAlign: 'left', width: '100%', marginTop: 15, color: 'dimgray' }}>{itemDataJSON.options.offers}</Text>
                             </View>
                             :
                             <></>
@@ -219,7 +219,7 @@ export default class BeforePayment extends React.Component {
                             }), handleOrder(shopInfo,itemDataJSON, false)
                         ]}
                     >
-                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제</Text>
+                        <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 14 }]}>바로결제</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[basketStyles.goToBasket, { width: 120 }]}

@@ -839,7 +839,7 @@ export default Basket = ({ navigation, route }) => {
                                 
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(true), alert('담겼습니다!')] : console.log('handleOrder(error)')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>
@@ -864,7 +864,7 @@ export default Basket = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-                        onPress={() => handleOrder(item) === true ? sendOrder(false) : alert('ERROR')}
+                        onPress={() => handleOrder(item) === true ? sendOrder(false) : console.log('handleOrder(error)')}
                     >
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                     </TouchableOpacity>
