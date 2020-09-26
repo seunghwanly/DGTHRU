@@ -104,10 +104,14 @@ export default class BasketDetail extends React.Component {
     updateAndSendData(shopInfo) {
         //set data fixed
         if(this.state.chooseCoupon !== null){
-            if(this.state.chooseCoupon === '10잔')
+            if(this.state.chooseCoupon === '10잔') {
                 this.state.propsData[0].cost -= 2000;
-            else if(this.state.chooseCoupon === '15잔')
+                this.state.propsData[0].options.coupon = this.state.chooseCoupon;
+            }
+            else if(this.state.chooseCoupon === '15잔'){
                 this.state.propsData[0].cost -= 2600;
+                this.state.propsData[0].options.coupon = this.state.chooseCoupon;
+            }
         }
 
         this.props.navigation.navigate('Paying',

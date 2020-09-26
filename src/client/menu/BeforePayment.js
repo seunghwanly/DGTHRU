@@ -201,7 +201,7 @@ export default class BeforePayment extends React.Component {
                     <View style={{ flexDirection: 'row', width: '100%', paddingTop: 15 }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left', width: '50%' }}>총 결제금액 : </Text>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>
-                            {this.state.totalCost > 0 ? this.state.totalCost : 0}원
+                            {this.state.totalCost > 0 ? this.state.totalCost.toLocaleString(): 0}원
                             </Text>
                     </View>
                 </View>
@@ -215,7 +215,7 @@ export default class BeforePayment extends React.Component {
                                 totalCost : this.state.totalCost > 0 ? this.state.totalCost : 0,
                                 shopInfo:shopInfo,
                                 itemData:JSON.stringify(itemDataJSON),
-                                coupon:this.state.chooseCoupon
+                                coupon:this.state.chooseCoupon !== null ? this.state.chooseCoupon : '-'
                             }), handleOrder(shopInfo,itemDataJSON, false)
                         ]}
                     >

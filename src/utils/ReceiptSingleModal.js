@@ -48,6 +48,18 @@ export default class RecieptSingleModal extends React.Component {
                         <Text style={RecieptModal.recieptItemTextRight}>{this.props.item.cost.toLocaleString()}원</Text>
                     </View>
 
+                    <View style={RecieptModal.orderTimeWrapper}>
+                        <Text style={RecieptModal.orderTimeTextLeft}>쿠폰사용여부 : </Text>
+                        <Text style={RecieptModal.orderTimeTextRight}>
+                        {
+                            this.props.item.options.coupon === '-'?
+                                '사용안함'
+                                :
+                                this.props.item.options.coupon + '쿠폰 사용됨'
+                        }
+                        </Text>
+                    </View>
+
                     <View style={RecieptModal.totalCostWrapper}>
                         <Text style={RecieptModal.totalCostTextLeft}>총 결제금액 : </Text>
                         <Text style={RecieptModal.totalCostTextRight}>

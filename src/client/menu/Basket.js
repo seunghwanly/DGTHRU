@@ -240,7 +240,7 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    sendOrder = (userPhoneNumber, isMoreThanOne) => {
+    sendOrder = (isMoreThanOne) => {
 
         var forPush = {
             name: item.name,
@@ -272,25 +272,6 @@ export default Basket = ({ navigation, route }) => {
         }
         
         if (isMoreThanOne === false) {
-            // // 1.오너와 함께 공유하는 DB
-            // const orderRef = database()
-            //     .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-            //     .push();
-
-            // orderRef
-            //     .set(forPush)
-            //     .then(() => 
-            //         [
-            //             console.log('Updated Shops DB'),
-            //             // navigate to KaokaoPay.js
-            //             navigation.navigate('Paying', {
-            //                 totalCost: (item.cost + handleOptionCost()) * count,
-            //                 shopInfo: shopInfo,
-            //                 itemData: JSON.stringify(forPush)
-            //             })
-            //         ]
-            //     )
-
             // 1. 사용자 전용 장바구니안에 group으로 넣지않음
             const orderRef = database()
                     .ref('user/basket/'+auth().currentUser.uid)
@@ -704,8 +685,12 @@ export default Basket = ({ navigation, route }) => {
                                                                         onPress={() => {
                                                                             if (whippingCream == null)
                                                                                 setWhippingCream(item.toString());
-                                                                            else
-                                                                                setWhippingCream(null);
+                                                                            else{
+                                                                                if(item.toString() !== whippingCream)
+                                                                                    setWhippingCream(item.toString());
+                                                                                else
+                                                                                    setWhippingCream(null);
+                                                                            }
                                                                         }}
                                                                         style={[basketStyles.basketThreeItem, { backgroundColor }]}>
                                                                         <Text style={{ color }}> {item} </Text>
@@ -808,8 +793,12 @@ export default Basket = ({ navigation, route }) => {
                                                                         onPress={() => {
                                                                             if (waffleSyrup === null)
                                                                                 setWaffleSyrup(item.toString())
-                                                                            else
-                                                                                setWaffleSyrup(null);
+                                                                            else {
+                                                                                if(item.toString() !== waffleSyrup)
+                                                                                    setWaffleSyrup(item.toString());
+                                                                                else
+                                                                                    setWaffleSyrup(null);
+                                                                            }
                                                                         }}
                                                                         style={[
                                                                             { backgroundColor },
@@ -850,7 +839,7 @@ export default Basket = ({ navigation, route }) => {
                                 
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(true), alert('담겼습니다!')] : alert('ERROR !')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>
@@ -875,7 +864,7 @@ export default Basket = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-                        onPress={() => handleOrder(item) === true ? sendOrder(userPhoneNumber, false) : alert('ERROR')}
+                        onPress={() => handleOrder(item) === true ? sendOrder(false) : alert('ERROR')}
                     >
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                     </TouchableOpacity>

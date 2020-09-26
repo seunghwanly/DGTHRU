@@ -71,6 +71,17 @@ export default class ReceiptGroupModal extends React.Component {
                         )}
                         keyExtractor={(item, index) => item.key}
                     />
+                    <View style={RecieptModal.orderTimeWrapper}>
+                        <Text style={RecieptModal.orderTimeTextLeft}>쿠폰사용여부 : </Text>
+                        <Text style={RecieptModal.orderTimeTextRight}>
+                        {
+                            this.props.item.group[0].options.coupon !== undefined ?
+                                this.props.item.group[0].options.coupon + '쿠폰 사용됨'
+                                :
+                                '사용안함'
+                        }
+                        </Text>
+                    </View>
                     <View style={RecieptModal.totalCostWrapper}>
                         <Text style={RecieptModal.totalCostTextLeft}>총 결제금액 : </Text>
                         <Text style={RecieptModal.totalCostTextRight}>

@@ -86,7 +86,7 @@ export default class RecentOrder extends React.Component {
                 })
             }).then(() => {
                 //데이터베이스에서 item 가져오기
-                recentOrder.forEach((item) => {
+                recentOrder.reverse().forEach((item) => {
                     database()
                         .ref('menu/' + item.shopInfo + '/' + item.type)
                         .once('value', snapshot => {
@@ -109,6 +109,7 @@ export default class RecentOrder extends React.Component {
                             })
                         }).then(() => {
                             // 중복된 값을 삭제
+
                             console.log('fetched data');
                         })
                 })
@@ -140,6 +141,10 @@ export default class RecentOrder extends React.Component {
                         메뉴
                         </Text>
                 </View>
+                {
+                    this.state.data.length > 0 ? 
+
+                
                 <ScrollView horizontal={true} style={{ paddingStart:'5%'}} showsHorizontalScrollIndicator={false}>
                 {
                     this.state.data.map((item, index) => {
@@ -204,6 +209,9 @@ export default class RecentOrder extends React.Component {
                     })
                 }
                 </ScrollView>
+                :
+                <Text style={{ marginVertical: 20, textAlign: 'center', fontSize: 14, color: '#777', fontWeight: '500' }}>최근에 주문한 메뉴가 없습니다.</Text>
+                }
             </SafeAreaView>
         )
             }

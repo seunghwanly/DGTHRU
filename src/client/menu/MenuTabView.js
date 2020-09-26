@@ -121,22 +121,26 @@ export default class TabViewExample extends React.Component {
                                             justifyContent: 'center',
                                         }}
                                         getLabelText={({ route }) => (
+                                            <>
                                             <Text style={
                                                 {
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
                                                     color: 'white',
                                                     textAlign: 'center',
-                                                    // textShadowColor:'#182335',
-                                                    // textShadowOffset : {
-                                                    //     width:1,
-                                                    //     height:1
-                                                    // },
-                                                    // textShadowRadius:2
                                                 }
                                             }>
                                                 {translateCategoryName(route.title)}
                                             </Text>
+                                            <Text style={
+                                                {
+                                                    fontSize:10,
+                                                    color:'#eee',
+                                                    textAlign:'center',
+                                                    marginTop:5
+                                                }
+                                            }>{route.title}</Text>
+                                            </>
                                         )}
                                         tabStyle={{ width: 90, }}
                                         scrollEnabled={true}

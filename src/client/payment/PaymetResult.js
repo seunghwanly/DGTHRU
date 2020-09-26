@@ -330,7 +330,7 @@ export default class PaymentResult extends React.Component {
 
                     console.log('menu ready !');
                     Alert.alert(
-                        'DGHTRU 알림', '메뉴가 준비되었습니다 ! 직원에게 위 화면을 보여주세요 !',
+                        'DGHTRU 알림', '메뉴가 준비되었습니다 !\n 직원에게 위 화면을 보여주세요 !',
                         [
                             {
                                 text: '확인',
