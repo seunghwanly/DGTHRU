@@ -749,18 +749,18 @@ export default Basket = ({ navigation, route }) => {
                                                                 === cupSize ?
                                                                 'white' : 'black';
 
-                                                            return (
-                                                                <TouchableOpacity
-                                                                    onPress={() => setCupSize(item.toString())}
-                                                                    style={[{ backgroundColor }, basketStyles.basketTwoItem]}>
-                                                                    {
-                                                                        item === '사이즈업' ?
-                                                                            <>
-                                                                                <Text style={{ color }}>
-                                                                                    {item}
-                                                                                </Text>
-                                                                                <Text style={{ color, fontSize: 10, marginTop: 2 }}>
-                                                                                    + {handleSizeUp()}원
+                                                    return (
+                                                        <TouchableOpacity
+                                                            onPress={() => setCupSize(item.toString())}
+                                                            style={[{ backgroundColor }, basketStyles.basketTwoItem]}>
+                                                            {
+                                                                item === '사이즈업' ?
+                                                                    <>
+                                                                        <Text style={{ color }}>
+                                                                            {item}
+                                                                        </Text>
+                                                                        <Text style={{ color, fontSize:10, marginTop:2 }}>
+                                                                            + {handleSizeUp().toLocaleString()}원
                                                                         </Text>
                                                                             </>
                                                                             :
@@ -788,20 +788,31 @@ export default Basket = ({ navigation, route }) => {
                                 <ChooseDetail subMenu={item} />
 
 
-                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', padding: 1 }]}>
+
+                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', padding:5, backgroundColor:'#eee'}]}>
                                     <TouchableOpacity
-                                        style={{ width: '100%', flexDirection: 'row', padding: 10 }}
+                                        style={{ width: '100%', flexDirection: 'row', padding: 10}}
                                         onPress={() => { optionVisible === false ? setOptionVisible(true) : setOptionVisible(false) }}
                                     >
                                         <Text style={{ color: '#182335', fontWeight: 'bold', textAlign: 'left', width: '80%' }}>선택사항</Text>
-                                        <Text style={{ color: '#182335', fontWeight: 'bold', textAlign: 'right', width: '20%' }}>▼</Text>
+                                        {
+                                            optionVisible === false ? 
+
+                                                <View style={{ width: '20%' }}>
+                                                    <Image source={require('../../../image/chevron-forward-outline.png')} style={{ alignSelf: 'flex-end', width: 20, height: 20 }} resizeMode='cover' />
+                                                </View>
+                                                :
+                                                <View style={{ width: '20%' }}>
+                                                    <Image source={require('../../../image/chevron-down-outline.png')} style={{ alignSelf: 'flex-end', width: 20, height: 20 }} resizeMode='cover' />
+                                                </View>
+                                        }
                                     </TouchableOpacity>
 
                                     {
                                         type === 'drink' && optionVisible === true ?
                                             <>
 
-                                                <View style={basketStyles.basketOptionWrapper}>
+                                                <View style={[basketStyles.basketOptionWrapper,{paddingHorizontal:5, width:330}]}>
                                                     <View style={basketStyles.basketPreferOptionWrapper}>
                                                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>에스프레소 샷 추가{'\n'}(+500원)</Text>
                                                         <Text style={{ fontSize: 11, color: 'gray', textAlign: 'center', marginBottom: 5 }}>기본에서 추가됩니다.</Text>
@@ -814,7 +825,7 @@ export default Basket = ({ navigation, route }) => {
                                                     </View>
                                                 </View>
 
-                                                <View style={basketStyles.basketOptionWrapper}>
+                                                <View style={[basketStyles.basketOptionWrapper,{paddingHorizontal:5, width:330}]}>
                                                     <View style={basketStyles.basketPreferOptionWrapper}>
                                                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>시럽 추가{'\n'}(+500원)</Text>
                                                         <Text style={{ fontSize: 11, color: 'gray', textAlign: 'center', marginBottom: 5 }}>기본에서 추가됩니다.</Text>
@@ -827,7 +838,7 @@ export default Basket = ({ navigation, route }) => {
                                                     </View>
                                                 </View>
 
-                                                <View style={basketStyles.basketOptionWrapper}>
+                                                <View style={[basketStyles.basketOptionWrapper,{paddingHorizontal:5, width:330}]}>
                                                     <View style={[basketStyles.basketPreferOptionWrapper, { marginStart: 2 }]}>
                                                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>휘핑크림 추가{'\n'}(+500원)</Text>
                                                         <Text style={{ fontSize: 11, color: 'gray', textAlign: 'center', marginBottom: 5 }}>기본에서 추가됩니다.</Text>
@@ -872,8 +883,8 @@ export default Basket = ({ navigation, route }) => {
                                     }
                                     {
                                         type === 'drink' && categoryName === 'Latte' ?
-                                            <>
-                                                <View style={[basketStyles.basketOptionWrapper, { justifyContent: 'flex-start' }]}>
+                                        <>
+                                                <View style={[basketStyles.basketOptionWrapper, { justifyContent: 'flex-start', paddingHorizontal:5, width:330 }]}>
                                                     <View style={[basketStyles.basketOptionDesc, { width: '80%' }]}>
                                                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>스팀우유 추가{'\n'}(+2300원)</Text>
                                                     </View>
@@ -903,9 +914,10 @@ export default Basket = ({ navigation, route }) => {
                                     {   // 와플 크림 추가
                                         type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
-                                                <View style={[basketStyles.basketOptionWrapper, { justifyContent: 'flex-start' }]}>
-                                                    <View style={[basketStyles.basketOptionDesc, { width: '80%' }]}>
-                                                        <Text style={{ fontSize: 12, fontWeight: 'bold' }}>생크림 추가{'\n'}(+500원)</Text>
+
+                                                <View style={[basketStyles.basketOptionWrapper, {justifyContent:'flex-start', paddingHorizontal:5, width:330}]}>
+                                                    <View style={[basketStyles.basketOptionDesc,{width:'80%'}]}>
+                                                        <Text style={{ fontSize: 12, fontWeight:'bold'}}>생크림 추가{'\n'}(+500원)</Text>
                                                     </View>
                                                     <TouchableOpacity
                                                         onPress={() => {
@@ -933,7 +945,7 @@ export default Basket = ({ navigation, route }) => {
                                     {   // 와플 시럽 추가
                                         type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
-                                                <View style={basketStyles.basketOptionWrapper}>
+                                                <View style={[basketStyles.basketOptionWrapper,{paddingHorizontal:5, width:330}]}>
                                                     <View style={basketStyles.basketOptionDesc}>
                                                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>시럽 추가{'\n'}(+500원)</Text>
                                                     </View>
@@ -978,7 +990,8 @@ export default Basket = ({ navigation, route }) => {
                                             <></>
                                     }
                                     <>
-                                        <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', marginBottom: 5 }]} >
+
+                                        <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', marginBottom:5, paddingHorizontal:5, width:330 }]} >
                                             <View style={basketStyles.basketPreferOptionWrapper}>
                                                 <Text style={{ fontSize: 12, fontWeight: 'bold' }}>요청사항 (15자이내)</Text>
                                             </View>
@@ -993,7 +1006,7 @@ export default Basket = ({ navigation, route }) => {
                                         </View>
                                     </>
                                 </View>
-                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'row', marginVertical: 5 }]} >
+                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'row', marginVertical: 5, }]} >
                                     <View style={basketStyles.basketOptionDesc}>
                                         <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
                                         <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
