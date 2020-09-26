@@ -16,19 +16,22 @@ export function Payment({ navigation, route }) {
     const { shopInfo } = route.params;
     const { itemData } = route.params;
     const { itemKey } = route.params;
+    const { coupon } = route.params;
 
     console.log('totalCost :' + totalCost + '\tshopInfo : ' + shopInfo);
     // const { quantity } = route.params;
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
+        console.log('> Kakaopay : ' + JSON.stringify(response));
         navigation.replace('Result',
             {
                 response: response,
                 shopInfo: shopInfo,
                 itemData: itemData,
                 requestTime: moment().format('HH:mm:ss'),
-                itemKey: itemKey
+                itemKey: itemKey,
+                coupon : coupon
             });
     }
 

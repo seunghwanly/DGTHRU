@@ -74,10 +74,22 @@ export const translateCategoryName = name => {
             return "프라푸치노";
         case "Fresh Juice":
             return "생과일주스";
+        case "Fruit Juice":
+            return "생과일주스";
         case "Juice":
             return "주스";
         case "Ade":
             return "에이드";
+        case "Cold Brew":
+            return "콜드브루";
+        case "SandWich":
+            return "샌드위치";
+        case "Bakery":
+            return "베이커리";
+        case "Bagel":
+            return "베이글";
+        case "Waffle":
+            return "와플";
         default:
             return "뭘까요?";
     }

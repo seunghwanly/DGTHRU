@@ -25,6 +25,7 @@ import Favorites from './menu/Favorites';
 //Bakset
 import Basket from './menu/Basket';
 import BasketDetail from './menu/BasketDetail';
+import BeforePayment from './menu/BeforePayment';
 
 //Payment
 import KakaoPay from './payment/KakaoPay';
@@ -59,7 +60,8 @@ const menuScreen = {
     Menu: Menu,
     MenuTabView: MenuTabview,
     MenuDetail: MenuDetail,
-    SelectMenu: Basket
+    SelectMenu: Basket,
+    BeforePayment: BeforePayment
 };
 
 const payScreen = {
@@ -76,7 +78,7 @@ const supervisorScreens = {
 };
 
 export default StackContainer = ({ navigation }) => {
-    
+
     // Set an initializing state whilst Firebase connects
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState(null);
@@ -103,12 +105,12 @@ export default StackContainer = ({ navigation }) => {
     if (user) {
         console.log('current user : ' + user.phoneNumber);
         return (
-            <Stack.Navigator 
-                initialRouteName={user.phoneNumber === '+821011112222' ? 'SupervisorShops' : 'Shops'} 
+            <Stack.Navigator
+                initialRouteName={user.phoneNumber === '+821011112222' ? 'SupervisorShops' : 'Shops'}
                 screenOptions={{
                     headerTitle: 'DONGGUCKS.',
                 }}
-                >
+            >
                 {Object.entries({
                     ...IntroScreen, ...commonScreen, ...menuScreen, ...payScreen, ...supervisorScreens
                 }).map(([name, component]) => (
@@ -118,9 +120,9 @@ export default StackContainer = ({ navigation }) => {
                             ({ navigation }) => ({
 
                                 headerRight: () => {
-                                    if ( name === "Shops" || name === "MenuTabView" || name === "Menu" || 
-                                         name === "MenuDetail" || name === "SelectMenu" || name === "Result" ||
-                                         name === "Favorites") {
+                                    if (name === "Shops" || name === "MenuTabView" || name === "Menu" ||
+                                        name === "MenuDetail" || name === "SelectMenu" || name === "Result" ||
+                                        name === "Favorites") {
 
                                         return (
                                             <HeaderRight navigation={navigation} page={name} />
@@ -140,28 +142,29 @@ export default StackContainer = ({ navigation }) => {
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
                                                     name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' ||
-                                                    name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ||
-                                                    name === 'SupervisorOrderList' ?
+                                                        name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ||
+                                                        name === 'SupervisorOrderList' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
                                                             // onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                                                             onPress={() => [navigation.goBack(), setRefresh(true)]}
                                                         >
-                                                        {
-                                                            name === 'MenuTabView' || name === "Result" || name === 'SupervisorOrderList' ?
-                                                            <Image
-                                                                style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
-                                                                resizeMode='cover'
-                                                                source={require('../../image/chevron-back-white.png')}
-                                                            />
-                                                            :
-                                                            <Image
-                                                                style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
-                                                                resizeMode='cover'
-                                                                source={require('../../image/chevron-back-outline.png')}
-                                                            />
-                                                        }
+                                                            {
+                                                                name === 'MenuTabView' || name === "Result" || name === 'SupervisorOrderList' 
+                                                                || name === 'Basket'?
+                                                                    <Image
+                                                                        style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
+                                                                        resizeMode='cover'
+                                                                        source={require('../../image/chevron-back-white.png')}
+                                                                    />
+                                                                    :
+                                                                    <Image
+                                                                        style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
+                                                                        resizeMode='cover'
+                                                                        source={require('../../image/chevron-back-outline.png')}
+                                                                    />
+                                                            }
                                                         </TouchableOpacity>
                                                         :
 
@@ -175,15 +178,23 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops'  || name === 'SupervisorShops' || name === "Result" ? false : true,
+                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' || name === "Result" ? false : true,
                                 // gestureEnabled: false
-                                headerStyle: { 
-                                    backgroundColor : name === "Shops" || name === 'MenuTabView' || name === 'SupervisorOrderList' ? '#182335' : name === 'Result' || name === 'Loading' ? '#eeaf9d' : '#fff', 
-                                    shadowColor:'transparent',
+                                headerStyle: {
+                                    backgroundColor:
+                                        name === "Shops" || name === 'MenuTabView' || name === 'Basket' ||
+                                            name === 'SupervisorOrderList' ?
+                                            '#182335'
+                                            :
+                                            name === 'Result' || name === 'Loading' ?
+                                                '#eeaf9d'
+                                                :
+                                                '#fff',
+                                    shadowColor: 'transparent',
                                 },
                                 headerTitleStyle: {
-                                    color : name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Loading' || name === 'SupervisorOrderList' ? '#fff' : '#000',
-                                    fontWeight:'bold',
+                                    color: name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Basket' || name === 'Loading' || name === 'SupervisorOrderList' ? '#fff' : '#000',
+                                    fontWeight: 'bold',
                                 },
                             })
                         }
@@ -196,35 +207,35 @@ export default StackContainer = ({ navigation }) => {
     else {
         console.log('null user');
         return (
-            <Stack.Navigator 
-                initialRouteName='Intro' 
+            <Stack.Navigator
+                initialRouteName='Intro'
                 screenOptions={{
-                    title:'',
+                    title: '',
                 }}>
                 {Object.entries({
                     ...IntroScreen
                 }).map(([name, component]) => (
-                    <Stack.Screen 
-                        name={name} 
-                        component={component} 
+                    <Stack.Screen
+                        name={name}
+                        component={component}
                         options={
                             ({ navigation }) => ({
                                 headerLeft: () => (
                                     name === 'Verify' ?
-                                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                                        <Image
-                                            style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
-                                            resizeMode='cover'
-                                            source={require('../../image/chevron-back-white.png')}
-                                        />
-                                    </TouchableOpacity>
-                                    :
-                                    <></>
+                                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                                            <Image
+                                                style={{ height: 20, width: 25, marginStart: 10, alignSelf: 'center' }}
+                                                resizeMode='cover'
+                                                source={require('../../image/chevron-back-white.png')}
+                                            />
+                                        </TouchableOpacity>
+                                        :
+                                        <></>
                                 ),
-                                headerStyle : { backgroundColor:'#182335', shadowColor:'transparent' }
+                                headerStyle: { backgroundColor: '#182335', shadowColor: 'transparent' }
                             })
                         }
-                        />))}
+                    />))}
             </Stack.Navigator>
         )
     }

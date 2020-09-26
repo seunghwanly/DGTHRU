@@ -135,6 +135,9 @@ export default class PaymentResult extends React.Component {
                                 //update common DB
                                 var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
                                 updateOrderInfo.update({ orderNumber: res });
+                                //update coupon
+                                var updateCoupon = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/options');
+                                updateCoupon.update({ coupon : this.props.route.params.coupon });
 
                                 //get data
                                 database()
@@ -169,6 +172,12 @@ export default class PaymentResult extends React.Component {
                             .once('value', (snapshot) => {
                                 snapshot.forEach((childData, index) => {
                                     console.log('> ref : \n' + commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo');
+                                    if (index === 0) {
+                                        // 첫 번째 주문에만 쿠폰 사용 업데이트
+                                        database()
+                                            .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/options')
+                                            .update({ coupon: this.props.route.params.coupon });
+                                    }
                                     //주문번호 업데이트 : 공통 DB
                                     database()
                                         .ref(commonRef(this.props.route.params.shopInfo) + '/group/' + index + '/orderInfo')
@@ -321,7 +330,7 @@ export default class PaymentResult extends React.Component {
 
                     console.log('menu ready !');
                     Alert.alert(
-                        'DGHTRU 알림', '메뉴가 준비되었습니다 ! 직원에게 위 화면을 보여주세요 !',
+                        'DGHTRU 알림', '메뉴가 준비되었습니다 !\n 직원에게 위 화면을 보여주세요 !',
                         [
                             {
                                 text: '확인',
@@ -348,11 +357,10 @@ export default class PaymentResult extends React.Component {
                             style={{ backgroundColor: '#eeaf9d' }}
                         >
                             <View style={paymentStyles.background}>
-
                                 <FlatList
                                     data={this.state.data}
                                     renderItem={
-                                        ({ item }) => (
+                                        ({ item, index }) => (
                                             <View style={paymentStyles.orderWrapper}>
                                                 <View style={{ flexDirection: 'row', width: '100%' }}>
                                                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.name}</Text>
@@ -364,7 +372,6 @@ export default class PaymentResult extends React.Component {
                                                         item.options.selected !== undefined ? <Text style={{ color: 'gray', fontSize: 14 }}>{item.options.selected} / </Text> : <></>
                                                     }
                                                     <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.cup} / </Text>
-                                                    <Text style={{ color: 'gray', fontSize: 12 }}>{item.cost}원 / </Text>
                                                     <Text style={{ color: 'gray', fontSize: 12 }}>{item.options.count}개 </Text>
                                                 </View>
                                                 <View style={{ flexDirection: 'row', marginVertical: 1, width: '100%' }}>
@@ -383,6 +390,9 @@ export default class PaymentResult extends React.Component {
                                                         item.options.offers.length > 0 ? <Text style={{ color: 'gray', fontSize: 12 }}>요청사항 : {item.options.offers}</Text> : <></>
                                                     }
                                                 </View>
+                                                {
+                                                    index === 0 && item.options.coupon !== '-' ? <Text style={{textAlign:'right'}}>{item.options.coupon}쿠폰 사용!</Text> : <></>
+                                                }
                                             </View>
                                         )
                                     }

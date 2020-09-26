@@ -116,3 +116,43 @@ export function orderNumDatabase(shopInfo) {
         return database().ref('order_num/'+shopInfo);
     }
 }
+
+export async function handleOrder(shopInfo, data, isGroup) {
+    var currentTime = moment().format('YYYY_MM_DD');
+    if (isGroup) {
+        //pop     
+        await database().ref('user/basket/' + auth().currentUser.uid + '/group').remove();
+        //push
+        await database()
+            .ref('shops/' + shopInfo + '/' + currentTime + '/' + auth().currentUser.phoneNumber + '/' + 'group')
+            .set(data);
+    }
+    else {
+        //pop     
+        await database().ref('user/basket/' + auth().currentUser.uid).remove();
+        //push
+        await database()
+            .ref('shops/' + shopInfo + '/' + currentTime + '/' + auth().currentUser.phoneNumber)
+            .push(data);
+    }
+}
+
+
+export async function handleDeleteOrder(orderKey, isGroup) {
+
+    console.log('>> orderKey : ' + orderKey);
+
+    if (isGroup) {
+        var orderPath = 'user/basket/' + auth().currentUser.uid + '/group/' + orderKey;
+
+        await database()
+            .ref(orderPath)
+            .remove();
+    } else {
+        var orderPath = 'user/basket/' + auth().currentUser.uid + '/' + orderKey;
+
+        await database()
+            .ref(orderPath)
+            .remove();
+    }
+}

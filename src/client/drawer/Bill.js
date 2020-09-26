@@ -8,6 +8,7 @@ import {
     ScrollView,
     RefreshControl,
     Modal,
+    StatusBar
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
 import ReceiptGroupModal from '../../utils/ReceiptGroupModal';

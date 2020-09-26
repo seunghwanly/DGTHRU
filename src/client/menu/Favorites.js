@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     Text,
     Image,
-    Alert
+    Alert,
+    StatusBar
 } from 'react-native';
 import RecentOrder from './RecentOrder';
 import { userFavoriteDatabase, popFavorite } from '../../utils/DatabaseRef';
@@ -60,6 +61,7 @@ export default class Favorites extends React.Component {
                         flex:1
                     }
                 }>
+                    <StatusBar barStyle='dark-content'/>
                     <View style={{ flexDirection: 'row', alignItems:'center', marginTop: '10%', }}>
                         <Text style={
                             {

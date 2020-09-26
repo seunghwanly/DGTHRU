@@ -4,7 +4,6 @@ import {
     Text,
     FlatList,
     TextInput,
-    Modal,
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
@@ -15,14 +14,12 @@ import {
     TouchableOpacity
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
-import { Picker } from '@react-native-community/picker';
 import { basketStyles } from './styles';
 import { MinusButton, PlusButton } from './components/CountButton';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 import moment from 'moment';
-import { getCafeIcon } from '../../utils/cafeInformation';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -74,6 +71,7 @@ export default Basket = ({ navigation, route }) => {
     //discount
     const [useCoupon, setUseCoupon] = useState(null);
     const [couponNum, setCouponNum] = useState(0);
+
 
     //modal
     const [modalVisible, setModalVisible] = useState(false);
@@ -187,9 +185,6 @@ export default Basket = ({ navigation, route }) => {
         if (cupSize === "사이즈업")
             res += handleSizeUp();
 
-        if (useCoupon !== null)
-            res -= useCoupon;
-
         return res;
     }
 
@@ -260,7 +255,7 @@ export default Basket = ({ navigation, route }) => {
         return count;
     }
 
-    sendOrder = (userPhoneNumber, isMoreThanOne) => {
+    sendOrder = (isMoreThanOne) => {
 
         var forPush = {
             name: item.name,
@@ -277,7 +272,9 @@ export default Basket = ({ navigation, route }) => {
                 waffleCream: waffleCream,
                 waffleSyrup: waffleSyrup,
                 offers: offers,
-                addedCost: handleOptionCost() * count
+
+                addedCost:handleOptionCost() * count,
+                coupon:'-'
             },
             orderInfo: {
                 orderTime: moment().format('HH:mm:ss'),
@@ -291,24 +288,22 @@ export default Basket = ({ navigation, route }) => {
         }
 
         if (isMoreThanOne === false) {
-            // 1.오너와 함께 공유하는 DB
+            // 1. 사용자 전용 장바구니안에 group으로 넣지않음
             const orderRef = database()
-                .ref('shops/' + shopInfo + '/' + currentTime + '/' + userPhoneNumber.phoneNumber)
-                .push();
-
+                    .ref('user/basket/'+auth().currentUser.uid)
+                    .push();
+            const key = orderRef.key;
             orderRef
-                .set(forPush)
-                .then(() =>
-                    [
-                        console.log('Updated Shops DB'),
-                        // navigate to KaokaoPay.js
-                        navigation.navigate('Paying', {
+
+                    .set(forPush)
+                    .then(() => {
+                        navigation.navigate('BeforePayment', {
                             totalCost: (item.cost + handleOptionCost()) * count,
                             shopInfo: shopInfo,
-                            itemData: JSON.stringify(forPush)
+                            itemData: JSON.stringify(forPush),
+                            key:key
                         })
-                    ]
-                )
+                    });
         }
         else {
             // 2. 사용자 전용 장바구니 개설
@@ -458,158 +453,6 @@ export default Basket = ({ navigation, route }) => {
 
         return (
             <>
-                <Modal
-                    animationType='slide'
-                    transparent={true}
-                    visible={modalVisible}
-                >
-                    <View style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginTop: 22
-                    }}>
-                        <View style={{
-                            margin: 20,
-                            backgroundColor: "white",
-                            borderRadius: 20,
-                            padding: 35,
-                            alignItems: 'center',
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 2
-                            },
-                            shadowOpacity: 0.25,
-                            shadowRadius: 3.84,
-                            elevation: 5
-                        }}>
-                            <Text style={[basketStyles.radiusText, { fontSize: 25, fontWeight: '800' }]}>주문내역확인</Text>
-                            <Image
-                                source={getCafeIcon(shopInfo)}
-                                resizeMode='cover'
-                                style={{
-                                    width: 100,
-                                    height: 100,
-                                    alignSelf: 'flex-end',
-                                    position: 'absolute',
-                                    opacity: 0.3,
-                                    right: 10,
-                                    top: 10,
-                                    transform: [{ rotate: '330deg' }]
-                                }}
-                            />
-
-                            <View style={{
-                                marginVertical: 50,
-                                padding: 10,
-                                width: 200,
-                                alignItems: 'stretch'
-                            }}>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>상품명 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.name}</Text>
-                                </View>
-                                {
-                                    selected !== null ?
-                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>세부메뉴 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{selected}</Text>
-                                        </View>
-                                        :
-                                        <></>
-
-                                }
-                                {
-                                    hotOrIced !== null ?
-                                        <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>따뜻차갑 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{hotOrIced}</Text>
-                                        </View>
-                                        :
-                                        <></>
-                                }
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '40%' }}>가격 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '60%' }}>{item.cost.toLocaleString()}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>갯수 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{count}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{inOrOut}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>사이즈 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{cupSize}</Text>
-                                </View>
-
-                                <View style={{ width: '100%', borderWidth: 1, borderStyle: 'dotted', marginVertical: 5 }} />
-
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>샷 추가 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{shotNum}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>시럽 추가 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{syrup}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>휘핑 추가 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{whippingCream}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>추가금액 : </Text>
-                                    <Text style={{ fontSize: 15, textAlign: 'right', width: '40%' }}>{handleOptionCost().toLocaleString()}원</Text>
-                                </View>
-                                {
-                                    offers.length > 0 ?
-                                        <View style={{ flexDirection: 'column', width: '100%', marginVertical: 2 }}>
-                                            <Text style={{ fontSize: 15, fontWeight: '600', textAlign: 'left', width: '60%' }}>요청사항 : </Text>
-                                            <Text style={{ fontSize: 15, textAlign: 'left', width: '100%', marginTop: 15, color: 'dimgray' }}>{offers}</Text>
-                                        </View>
-                                        :
-                                        <></>
-                                }
-
-                                <View style={{ width: '100%', borderWidth: 1, borderStyle: 'dotted', marginVertical: 5 }} />
-
-                                <View style={{ flexDirection: 'row', width: '100%', paddingTop: 15 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left', width: '50%' }}>총 결제금액 : </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>
-                                        {item.cost + handleOptionCost() > 0 ? ((item.cost + handleOptionCost()) * count).toLocaleString() + '원' : 0 + '원'}
-                                    </Text>
-                                </View>
-                            </View>
-                            <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color: 'dimgray', marginBottom: 10 }}>주의사항 : 신청하신 옵션은 컵 용량에 맞춰서 나갑니다.</Text>
-                            <View style={{ flexDirection: 'row-reverse' }}>
-                                <TouchableOpacity
-                                    style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 100 }]}
-                                    onPress={() => [
-                                        sendOrder(userPhoneNumber, false),
-                                        setModalVisible(!modalVisible)
-                                    ]}
-                                >
-                                    <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[basketStyles.goToBasket, { width: 100 }]}
-                                    onPress={() => setModalVisible(!modalVisible)}
-                                >
-                                    <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>취소하기</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-
-
-
-
-
-
 
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -861,8 +704,12 @@ export default Basket = ({ navigation, route }) => {
                                                                         onPress={() => {
                                                                             if (whippingCream == null)
                                                                                 setWhippingCream(item.toString());
-                                                                            else
-                                                                                setWhippingCream(null);
+                                                                            else{
+                                                                                if(item.toString() !== whippingCream)
+                                                                                    setWhippingCream(item.toString());
+                                                                                else
+                                                                                    setWhippingCream(null);
+                                                                            }
                                                                         }}
                                                                         style={[basketStyles.basketThreeItem, { backgroundColor }]}>
                                                                         <Text style={{ color }}> {item} </Text>
@@ -966,8 +813,12 @@ export default Basket = ({ navigation, route }) => {
                                                                         onPress={() => {
                                                                             if (waffleSyrup === null)
                                                                                 setWaffleSyrup(item.toString())
-                                                                            else
-                                                                                setWaffleSyrup(null);
+                                                                            else {
+                                                                                if(item.toString() !== waffleSyrup)
+                                                                                    setWaffleSyrup(item.toString());
+                                                                                else
+                                                                                    setWaffleSyrup(null);
+                                                                            }
                                                                         }}
                                                                         style={[
                                                                             { backgroundColor },
@@ -1038,9 +889,10 @@ export default Basket = ({ navigation, route }) => {
                                         }
                                     </Picker>
                                 </View>
+
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
-                                    onPress={() => handleOrder(item) === true ? [sendOrder(userPhoneNumber, true), alert('담겼습니다!')] : alert('ERROR !')}>
+                                    onPress={() => handleOrder(item) === true ? [sendOrder(true), alert('담겼습니다!')] : console.log('handleOrder(error)')}>
                                     <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>장바구니담기</Text>
                                 </TouchableOpacity>
                             </View>
@@ -1065,7 +917,7 @@ export default Basket = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[basketStyles.goToBasket, { backgroundColor: 'gold' }]}
-                        onPress={() => handleOrder(item) === true ? setModalVisible(true) : setModalVisible(false)}
+                        onPress={() => handleOrder(item) === true ? sendOrder(false) : console.log('handleOrder(error)')}
                     >
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15 }]}>바로결제 및 주문</Text>
                     </TouchableOpacity>

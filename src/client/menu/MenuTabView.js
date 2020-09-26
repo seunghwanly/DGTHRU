@@ -121,22 +121,27 @@ export default class TabViewExample extends React.Component {
                                             justifyContent: 'center',
                                         }}
                                         getLabelText={({ route }) => (
+                                            <>
                                             <Text style={
                                                 {
                                                     fontSize: 16,
                                                     fontWeight: 'bold',
                                                     color: 'white',
                                                     textAlign: 'center',
-                                                    // textShadowColor:'#182335',
-                                                    // textShadowOffset : {
-                                                    //     width:1,
-                                                    //     height:1
-                                                    // },
-                                                    // textShadowRadius:2
                                                 }
                                             }>
                                                 {translateCategoryName(route.title)}
                                             </Text>
+                                            <Text style={
+                                                {
+                                                    fontSize:10,
+                                                    fontWeight:'600',
+                                                    color:'#eee',
+                                                    textAlign:'center',
+                                                    marginTop:5
+                                                }
+                                            }>{route.title}</Text>
+                                            </>
                                         )}
                                         tabStyle={{ width: 90, }}
                                         scrollEnabled={true}
@@ -225,7 +230,7 @@ export default class TabViewExample extends React.Component {
                         onPress={() => this._setMenu(!this.state.isDrinkMenu)}
                     >
                         {
-                            this.state.isDrinkMenu === true ? <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>디저트{'\n'}메뉴가기</Text> : <Text style={{ fontSize: 12, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>음료{'\n'}메뉴가기</Text>
+                            this.state.isDrinkMenu === true ? <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>디저트{'\n'}메뉴가기</Text> : <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: 'white' }}>음료{'\n'}메뉴가기</Text>
                         }
                     </TouchableOpacity>
                 </>
