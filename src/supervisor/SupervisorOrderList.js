@@ -1,4 +1,4 @@
-import React, { Component, useEffect, } from 'react';
+import React, { Component, useEffect, useState, } from 'react';
 import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { OrderlistStyle } from './styles';
@@ -12,6 +12,7 @@ import imageLinker from '../utils/ImageLinker';
 import FirstRoute from './tabs/firstRoute';
 import SecondRoute from './tabs/secondRoute';
 import ThirdRoute from './tabs/thirdRoute';
+import UnhandledOrder from './tabs/UnhandledOrder';
 const initialLayout = { width: Dimensions.get('window').width };
 
 var shopname = '';
@@ -26,17 +27,53 @@ export default class SupervisorOrderList extends Component {
 
         this.state = {
             index: 0,
-            routes: [{ key: 'first', title: '주문현황' }, { key: 'second', title: '지난주문' }, { key: 'third', title: '메뉴관리' }],
+            routes: [
+                { key: 'first', title: '매장관리' },
+                { key: 'second', title: '메뉴관리' },
+                { key: 'third', title: '매출관리' },
+                { key: 'fourth', title: '마이메뉴' },
+            ],
             list: [],
             pastList: [],
+            pageIndex : 0
         }
+    }
+    setCurrentPage = index => {
+        this.setState({ pageIndex : index });
     }
 
     renderScene = ({ route }) => {
+
         switch (route.key) {
             case 'first':
                 return (
-                    <FirstRoute data={this.state.list} route={route} />
+                    <>
+                        {
+                            this.state.pageIndex === 0 ?
+                                <UnhandledOrder
+                                    data={this.state.list}
+                                    pastData={this.state.pastList}
+                                    route={route}
+                                    onPressFunction={this.setCurrentPage}
+                                />
+                                :
+                                this.state.pageIndex === 1 ?
+                                    <FirstRoute 
+                                        data={this.state.list} 
+                                        route={route} 
+                                        onPressFunction={this.setCurrentPage}   
+                                        />
+                                    :
+                                    this.state.pageIndex === 2 ?
+                                        <SecondRoute 
+                                            data={this.state.pastList} 
+                                            route={route}
+                                            onPressFunction={this.setCurrentPage}   
+                                            />
+                                        :
+                                        <></>
+                        }
+                    </>
                 )
             case 'second':
                 return (
@@ -45,6 +82,11 @@ export default class SupervisorOrderList extends Component {
             case 'third':
                 return (
                     <ThirdRoute route={route} />
+                )
+            case 'fourth':
+                return (
+                    <>
+                    </>
                 )
             default:
                 return null;
@@ -83,7 +125,7 @@ export default class SupervisorOrderList extends Component {
                 break;
         }
     }
-     
+
 
     componentDidMount = () => {
         //console.log('key: ' + shopname);
@@ -115,7 +157,7 @@ export default class SupervisorOrderList extends Component {
                                 orderInfo: menuChild.val().orderInfo,
                                 //key : orderInfo.orderTime,
                                 key: keyName,
-                                date:orderDate
+                                date: orderDate
                             })
 
                         }
@@ -164,7 +206,7 @@ export default class SupervisorOrderList extends Component {
 
             })
             const Moment = require('moment')
-            
+
 
             //li.sort((d2, d1) => new Moment(d2.orderInfo.orderTime, 'HH:mm:ss') - new Moment(d1.orderInfo.orderTime, 'HH:mm:ss'));
             this.setState({ list: li });
@@ -175,38 +217,38 @@ export default class SupervisorOrderList extends Component {
             var li = []
             var index = 0;
             //snapshot: 날짜
-          
+
 
             snapshot.forEach((childSnapShot) => {
                 //ChildSnapshot : 주문 날짜
                 var orderDate = childSnapShot.key;
-                    childSnapShot.forEach((menuChild) => {
-                        var keyName = menuChild.key;
+                childSnapShot.forEach((menuChild) => {
+                    var keyName = menuChild.key;
 
-                            if(menuChild.val().orderInfo.orderState =='ready'){
-                                //console.log('레 디 상 태 !')
-                            }
+                    if (menuChild.val().orderInfo.orderState == 'ready') {
+                        //console.log('레 디 상 태 !')
+                    }
 
-                            li.push({
-                            
-                                //key : index++,
-                                listSize: 1,
-                                isGroup: false,
-                                cost: menuChild.val().cost,
-                                name: menuChild.val().name,
-                                options: menuChild.val().options,
-                                orderInfo: menuChild.val().orderInfo,
-                                //key : orderInfo.orderTime,
-                                key: keyName,
-                                date:menuChild.val().date,
-                            })
+                    li.push({
 
-                        
-                        
-
+                        //key : index++,
+                        listSize: 1,
+                        isGroup: false,
+                        cost: menuChild.val().cost,
+                        name: menuChild.val().name,
+                        options: menuChild.val().options,
+                        orderInfo: menuChild.val().orderInfo,
+                        //key : orderInfo.orderTime,
+                        key: keyName,
+                        date: menuChild.val().date,
                     })
 
-              
+
+
+
+                })
+
+
 
             })
             //console.log(JSON.stringify(li));
@@ -216,6 +258,7 @@ export default class SupervisorOrderList extends Component {
 
         })
 
+        this.setCurrentPage;
     }
 
 
@@ -241,31 +284,33 @@ export default class SupervisorOrderList extends Component {
                 renderScene={this.renderScene}
                 onIndexChange={this._setIndex}
                 initialLayout={initialLayout}
-               
+
 
                 renderTabBar={(props) => (
-                    <View style={{ backgroundColor: '#182335',}}>
+                    <View style={{ backgroundColor: '#182335', }}>
                         <TabBar
                             {...props}
                             indicatorStyle={{
                                 backgroundColor: '#EEAF9D',
                                 borderRadius: 20,
                                 height: '100%',
-                                width: Dimensions.get('window').width / 9,
-                                marginHorizontal: Dimensions.get('window').width / 9,
+                                // width: Dimensions.get('window').width / 7,
+                                width: Dimensions.get('window').width / 10,
+                                // marginHorizontal: Dimensions.get('window').width / 9,
+                                marginHorizontal: '4%'
                             }}
 
                             style={{
                                 backgroundColor: '#182335',
-                                height: 80,
+                                height: 100,
                                 width: Dimensions.get('window').width,
                                 justifyContent: 'center',
-                                marginTop:20,
+                                marginTop: 20,
                             }}
 
                             getLabelText={({ route }) => (<Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white', paddingBottom: 5, textAlign: 'center' }}>{route.title}</Text>)}
                             tabStyle={{
-                                width: Dimensions.get('window').width / 3,
+                                width: Dimensions.get('window').width / 4,
                                 // borderRightColor: 'white', borderWidth: 1, borderLeftColor: 'white'
                             }}
                         />

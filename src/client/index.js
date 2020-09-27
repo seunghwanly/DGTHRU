@@ -39,6 +39,8 @@ import SupervisorShops from '../supervisor/SupervisorShops';
 import HeaderRight from './HeaderRight';
 import SupervisorTabview from '../supervisor/SupervisorTabview';
 
+// tabs
+import FirstRoute  from '../supervisor/tabs/firstRoute';
 
 
 
@@ -75,6 +77,7 @@ const supervisorScreens = {
     example: example,
     SupervisorOrderList: SupervisorOrderList,
     SupervisorTabview: SupervisorTabview,
+    FirstRoute : FirstRoute
 };
 
 export default StackContainer = ({ navigation }) => {

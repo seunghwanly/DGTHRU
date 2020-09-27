@@ -38,7 +38,7 @@ export default class RecieptSingleModal extends React.Component {
                         <Text style={RecieptModal.recieptTopItemTextLeft}>주문상품</Text>
                         <Text style={RecieptModal.recieptTopItemTextCenter}>갯수</Text>
                         <Text style={RecieptModal.recieptTopItemTextCenter}>유형</Text>
-                        <Text style={RecieptModal.recieptTopItemTextRight}>가격</Text>
+                        <Text style={RecieptModal.recieptTopItemTextRight}>가격</Text>~
                     </View>
 
                     <View style={RecieptModal.recieptItemSubWrapper}>
