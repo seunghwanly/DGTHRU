@@ -13,8 +13,6 @@ import { Dimensions } from "react-native";
 import { Line } from 'react-native-svg';
 const screenWidth = Dimensions.get("window").width;
 
-var data = [];
-
 const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -26,8 +24,6 @@ const chartConfig = {
     useShadowColorFromDataset: false // optional
   };
 
-
-
 class sales extends React.PureComponent{
 
     constructor(props) {
@@ -35,48 +31,33 @@ class sales extends React.PureComponent{
         
         this.state = {
             totalCost: 0,
-            todayCost: 0,
-            tableHead: ["날짜", "금액", "품목", "누적금액"],
-            widthArr: [150, 70, 90, 70],
+            tableHead: ["날짜", "금액", "품목", "개수", "누적금액"],
+            widthArr: [150, 70, 90, 70, 70],
             list: [],
             menu: [],
-            menuCost: [],
             shopname: this.props.route.params.shopInfo,
         }
     }
 
-    reverseData(li){
-        var arr = [];
-        for(var i = 0; i< li.length; i++){
-            arr[i] = li[li.length - i - 1];
-        }
-        return arr;
-    }
+    randomColor() {return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
 
-    randomColor(){
-        return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);
-    }
-
-    sortListByCost() {
-        this.state.menu.sort(function (obj1, obj2) {
+    sortListByCount(tempMenu) {
+        tempMenu = tempMenu.sort(function (obj1, obj2) {
             // return obj1.cost - obj2.cost;
             //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
-            var cost1 = obj1.count;
-            var cost2 = obj2.count;
-            return cost2 - cost1;
+            var count1 = obj1.cost;
+            var count2 = obj2.cost;
+            return count2 - count1;
         });
-        this.setState(previousState => (
-            { menu: previousState.menu }
-        ))
+        return tempMenu;
     }
 
     componentDidMount(){
         //console.log('key: ' + shopname);
-        var tampTotalCost = 0;
+        var tempTotalCost = 0;
         database().ref('admin/' + this.state.shopname).once('value').then(snapshot => {
             var li = [];
             var tempMenu = [];
-            var tempTotalCost = 0;
             //snapshot: 날짜
             snapshot.forEach((childSnapShot) => {
                 //ChildSnapshot : 주문 날짜
@@ -84,10 +65,7 @@ class sales extends React.PureComponent{
                 childSnapShot.forEach((menuChild) => {
                     var keyName = menuChild.key;
                     tempTotalCost += menuChild.val().cost;
-                    //if(orderDate === moment().format("YYYY_MM_DD")){
-                    if(orderDate === "2020_09_20"){
-                        this.setState({todayCost : this.state.todayCost + menuChild.val().cost})
-                    }
+                    // list 에 추가
                     li.push({
                         listSize: 1,
                         isGroup: false,
@@ -98,10 +76,12 @@ class sales extends React.PureComponent{
                         key: keyName,
                         date: orderDate,
                     })
+
+                    // menu에 추가
                     var ix = 0;
-                    while(ix<tempMenu.length){
+                    while(ix < tempMenu.length){
                         if(tempMenu[ix].name === menuChild.val().name){
-                            tempMenu[ix].count += menuChild.val().orderInfo.count;
+                            tempMenu[ix].count += menuChild.val().options.count
                             break;
                         }
                         ix++;
@@ -109,54 +89,106 @@ class sales extends React.PureComponent{
                     if(ix === tempMenu.length){
                         tempMenu.push({
                             name: menuChild.val().name,
-                            count: menuChild.val().orderInfo.count,
+                            count: menuChild.val().options.count,
+                            cost: menuChild.val().cost,
+                            date: orderDate,
                             color: this.randomColor(),
                             legendFontColor: "#7F7F7F",
                             legendFontSize: 15
-                        })
+                        });
+                    //this.setState({menu: this.state.menu.concat(temp)});
                     }
                 })
             })
-            li = this.reverseData(li);
 
-            this.setState({ menu: tempMenu });
-            this.sortListByCost();
-            console.log("tesnt >> " + this.state.menu);
-            for(var i = 0;i<this.state.menu.length;i++){
+            const Moment = require('moment');
+            li.sort((d1, d2) => new Moment(d1.orderDate, "YYYY_MM_DD") - new Moment(d2.orderDate, "YYYY_MM_DD"));
+            tempMenu = this.sortListByCount(tempMenu);
 
-                this.setState({menuCost: this.state.menuCost.concat(this.state.menu[i].count)});
+            for(var i = 0;i<5;i++){
+                console.log("tempmenu : " + tempMenu[i].cost);
             }
-           
+
+            if(tempMenu.length > 5){
+                for(var i = 0;i<5;i++){
+                    this.setState({menu: this.state.menu.concat(tempMenu[i])});
+                }
+            }
+            else{
+                this.setState({menu : tempMenu});
+            }   
+
+
+
             this.setState({ totalCost: tempTotalCost });
             this.setState({ list: li });
-            
         })
     }
 
     render(){ 
-        const data = this.state.menu;
-        console.log("testint >> " + data);
-        return(
-            <PieChart
-                data={ data }
-                width={screenWidth}
-                height={220}
-                chartConfig={chartConfig}
-                accessor="count"
-                backgroundColor="transparent"
-                paddingLeft="15"
-                absolute
-            />
+        var tableData = [];
+        for (let i = 0; i < this.state.list.length; i += 1) {
+          const rowData = [];
+          
+          rowData = rowData.concat(this.state.list[i].date);
+          rowData = rowData.concat(this.state.list[i].cost);
+          rowData = rowData.concat(this.state.list[i].name);
+          rowData = rowData.concat(this.state.list[i].options.count);
 
+          console.log("rowdata : " + rowData);
+          tableData.push(rowData);
+        }
+
+        return(
+            <>
+            <View>
+                <Text style = {{color: 'pink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매뉴 별 매출현황</Text>
+                <PieChart
+                    data={this.state.menu}
+                    width={screenWidth}
+                    height={220}
+                    chartConfig={chartConfig}
+                    accessor="count"
+                    backgroundColor="transparent"
+                    paddingLeft="15"
+                    absolute
+                />
+            </View>
+            <View style={styles.container}>
+        <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
+                <ScrollView horizontal={true}>
+                <View>
+                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                        <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
+                    </Table>
+                <ScrollView style={styles.dataWrapper}>
+                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                    {
+                        tableData.map((rowData, index) => (
+                        <Row
+                            key={index}
+                            data={rowData}
+                            widthArr={this.state.widthArr}
+                            style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
+                            textStyle={styles.text}
+                        />
+                        ))
+                    }
+                    </Table>
+                </ScrollView>
+                </View>
+                </ScrollView>
+            </View>
+        </>
     )}
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 7, padding: 16, paddingTop: 30, backgroundColor: '#fff', borderTopStartRadius: 50,borderTopEndRadius: 50 },
+    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     header: { height: 50, backgroundColor: '#537791' },
     text: { textAlign: 'center', fontWeight: '100' },
     dataWrapper: { marginTop: -1 },
     row: { height: 40, backgroundColor: '#E7E6E1' }
   });
 
-  export default sales
+export default sales
