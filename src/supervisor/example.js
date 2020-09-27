@@ -1,8 +1,13 @@
 ﻿import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View,Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight, ScrollView  } from 'react-native';
+import { Platform, 
+    StyleSheet, 
+    Text, View,Image, 
+    TextInput, Alert, 
+    FlatList, ListItem, 
+    Button, TouchableHighlight, 
+    SafeAreaView, ScrollView  } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { exampleStyle } from './styles';
-import { PieChart } from 'react-native-chart-kit';
+import { LineChart, PieChart } from 'react-native-chart-kit';
 
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
@@ -35,18 +40,33 @@ class sales extends React.PureComponent{
             widthArr: [150, 70, 90, 70, 70],
             list: [],
             menu: [],
+            accum: [],
             shopname: this.props.route.params.shopInfo,
         }
     }
 
     randomColor() {return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
 
+    sortListByTime() {
+        this.state.list.sort(function (obj2, obj1) {
+            // return obj1.cost - obj2.cost;
+            //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
+            var date1 = new Date(obj1.orderTime);
+            var date2 = new Date(obj2.orderTime);
+            return date2 - date1;
+        });
+        this.setState(previousState => (
+            { list: previousState.list }
+        ))
+    }
+
+
     sortListByCount(tempMenu) {
         tempMenu = tempMenu.sort(function (obj1, obj2) {
             // return obj1.cost - obj2.cost;
             //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
-            var count1 = obj1.cost;
-            var count2 = obj2.cost;
+            var count1 = obj1.count;
+            var count2 = obj2.count;
             return count2 - count1;
         });
         return tempMenu;
@@ -76,7 +96,6 @@ class sales extends React.PureComponent{
                         key: keyName,
                         date: orderDate,
                     })
-
                     // menu에 추가
                     var ix = 0;
                     while(ix < tempMenu.length){
@@ -96,7 +115,6 @@ class sales extends React.PureComponent{
                             legendFontColor: "#7F7F7F",
                             legendFontSize: 15
                         });
-                    //this.setState({menu: this.state.menu.concat(temp)});
                     }
                 })
             })
@@ -109,82 +127,112 @@ class sales extends React.PureComponent{
                 console.log("tempmenu : " + tempMenu[i].cost);
             }
 
-            if(tempMenu.length > 5){
-                for(var i = 0;i<5;i++){
+            if(tempMenu.length > 4){
+                for(var i = 0;i<4;i++){
                     this.setState({menu: this.state.menu.concat(tempMenu[i])});
                 }
             }
             else{
                 this.setState({menu : tempMenu});
             }   
-
-
-
             this.setState({ totalCost: tempTotalCost });
             this.setState({ list: li });
+            this.sortListByTime();
         })
     }
 
     render(){ 
         var tableData = [];
+        var graphHead = [];
+        var datasets = [];
+        var lineGraphCost = [];
         for (let i = 0; i < this.state.list.length; i += 1) {
-          const rowData = [];
-          
-          rowData = rowData.concat(this.state.list[i].date);
-          rowData = rowData.concat(this.state.list[i].cost);
-          rowData = rowData.concat(this.state.list[i].name);
-          rowData = rowData.concat(this.state.list[i].options.count);
+            graphHead = graphHead.concat(this.state.list[i].date);
+            lineGraphCost = lineGraphCost.concat(this.state.list[i].cost / 100);
 
-          console.log("rowdata : " + rowData);
-          tableData.push(rowData);
+            const rowData = [];
+            var accumCost = 0;
+            for(var j = i;j<this.state.list.length; j+=1){
+                accumCost += this.state.list[j].cost;
+            }
+            rowData = rowData.concat(this.state.list[i].date);
+            rowData = rowData.concat(this.state.list[i].cost);
+            rowData = rowData.concat(this.state.list[i].name);
+            rowData = rowData.concat(this.state.list[i].options.count);
+            rowData = rowData.concat(accumCost);
+
+            console.log("linedata : " + lineGraphCost);
+            tableData.push(rowData);
         }
 
+        const lineGraphdata = {
+            labels: graphHead,
+            datasets: [
+            {
+                data: [20, 45, 28, 80, 99, 43],
+                color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+                strokeWidth: 2 // optional
+                }
+            ],
+            legend: ["Rainy Days"] // optional
+        };
+        
+        
+
         return(
-            <>
-            <View>
-                <Text style = {{color: 'pink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매뉴 별 매출현황</Text>
-                <PieChart
-                    data={this.state.menu}
-                    width={screenWidth}
-                    height={220}
-                    chartConfig={chartConfig}
-                    accessor="count"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
-            </View>
-            <View style={styles.container}>
-        <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
-                <ScrollView horizontal={true}>
-                <View>
-                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                        <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
-                    </Table>
-                <ScrollView style={styles.dataWrapper}>
-                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                    {
-                        tableData.map((rowData, index) => (
-                        <Row
-                            key={index}
-                            data={rowData}
-                            widthArr={this.state.widthArr}
-                            style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
-                            textStyle={styles.text}
+            <SafeAreaView style={{flex: 9}}>
+                <ScrollView style={{marginHorizontal: 20,}}>
+                    <View style = {{flex: 3,}}>
+                        <Text style = {{color: 'pink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매뉴 별 매출현황</Text>
+                        <PieChart
+                            data={this.state.menu}
+                            width={screenWidth}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="count"
+                            backgroundColor="transparent"
+                            paddingLeft="15"
+                            absolute
                         />
-                        ))
-                    }
-                    </Table>
+                    </View>
+                    <View style={styles.container}>
+                        <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
+                        <ScrollView horizontal={true}>
+                            <View>
+                                <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                    <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
+                                </Table>
+                                <ScrollView style={styles.dataWrapper}>
+                                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                            {tableData.map((rowData, index) => (
+                                            <Row
+                                                key={index}
+                                                data={rowData}
+                                                widthArr={this.state.widthArr}
+                                                style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
+                                                textStyle={styles.text}
+                                            />
+                                            ))}
+                                    </Table>
+                                </ScrollView>
+                            </View>
+                        </ScrollView>
+                    </View>
+                    <ScrollView horizontal={true}>
+                        <LineChart
+                            data={lineGraphdata}
+                            width={screenWidth}
+                            height={220}
+                            chartConfig={chartConfig}
+                        />
+                    </ScrollView>
                 </ScrollView>
-                </View>
-                </ScrollView>
-            </View>
-        </>
+            </SafeAreaView>
     )}
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+    container: { flex: 3, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     header: { height: 50, backgroundColor: '#537791' },
     text: { textAlign: 'center', fontWeight: '100' },
     dataWrapper: { marginTop: -1 },
