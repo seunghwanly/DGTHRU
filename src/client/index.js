@@ -32,6 +32,7 @@ import PaymentResult from './payment/PaymetResult';
 
 //Supervisor
 import example from '../supervisor/example';
+import selectSales from '../supervisor/selectSales';
 import SupervisorOrderList from '../supervisor/SupervisorOrderList';
 import SupervisorShops from '../supervisor/SupervisorShops';
 import HeaderRight from './HeaderRight';
@@ -68,6 +69,7 @@ const payScreen = {
 
 const supervisorScreens = {
     SupervisorShops: SupervisorShops,
+    selectSales: selectSales,
     example: example,
     SupervisorOrderList: SupervisorOrderList,
     SupervisorTabview: SupervisorTabview,
