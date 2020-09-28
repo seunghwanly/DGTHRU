@@ -862,7 +862,7 @@ export default Basket = ({ navigation, route }) => {
                                         <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
                                         <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
                                     </View>
-                                    <Picker
+                                    {/* <Picker
                                         style={{ width: '53%', height: 80, marginHorizontal: 20, justifyContent: 'center' }}
                                         selectedValue={useCoupon}
                                         onValueChange={(itemValue, itemIndex) => {
@@ -887,7 +887,7 @@ export default Basket = ({ navigation, route }) => {
                                                     <Picker.Item label='사용 가능한 쿠폰 없음' value={2600} />
 
                                         }
-                                    </Picker>
+                                    </Picker> */}
                                 </View>
 
                                 <TouchableOpacity
