@@ -39,10 +39,6 @@ import SupervisorShops from '../supervisor/SupervisorShops';
 import HeaderRight from './HeaderRight';
 import SupervisorTabview from '../supervisor/SupervisorTabview';
 
-
-
-
-
 const Stack = createStackNavigator();
 
 const IntroScreen = {

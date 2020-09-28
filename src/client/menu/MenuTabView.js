@@ -135,7 +135,7 @@ export default class TabViewExample extends React.Component {
                                             <Text style={
                                                 {
                                                     fontSize:10,
-                                                    fontWeight:'600',
+                                                    fontWeight:'700',
                                                     color:'#eee',
                                                     textAlign:'center',
                                                     marginTop:5

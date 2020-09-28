@@ -1,12 +1,12 @@
 import React, { Component, useEffect, } from 'react';
-import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight, StatusBar } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
-import { exampleStyle } from '../styles';
+import { exampleStyle } from '../../styles';
 import moment from 'moment';
 import {
     _setPickUpTime, _setCompleteTime, _setConfirmTime, _stringConverter, DeleteOrderList, Setconfirm, SetUnconfirm, SetReady, SetRemove,
     addToAdmin,
-} from '../tabs/tabFunctions'
+} from '../tabFunctions'
 
 
 const FirstRoute = (props) => {
@@ -21,21 +21,35 @@ const FirstRoute = (props) => {
             backgroundColor: '#fff'
         }
         ]} >
+        <StatusBar barStyle='light-content' /> 
             <View style={
                 {
                     width: '100%',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    marginRight: '10%',
-                    marginVertical:'1%'
+                    flexDirection: 'row',
+                    paddingHorizontal:'3%',
+                    paddingVertical:'1%'
                 }
             }>
+                <TouchableOpacity 
+                    style={
+                        {
+                            width:'10%'
+                        }
+                    }
+                    onPress={() => props.onPressFunction(0)}
+                >
+                    <Image 
+                        style={{width:24, height:24}}
+                        resizeMode='cover'
+                        source={require('../../../../image/chevron-back-outline.png')}
+                    />
+                </TouchableOpacity>
                 <View style={
                     {
-                        width: '100%',
+                        width: '90%',
                         flexDirection:'row',
                         justifyContent:'flex-end',
-                        alignItems:'center'
+                        alignItems:'center',
                     }
                 }>
                     <Text style={
@@ -178,7 +192,7 @@ const FirstRoute = (props) => {
                                                         padding: 10
                                                     }
                                                 }>
-                                                    <Image style={{ alignSelf: "center", width: 24, height: 24, marginBottom: 5 }} source={require('../../../image/alarm-white.png')} />
+                                                    <Image style={{ alignSelf: "center", width: 24, height: 24, marginBottom: 5 }} source={require('../../../../image/alarm-white.png')} />
                                                     <Text style={[exampleStyle.orderlistPastTime, { color: '#ddd' }]}>경과시간</Text>
                                                     <Text style={exampleStyle.orderlistPastTime}>
                                                         {
@@ -306,7 +320,7 @@ const FirstRoute = (props) => {
                                                 padding: 10
                                             }
                                         }>
-                                            <Image style={{ alignSelf: "center", width: 24, height: 24, marginBottom: 5 }} source={require('../../../image/alarm-white.png')} />
+                                            <Image style={{ alignSelf: "center", width: 24, height: 24, marginBottom: 5 }} source={require('../../../../image/alarm-white.png')} />
                                             <Text style={exampleStyle.orderlistPastTime}>경과시간</Text>
                                             <Text style={exampleStyle.orderlistPastTime}>
                                                 {

@@ -75,7 +75,7 @@ export default class ReceiptGroupModal extends React.Component {
                         <Text style={RecieptModal.orderTimeTextLeft}>쿠폰사용여부 : </Text>
                         <Text style={RecieptModal.orderTimeTextRight}>
                         {
-                            this.props.item.group[0].options.coupon !== undefined ?
+                            this.props.item.group[0].options.coupon !== '-' ?
                                 this.props.item.group[0].options.coupon + '쿠폰 사용됨'
                                 :
                                 '사용안함'
