@@ -87,9 +87,58 @@ export const modalItem = StyleSheet.create({
     },
     modalButton: {
         borderRadius: 10,
-        backgroundColor: 'black',
-        width: '90%',
-        paddingHorizontal: 50,
-        paddingVertical: 10
+        backgroundColor: '#182335',
+        width: 100,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        marginHorizontal:10
     },
+    modalSubTitleView : {
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        marginBottom:'5%'
+    },
+    modalSubTitleText :{
+        textAlign:'center',
+        fontWeight:'bold',
+        color:'#182335',
+        fontSize:22,
+    },
+    modalSubItemWrapper : {
+        flexDirection: 'row',
+        width: '100%',
+        height:60,
+        alignItems: 'center'
+    },
+    modalSubItemDescText : {
+        width: 200,
+    },
+    modalSubUtemDescBtn : {
+        borderRadius: 20,
+        backgroundColor: '#ea5517',
+        justifyContent: 'center'
+    },
+    modalSubUtemDescBtnText : {
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        color: '#fff',
+        fontWeight: 'bold'
+    },
+    flatlistItemBtn : {
+        width: 50,
+        height: 40,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 2,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:1
+    }
+
 });

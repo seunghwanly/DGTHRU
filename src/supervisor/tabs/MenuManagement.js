@@ -10,6 +10,7 @@ import {
     FlatList
 } from 'react-native';
 import { menuManage, modalItem } from './styles'
+import MenuModal from './MenuModal';
 import database from '@react-native-firebase/database';
 
 export default class MenuManagement extends React.Component {
@@ -23,6 +24,9 @@ export default class MenuManagement extends React.Component {
             drinkMenu: [],
             dessertMenu: [],
             currentItem : null,
+            currentType : 'drink',
+            currentCategory : null,
+            currentCategoryIndex : 0,
             modalVisible : false
         }
 
@@ -32,13 +36,22 @@ export default class MenuManagement extends React.Component {
     componentDidMount() {
         this._fetchData();
     }
+    
+    shouldComponentUpdate(nextState) {
+        return nextState.currentItem !== this.state.currentItem;
+    }
 
     _setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
     }
 
-    _setCurrentItem = item => {
-        this.setState({ currentItem : item });
+    _setCurrentItem = (item, group, index, type) => {
+        this.setState({ 
+            currentItem : item, 
+            currentCategory : group,
+            currentCategoryIndex : index,
+            currentType : type
+        });
         this._setModalVisible(true);
     }
 
@@ -75,23 +88,15 @@ export default class MenuManagement extends React.Component {
 
         return (
             <View style={menuManage.mainBackground} >
-                <Modal
-                    animationType='slide'
-                    transparent={true}
-                    visible={this.state.modalVisible}
-                >
-                    <View style={modalItem.modalBackground}>
-                        <View style={modalItem.modalSubBackground}>
-                            
-                            <TouchableOpacity
-                                style={modalItem.modalButton}
-                                onPress={() => this._setModalVisible(!this.state.modalVisible)}
-                            >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
+                <MenuModal 
+                    data={this.state.currentItem}
+                    category={this.state.currentCategory}
+                    categoryIndex={this.state.currentCategoryIndex}
+                    categoryType={this.state.currentType}
+                    shopname={this.props.shopname}
+                    modalVisible={this.state.modalVisible}
+                    onPress={() => this._setModalVisible(!this.state.modalVisible)}
+                />
                 <ScrollView>
                     <KeyboardAvoidingView
                         keyboardVerticalOffset={30}
@@ -113,21 +118,25 @@ export default class MenuManagement extends React.Component {
                                     keyExtractor={(item, index) => item.key}
                                     numColumns={3}
                                     renderItem={
-                                        ({ item }) => {
+                                        ({ item, index }) => {
+                                            var categoryIndex = index;
+                                            var categoryMenu = item;
                                             return (
                                                 <View style={menuManage.categoryWrapper}>
-                                                    <Text style={menuManage.categoryWrapperTitle}>{item.category_name}</Text>
+                                                    <Text style={menuManage.categoryWrapperTitle}>{categoryMenu.category_name}</Text>
                                                     <FlatList
-                                                        data={item.menu}
+                                                        data={categoryMenu.menu}
                                                         style={menuManage.categoryFlatList}
                                                         keyExtractor={(item, index) => item.key}
                                                         numColumns={3}
-                                                        renderItem={({ info, index }) => {
+                                                        renderItem={({ item, index }) => {
+                                                            var subItem = item;
+                                                            var subIndex = index;
                                                             return (
                                                                 <TouchableOpacity style={menuManage.categoryFlatlistItems}
-                                                                    onPress={() => this._setCurrentItem(item.menu[index])}
+                                                                    onPress={() => this._setCurrentItem(subItem, categoryMenu.category_name, categoryIndex, 'categories_drink')}
                                                                 >
-                                                                    <Text style={menuManage.categoryFlatlistItemsTitle}>{item.menu[index].name}</Text>
+                                                                    <Text style={menuManage.categoryFlatlistItemsTitle}>{subItem.name}</Text>
                                                                 </TouchableOpacity>
                                                             )
                                                         }}
@@ -145,7 +154,8 @@ export default class MenuManagement extends React.Component {
                                     keyExtractor={(item, index) => item.key}
                                     numColumns={2}
                                     renderItem={
-                                        ({ item }) => {
+                                        ({ item, index }) => {
+                                            var categoryIndex = index;
                                             return (
                                                 <View style={menuManage.categoryWrapper}>
                                                     <Text style={menuManage.categoryWrapperTitle}>{item.category_name}</Text>
@@ -157,7 +167,7 @@ export default class MenuManagement extends React.Component {
                                                         renderItem={({ info, index }) => {
                                                             return (
                                                                 <TouchableOpacity style={menuManage.categoryFlatlistItems}
-                                                                    onPress={() => this._setCurrentItem(item.menu[index])}
+                                                                    onPress={() => this._setCurrentItem(item.menu[index], item.category_name, categoryIndex, 'categories_bakery')}
                                                                 >
                                                                     <Text style={menuManage.categoryFlatlistItemsTitle}>{item.menu[index].name}</Text>
                                                                 </TouchableOpacity>
