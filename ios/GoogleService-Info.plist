@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.DGTHRU123</string>
+	<string>org.reactjs.native.example.DGTHRU</string>
 	<key>PROJECT_ID</key>
 	<string>dgthru-bf3d6</string>
 	<key>STORAGE_BUCKET</key>

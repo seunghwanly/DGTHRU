@@ -1,11 +1,11 @@
 import React, { Component, useEffect, } from 'react';
 import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
-import { exampleStyle } from '../styles';
+import { exampleStyle } from '../../styles';
 import {
     _setPickUpTime, _setCompleteTime, _setConfirmTime, _stringConverter, DeleteOrderList, Setconfirm, SetUnconfirm, SetReady, SetRemove,
     addToAdmin,
-} from '../tabs/tabFunctions'
+} from '../tabFunctions'
 import moment from 'moment';
 
 const SecondRoute = (props) => {
@@ -42,7 +42,7 @@ const SecondRoute = (props) => {
                     <Image
                         style={{ width: 24, height: 24 }}
                         resizeMode='cover'
-                        source={require('../../../image/chevron-back-outline.png')}
+                        source={require('../../../../image/chevron-back-outline.png')}
                     />
                 </TouchableOpacity>
 

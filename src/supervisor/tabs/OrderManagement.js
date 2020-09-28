@@ -11,7 +11,7 @@ import {
 import { exampleStyle } from '../styles';
 import moment from 'moment';
 
-export default UnhandledOrder = (props) => {
+export default OrderManagement = (props) => {
 
     const {
         data, route, onPressFunction,

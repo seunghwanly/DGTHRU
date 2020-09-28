@@ -9,10 +9,11 @@ import auth from '@react-native-firebase/auth';
 import Moment from 'moment';
 import moment from 'moment';
 import imageLinker from '../utils/ImageLinker';
-import FirstRoute from './tabs/firstRoute';
-import SecondRoute from './tabs/secondRoute';
+import FirstRoute from './tabs/OrderManagementPage/firstRoute';
+import SecondRoute from './tabs/OrderManagementPage/secondRoute';
 import ThirdRoute from './tabs/thirdRoute';
-import UnhandledOrder from './tabs/UnhandledOrder';
+import OrderManagement from './tabs/OrderManagement';
+import MenuManagement from './tabs/MenuManagement';
 const initialLayout = { width: Dimensions.get('window').width };
 
 var shopname = '';
@@ -50,7 +51,7 @@ export default class SupervisorOrderList extends Component {
                     <>
                         {
                             this.state.pageIndex === 0 ?
-                                <UnhandledOrder
+                                <OrderManagement
                                     data={this.state.list}
                                     pastData={this.state.pastList}
                                     route={route}
@@ -77,7 +78,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'second':
                 return (
-                    <SecondRoute data={this.state.pastList} route={route} />
+                    <MenuManagement shopname={'hyehwa_roof'}/>
                 )
             case 'third':
                 return (
