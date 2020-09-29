@@ -24,10 +24,9 @@ export default class BeforePayment extends React.Component {
     }
 
     chosenCoupon = name => {
-        if (name === '10잔') { // 10잔 짜리
-            console.log('10 cups');
+        if (name === '10잔') {
             if(this.state.couponNum < 10){
-                alert(10-this.state.couponNum + "개 더 모아야 해요");
+                alert(10 - this.state.couponNum + "개 더 모아야 해요");
             }
             else{
                 this.setState({
@@ -35,14 +34,17 @@ export default class BeforePayment extends React.Component {
                     chooseCoupon: name
                 });
                 
-                // 파이어베이스에서 10개 삭제하기
             }
-        } else if (name === '15잔') {  // 15잔 짜리
-            console.log('15 cups');
-            this.setState({
-                totalCost: this.props.route.params.totalCost - 2600,
-                chooseCoupon: name
-            });
+        } else if (name === '15잔') {
+            if(this.state.couponNum < 15){
+                alert(15 - this.state.couponNum + "개 더 모아야 해요");
+            }
+            else{
+                this.setState({
+                    totalCost: this.props.route.params.totalCost - 2600,
+                    chooseCoupon: name
+                });                
+            }
         } else { // 쿠폰없음
             console.log('no coupons');
             this.setState({
