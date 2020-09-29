@@ -14,6 +14,7 @@ export const menuManage = StyleSheet.create({
     searchBar : {
         alignSelf: 'flex-end',
         flexDirection: 'row',
+        marginBottom:20
     },
     mainWrapper : {
         flexDirection:'row',
@@ -21,17 +22,18 @@ export const menuManage = StyleSheet.create({
     categoryWrapper : {
         backgroundColor: '#fff',
         borderRadius: 20,
-        width: 200,
+        width: 204,
         paddingTop:20,
         padding:5,
         margin: 5,
         shadowColor: "#333",
         shadowOffset: {
             width: 1,
-            height: 1
+            height: 2
         },
-        shadowOpacity: 0.5,
-        shadowRadius: 1
+        shadowOpacity: 0.365,
+        shadowRadius: 1,
+        elevation:5
     },
     categoryWrapperTitle : {
         fontWeight:'bold',
@@ -54,11 +56,11 @@ export const menuManage = StyleSheet.create({
             width: 1,
             height: 1
         },
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.5,
         shadowRadius: 1
     },
     categoryFlatlistItemsTitle:  {
-        fontSize:12,
+        fontSize:13,
         textAlign:'center'
     }
 });
@@ -72,7 +74,7 @@ export const modalItem = StyleSheet.create({
     },
     modalSubBackground: {
         margin: 20,
-        backgroundColor: "white",
+        backgroundColor: "#eee",
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
@@ -88,7 +90,10 @@ export const modalItem = StyleSheet.create({
     modalButton: {
         borderRadius: 10,
         backgroundColor: '#182335',
-        width: 100,
+        width: 120,
+        height:40,
+        alignItems:'center',
+        justifyContent:'center',
         paddingHorizontal: 10,
         paddingVertical: 5,
         marginHorizontal:10

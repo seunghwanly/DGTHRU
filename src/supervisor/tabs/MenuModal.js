@@ -12,7 +12,32 @@ import {
 import { modalItem } from './styles';
 import database from '@react-native-firebase/database';
 
-const updateDatabase = async (inputJSON, ref) => {
+const updateDatabase = async (name, inputJSON, ref) => {
+
+    var isRightRef = false;
+
+    var newName = inputJSON.name.changed ? inputJSON.name.now : inputJSON.name.prev;
+    var newCost = inputJSON.cost.changed ? inputJSON.cost.now : inputJSON.cost.prev;
+    var newSoldOut = inputJSON.sold_out.changed ?
+                        inputJSON.sold_out.now === '품절' ? true : false
+                        :
+                        inputJSON.sold_out.prev === '품절' ? true : false;
+
+    await database()
+        .ref(ref)
+        .once('value', snapshot => {
+            if(snapshot.val().name === name)
+                isRightRef = true;
+        }).then(() => {
+            if(isRightRef) {
+
+                database().ref(ref).update({
+                    name : newName,
+                    cost : newCost,
+                    sold_out : newSoldOut
+                }).then(() => console.log('Updated Menu'));
+            }
+        })
 
 }
 
@@ -20,6 +45,7 @@ export default MenuModal = (props) => {
 
     const {
         data,
+        dataIndex,
         category,
         categoryIndex,
         categoryType,
@@ -39,34 +65,40 @@ export default MenuModal = (props) => {
         //sold out
         const [soldOut, setSoldOut] = useState(null);
         const [editSoldOut, setEditSoldOut] = useState(false);
-        
-        
+
+
         var forUpdate = {
             "name": {
                 "prev": data.name,
-                "now": name
+                "now": name,
+                "changed" : false
             },
             "cost": {
                 "prev": data.cost,
-                "now": cost
+                "now": cost,
+                "changed" : false
             },
             "sold_out": {
                 "prev": data.sold_out,
-                "now": soldOut
+                "now": soldOut,
+                "changed" : false
             }
         };
 
-        const updateRef = shopname + '/' + categoryType + '/' + categoryIndex + '/' + category;
+        const updateRef = 'menu/' + shopname + '/' + categoryType + '/' + categoryIndex + '/menu/' + dataIndex;
 
         console.log('> ref : ' + updateRef);
 
-        const checkUpdate =()=> {
-            if(forUpdate.name.now !== forUpdate.name.prev)
-                console.log(name + 'updated');
-            if(forUpdate.cost.now !== forUpdate.cost.prev)
-                console.log(cost + 'updated');
-            if(forUpdate.sold_out.now !== forUpdate.sold_out.prev)
-                console.log(soldOut + 'updated');
+        const checkUpdate = () => {
+
+            if (forUpdate.name.now !== forUpdate.name.prev && forUpdate.name.now !== null)
+                forUpdate.name.changed = true;
+            if (forUpdate.cost.now !== forUpdate.cost.prev && forUpdate.cost.now !== null)
+                forUpdate.cost.changed = true;
+            if (forUpdate.sold_out.now !== forUpdate.sold_out.prev && forUpdate.sold_out.now !== null)
+                forUpdate.sold_out.changed = true;
+
+            updateDatabase(data.name, forUpdate, updateRef);
         }
 
         return (
@@ -100,9 +132,9 @@ export default MenuModal = (props) => {
                                     !editName ?
                                         <>
                                             <Text style={modalItem.modalSubItemDescText}>
-                                            {
-                                                forUpdate.name.now === null ? forUpdate.name.prev : forUpdate.name.now
-                                            }
+                                                {
+                                                    forUpdate.name.now === null ? forUpdate.name.prev : forUpdate.name.now
+                                                }
                                             </Text>
                                             <TouchableOpacity style={modalItem.modalSubUtemDescBtn}
                                                 onPress={() => setEditName(true)}
@@ -132,9 +164,9 @@ export default MenuModal = (props) => {
                                     !editCost ?
                                         <>
                                             <Text style={modalItem.modalSubItemDescText}>
-                                            {
-                                                forUpdate.cost.now === null ? forUpdate.cost.prev : forUpdate.cost.now
-                                            }
+                                                {
+                                                    forUpdate.cost.now === null ? forUpdate.cost.prev : forUpdate.cost.now
+                                                }
                                             </Text>
                                             <TouchableOpacity style={modalItem.modalSubUtemDescBtn}
                                                 onPress={() => setEditCost(true)}
@@ -147,6 +179,7 @@ export default MenuModal = (props) => {
                                             <TextInput
                                                 placeholder='가격을 입력해주세요.(숫자만)'
                                                 onChangeText={(text) => setCost(Number(text))}
+                                                keyboardType='numeric'
                                                 returnKeyType='done'
                                                 style={modalItem.modalSubItemDescText}
                                             />
@@ -212,18 +245,21 @@ export default MenuModal = (props) => {
                                         </>
                                 }
                             </View>
-                            <View style={{ flexDirection: 'row', alignSelf:'center',width:'50%' }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', width: '50%', marginTop:50 }}>
                                 <TouchableOpacity
                                     style={modalItem.modalButton}
                                     onPress={onPress}
+                                    onPressIn={() => [setEditName(false), setEditCost(false), setEditSoldOut(false)]}
                                 >
-                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize:14, textAlign:'center' }}>닫기</Text>
+                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>닫기</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={[modalItem.modalButton, { backgroundColor: 'gold' }]}
-                                    onPress={() => checkUpdate()}
+                                    onPress={() => {
+                                        !editName && !editCost && !editSoldOut ? checkUpdate() : alert('저장하기를 해주세요 !')
+                                    }}
                                 >
-                                    <Text style={{ color: '#182335', fontWeight: 'bold', fontSize:14, textAlign:'center' }}>저장하기</Text>
+                                    <Text style={{ color: '#182335', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>저장하기</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

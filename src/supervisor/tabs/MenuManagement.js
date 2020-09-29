@@ -24,6 +24,7 @@ export default class MenuManagement extends React.Component {
             drinkMenu: [],
             dessertMenu: [],
             currentItem : null,
+            currentItemIndex : 0,
             currentType : 'drink',
             currentCategory : null,
             currentCategoryIndex : 0,
@@ -45,9 +46,10 @@ export default class MenuManagement extends React.Component {
         this.setState({ modalVisible: visible });
     }
 
-    _setCurrentItem = (item, group, index, type) => {
+    _setCurrentItem = (item, itemIdx, group, index, type) => {
         this.setState({ 
             currentItem : item, 
+            currentItemIndex : itemIdx,
             currentCategory : group,
             currentCategoryIndex : index,
             currentType : type
@@ -57,7 +59,7 @@ export default class MenuManagement extends React.Component {
 
     _fetchData = () => {
         this._menuDatabse
-            .once('value', snapshot => {
+            .on('value', snapshot => {
                 var drinkData = [];
                 var dessertData = [];
                 snapshot.forEach(twoTypeData => {
@@ -83,6 +85,10 @@ export default class MenuManagement extends React.Component {
             });
     }
 
+    componentWillUnmount() {
+        this._menuDatabse.off();
+    }
+
 
     render() {
 
@@ -90,6 +96,7 @@ export default class MenuManagement extends React.Component {
             <View style={menuManage.mainBackground} >
                 <MenuModal 
                     data={this.state.currentItem}
+                    dataIndex={this.state.currentItemIndex}
                     category={this.state.currentCategory}
                     categoryIndex={this.state.currentCategoryIndex}
                     categoryType={this.state.currentType}
@@ -116,7 +123,7 @@ export default class MenuManagement extends React.Component {
                                 <FlatList
                                     data={this.state.drinkMenu}
                                     keyExtractor={(item, index) => item.key}
-                                    numColumns={3}
+                                    numColumns={4}
                                     renderItem={
                                         ({ item, index }) => {
                                             var categoryIndex = index;
@@ -134,7 +141,7 @@ export default class MenuManagement extends React.Component {
                                                             var subIndex = index;
                                                             return (
                                                                 <TouchableOpacity style={menuManage.categoryFlatlistItems}
-                                                                    onPress={() => this._setCurrentItem(subItem, categoryMenu.category_name, categoryIndex, 'categories_drink')}
+                                                                    onPress={() => this._setCurrentItem(subItem, subIndex, categoryMenu.category_name, categoryIndex, 'categories_drink')}
                                                                 >
                                                                     <Text style={menuManage.categoryFlatlistItemsTitle}>{subItem.name}</Text>
                                                                 </TouchableOpacity>
@@ -152,7 +159,7 @@ export default class MenuManagement extends React.Component {
                                 <FlatList
                                     data={this.state.dessertMenu}
                                     keyExtractor={(item, index) => item.key}
-                                    numColumns={2}
+                                    numColumns={1}
                                     renderItem={
                                         ({ item, index }) => {
                                             var categoryIndex = index;
@@ -163,7 +170,7 @@ export default class MenuManagement extends React.Component {
                                                         data={item.menu}
                                                         style={menuManage.categoryFlatList}
                                                         keyExtractor={(item, index) => item.key}
-                                                        numColumns={3}
+                                                        numColumns={2}
                                                         renderItem={({ info, index }) => {
                                                             return (
                                                                 <TouchableOpacity style={menuManage.categoryFlatlistItems}
