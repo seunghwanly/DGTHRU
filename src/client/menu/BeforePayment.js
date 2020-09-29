@@ -8,46 +8,68 @@ import {
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
 import { handleDeleteOrder, handleOrder } from '../../utils/DatabaseRef';
+import database from '@react-native-firebase/database'
+import auth from '@react-native-firebase/auth';
+
 
 export default class BeforePayment extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            chooseCoupon : null, 
-            totalCost : this.props.route.params.totalCost
+            couponNum: 0,
+            chooseCoupon: null,
+            totalCost: this.props.route.params.totalCost
         }
     }
 
     chosenCoupon = name => {
-        if(name === '10잔') { // 10잔 짜리
+        if (name === '10잔') { // 10잔 짜리
             console.log('10 cups');
-            this.setState({ 
-                totalCost : this.props.route.params.totalCost - 2000,
-                chooseCoupon : name 
-            });
-        } else if(name === '15잔') {  // 15잔 짜리
+            if(this.state.couponNum < 10){
+                alert(10-this.state.couponNum + "개 더 모아야 해요");
+            }
+            else{
+                this.setState({
+                    totalCost: this.props.route.params.totalCost - 2000,
+                    chooseCoupon: name
+                });
+                
+                // 파이어베이스에서 10개 삭제하기
+            }
+        } else if (name === '15잔') {  // 15잔 짜리
             console.log('15 cups');
-            this.setState({ 
-                totalCost : this.props.route.params.totalCost - 2600,
-                chooseCoupon : name  
+            this.setState({
+                totalCost: this.props.route.params.totalCost - 2600,
+                chooseCoupon: name
             });
         } else { // 쿠폰없음
             console.log('no coupons');
-            this.setState({ 
-                totalCost : this.props.route.params.totalCost - 0,
-                chooseCoupon : name  
+            this.setState({
+                totalCost: this.props.route.params.totalCost - 0,
+                chooseCoupon: name
             });
         }
     }
 
     componentDidMount() {
         // data fetch
+        this._fetchData();
         this.chosenCoupon;
     }
 
     componentWillUnmount() {
         // data off
+    }
+
+    _fetchData() {
+        var i = 0;
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
+            snapshot.forEach((childSnapshot) => {
+                i++;
+                this.setState({ couponNum: i });
+            });
+        });
     }
 
     render() {
@@ -161,18 +183,18 @@ export default class BeforePayment extends React.Component {
 
                     <View style={{ width: '100%', borderWidth: 1, borderStyle: 'dotted', marginVertical: 5 }} />
 
-                    <View style={{flexDirection:'row'}} >
-                        <View style={[ basketStyles.basketOptionDesc, { width:'40%', paddingStart:0 }]}>
+                    <View style={{ flexDirection: 'row' }} >
+                        <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
                             <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
                             <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
                         </View>
-                       
-                        <FlatList 
+
+                        <FlatList
                             data={['적용안함', '10잔', '15잔']}
-                            keyExtractor={item=>item.key}
+                            keyExtractor={item => item.key}
                             horizontal={true}
                             scrollEnabled={false}
-                            renderItem={({item, index}) => {
+                            renderItem={({ item, index }) => {
 
                                 const backgroundColor = item.toString()
                                     === this.state.chooseCoupon ?
@@ -181,16 +203,16 @@ export default class BeforePayment extends React.Component {
                                 const color = item.toString()
                                     === this.state.chooseCoupon ?
                                     'white' : 'black';
-                                return(
+                                return (
 
-                                    <TouchableOpacity 
-                                        style={[basketStyles.basketThreeItem,{backgroundColor}]}
+                                    <TouchableOpacity
+                                        style={[basketStyles.basketThreeItem, { backgroundColor }]}
                                         onPress={() => this.chosenCoupon(item)}
-                                        >
-                                        <Text style={[{ fontSize:12, textAlign:'center' },color]}>
-                                        {
-                                            index === 0 ? item : item+'\n적용하기'
-                                        }
+                                    >
+                                        <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
+                                            {
+                                                index === 0 ? item : item + '\n적용하기'
+                                            }
                                         </Text>
                                     </TouchableOpacity>
                                 )
@@ -201,7 +223,7 @@ export default class BeforePayment extends React.Component {
                     <View style={{ flexDirection: 'row', width: '100%', paddingTop: 15 }}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left', width: '50%' }}>총 결제금액 : </Text>
                         <Text style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'right', width: '50%' }}>
-                            {this.state.totalCost > 0 ? this.state.totalCost.toLocaleString(): 0}원
+                            {this.state.totalCost > 0 ? this.state.totalCost.toLocaleString() : 0}원
                             </Text>
                     </View>
                 </View>
@@ -212,18 +234,18 @@ export default class BeforePayment extends React.Component {
                         style={[basketStyles.goToBasket, { backgroundColor: 'gold', width: 120 }]}
                         onPress={() => [
                             this.props.navigation.navigate('Paying', {
-                                totalCost : this.state.totalCost > 0 ? this.state.totalCost : 0,
-                                shopInfo:shopInfo,
-                                itemData:JSON.stringify(itemDataJSON),
-                                coupon:this.state.chooseCoupon !== null ? this.state.chooseCoupon : '-'
-                            }), handleOrder(shopInfo,itemDataJSON, false)
+                                totalCost: this.state.totalCost > 0 ? this.state.totalCost : 0,
+                                shopInfo: shopInfo,
+                                itemData: JSON.stringify(itemDataJSON),
+                                coupon: this.state.chooseCoupon !== null ? this.state.chooseCoupon : '-'
+                            }), handleOrder(shopInfo, itemDataJSON, false)
                         ]}
                     >
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 14 }]}>바로결제</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[basketStyles.goToBasket, { width: 120 }]}
-                        onPress={() => [this.props.navigation.goBack(),handleDeleteOrder(this.props.route.params.key,false)]}
+                        onPress={() => [this.props.navigation.goBack(), handleDeleteOrder(this.props.route.params.key, false)]}
                     >
                         <Text style={[basketStyles.radiusText, { textAlign: 'center', fontSize: 15, color: 'white' }]}>취소하기</Text>
                     </TouchableOpacity>

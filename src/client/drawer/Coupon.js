@@ -143,15 +143,10 @@ export default class Coupon extends React.Component {
                 i++;
                 if(i <= 15){
                     this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
-                    if(i === 10){
-                        alert('you can use coupon');
-                    }
                 }
                 else{
                     alert('you can use coupon');
                 }
-
-                //이거 state에 저장해서 쿠폰으로 결제할 때 쓸 수 있도록!
             });
         });
     }
