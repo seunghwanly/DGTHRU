@@ -1,5 +1,5 @@
 import React, { Component, useEffect, } from 'react';
-import { Platform, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Dimensions, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { exampleStyle } from '../../styles';
 import {
@@ -22,7 +22,7 @@ const SecondRoute = (props) => {
                 backgroundColor: '#fff'
             }
         ]} >
-
+            <StatusBar barStyle='light-content' />
             <View style={
                 {
                     width: '100%',

@@ -1,30 +1,62 @@
 import { StyleSheet } from 'react-native';
 
 export const menuManage = StyleSheet.create({
-    mainBackground :{
+    mainBackground: {
         backgroundColor: '#fff',
         borderTopStartRadius: 30,
         borderTopEndRadius: 30,
-        marginTop: 30,
+        marginTop: 15,
         paddingTop: 30,
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         flex: 1,
     },
-    searchBar : {
-        alignSelf: 'flex-end',
+    keyboardAvoidingView: {
+        width: '100%',
+        alignItems: 'center',
         flexDirection: 'row',
-        marginBottom:20
+        justifyContent: 'flex-end',
+        marginBottom: 20,
     },
-    mainWrapper : {
-        flexDirection:'row',
+    resetSearch: {
+        borderRadius: 20,
+        width: 120,
+        height: 30,
+        backgroundColor: '#eaaf9d',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 10
     },
-    categoryWrapper : {
+    searchBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginEnd: 20,
+    },
+    searchBarIcon: {
+        width: 30,
+        height: 30,
+        backgroundColor: '#ddd',
+        borderRadius: 10,
+        padding: 5,
+        marginHorizontal: 5
+    },
+    searchBarTextInput: {
+        borderRadius: 20,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        width: 200
+    },
+    mainWrapper: {
+        flexDirection: 'row',
+    },
+    categoryWrapper: {
         backgroundColor: '#fff',
         borderRadius: 20,
         width: 204,
-        paddingTop:20,
-        padding:5,
+        paddingTop: 20,
+        padding: 5,
         margin: 5,
         shadowColor: "#333",
         shadowOffset: {
@@ -33,21 +65,21 @@ export const menuManage = StyleSheet.create({
         },
         shadowOpacity: 0.365,
         shadowRadius: 1,
-        elevation:5
+        elevation: 5
     },
-    categoryWrapperTitle : {
-        fontWeight:'bold',
-        fontSize:16,
-        paddingStart:10
+    categoryWrapperTitle: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        paddingStart: 10
     },
-    categoryFlatList : {
-        marginTop:20,
+    categoryFlatList: {
+        marginTop: 20,
     },
-    categoryFlatlistItems : {
+    categoryFlatlistItems: {
         width: 60,
         height: 60,
         borderRadius: 20,
-        backgroundColor:'#eee',
+        backgroundColor: '#eee',
         justifyContent: 'center',
         alignItems: 'center',
         margin: 2,
@@ -59,9 +91,9 @@ export const menuManage = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 1
     },
-    categoryFlatlistItemsTitle:  {
-        fontSize:13,
-        textAlign:'center'
+    categoryFlatlistItemsTitle: {
+        fontSize: 13,
+        textAlign: 'center'
     }
 });
 
@@ -91,46 +123,46 @@ export const modalItem = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#182335',
         width: 120,
-        height:40,
-        alignItems:'center',
-        justifyContent:'center',
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
         paddingHorizontal: 10,
         paddingVertical: 5,
-        marginHorizontal:10
+        marginHorizontal: 10
     },
-    modalSubTitleView : {
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
-        marginBottom:'5%'
+    modalSubTitleView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '5%'
     },
-    modalSubTitleText :{
-        textAlign:'center',
-        fontWeight:'bold',
-        color:'#182335',
-        fontSize:22,
+    modalSubTitleText: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#182335',
+        fontSize: 22,
     },
-    modalSubItemWrapper : {
+    modalSubItemWrapper: {
         flexDirection: 'row',
         width: '100%',
-        height:60,
+        height: 60,
         alignItems: 'center'
     },
-    modalSubItemDescText : {
+    modalSubItemDescText: {
         width: 200,
     },
-    modalSubUtemDescBtn : {
+    modalSubUtemDescBtn: {
         borderRadius: 20,
         backgroundColor: '#ea5517',
         justifyContent: 'center'
     },
-    modalSubUtemDescBtnText : {
+    modalSubUtemDescBtnText: {
         paddingVertical: 5,
         paddingHorizontal: 10,
         color: '#fff',
         fontWeight: 'bold'
     },
-    flatlistItemBtn : {
+    flatlistItemBtn: {
         width: 50,
         height: 40,
         borderRadius: 15,
@@ -143,7 +175,7 @@ export const modalItem = StyleSheet.create({
             height: 2
         },
         shadowOpacity: 0.3,
-        shadowRadius:1
+        shadowRadius: 1
     }
 
 });

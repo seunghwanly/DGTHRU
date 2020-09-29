@@ -12,8 +12,8 @@ import imageLinker from '../utils/ImageLinker';
 import FirstRoute from './tabs/OrderManagementPage/firstRoute';
 import SecondRoute from './tabs/OrderManagementPage/secondRoute';
 import ThirdRoute from './tabs/thirdRoute';
-import OrderManagement from './tabs/OrderManagement';
-import MenuManagement from './tabs/MenuManagement';
+import OrderManagement from './tabs/OrderManagementPage/OrderManagement';
+import MenuManagement from './tabs/MenuManagement/MenuManagement';
 const initialLayout = { width: Dimensions.get('window').width };
 
 var shopname = '';
@@ -78,7 +78,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'second':
                 return (
-                    <MenuManagement shopname={'hyehwa_roof'}/>
+                    <MenuManagement shopname={shopname}/>
                 )
             case 'third':
                 return (

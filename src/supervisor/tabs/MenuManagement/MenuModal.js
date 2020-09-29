@@ -9,7 +9,7 @@ import {
     ScrollView,
     KeyboardAvoidingView
 } from 'react-native';
-import { modalItem } from './styles';
+import { modalItem } from '../styles';
 import database from '@react-native-firebase/database';
 
 const updateDatabase = async (name, inputJSON, ref) => {

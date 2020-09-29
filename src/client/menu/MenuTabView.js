@@ -291,9 +291,14 @@ class MenuChildView extends React.Component {
                                 }
                                 else {
                                     return (
-                                        <View style={menuStyles.subRadiusIconSoldOut} >
-                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>IMG</Text>
-                                            <Text style={menuStyles.subRadiusText}>{item.name}</Text>
+                                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                                            <View style={menuStyles.subRadiusIconSoldOut}>
+                                                <Text style={[menuStyles.subRadiusText,{color:'#fff'}]}>품 절</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'column', marginStart: 10 }}>
+                                                <Text style={menuStyles.subRadiusText}>{item.name}</Text>
+                                                <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost.toLocaleString()}원</Text>
+                                            </View>
                                         </View>
                                     )
                                 }

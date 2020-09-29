@@ -8,7 +8,7 @@ import {
     Dimensions,
     StatusBar
 } from 'react-native';
-import { exampleStyle } from '../styles';
+import { exampleStyle } from '../../styles';
 import moment from 'moment';
 
 export default OrderManagement = (props) => {
@@ -82,7 +82,7 @@ export default OrderManagement = (props) => {
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
-                            source={require('../../../image/chevron-forward-outline.png')} />
+                            source={require('../../../../image/chevron-forward-outline.png')} />
                     </TouchableOpacity>
                 </View>
                 <View style={
@@ -268,7 +268,7 @@ export default OrderManagement = (props) => {
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
-                            source={require('../../../image/chevron-forward-outline.png')} />
+                            source={require('../../../../image/chevron-forward-outline.png')} />
                     </TouchableOpacity>
                 </View>
                 <View style={
