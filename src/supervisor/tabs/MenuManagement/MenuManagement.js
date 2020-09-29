@@ -131,7 +131,7 @@ export default class MenuManagement extends React.Component {
     }
 
     _resetSearchResult = () => {
-        this.setState({ searchResult : null });
+        this.setState({ searchResult : null, searchItem : null });
         this.scrollView.scrollTo({y:0});
     }
 
