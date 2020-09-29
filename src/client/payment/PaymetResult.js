@@ -90,7 +90,9 @@ export default class PaymentResult extends React.Component {
             basket: [],
             currentOrderNumber: '',
             isUpdated: false,
-            isLoading: true
+            isLoading: true,
+            couponSelected: this.props.route.params.chooseCoupon
+
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -137,7 +139,7 @@ export default class PaymentResult extends React.Component {
                                 updateOrderInfo.update({ orderNumber: res });
                                 //update coupon
                                 var updateCoupon = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/options');
-                                updateCoupon.update({ coupon : this.props.route.params.coupon });
+                                updateCoupon.update({ coupon: this.props.route.params.coupon });
 
                                 //get data
                                 database()
@@ -302,6 +304,32 @@ export default class PaymentResult extends React.Component {
                         database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
                             "shopInfo": this.props.route.params.shopInfo
                         });
+
+                        if (couponSelected === '10개') { //쿠폰 사용 했으면
+                            for (var i = 0; i < 10; i++) {
+                                database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+                                    snapshot.forEach((child) => {
+                                        if (child.key.charAt(0) === '-') {
+                                            key = child.key;
+                                        }
+                                    });
+                                }).then(() => {
+                                    await database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                                })
+                            }
+                        } else if (couponSelected === '15개') { //쿠폰 사용 했으면
+                            for (var i = 0; i < 15; i++) {
+                                database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+                                    snapshot.forEach((child) => {
+                                        if (child.key.charAt(0) === '-') {
+                                            key = child.key;
+                                        }
+                                    });
+                                }).then(() => {
+                                    await database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                                })
+                            }
+                        }
                     }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
@@ -347,7 +375,7 @@ export default class PaymentResult extends React.Component {
 
                 return (
                     <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
-                    <StatusBar barStyle='light-content' />
+                        <StatusBar barStyle='light-content' />
                         <View style={{}}>
                             <Image
                                 style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
@@ -391,7 +419,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && item.options.coupon !== '-' ? <Text style={{textAlign:'right'}}>{item.options.coupon}쿠폰 사용!</Text> : <></>
+                                                    index === 0 && item.options.coupon !== '-' ? <Text style={{ textAlign: 'right' }}>{item.options.coupon}쿠폰 사용!</Text> : <></>
                                                 }
                                             </View>
                                         )
@@ -408,10 +436,10 @@ export default class PaymentResult extends React.Component {
                                         top: '5%',
                                         transform: [{ rotate: '330deg' }],
                                     }
-                                } 
+                                }
                                     name={this.props.route.params.shopInfo}
                                 />
-                                
+
 
                             </View>
                         </ScrollView>
