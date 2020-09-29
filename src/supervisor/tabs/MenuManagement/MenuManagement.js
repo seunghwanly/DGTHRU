@@ -172,6 +172,7 @@ export default class MenuManagement extends React.Component {
                         <TextInput
                             style={menuManage.searchBarTextInput}
                             onChangeText={(text) => this.setState({ searchItem: text })}
+                            value={this.state.searchItem}
                             returnKeyType='search'
                             placeholder='검색어를 입력해주세요...'
                         />
