@@ -270,7 +270,7 @@ class MenuChildView extends React.Component {
 
                                     return (
                                         <TouchableOpacity
-                                            style={{ alignItems: 'center', flexDirection: 'row', }}
+                                            style={{ alignItems: 'center', flexDirection: 'row'}}
                                             onPress={() => this.props.navigation.navigate('SelectMenu',
                                                 {
                                                     item: item,
@@ -282,7 +282,7 @@ class MenuChildView extends React.Component {
                                             onLongPress={() => pushFavorite(shopInfo, item, type, categoryName)}
                                         >
                                             <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
-                                            <View style={{ flexDirection: 'column', marginStart: 10 }}>
+                                            <View style={{ flexDirection: 'column', marginStart: 10, width:'70%' }}>
                                                 <Text style={menuStyles.subRadiusText}>{item.name}</Text>
                                                 <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost.toLocaleString()}원</Text>
                                             </View>
