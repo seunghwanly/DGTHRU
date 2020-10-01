@@ -16,7 +16,7 @@ import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 import { Dimensions } from "react-native";
 import { Line } from 'react-native-svg';
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get("window").width * (4/9);
 
 const chartConfig = {
     backgroundGradientFrom: "#1E2923",
@@ -180,9 +180,34 @@ class sales extends React.PureComponent{
         
 
         return(
-            <SafeAreaView style={{flex: 9}}>
-                <ScrollView style={{marginHorizontal: 20,}}>
-                    <View style = {{flex: 3,}}>
+            <ScrollView style={{margin: 20}}>
+                <View style={{flex: 9, flexDirection: 'row'}}>
+                <View style={styles.container}>
+                            <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
+                            <ScrollView horizontal={true}>
+                                <View>
+                                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                        <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
+                                    </Table>
+                                    <ScrollView style={styles.dataWrapper}>
+                                        <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                            {tableData.map((rowData, index) => (
+                                            <Row
+                                                key={index}
+                                                data={rowData}
+                                                widthArr={this.state.widthArr}
+                                                style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
+                                                textStyle={styles.text}
+                                            />
+                                            ))}
+                                        </Table>
+                                    </ScrollView>
+                                </View>
+                            </ScrollView>
+                        </View>
+                    <View style = {{flex : 5, flexDirection: 'column'}}>
+                        
+                        <View style = {{flex: 3}}>
                         <Text style = {{color: 'pink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매뉴 별 매출현황</Text>
                         <PieChart
                             data={this.state.menu}
@@ -195,44 +220,25 @@ class sales extends React.PureComponent{
                             absolute
                         />
                     </View>
-                    <View style={styles.container}>
-                        <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
+                    <View style = {{flex : 2}}>
                         <ScrollView horizontal={true}>
-                            <View>
-                                <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                                    <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
-                                </Table>
-                                <ScrollView style={styles.dataWrapper}>
-                                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                                            {tableData.map((rowData, index) => (
-                                            <Row
-                                                key={index}
-                                                data={rowData}
-                                                widthArr={this.state.widthArr}
-                                                style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
-                                                textStyle={styles.text}
-                                            />
-                                            ))}
-                                    </Table>
-                                </ScrollView>
-                            </View>
+                            <LineChart
+                                data={lineGraphdata}
+                                width={screenWidth}
+                                height={220}
+                                chartConfig={chartConfig}
+                            />
                         </ScrollView>
                     </View>
-                    <ScrollView horizontal={true}>
-                        <LineChart
-                            data={lineGraphdata}
-                            width={screenWidth}
-                            height={220}
-                            chartConfig={chartConfig}
-                        />
-                    </ScrollView>
-                </ScrollView>
-            </SafeAreaView>
+                    </View>
+                </View>
+            </ScrollView>
+            
     )}
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 3, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+    container: { flex: 4, padding: 16, alignItems: 'center', paddingTop: 30, backgroundColor: '#fff' },
     header: { height: 50, backgroundColor: '#537791' },
     text: { textAlign: 'center', fontWeight: '100' },
     dataWrapper: { marginTop: -1 },
