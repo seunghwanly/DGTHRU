@@ -11,7 +11,8 @@ import {
     Image,
     ScrollView,
     StatusBar,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
@@ -28,9 +29,6 @@ enableScreens();
 
 export default Basket = ({ navigation, route }) => {
 
-    const userPhoneNumber = auth().currentUser;
-    var currentTime = moment().format('YYYY_MM_DD');
-
     const { item } = route.params;
     const { shopInfo } = route.params;
     const { type } = route.params;
@@ -41,7 +39,7 @@ export default Basket = ({ navigation, route }) => {
     ]
 
     const dataInOrOut = [
-        "개인용", "매장용", "일회용"
+        "개인용", "매장용", "포장용"
     ];
 
     const dataIceHot = [
@@ -70,8 +68,7 @@ export default Basket = ({ navigation, route }) => {
     const [waffleSyrup, setWaffleSyrup] = useState(null);
     
     //modal
-    const [modalVisible, setModalVisible] = useState(false);
-    const [optionVisible, setOptionVisible] = useState(false);
+    const [optionVisible, setOptionVisible] = useState(true);
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
@@ -539,7 +536,13 @@ export default Basket = ({ navigation, route }) => {
 
                                                     return (
                                                         <TouchableOpacity
-                                                            onPress={() => setInOrOut(item.toString())}
+                                                            onPress={() => [
+                                                                setInOrOut(item.toString()),
+                                                                Alert.alert('DGTHRU 알림', "'개인용'을 선택하시면 음료픽업대로 개인 텀블러나 용기를 가져오셔야 주문이 성립됩니다 :)",
+                                                                [
+                                                                    { text : '확인', onPress : () => console.log('confirmed') }
+                                                                ])
+                                                            ]}
                                                             style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
                                                             <Text style={{ color }}> {item} </Text>
                                                         </TouchableOpacity>
@@ -820,21 +823,26 @@ export default Basket = ({ navigation, route }) => {
                                             :
                                             <></>
                                     }
-                                    <>
-                                        <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', marginBottom:5, paddingHorizontal:5, width:330 }]} >
-                                            <View style={basketStyles.basketPreferOptionWrapper}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>요청사항 (15자이내)</Text>
-                                            </View>
-                                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                                                <TextInput
-                                                    style={basketStyles.offerLayout}
-                                                    onChangeText={(text) => setOffers(text)}
-                                                    placeholder="간단하게 요청사항을 적어주세요 ~"
-                                                    returnKeyType='done'
-                                                />
-                                            </TouchableWithoutFeedback>
-                                        </View>
-                                    </>
+                                    {
+                                        optionVisible ? 
+                                            <>
+                                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', marginBottom: 5, paddingHorizontal: 5, width: 330 }]} >
+                                                    <View style={basketStyles.basketPreferOptionWrapper}>
+                                                        <Text style={{ fontSize: 12, fontWeight: 'bold' }}>요청사항 (15자이내)</Text>
+                                                    </View>
+                                                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                                        <TextInput
+                                                            style={basketStyles.offerLayout}
+                                                            onChangeText={(text) => setOffers(text)}
+                                                            placeholder="간단하게 요청사항을 적어주세요 ~"
+                                                            returnKeyType='done'
+                                                        />
+                                                    </TouchableWithoutFeedback>
+                                                </View>
+                                            </>
+                                            :
+                                            <></>
+                                    }
                                 </View>
                                 
                                 <TouchableOpacity

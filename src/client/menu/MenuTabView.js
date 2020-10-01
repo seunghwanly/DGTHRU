@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Dimensions, FlatList, Text, ScrollView, TouchableOpacity, StatusBar, Pressable } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ImageLinker from '../../utils/ImageLinker';
 import { menuStyles } from './styles';
@@ -27,7 +27,7 @@ export default class TabViewExample extends React.Component {
         }
         console.log('> constructor');
     }
-    
+
     _fetchData() {
 
         database()
@@ -90,7 +90,7 @@ export default class TabViewExample extends React.Component {
         // console.log('> render ' + this.state.isDrinkMenu, JSON.stringify(this.state.bakeryData));
         if (this.state.isLoading) {
             return (
-                <Loading style={{backgroundColor:'#182335'}} />
+                <Loading style={{ backgroundColor: '#182335' }} />
             )
         }
         else {
@@ -99,7 +99,7 @@ export default class TabViewExample extends React.Component {
                     <StatusBar barStyle='light-content' />
                     <TabView
                         renderTabBar={(props) => (
-                            <View style={{ backgroundColor:'#182335', paddingHorizontal:'5%' }}>
+                            <View style={{ backgroundColor: '#182335', paddingHorizontal: '5%' }}>
                                 <ScrollView
                                     horizontal={true}
                                     showsHorizontalScrollIndicator={false}
@@ -107,14 +107,14 @@ export default class TabViewExample extends React.Component {
                                 >
                                     <TabBar
                                         {...props}
-                                        indicatorStyle={{ 
+                                        indicatorStyle={{
                                             backgroundColor: '#EEAF9D',
-                                            borderRadius:20,
-                                            height:100,
+                                            borderRadius: 20,
+                                            height: 100,
                                         }}
-                                        
-                                        style={{ 
-                                            marginVertical:'10%',
+
+                                        style={{
+                                            marginVertical: '10%',
                                             backgroundColor: '#182335',
                                             height: 100,
                                             width: Dimensions.get('window').width,
@@ -122,25 +122,25 @@ export default class TabViewExample extends React.Component {
                                         }}
                                         getLabelText={({ route }) => (
                                             <>
-                                            <Text style={
-                                                {
-                                                    fontSize: 16,
-                                                    fontWeight: 'bold',
-                                                    color: 'white',
-                                                    textAlign: 'center',
-                                                }
-                                            }>
-                                                {translateCategoryName(route.title)}
-                                            </Text>
-                                            <Text style={
-                                                {
-                                                    fontSize:10,
-                                                    fontWeight:'700',
-                                                    color:'#eee',
-                                                    textAlign:'center',
-                                                    marginTop:5
-                                                }
-                                            }>{route.title}</Text>
+                                                <Text style={
+                                                    {
+                                                        fontSize: 16,
+                                                        fontWeight: 'bold',
+                                                        color: 'white',
+                                                        textAlign: 'center',
+                                                    }
+                                                }>
+                                                    {translateCategoryName(route.title)}
+                                                </Text>
+                                                <Text style={
+                                                    {
+                                                        fontSize: 10,
+                                                        fontWeight: '700',
+                                                        color: '#eee',
+                                                        textAlign: 'center',
+                                                        marginTop: 5
+                                                    }
+                                                }>{route.title}</Text>
                                             </>
                                         )}
                                         tabStyle={{ width: 90, }}
@@ -179,7 +179,7 @@ export default class TabViewExample extends React.Component {
                                     case 8:
                                         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
                                     case 9:
-                                        if(route.title === 'Cold Brew')
+                                        if (route.title === 'Cold Brew')
                                             return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
                                         else
                                             return null;
@@ -248,17 +248,17 @@ class MenuChildView extends React.Component {
 
         return (
             <View style={menuStyles.background}>
-                <View style={[menuStyles.sectionHeader, { height: 'auto'}]}>
-                    <Text style={[menuStyles.subTitle, { color: 'black', fontSize: 16, paddingStart:5, paddingTop:5 }]}>{categoryName}</Text>
+                <View style={[menuStyles.sectionHeader, { height: 'auto' }]}>
+                    <Text style={[menuStyles.subTitle, { color: 'black', fontSize: 16, paddingStart: 5, paddingTop: 5 }]}>{categoryName}</Text>
                 </View>
-                <ScrollView 
+                <ScrollView
                     style={
                         {
-                            width:'95%',
-                            padding:10,
-                            backgroundColor:'#fff'
+                            width: '95%',
+                            padding: 10,
+                            backgroundColor: '#fff'
                         }
-                        }
+                    }
                     scrollEnabled={true}
                     showsVerticalScrollIndicator={false}
                 >
@@ -269,31 +269,44 @@ class MenuChildView extends React.Component {
                                 if (item.sold_out !== true) {
 
                                     return (
-                                        <TouchableOpacity
-                                            style={{ alignItems: 'center', flexDirection: 'row'}}
-                                            onPress={() => this.props.navigation.navigate('SelectMenu',
-                                                {
-                                                    item: item,
-                                                    shopInfo: shopInfo,
-                                                    type: type,
-                                                    categoryName: categoryName
-                                                }
-                                            )}
+                                        <Pressable
+                                            style={
+                                                ({ pressed }) => [
+                                                    {
+                                                        backgroundColor: pressed ? '#FFAF9F' : 'transparent',
+                                                    },
+                                                    {
+                                                        alignItems: 'center',
+                                                        flexDirection: 'row',
+                                                        borderRadius: 20,
+                                                    }
+                                                ]
+                                            }
+                                            onPress={() =>
+                                                this.props.navigation.navigate('SelectMenu',
+                                                    {
+                                                        item: item,
+                                                        shopInfo: shopInfo,
+                                                        type: type,
+                                                        categoryName: categoryName,
+                                                    }
+                                                )
+                                            }
                                             onLongPress={() => pushFavorite(shopInfo, item, type, categoryName)}
                                         >
                                             <ImageLinker name={item.name} style={menuStyles.subRadiusIcon} />
-                                            <View style={{ flexDirection: 'column', marginStart: 10, width:'70%' }}>
+                                            <View style={{ flexDirection: 'column', marginStart: 10, width: '70%' }}>
                                                 <Text style={menuStyles.subRadiusText}>{item.name}</Text>
                                                 <Text style={[menuStyles.subRadiusText, { color: 'grey', fontSize: 13 }]}>{item.cost.toLocaleString()}원</Text>
                                             </View>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     )
                                 }
                                 else {
                                     return (
-                                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                             <View style={menuStyles.subRadiusIconSoldOut}>
-                                                <Text style={[menuStyles.subRadiusText,{color:'#fff'}]}>품 절</Text>
+                                                <Text style={[menuStyles.subRadiusText, { color: '#fff' }]}>품 절</Text>
                                             </View>
                                             <View style={{ flexDirection: 'column', marginStart: 10 }}>
                                                 <Text style={menuStyles.subRadiusText}>{item.name}</Text>
@@ -309,7 +322,7 @@ class MenuChildView extends React.Component {
                         contentContainerStyle={{ alignItems: 'flex-start', margin: 5 }}
                     />
                 </ScrollView>
-                <View style={{ backgroundColor: '#fff', width:'95%', alignItems:'center' }}>
+                <View style={{ backgroundColor: '#fff', width: '95%', alignItems: 'center' }}>
                     <Text style={{ marginBottom: 25, color: 'gray', fontSize: 12 }}>길게 누르시면 '즐겨찾기' 등록이 가능합니다.</Text>
                 </View>
             </View>
