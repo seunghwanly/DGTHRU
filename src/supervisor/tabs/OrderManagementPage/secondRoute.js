@@ -1,15 +1,93 @@
-import React, { Component, useEffect, } from 'react';
-import { Platform, Dimensions, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import React, { Component, useEffect,useState } from 'react';
+import { Platform, Dimensions,CheckBox, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { exampleStyle } from '../../styles';
 import {
     _setPickUpTime, _setCompleteTime, _setConfirmTime, _stringConverter, DeleteOrderList, Setconfirm, SetUnconfirm, SetReady, SetRemove,
     addToAdmin,
 } from '../tabFunctions'
-import moment from 'moment';
+import Moment from 'moment';
 
+import DateTimePicker from '@react-native-community/datetimepicker';
 const SecondRoute = (props) => {
 
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const [DateBoxState, setDateBoxState] = useState(false);
+    const [numberBoxState, setnumberBoxState] = useState(true);
+    const [pastList , setpastList] = useState(props.data);
+    const [originList , setOriginList] = useState(props.data);
+    const [flag, setflag] = useState(0);
+
+    const [startDate, setStartDate] = useState(new Moment('2020-05-23','YYYY-MM-DD').format('YYYY-MM-DD').toString());
+    const [endDate, setEndDate] = useState(0);
+
+
+    // const dateRangeFilter = () =>{
+    // }
+
+    const toggleStateDateBox = (item) =>{
+        if(item == 'Date'){
+            setnumberBoxState(!numberBoxState);
+            setDateBoxState(!DateBoxState);
+            filterList();
+        }
+    }
+    const toggleStatenumberBox = (item) =>{
+        if(item =='Number'){
+        setnumberBoxState(!numberBoxState);
+        setDateBoxState(!DateBoxState);
+        filterList();
+        }
+    }
+
+    const filterList = () =>{
+        var li = originList;
+        if(numberBoxState == true){
+
+            li.sort((d2, d1) => new Moment(d1.date+' '+d1.orderInfo.orderTime, 'YYYY_MM_DD HH:mm:ss') - new Moment(d2.date+' '+d2.orderInfo.orderTime, 'YYYY_MM_DD HH:mm:ss'));
+            // li.sort((d2, d1) => new Moment(d1.orderInfo.orderTime, 'HH:MM:ss') - new Moment(d2.orderInfo.orderTime, 'HH:MM:ss')
+            // );
+            setpastList(li);
+        }else{
+            li.sort((d2, d1) => parseInt(d2.orderInfo.orderNumber.substring(2,d2.orderInfo.orderNumber.length)) -     
+                                parseInt(d1.orderInfo.orderNumber.substring(2,d1.orderInfo.orderNumber.length)));
+            
+            setpastList(li);
+        }
+    }
+    
+  
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        var str = new Moment(currentDate).format('YYYY-MM-DD').toString();
+        if(flag ===1){
+        setStartDate(str);      
+        setflag(0);
+        }
+        else if(flag ===2){
+            setEndDate(str);
+            setflag(0);
+        }
+      };
+    
+      const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+      const showDatepicker = () => {
+        setflag(1);
+        showMode('date');
+        
+      };
+    
+      const showTimepicker = () => {
+        setflag(2);
+        showMode('date');
+      };
 
     return (
         <View style={[
@@ -54,6 +132,45 @@ const SecondRoute = (props) => {
                         alignItems: 'center',
                     }
                 }>
+
+                    <View style={{marginRight:5,}}>
+                    <Button onPress={showDatepicker} title={startDate.toString()} />
+                </View>
+
+                <View>
+                    <Button onPress={showTimepicker} title={endDate == 0 ? new Moment().format('YYYY-MM-DD').toString() : endDate.toString() } />
+                </View>
+                {show && (
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                    />
+                )}
+                
+                     <View style={{ flexDirection: 'row',marginRight:10, }}>
+                            <CheckBox
+                                value={numberBoxState}
+                                disabled={false}
+                                onChange={() => toggleStatenumberBox('Number') }
+                            />
+                            <Text style={{marginTop: 5 , padding:2,}}> 주문번호순 </Text>
+                            <CheckBox
+                                value={DateBoxState}
+                                
+                                disabled={false}
+                                onChange={() => toggleStateDateBox('Date') }
+                            />
+                            <Text style={{marginTop: 5, padding:2,}}> 최근순 </Text>
+                            <View>
+
+                
+            </View>
+                    </View>
+
                     <Text style={
                         {
                             fontSize: 22,
@@ -69,7 +186,7 @@ const SecondRoute = (props) => {
                             fontWeight: 'bold',
                             color: '#ea5567',
                         }
-                    }>  {props.data.length}  </Text>
+                    }>  {pastList.length}  </Text>
                     <Text style={
                         {
                             fontSize: 22,
@@ -89,15 +206,16 @@ const SecondRoute = (props) => {
                     borderColor: '#777'
                 }
             }>
-                <Text style={exampleStyle.pastOrderListText}>주문번호</Text>
+                <Text style={exampleStyle.pastOrderNumberListText}>주문번호</Text>
                 <Text style={exampleStyle.pastOrderListText}>상품명</Text>
-                <Text style={exampleStyle.pastOrderListText}>갯수</Text>
+                <Text style={exampleStyle.pastOrderNumberListText}>갯수</Text>
                 <Text style={exampleStyle.pastOrderListText}>주문자번호</Text>
+                <Text style={exampleStyle.pastOrderListText}>주문날짜</Text>
                 <Text style={exampleStyle.pastOrderListText}>주문시간</Text>
-                <Text style={[exampleStyle.pastOrderListText, { width: '25%' }]}>비고</Text>
+                <Text style={[exampleStyle.pastOrderListText, { width: '30%' }]}>비고</Text>
             </View>
             <FlatList
-                data={props.data}
+                data={pastList}
                 keyExtractor={item => item.key}
                 contentContainerStyle={
                     {
@@ -116,12 +234,13 @@ const SecondRoute = (props) => {
                                     flexDirection: 'row',
                                 }
                             }>
-                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.orderNumber}</Text>
+                                <Text style={[exampleStyle.pastOrderNumberListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.orderNumber}</Text>
                                 <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.name}</Text>
-                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.options.count}</Text>
-                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.clientPhoneNumber}</Text>
+                                <Text style={[exampleStyle.pastOrderNumberListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.options.count}</Text>
+                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>0{item.orderInfo.clientPhoneNumber.substring(3,item.orderInfo.clientPhoneNumber.length)}</Text>
+                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.date}</Text>
                                 <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.orderTime}</Text>
-                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14, width: '25%' }]}>샷 추가 : {item.options.shotNum} / 시럽 추가 : {item.options.syrup} / 크림 추가 : {item.options.whipping}</Text>
+                                <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14, width: '30%' }]}>샷 추가 : {item.options.shotNum} / 시럽 추가 : {item.options.syrup} / HOT/ICED : {item.options.type}</Text>
                             </View>
                             <View style={
                                 {

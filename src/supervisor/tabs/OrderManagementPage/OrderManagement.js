@@ -1,14 +1,17 @@
-import React from 'react';
+import React ,{useState}from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     FlatList,
     Image,
+    Button,
+
     Dimensions,
     StatusBar
 } from 'react-native';
 import { exampleStyle } from '../../styles';
+
 import moment from 'moment';
 
 export default OrderManagement = (props) => {
@@ -16,6 +19,9 @@ export default OrderManagement = (props) => {
     const {
         data, route, onPressFunction,
     } = props;
+
+  
+
 
     return (
         <View style={[exampleStyle.background,
@@ -29,6 +35,8 @@ export default OrderManagement = (props) => {
         }
         ]}>
             <StatusBar barStyle='light-content' />
+            
+            
             <View style={exampleStyle.functionWrapper}>
                 <View style={   // 상위 탭
                     {

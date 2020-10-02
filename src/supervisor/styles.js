@@ -219,7 +219,14 @@ const exampleStyle = StyleSheet.create({
     pastOrderListText : {
         fontWeight: 'bold', 
         fontSize: 15, 
-        width: '15%', 
+        width: '14%', 
+        textAlign: 'center',
+        color:'#182335'
+    },
+    pastOrderNumberListText : {
+        fontWeight: 'bold', 
+        fontSize: 15, 
+        width: '7%', 
         textAlign: 'center',
         color:'#182335'
     },

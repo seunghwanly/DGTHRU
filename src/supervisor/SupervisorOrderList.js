@@ -68,7 +68,7 @@ export default class SupervisorOrderList extends Component {
                                     this.state.pageIndex === 2 ?
                                         <SecondRoute 
                                             data={this.state.pastList} 
-                                            route={route}
+                                            route={route}originList
                                             onPressFunction={this.setCurrentPage}   
                                             />
                                         :
@@ -240,7 +240,7 @@ export default class SupervisorOrderList extends Component {
                         options: menuChild.val().options,
                         orderInfo: menuChild.val().orderInfo,
                         //key : orderInfo.orderTime,
-                        key: keyName,
+                        //key: keyName,
                         date: menuChild.val().date,
                     })
 
@@ -253,8 +253,9 @@ export default class SupervisorOrderList extends Component {
 
             })
             //console.log(JSON.stringify(li));
-            li.sort((d2, d1) => new Moment(d2.orderInfo.orderTime, 'HH:mm:ss') - new Moment(d1.orderInfo.orderTime, 'HH:mm:ss'));
-
+            li.sort((d2, d1) => parseInt(d2.orderInfo.orderNumber.substring(2,d2.orderInfo.orderNumber.length)) -     
+                                parseInt(d1.orderInfo.orderNumber.substring(2,d1.orderInfo.orderNumber.length)));
+                     
             this.setState({ pastList: li });
 
         })
