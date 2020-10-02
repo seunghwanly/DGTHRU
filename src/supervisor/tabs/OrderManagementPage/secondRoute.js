@@ -24,8 +24,24 @@ const SecondRoute = (props) => {
     const [endDate, setEndDate] = useState(0);
 
 
-    // const dateRangeFilter = () =>{
-    // }
+    const dateRangeFilter = () =>{
+        var start = new Moment(startDate,'YYYY-MM-DD').format('YYYY-MM-DD');
+        var end = new Moment(endDate,'YYYY-MM-DD').format('YYYY-MM-DD');
+        var li = originList;
+        console.log('start :' , start);
+        console.log('li[0] :' , li[0].date);
+        console.log('end :' , end);
+        console.log('답은 : ' , new Moment(li[0].date,'YYYY-MM-DD').isBetween(start,end,null,'[]'));
+       // li.filter(menu => new Moment(menu.date,'YYYY-MM-DD').isBetween(start,end));
+        
+        var li2 = li.filter(function (n) {
+            return new Moment(n.date,'YYYY-MM-DD').isBetween(start,end,null,'[]');
+        });
+
+        console.log(li2.length); 
+        setpastList(li2);
+
+    }
 
     const toggleStateDateBox = (item) =>{
         if(item == 'Date'){
@@ -64,13 +80,17 @@ const SecondRoute = (props) => {
         setShow(Platform.OS === 'ios');
         var str = new Moment(currentDate).format('YYYY-MM-DD').toString();
         if(flag ===1){
-        setStartDate(str);      
+        setStartDate(str);
         setflag(0);
+        //dateRangeFilter();     
         }
         else if(flag ===2){
             setEndDate(str);
             setflag(0);
+            //dateRangeFilter();     
         }
+
+   
       };
     
       const showMode = (currentMode) => {
@@ -132,9 +152,13 @@ const SecondRoute = (props) => {
                         alignItems: 'center',
                     }
                 }>
-
+                     <View style={{marginRight:5,}}>
+                    <Button onPress={dateRangeFilter} title=' >> 기간으로 검색 !' /> 
+                    </View>
                     <View style={{marginRight:5,}}>
+                        
                     <Button onPress={showDatepicker} title={startDate.toString()} />
+                   
                 </View>
 
                 <View>
