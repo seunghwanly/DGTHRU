@@ -11,36 +11,31 @@ import Moment from 'moment';
 import DateTimePicker from '@react-native-community/datetimepicker';
 const SecondRoute = (props) => {
 
-    const [date, setDate] = useState(new Date(1598051730000));
+
+    const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [DateBoxState, setDateBoxState] = useState(false);
     const [numberBoxState, setnumberBoxState] = useState(true);
     const [pastList , setpastList] = useState(props.data);
+    const [currentList , setCurrentList] = useState(props.data);
     const [originList , setOriginList] = useState(props.data);
     const [flag, setflag] = useState(0);
 
-    const [startDate, setStartDate] = useState(new Moment('2020-05-23','YYYY-MM-DD').format('YYYY-MM-DD').toString());
-    const [endDate, setEndDate] = useState(0);
+    const [startDate, setStartDate] = useState(new Moment().format('YYYY-MM-DD').toString());
+    const [endDate, setEndDate] = useState(new Moment().format('YYYY-MM-DD').toString());
 
 
     const dateRangeFilter = () =>{
         var start = new Moment(startDate,'YYYY-MM-DD').format('YYYY-MM-DD');
         var end = new Moment(endDate,'YYYY-MM-DD').format('YYYY-MM-DD');
-        var li = originList;
-        console.log('start :' , start);
-        console.log('li[0] :' , li[0].date);
-        console.log('end :' , end);
-        console.log('답은 : ' , new Moment(li[0].date,'YYYY-MM-DD').isBetween(start,end,null,'[]'));
-       // li.filter(menu => new Moment(menu.date,'YYYY-MM-DD').isBetween(start,end));
-        
+        var li = originList;     
         var li2 = li.filter(function (n) {
             return new Moment(n.date,'YYYY-MM-DD').isBetween(start,end,null,'[]');
         });
 
         console.log(li2.length); 
         setpastList(li2);
-
     }
 
     const toggleStateDateBox = (item) =>{
@@ -59,7 +54,7 @@ const SecondRoute = (props) => {
     }
 
     const filterList = () =>{
-        var li = originList;
+        var li = pastList;
         if(numberBoxState == true){
 
             li.sort((d2, d1) => new Moment(d1.date+' '+d1.orderInfo.orderTime, 'YYYY_MM_DD HH:mm:ss') - new Moment(d2.date+' '+d2.orderInfo.orderTime, 'YYYY_MM_DD HH:mm:ss'));
@@ -143,18 +138,74 @@ const SecondRoute = (props) => {
                         source={require('../../../../image/chevron-back-outline.png')}
                     />
                 </TouchableOpacity>
+                
+                <TouchableOpacity
+                        style={
+                            {
+                                justifyContent:'center',
+                                alignItems:'center',
+                                width:'10%',
+                            borderBottomColor:'gray',
+                            borderBottomWidth:1,
+                            marginRight:5,
+                            }
+                        }
+                        onPress={() => showDatepicker()}
+                    >
+                    <Text> {startDate.toString()}</Text>
+                    </TouchableOpacity>
+                    <Text> - </Text>
+                    <TouchableOpacity
+                        style={
+                            {
+                                justifyContent:'center',
+                                alignItems:'center',
+                                width:'10%',
+                                borderBottomColor:'gray',
+                                borderBottomWidth:1,
+                                marginRight:5,
+                            }
+                        }
+                        onPress={() => showTimepicker()}
+                    >
+                    <Text> {endDate.toString()} </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    style={
+                        {
+                            backgroundColor:'#182335',
+                            justifyContent:'center',
+                                alignItems:'center',
+                            padding:'0.8%',
+                            marginLeft:5,
+                           marginRight:5,
+                        }
+                    }
+                    onPress={() => dateRangeFilter()}
+                >
+                   <Text style={{fontSize: 16, color:'white',}}> 기간설정 </Text>
+                </TouchableOpacity>
 
+                
                 <View style={
                     {
-                        width: '90%',
+
+                        width: '60%',
                         flexDirection: 'row',
                         justifyContent: 'flex-end',
                         alignItems: 'center',
                     }
                 }>
-                     <View style={{marginRight:5,}}>
+                   
+                   
+                    
+
+                    
+
+                 {/* <View style={{marginRight:5,}}>
                     <Button onPress={dateRangeFilter} title=' >> 기간으로 검색 !' /> 
                     </View>
+
                     <View style={{marginRight:5,}}>
                         
                     <Button onPress={showDatepicker} title={startDate.toString()} />
@@ -162,8 +213,8 @@ const SecondRoute = (props) => {
                 </View>
 
                 <View>
-                    <Button onPress={showTimepicker} title={endDate == 0 ? new Moment().format('YYYY-MM-DD').toString() : endDate.toString() } />
-                </View>
+                    <Button onPress={showTimepicker} title={endDate.toString() } />
+                </View> */}
                 {show && (
                     <DateTimePicker
                     testID="dateTimePicker"
@@ -175,7 +226,7 @@ const SecondRoute = (props) => {
                     />
                 )}
                 
-                     <View style={{ flexDirection: 'row',marginRight:10, }}>
+                     <View style={{ flexDirection: 'row',marginRight:'3%', }}>
                             <CheckBox
                                 value={numberBoxState}
                                 disabled={false}
@@ -195,7 +246,17 @@ const SecondRoute = (props) => {
             </View>
                     </View>
 
-                    <Text style={
+                   
+                </View>
+                
+            </View>
+            <View style={{
+                marginRight:'3%',
+                alignSelf:'flex-end',
+                flexDirection:'row',
+
+            }}>
+            <Text style={
                         {
                             fontSize: 22,
                             fontWeight: 'bold',
@@ -218,9 +279,7 @@ const SecondRoute = (props) => {
                             color: '#182335',
                         }
                     }>개의 주문이 있습니다.</Text>
-                </View>
             </View>
-
             <View style={
                 {
                     flexDirection: 'row',
