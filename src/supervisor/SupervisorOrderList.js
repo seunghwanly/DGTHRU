@@ -82,7 +82,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'third':
                 return (
-                    <ThirdRoute route={route} />
+                    <ThirdRoute shopname={this.state.shopname} />
                 )
             case 'fourth':
                 return (
