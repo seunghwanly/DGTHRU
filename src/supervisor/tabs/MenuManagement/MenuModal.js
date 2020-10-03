@@ -9,9 +9,10 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     Pressable,
-    Image
 } from 'react-native';
 import { modalItem, menuManage } from '../styles';
+import CheckBox from '@react-native-community/checkbox';
+import { MinusButton, PlusButton } from '../../../client/menu/components/CountButton';
 import database from '@react-native-firebase/database';
 
 const updateDatabase = async (name, inputJSON, ref) => {
@@ -287,15 +288,18 @@ export default MenuModal = (props) => {
             });
 
             const [iceAvailable, setIceAvailable] = useState(false);
+            const [subMenuAvailable, setSubMenuAvailable] = useState(false);
+            const [subMenu, setSubMenu] = useState(null);
             const [iceCost, setIceCost] = useState(0);
             const [hotCost, setHotCost] = useState(0);
+            const [category, setCategory] = useState(null);
 
             const isNumber = (input, isHot) => {
 
                 var result = false;
-               
+
                 for (var i = 0; i < input.length; ++i) {
-                    if(48 <= input[i].charCodeAt(0) && input[i].charCodeAt(0) <= 57) result = true;
+                    if (48 <= input[i].charCodeAt(0) && input[i].charCodeAt(0) <= 57) result = true;
                     else result = false;
                 }
 
@@ -315,37 +319,38 @@ export default MenuModal = (props) => {
                     animationType='slide'
                     transparent={true}
                     visible={modalVisible}
-                    >
+                >
                     <ScrollView contentContainerStyle={modalItem.modalBackground}>
                         <KeyboardAvoidingView
                             style={modalItem.modalSubBackground}
                             behavior={Platform.OS == "ios" ? "padding" : "height"}
+                            keyboardVerticalOffset={50}
                         >
                             <View style={
                                 {
-                                    flexDirection:'row',
-                                    alignItems:'center'
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
                                 }
                             }>
                                 <Text style={
                                     {
-                                        fontSize:20,
-                                        color:'#182335',
-                                        fontWeight:'bold'
+                                        fontSize: 20,
+                                        color: '#182335',
+                                        fontWeight: 'bold'
                                     }
                                 }>새로운</Text>
                                 <Text style={
                                     {
-                                        fontSize:20,
-                                        color:'#eaaf9d',
-                                        fontWeight:'bold'
+                                        fontSize: 20,
+                                        color: '#eaaf9d',
+                                        fontWeight: 'bold'
                                     }
                                 }> 메뉴 </Text>
                                 <Text style={
                                     {
-                                        fontSize:20,
-                                        color:'#182335',
-                                        fontWeight:'bold'
+                                        fontSize: 20,
+                                        color: '#182335',
+                                        fontWeight: 'bold'
                                     }
                                 }>추가하기</Text>
                             </View>
@@ -355,6 +360,48 @@ export default MenuModal = (props) => {
                                 }
                             }>
                                 <View style={modalItem.addMenu}>
+                                    <FlatList
+                                        data={['음료', '디저트']}
+                                        keyExtractor={item => item.key}
+                                        horizontal={true}
+                                        scrollEnabled={false}
+                                        contentContainerStyle={
+                                            {
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '100%',
+                                                marginVertical: 10
+                                            }
+                                        }
+                                        renderItem={
+                                            ({ item }) => {
+                                                const backgroundColor = item.toString()
+                                                    === category ? '#eaaf9d' : '#f2f2f2';
+                                                const color = item.toString()
+                                                    === category ? '#fff' : '#000'
+                                                return (
+                                                    <TouchableOpacity style={
+                                                        {
+                                                            borderRadius: 15,
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            paddingVertical: 20,
+                                                            paddingHorizontal: 30,
+                                                            marginHorizontal: 10,
+                                                            backgroundColor,
+                                                        }
+                                                    }
+                                                        onPress={() => setCategory(item)}
+                                                    >
+                                                        <Text style={{ color, fontWeight: 'bold' }}>{item}</Text>
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                        }
+                                    />
+
+                                </View>
+                                <View style={modalItem.addMenu}>
                                     <Text style={modalItem.addMenuLeftText}>메뉴 이름 : </Text>
                                     <TextInput
                                         style={modalItem.addMenuRightText}
@@ -362,50 +409,123 @@ export default MenuModal = (props) => {
                                         onChangeText={(text) => setForm({ ['name']: text })}
                                     />
                                 </View>
-                                <View style={modalItem.addMenu}>
-                                    <Text style={modalItem.addMenuLeftText}>HOT 가격 : </Text>
-                                    <TextInput
-                                        style={modalItem.addMenuRightText}
-                                        keyboardType='numeric'
-                                        placeholder='HOT 가격을 입력해주세요...(숫자만)'
-                                        onChangeText={(text) => isNumber(text, true)}
-                                    />
-                                </View>
-                                <View style={{flexDirection:'row'}}>
-                                    <Text>ICE 메뉴 가능 : 가격 입력</Text>
-                                    <Pressable
-                                        style={ ({ pressed }) => [
-                                            menuManage.searchBarIcon,
-                                            {
-                                                backgroundColor : pressed
-                                                ? '#ea5517'
-                                                : 'transparent'
-                                            }
-                                        ]}
-                                        onPress={() => setIceAvailable(!iceAvailable)}
-                                        >
-                                        <Text>✔︎</Text>
-                                    </Pressable>
-                                </View>
                                 {
-                                    iceAvailable ?
-                                        <View style={modalItem.addMenu}>
-                                            <Text style={modalItem.addMenuLeftText}>ICE 가격 : </Text>
-                                            <TextInput
-                                                style={modalItem.addMenuRightText}
-                                                keyboardType='numeric'
-                                                placeholder='ICED 가격을 입력해주세요...(숫자만)'
-                                                onChangeText={(text) => isNumber(text, false)}
-                                            />
-                                        </View>
+                                    category === '음료' ?
+                                        <>
+                                            <View style={modalItem.addMenu}>
+                                                <Text style={modalItem.addMenuLeftText}>HOT 가격 : </Text>
+                                                <TextInput
+                                                    style={modalItem.addMenuRightText}
+                                                    keyboardType='numeric'
+                                                    placeholder='HOT 가격을 입력해주세요...(숫자만)'
+                                                    onChangeText={(text) => isNumber(text, true)}
+                                                />
+                                            </View>
+                                            <View style={modalItem.addMenu}>
+                                                <Text style={modalItem.addMenuLeftText}>ICE 메뉴 가능 </Text>
+                                                {
+                                                    Platform.OS === 'ios' ?
+                                                        <CheckBox
+                                                            style={{ height: 20, width: 20, }}
+                                                            boxType='square'
+                                                            lineWidth={true}
+                                                            tintColor='#eaaf9d'
+                                                            onCheckColor='#fff'
+                                                            onTintColor='#eaaf9d'
+                                                            onFillColor='#eaaf9d'
+                                                            onAnimationType='bounce'
+                                                            offAnimationType='bounce'
+                                                            value={iceAvailable}
+                                                            disabled={false}
+                                                            onChange={() => setIceAvailable(!iceAvailable)}
+                                                        />
+                                                        :
+                                                        <CheckBox
+                                                            value={iceAvailable}
+                                                            disabled={false}
+                                                            onChange={() => setIceAvailable(!iceAvailable)}
+                                                        />
+                                                }
+                                            </View>
+                                            {
+                                                iceAvailable ?
+                                                    <View style={modalItem.addMenu}>
+                                                        <Text style={modalItem.addMenuLeftText}>ICE 가격 : </Text>
+                                                        <TextInput
+                                                            style={modalItem.addMenuRightText}
+                                                            keyboardType='numeric'
+                                                            placeholder='ICED 가격을 입력해주세요...(숫자만)'
+                                                            onChangeText={(text) => isNumber(text, false)}
+                                                        />
+                                                    </View>
+                                                    :
+                                                    <></>
+                                            }
+                                            <View style={modalItem.addMenu}>
+                                                <Text style={modalItem.addMenuLeftText}>세부 메뉴 가능 </Text>
+                                                {
+                                                    Platform.OS === 'ios' ?
+                                                        <CheckBox
+                                                            style={{ height: 20,width: 20,}}
+                                                            boxType='square'
+                                                            lineWidth={true}
+                                                            tintColor='#eaaf9d'
+                                                            onCheckColor='#fff'
+                                                            onTintColor='#eaaf9d'
+                                                            onFillColor='#eaaf9d'
+                                                            onAnimationType='bounce'
+                                                            offAnimationType='bounce'
+                                                            value={subMenuAvailable}
+                                                            disabled={false}
+                                                            onChange={() => setSubMenuAvailable(!subMenuAvailable)}
+                                                        />
+                                                        :
+                                                        <CheckBox
+                                                            value={subMenuAvailable}
+                                                            disabled={false}
+                                                            onChange={() => setSubMenuAvailable(!subMenuAvailable)}
+                                                        />
+                                                }
+                                            </View>
+                                            {
+                                                subMenuAvailable ?
+                                                    <View style={modalItem.addMenu}>
+                                                        <Text style={modalItem.addMenuLeftText}>세부메뉴 추가 : </Text>
+                                                        <TextInput
+                                                            style={modalItem.addMenuRightText}
+                                                            placeholder='세부메뉴를 입력해주세요'
+                                                            onChangeText={(text) => setSubMenu(text)}
+                                                        />
+                                                        <PlusButton style={
+                                                            {
+                                                                backgroundColor:'lightgray',
+                                                                width:20,
+                                                                height:20,
+                                                                borderRadius:8,
+                                                                alignItems:'center'                                                                
+                                                            }
+                                                        }
+                                                            onPress={() => alert('add')}
+                                                        />
+                                                    </View>
+                                                    :
+                                                    <></>
+                                            }
+                                        </>
                                         :
-                                        <></>
+                                        <>
+                                        </>
                                 }
+
+                                <View style={modalItem.addMenu}>
+                                    <Text style={modalItem.addMenuLeftText}>메뉴 사진 : </Text>
+                                    <Text style={modalItem.addMenuRightText}>준비중입니다 :)</Text>
+                                </View>
                             </View>
                             <View style={
                                 {
-                                    flexDirection:'row',
-                                    marginVertical:10
+                                    flexDirection: 'row',
+                                    marginVertical: 10
                                 }
                             }>
                                 <TouchableOpacity
