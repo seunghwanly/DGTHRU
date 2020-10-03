@@ -19,7 +19,7 @@ const shopStyles = StyleSheet.create({
         alignItems: 'center',
     },
     body: {
-
+     
         flex: 5,
         width: '100%',
         margin: 2,
@@ -43,15 +43,17 @@ const shopStyles = StyleSheet.create({
         alignItems: 'center'
     },
     itemDesc: {
-        fontSize: 15,
-        color: 'black',
+        fontSize: 16,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color:'#182355',
+        marginVertical:4
     },
     itemSubDesc: {
-        textAlign: 'center',
-        color: 'gray',
-        fontSize: 10,
+        textAlign: 'right',
+        color: '#555',
+        fontSize: 12,
+        marginVertical:2
     },
     image: {
         resizeMode: 'cover',
@@ -61,14 +63,27 @@ const shopStyles = StyleSheet.create({
         borderRadius: 12,
     },
     itemContainer: {
-        width: "50%",
+        width:'33%',
         alignItems: 'center',
+        alignSelf:'center',
+        backgroundColor:'#fff'
     },
     imageContainer: {
-        width: "100%",
+        width: '70%',
+        backgroundColor:'#fff',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '2%',
+        marginVertical:10,
+        paddingTop:0,
+        paddingVertical:20,
+        borderRadius:20,
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius:2
     },
 });
 
@@ -217,6 +232,8 @@ const exampleStyle = StyleSheet.create({
         elevation: 3,
     },
     pastOrderListText : {
+        
+        alignSelf:'center',
         fontWeight: 'bold', 
         fontSize: 15, 
         width: '14%', 

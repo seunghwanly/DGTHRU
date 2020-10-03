@@ -179,7 +179,7 @@ export default StackContainer = ({ navigation }) => {
                                 headerStyle: {
                                     backgroundColor:
                                         name === "Shops" || name === 'MenuTabView' || name === 'Basket' ||
-                                            name === 'SupervisorOrderList' ?
+                                            name === 'SupervisorOrderList' || name === 'SupervisorShops' ?
                                             '#182335'
                                             :
                                             name === 'Result' || name === 'Loading' ?
@@ -189,7 +189,7 @@ export default StackContainer = ({ navigation }) => {
                                     shadowColor: 'transparent',
                                 },
                                 headerTitleStyle: {
-                                    color: name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Basket' || name === 'Loading' || name === 'SupervisorOrderList' ? '#fff' : '#000',
+                                    color: name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Basket' || name === 'Loading' || name ==='SupervisorShops' || name === 'SupervisorOrderList' ? '#fff' : '#000',
                                     fontWeight: 'bold',
                                 },
                             })

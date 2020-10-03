@@ -100,7 +100,8 @@ export default OrderManagement = (props) => {
                         borderBottomWidth: 2,
                         paddingVertical: 10,
                         borderColor: '#777',
-                        marginTop: 10
+                        marginTop: 10,
+                        
                     }
                 }>
                     <Text style={exampleStyle.pastOrderListText}>주문번호</Text>
@@ -134,11 +135,12 @@ export default OrderManagement = (props) => {
                                                     <>
                                                         <View style={
                                                             {
+                                                                width: '100%',
                                                                 paddingVertical: 10,
                                                                 flexDirection: 'row',
                                                             }
                                                         }>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.orderNumber}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 , }]}>{item.orderInfo.orderNumber}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.name}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.options.count}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.clientPhoneNumber}</Text>
@@ -166,6 +168,8 @@ export default OrderManagement = (props) => {
                                         <>
                                             <View style={
                                                 {
+                                                    width: '100%',
+                                                    justifyContent:'center',
                                                     paddingVertical: 10,
                                                     flexDirection: 'row',
 

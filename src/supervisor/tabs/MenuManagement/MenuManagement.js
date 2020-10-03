@@ -34,7 +34,7 @@ export default class MenuManagement extends React.Component {
             searchResult: null,
             isAddMenu : false
         }
-
+        console.log("최종 : " + this.props.shopname);
         this._menuDatabse = database().ref('menu/' + this.props.shopname);
     }
 

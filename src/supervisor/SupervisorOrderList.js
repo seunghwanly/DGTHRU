@@ -16,7 +16,7 @@ import OrderManagement from './tabs/OrderManagementPage/OrderManagement';
 import MenuManagement from './tabs/MenuManagement/MenuManagement';
 const initialLayout = { width: Dimensions.get('window').width };
 
-var shopname = '';
+// var shopname = '';
 var phonenumber = '';
 
 
@@ -24,10 +24,10 @@ export default class SupervisorOrderList extends Component {
 
     constructor(props) {
         super(props);
-        shopname = "hyehwa_roof";
-
+        // shopname = props.route.params.shopInfo.id;
         this.state = {
             index: 0,
+            shopname : props.route.params.shopInfo,
             routes: [
                 { key: 'first', title: '매장관리' },
                 { key: 'second', title: '메뉴관리' },
@@ -78,7 +78,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'second':
                 return (
-                    <MenuManagement shopname={shopname}/>
+                    <MenuManagement shopname={this.state.shopname}/>
                 )
             case 'third':
                 return (
@@ -119,7 +119,6 @@ export default class SupervisorOrderList extends Component {
                 alert('준비중입니다!');
                 break;
             case 'munhwa_1f':
-
                 break;
             case 'favorate_shop':
                 alert('준비중입니다!');
@@ -131,7 +130,7 @@ export default class SupervisorOrderList extends Component {
     componentDidMount = () => {
         //console.log('key: ' + shopname);
 
-        database().ref('shops/' + shopname).on('value', (snapshot) => {
+        database().ref('shops/' + this.state.shopname).on('value', (snapshot) => {
             var li = []
             var index = 0;
             //snapshot: 날짜
@@ -214,7 +213,7 @@ export default class SupervisorOrderList extends Component {
 
         })
 
-        database().ref('admin/' + shopname).on('value', (snapshot) => {
+        database().ref('admin/' + this.state.shopname).on('value', (snapshot) => {
             var li = []
             var index = 0;
             //snapshot: 날짜
