@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Platform, Dimensions, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Dimensions, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, Modal, Pressable } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckBox from '@react-native-community/checkbox';
 import { exampleStyle } from '../../styles';
@@ -123,7 +123,7 @@ const SecondRoute = (props) => {
                     flexDirection: 'row',
                     paddingHorizontal: '3%',
                     paddingVertical: '1%',
-                    alignItems:'center'
+                    alignItems: 'center'
                 }
             }>
                 <TouchableOpacity
@@ -147,10 +147,10 @@ const SecondRoute = (props) => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             width: '10%',
-                            height:34,
+                            height: 34,
                             borderBottomColor: 'gray',
                             borderBottomWidth: 1,
-                            paddingBottom:1,
+                            paddingBottom: 1,
                             marginRight: 5,
                         }
                     }
@@ -160,7 +160,7 @@ const SecondRoute = (props) => {
                 </TouchableOpacity>
                 <Text style={
                     {
-                        paddingBottom:3
+                        paddingBottom: 3
                     }
                 }> - </Text>
                 <TouchableOpacity
@@ -169,10 +169,10 @@ const SecondRoute = (props) => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             width: '10%',
-                            height:34,
+                            height: 34,
                             borderBottomColor: 'gray',
                             borderBottomWidth: 1,
-                            paddingBottom:1,
+                            paddingBottom: 1,
                             marginRight: 5,
                         }
                     }
@@ -184,7 +184,7 @@ const SecondRoute = (props) => {
                     style={
                         {
                             backgroundColor: '#182335',
-                            borderRadius:5,
+                            borderRadius: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: '0.8%',
@@ -226,22 +226,79 @@ const SecondRoute = (props) => {
                 <View>
                     <Button onPress={showTimepicker} title={endDate.toString() } />
                 </View> */}
-                    {show && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date}
-                            mode={mode}
-                            is24Hour={true}
-                            display="default"
-                            onChange={onChange}
-                        />
-                    )}
-
+                    {
+                        Platform.OS === 'ios' ?
+                                <Modal
+                                    animationType='slide'
+                                    transparent={true}
+                                    visible={show}
+                                >
+                                <View style={
+                                    {
+                                        width:400,
+                                        height:300,
+                                        margin: 20,
+                                        backgroundColor: "#fff",
+                                        borderRadius: 20,
+                                        padding: 35,
+                                        alignItems: 'center',
+                                        justifyContent:'center',
+                                        alignSelf:'center',
+                                        top:'30%',
+                                        shadowColor: "#000",
+                                        shadowOffset: {
+                                            width: 1,
+                                            height: 2
+                                        },
+                                        shadowOpacity: 0.25,
+                                        shadowRadius: 3.84,
+                                        elevation: 5
+                                    }
+                                }>
+                                    <DateTimePicker
+                                        testID="dateTimePicker"
+                                        value={date}
+                                        mode={mode}
+                                        is24Hour={true}
+                                        display="default"
+                                        onChange={onChange}
+                                        style={{ width: '100%', backgroundColor:'#fff' }}
+                                    />
+                                    <Pressable
+                                        style={
+                                            {
+                                                borderRadius: 20,
+                                                backgroundColor: '#182335',
+                                                width:200,
+                                                height:50,
+                                                alignItems:'center',
+                                                justifyContent:'center',
+                                                marginVertical:10
+                                            }
+                                        }
+                                        onPress={() => setShow(!show)}
+                                    >
+                                        <Text style={{ fontWeight: 'bold', color:'#fff', fontSize:20 }}>확인</Text>
+                                    </Pressable>
+                                    </View>
+                                </Modal>
+                            :
+                            show && (
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={date}
+                                    mode={mode}
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={onChange}
+                                />
+                            )
+                    }
                     <View style={
                         {
                             flexDirection: 'row',
                             marginRight: '3%',
-                            alignItems:'center'
+                            alignItems: 'center'
                         }
                     }>
                         {
@@ -310,11 +367,10 @@ const SecondRoute = (props) => {
 
 
                 </View>
-
             </View>
             <View style={{
                 marginRight: '3%',
-                marginVertical:'1%',
+                marginVertical: '1%',
                 alignSelf: 'flex-end',
                 flexDirection: 'row',
                 alignItems: 'center'

@@ -38,7 +38,9 @@ export const menuManage = StyleSheet.create({
         backgroundColor: '#ddd',
         borderRadius: 10,
         padding: 5,
-        marginHorizontal: 5
+        marginHorizontal: 5,
+        alignItems:'center',
+        justifyContent:'center'
     },
     searchBarTextInput: {
         borderRadius: 20,
@@ -106,7 +108,7 @@ export const modalItem = StyleSheet.create({
     },
     modalSubBackground: {
         margin: 20,
-        backgroundColor: "#eee",
+        backgroundColor: "#fff",
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
@@ -128,7 +130,8 @@ export const modalItem = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 10,
         paddingVertical: 5,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        marginBottom:10
     },
     modalSubTitleView: {
         flexDirection: 'row',
@@ -179,8 +182,8 @@ export const modalItem = StyleSheet.create({
     },
     addMenu : {
         flexDirection:'row',
-        marginVertical:2,
-        paddingVertical:1,
+        marginVertical:8,
+        paddingVertical:2,
         width:400
      },
      addMenuLeftText : {
@@ -190,7 +193,7 @@ export const modalItem = StyleSheet.create({
         width:100
     },
     addMenuRightText : {
-        width:200
+        width:300
     },
     
 
