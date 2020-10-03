@@ -7,9 +7,11 @@ import {
     TouchableOpacity,
     FlatList,
     ScrollView,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Pressable,
+    Image
 } from 'react-native';
-import { modalItem } from '../styles';
+import { modalItem, menuManage } from '../styles';
 import database from '@react-native-firebase/database';
 
 const updateDatabase = async (name, inputJSON, ref) => {
@@ -19,26 +21,25 @@ const updateDatabase = async (name, inputJSON, ref) => {
     var newName = inputJSON.name.changed ? inputJSON.name.now : inputJSON.name.prev;
     var newCost = inputJSON.cost.changed ? inputJSON.cost.now : inputJSON.cost.prev;
     var newSoldOut = inputJSON.sold_out.changed ?
-                        inputJSON.sold_out.now === '품절' ? true : false
-                        :
-                        inputJSON.sold_out.prev === '품절' ? true : false;
+        inputJSON.sold_out.now === '품절' ? true : false
+        :
+        inputJSON.sold_out.prev === '품절' ? true : false;
 
     await database()
         .ref(ref)
         .once('value', snapshot => {
-            if(snapshot.val().name === name)
+            if (snapshot.val().name === name)
                 isRightRef = true;
         }).then(() => {
-            if(isRightRef) {
+            if (isRightRef) {
 
                 database().ref(ref).update({
-                    name : newName,
-                    cost : newCost,
-                    sold_out : newSoldOut
+                    name: newName,
+                    cost: newCost,
+                    sold_out: newSoldOut
                 }).then(() => console.log('Updated Menu'));
             }
-        })
-
+        });
 }
 
 export default MenuModal = (props) => {
@@ -46,13 +47,15 @@ export default MenuModal = (props) => {
     const {
         data,
         dataIndex,
-        category,
         categoryIndex,
         categoryType,
         shopname,
         modalVisible,
-        onPress
+        onPress,
+        isAddMenu
     } = props;
+
+
 
     if (data !== null) {
 
@@ -71,17 +74,17 @@ export default MenuModal = (props) => {
             "name": {
                 "prev": data.name,
                 "now": name,
-                "changed" : false
+                "changed": false
             },
             "cost": {
                 "prev": data.cost,
                 "now": cost,
-                "changed" : false
+                "changed": false
             },
             "sold_out": {
                 "prev": data.sold_out,
                 "now": soldOut,
-                "changed" : false
+                "changed": false
             }
         };
 
@@ -123,8 +126,6 @@ export default MenuModal = (props) => {
                                 <Text style={[modalItem.modalSubTitleText, { marginHorizontal: 5, color: '#eaaf9d' }]}>수정</Text>
                                 <Text style={modalItem.modalSubTitleText}>하기</Text>
                             </View>
-
-
 
                             <View style={modalItem.modalSubItemWrapper}>
                                 <Text style={[modalItem.modalSubItemDescText, { width: 60 }]}>이름 : </Text>
@@ -245,7 +246,7 @@ export default MenuModal = (props) => {
                                         </>
                                 }
                             </View>
-                            <View style={{ flexDirection: 'row', alignSelf: 'center', width: '50%', marginTop:50 }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', width: '50%', marginTop: 50 }}>
                                 <TouchableOpacity
                                     style={modalItem.modalButton}
                                     onPress={onPress}
@@ -269,24 +270,182 @@ export default MenuModal = (props) => {
             </Modal>
         )
     } else {
-        return (
-            <Modal
-                animationType='slide'
-                transparent={true}
-                visible={modalVisible}
-            >
-                <View style={modalItem.modalBackground}>
-                    <View style={modalItem.modalSubBackground}>
-                        <Text>ERROR</Text>
-                    </View>
-                </View>
-                <TouchableOpacity
-                    style={modalItem.modalButton}
-                    onPress={onPress}
+        if (isAddMenu) {
+
+            const [form, setForm] = useState({
+                cost: 0,
+                ice_available: false,
+                ice_cost: 0,
+                name: null,
+                only_ice: false,
+                option_available: {
+                    shot: true,
+                    syrup: true,
+                    whipping: true
+                },
+                sold_out: false
+            });
+
+            const [iceAvailable, setIceAvailable] = useState(false);
+            const [iceCost, setIceCost] = useState(0);
+            const [hotCost, setHotCost] = useState(0);
+
+            const isNumber = (input, isHot) => {
+
+                var result = false;
+               
+                for (var i = 0; i < input.length; ++i) {
+                    if(48 <= input[i].charCodeAt(0) && input[i].charCodeAt(0) <= 57) result = true;
+                    else result = false;
+                }
+
+                if (result) {
+                    if (isHot) setHotCost(Number(input));
+                    else setIceCost(Number(input));
+                }
+                else alert('숫자만 입력해주세요 !');
+            }
+
+            const setSpecifyCost = () => {
+
+            }
+
+            return (
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalVisible}
+                    >
+                    <ScrollView contentContainerStyle={modalItem.modalBackground}>
+                        <KeyboardAvoidingView
+                            style={modalItem.modalSubBackground}
+                            behavior={Platform.OS == "ios" ? "padding" : "height"}
+                        >
+                            <View style={
+                                {
+                                    flexDirection:'row',
+                                    alignItems:'center'
+                                }
+                            }>
+                                <Text style={
+                                    {
+                                        fontSize:20,
+                                        color:'#182335',
+                                        fontWeight:'bold'
+                                    }
+                                }>새로운</Text>
+                                <Text style={
+                                    {
+                                        fontSize:20,
+                                        color:'#eaaf9d',
+                                        fontWeight:'bold'
+                                    }
+                                }> 메뉴 </Text>
+                                <Text style={
+                                    {
+                                        fontSize:20,
+                                        color:'#182335',
+                                        fontWeight:'bold'
+                                    }
+                                }>추가하기</Text>
+                            </View>
+                            <View style={
+                                {
+                                    marginVertical: 50
+                                }
+                            }>
+                                <View style={modalItem.addMenu}>
+                                    <Text style={modalItem.addMenuLeftText}>메뉴 이름 : </Text>
+                                    <TextInput
+                                        style={modalItem.addMenuRightText}
+                                        placeholder='이름을 입력해주세요...'
+                                        onChangeText={(text) => setForm({ ['name']: text })}
+                                    />
+                                </View>
+                                <View style={modalItem.addMenu}>
+                                    <Text style={modalItem.addMenuLeftText}>HOT 가격 : </Text>
+                                    <TextInput
+                                        style={modalItem.addMenuRightText}
+                                        keyboardType='numeric'
+                                        placeholder='HOT 가격을 입력해주세요...(숫자만)'
+                                        onChangeText={(text) => isNumber(text, true)}
+                                    />
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text>ICE 메뉴 가능 : 가격 입력</Text>
+                                    <Pressable
+                                        style={ ({ pressed }) => [
+                                            menuManage.searchBarIcon,
+                                            {
+                                                backgroundColor : pressed
+                                                ? '#ea5517'
+                                                : 'transparent'
+                                            }
+                                        ]}
+                                        onPress={() => setIceAvailable(!iceAvailable)}
+                                        >
+                                        <Text>✔︎</Text>
+                                    </Pressable>
+                                </View>
+                                {
+                                    iceAvailable ?
+                                        <View style={modalItem.addMenu}>
+                                            <Text style={modalItem.addMenuLeftText}>ICE 가격 : </Text>
+                                            <TextInput
+                                                style={modalItem.addMenuRightText}
+                                                keyboardType='numeric'
+                                                placeholder='ICED 가격을 입력해주세요...(숫자만)'
+                                                onChangeText={(text) => isNumber(text, false)}
+                                            />
+                                        </View>
+                                        :
+                                        <></>
+                                }
+                            </View>
+                            <View style={
+                                {
+                                    flexDirection:'row',
+                                    marginVertical:10
+                                }
+                            }>
+                                <TouchableOpacity
+                                    style={modalItem.modalButton}
+                                    onPress={onPress}
+                                >
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={modalItem.modalButton}
+                                    onPress={() => console.log('>> info : \n' + form.name, hotCost, iceCost)}
+                                >
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>저장하기</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </KeyboardAvoidingView>
+                    </ScrollView>
+                </Modal>
+            )
+        }
+        else {
+            return (
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalVisible}
                 >
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                </TouchableOpacity>
-            </Modal>
-        )
+                    <View style={modalItem.modalBackground}>
+                        <View style={modalItem.modalSubBackground}>
+                            <Text>ERROR</Text>
+                        </View>
+                        <TouchableOpacity
+                            style={modalItem.modalButton}
+                            onPress={onPress}
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+            )
+        }
     }
 }

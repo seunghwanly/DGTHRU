@@ -119,7 +119,7 @@ export default class BeforePayment extends React.Component {
                         <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.count}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>
-                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>테이크아웃 : </Text>
+                        <Text style={{ fontSize: 14, fontWeight: '600', textAlign: 'left', width: '60%' }}>매장 / 포장 : </Text>
                         <Text style={{ fontSize: 14, textAlign: 'right', width: '40%' }}>{itemDataJSON.options.cup}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', width: '100%', marginVertical: 2 }}>

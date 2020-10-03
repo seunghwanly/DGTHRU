@@ -13,9 +13,8 @@ export const menuManage = StyleSheet.create({
     },
     keyboardAvoidingView: {
         width: '100%',
-        alignItems: 'center',
+        alignItems:'center',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
         marginBottom: 20,
     },
     resetSearch: {
@@ -31,6 +30,7 @@ export const menuManage = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginEnd: 20,
+        alignSelf:'flex-end'
     },
     searchBarIcon: {
         width: 30,
@@ -176,6 +176,22 @@ export const modalItem = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 1
-    }
+    },
+    addMenu : {
+        flexDirection:'row',
+        marginVertical:2,
+        paddingVertical:1,
+        width:400
+     },
+     addMenuLeftText : {
+        fontSize:14,
+        fontWeight:'bold',
+        color : '#333',
+        width:100
+    },
+    addMenuRightText : {
+        width:200
+    },
+    
 
 });

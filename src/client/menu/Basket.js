@@ -538,10 +538,13 @@ export default Basket = ({ navigation, route }) => {
                                                         <TouchableOpacity
                                                             onPress={() => [
                                                                 setInOrOut(item.toString()),
-                                                                Alert.alert('DGTHRU 알림', "'개인용'을 선택하시면 음료픽업대로 개인 텀블러나 용기를 가져오셔야 주문이 성립됩니다 :)",
-                                                                [
-                                                                    { text : '확인', onPress : () => console.log('confirmed') }
-                                                                ])
+                                                                item.toString() === '개인용' ?
+                                                                    Alert.alert('DGTHRU 알림', "'개인용'을 선택하시면 음료픽업대로 개인 텀블러나 용기를 가져오셔야 주문이 성립됩니다 :)",
+                                                                        [
+                                                                            { text: '확인', onPress: () => console.log('confirmed') }
+                                                                        ])
+                                                                    :
+                                                                    {}
                                                             ]}
                                                             style={[{ backgroundColor }, basketStyles.basketThreeItem]}>
                                                             <Text style={{ color }}> {item} </Text>

@@ -1,6 +1,7 @@
 import React, { Component, useEffect,useState } from 'react';
-import { Platform, Dimensions,CheckBox, TouchableOpacity, StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Dimensions, TouchableOpacity,StatusBar, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
+import CheckBox from '@react-native-community/checkbox';
 import { exampleStyle } from '../../styles';
 import {
     _setPickUpTime, _setCompleteTime, _setConfirmTime, _stringConverter, DeleteOrderList, Setconfirm, SetUnconfirm, SetReady, SetRemove,

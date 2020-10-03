@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     ScrollView,
+    Pressable,
     Image,
     FlatList
 } from 'react-native';
@@ -30,7 +31,8 @@ export default class MenuManagement extends React.Component {
             currentCategoryIndex: 0,
             modalVisible: false,
             searchItem: null,
-            searchResult: null
+            searchResult: null,
+            isAddMenu : false
         }
 
         this._menuDatabse = database().ref('menu/' + this.props.shopname);
@@ -46,6 +48,13 @@ export default class MenuManagement extends React.Component {
 
     _setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
+    }
+
+    _setAddMenu = (add, visible) => {
+        this.setState({ 
+            isAddMenu : add,
+            modalVisible : visible
+        });
     }
 
     _setCurrentItem = (item, itemIdx, group, index, type) => {
@@ -147,20 +156,41 @@ export default class MenuManagement extends React.Component {
                 <MenuModal
                     data={this.state.currentItem}
                     dataIndex={this.state.currentItemIndex}
-                    category={this.state.currentCategory}
                     categoryIndex={this.state.currentCategoryIndex}
                     categoryType={this.state.currentType}
                     shopname={this.props.shopname}
                     modalVisible={this.state.modalVisible}
                     onPress={() => this._setModalVisible(!this.state.modalVisible)}
+                    isAddMenu={this.state.isAddMenu}
                 />
 
                 <KeyboardAvoidingView
                     keyboardVerticalOffset={30}
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     style={menuManage.keyboardAvoidingView}
-                >
-                    <View>
+                    >
+                    <View style={{ width:'15%', paddingStart:'2%' }}>
+                        <Pressable 
+                            style={ ({ pressed }) => [
+                                menuManage.resetSearch,
+                                {
+                                    backgroundColor : pressed
+                                    ? '#eaa517'
+                                    : '#eaaf9d'
+                                }
+                            ]}
+                            onPress={() => this._setAddMenu(true, true)}
+                            >
+                            <Text style={{ color: '#fff', fontWeight: 'bold' }}>새로운 메뉴추가</Text>
+                        </Pressable>
+                    </View>
+                    
+                    <View style={
+                        {
+                            alignItems:'flex-end',
+                            width:'60%'
+                        }
+                    }>
                         <TouchableOpacity style={menuManage.resetSearch}
                             onPress={() => this._resetSearchResult()}
                             >

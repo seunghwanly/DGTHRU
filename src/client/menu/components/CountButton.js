@@ -1,38 +1,54 @@
 import React from 'react';
 import {
-    TouchableOpacity,
     Text,
-    View,
-    StyleSheet
+    Pressable
 } from 'react-native';
 
 export const MinusButton = (props) => {
     return (
-            <TouchableOpacity
-                style={props.style}
-                onPress={props.onPress}
-            >
-                <Text style={{ 
-                fontSize: 20, 
-                color: '#FFF', 
+        <Pressable
+            style={
+                ({ pressed }) => [
+                    props.style,
+                    {
+                        backgroundColor: pressed
+                            ? '#eaaf9d'
+                            : '#e2e2e2'
+                    }
+                ]
+            }
+            onPress={props.onPress}
+        >
+            <Text style={{
+                fontSize: 20,
+                color: '#FFF',
                 textAlign: 'center',
-                fontWeight:'bold'
+                fontWeight: 'bold'
             }}>-</Text>
-            </TouchableOpacity>
+        </Pressable>
     )
 }
 export const PlusButton = (props) => {
     return (
-        <TouchableOpacity
-            style={props.style}
+        <Pressable
+            style={
+                ({ pressed }) => [
+                    props.style,
+                    {
+                        backgroundColor: pressed
+                            ? '#eaaf9d'
+                            : '#e2e2e2'
+                    }
+                ]
+            }
             onPress={props.onPress}
         >
-            <Text style={{ 
-                fontSize: 20, 
-                color: '#FFF', 
+            <Text style={{
+                fontSize: 20,
+                color: '#FFF',
                 textAlign: 'center',
-                fontWeight:'bold'
+                fontWeight: 'bold'
             }}>+</Text>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
