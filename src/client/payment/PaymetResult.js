@@ -48,11 +48,9 @@ async function couponUpdate(couponNum) {
                 snapshot.forEach((child) => {
                     if (child.key.charAt(0) === '-') {
                         key = child.key;
-                        console.log("키값은 : "+ key);
+                        database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
                     }
-                });
-            }).then(() => {
-                database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                });                
             })
         }
     } else if (couponNum === '15잔') { //쿠폰 사용 했으면
