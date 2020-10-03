@@ -40,6 +40,43 @@ async function updateCurrentOrderNumber(shopInfo) {
     }
 }
 
+async function couponUpdate(couponNum) {
+    if (couponNum === '10잔') { //쿠폰 사용 했으면
+        console.log("쿠폰1 : "+ couponNum);
+        for (var i = 0; i < 10; i++) {
+            database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    if (child.key.charAt(0) === '-') {
+                        key = child.key;
+                        console.log("키값은 : "+ key);
+                    }
+                });
+            }).then(() => {
+                database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+            })
+        }
+    } else if (couponNum === '15잔') { //쿠폰 사용 했으면
+        console.log("쿠폰2 : "+ couponNum);
+        for (var i = 0; i < 15; i++) {
+            database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    if (child.key.charAt(0) === '-') {
+                        key = child.key;
+                    }
+                });
+            }).then(() => {
+                database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+            })
+        }
+    }
+    else{
+        console.log("쿠폰3 : "+ couponNum);
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
+            "shopInfo": this.props.route.params.shopInfo
+        });
+    }
+}
+
 async function updateUserHistroy(data, orderNumber, isGroup) {
 
     if (isGroup === false) {
@@ -91,7 +128,7 @@ export default class PaymentResult extends React.Component {
             currentOrderNumber: '',
             isUpdated: false,
             isLoading: true,
-            couponSelected: this.props.route.params.chooseCoupon
+            couponSelected: this.props.route.params.coupon
 
         }
 
@@ -206,6 +243,7 @@ export default class PaymentResult extends React.Component {
     }
 
 
+
     _isMenuReady() {
         this._firebaseRef
             .on('value', (snapshot) => {
@@ -301,35 +339,7 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
-                            "shopInfo": this.props.route.params.shopInfo
-                        });
-
-                        if (couponSelected === '10개') { //쿠폰 사용 했으면
-                            for (var i = 0; i < 10; i++) {
-                                database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-                                    snapshot.forEach((child) => {
-                                        if (child.key.charAt(0) === '-') {
-                                            key = child.key;
-                                        }
-                                    });
-                                }).then(() => {
-                                    await database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
-                                })
-                            }
-                        } else if (couponSelected === '15개') { //쿠폰 사용 했으면
-                            for (var i = 0; i < 15; i++) {
-                                database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-                                    snapshot.forEach((child) => {
-                                        if (child.key.charAt(0) === '-') {
-                                            key = child.key;
-                                        }
-                                    });
-                                }).then(() => {
-                                    await database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
-                                })
-                            }
-                        }
+                        couponUpdate(this.props.route.params.coupon);
                     }
                     else {
                         if (isFullyReady > 0) isFullyReady--;
