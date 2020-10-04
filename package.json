@@ -12,6 +12,8 @@
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'"
   },
   "dependencies": {
+    "@chartiful/react-native-chart-builder": "^0.1.8",
+    "@chartiful/react-native-line-graph": "^0.1.2",
     "@invertase/react-native-apple-authentication": "^1.1.2",
     "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/checkbox": "^0.5.4",
@@ -30,6 +32,7 @@
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-apple-authentication": "^1.0.6",
+    "react-native-chart-kit": "^6.6.1",
     "react-native-device-info": "^5.6.4",
     "react-native-elements": "^2.3.0",
     "react-native-gesture-handler": "1.8.0",
@@ -39,7 +42,9 @@
     "react-native-screens": "^2.10.1",
     "react-native-status-bar-height": "^2.5.0",
     "react-native-super-grid": "^4.0.3",
+    "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.1",
+    "react-native-table-component": "^1.2.1",
     "react-native-tabs": "1.0.9",
     "react-native-vector-icons": "^7.0.0",
     "react-native-vertical-tab-view": "0.1.3",
