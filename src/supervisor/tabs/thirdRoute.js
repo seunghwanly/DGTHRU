@@ -1,7 +1,6 @@
 import React, { Component, useEffect, } from 'react';
-import { Platform, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { withTheme } from 'react-native-elements';
-//import { TouchableOpacity } from 'react-native-gesture-handler';
 import { exampleStyle } from '../styles';
 import { _setPickUpTime , _setCompleteTime , _setConfirmTime , _stringConverter, DeleteOrderList , Setconfirm , SetUnconfirm , SetReady , SetRemove ,
     addToAdmin , } from '../tabs/tabFunctions'
@@ -12,10 +11,10 @@ import database from '@react-native-firebase/database';
 import LineGraph from '@chartiful/react-native-line-graph';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
-//import { Dimensions } from "react-native";
 import { Line } from 'react-native-svg';
 const screenWidth = Dimensions.get("window").width * (4/9);
-    
+var currDate = moment().format("YYYY_MM_DD");    
+
 const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -34,26 +33,61 @@ const chartConfig = {
             
             this.state = {
                 totalCost: 0,
-                tableHead: ["날짜", "금액", "품목", "개수", "누적금액"],
-                widthArr: [150, 70, 90, 70, 70],
+                tableHead: ["날짜", "일 매출", "누적 매출"],
+                tableWidthArr: [screenWidth * 0.3, screenWidth*0.3, screenWidth*0.3],
+                tableData: [],
+                dateData: [],
+                costData: [],
                 list: [],
                 menu: [],
-                
                 shopname: this.props.shopname,
             }
         }
     
-        randomColor() {return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
-    
-        revert(){
-            var tmp = []
-            for(var i = 0;i<this.state.list.length;i++){
+        randomColor(){return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
+
+        onPress(months){
+            var datelimit;
+            if(months === 0)
+                datelimit = "1990_01_01";
+            else
+                datelimit = moment().subtract(months, 'months').format("YYYY_MM_DD");
+
+            var len = this.state.dateData.length, newTableData = [], index = len;
+
+            for(var i = len - 1;i>= 0;i--){
+                var accumCost = 0;
+                const rowData = [];
+                if(this.state.dateData[i] < datelimit){
+                    index = i;
+                    this.setState({totalCost: 0});
+                    continue;
+                } 
+
+                for(var j = index - 1;j>=i; j--)
+                    accumCost += this.state.costData[j];
+                
+                rowData = rowData.concat(this.state.dateData[i]).concat(this.state.costData[i]).concat(accumCost);
+                this.setState({totalCost: accumCost});
+                newTableData.push(rowData);
+            }
+            var tmp = [];
+            for(var i = 0;i<newTableData.length;i++){
                 tmp[i] = this.state.list[this.state.list.length - i - 1];
             }
-            this.setState({list : tmp});
+            console.log("press >> " + newTableData);
+            this.setState({tableData: this.reverse(newTableData)});
+        }
+    
+        reverse(li){
+            var tmp = [];
+            for(var i = 0;i<li.length;i++){
+                tmp[i] = li[li.length - i - 1];
+            }
+            return tmp;
         }
 
-        sortListByTime() {
+        sortListByDate() {
             this.state.list.sort(function (obj2, obj1) {
                 // return obj1.cost - obj2.cost;
                 //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
@@ -65,8 +99,7 @@ const chartConfig = {
                 { list: previousState.list }
             ))
         }
-    
-    
+
         sortListByCount(tempMenu) {
             tempMenu = tempMenu.sort(function (obj1, obj2) {
                 // return obj1.cost - obj2.cost;
@@ -79,8 +112,6 @@ const chartConfig = {
         }
     
         componentDidMount(){
-            //console.log('key: ' + shopname);
-            var tempTotalCost = 0;
             database().ref('admin/' + this.state.shopname).once('value').then(snapshot => {
                 var li = [];
                 var tempMenu = [];
@@ -90,7 +121,6 @@ const chartConfig = {
                     var orderDate = childSnapShot.key;
                     childSnapShot.forEach((menuChild) => {
                         var keyName = menuChild.key;
-                        tempTotalCost += menuChild.val().cost;
                         // list 에 추가
                         li.push({
                             listSize: 1,
@@ -133,78 +163,77 @@ const chartConfig = {
                 else{
                     this.setState({menu : tempMenu});
                 }   
-                this.setState({ totalCost: tempTotalCost, list: li });
-                this.sortListByTime();
-                this.revert();
+                this.setState({list: li });
+                this.sortListByDate();
+                this.setState({list: this.reverse(this.state.list)});
+
+
+                li = this.state.list;
+                var dateColumn = [], costColumn = [], tableColumn = [];
+                var len = this.state.list.length, prevDate, sum = 0;;
+                for(var i = 0;i< len;i++){
+                    if((i === 0) || (prevDate !== li[i].date)){
+                        dateColumn.push(li[i].date);
+                        costColumn.push(li[i].cost);
+                    }
+                    else{
+                        costColumn[costColumn.length - 1] += li[i].cost;
+                    }
+                    prevDate = li[i].date;
+                }
                 
-                
+                for (var i = 0; i <dateColumn.length; i++) {
+                    const rowData = [];
+                    var accumCost = 0;
+                    for(var j = i;j<dateColumn.length; j+=1)
+                        accumCost += costColumn[j];
+                    rowData = rowData.concat(dateColumn[i]).concat(costColumn[i]).concat(accumCost);
+                    tableColumn.push(rowData);
+                    sum+=costColumn[i];
+                }
+                this.setState({dateData: dateColumn, costData: costColumn, tableData: tableColumn, totalCost: sum});
             })
         }
     
         render(){ 
-            var tableData = [];
-            var li = this.state.list;
-            var lineGraphHead = [];
-            var datasets = [];
-            var lineGraphCost = [];
-            var listLength = this.state.list.length, prevDate;
-            for(var i = 0;i< listLength;i++){
-                //lineGraphHead.push(li[i].date);
-                //lineGraphCost.push(li[i].cost);
-                if((i === 0) || (prevDate !== li[i].date)){
-                    lineGraphHead.push(li[i].date);
-                    lineGraphCost.push(li[i].cost);
-                }
-                else{
-                    lineGraphCost[lineGraphCost.length - 1] += li[i].cost;
-                }
-                prevDate = li[i].date;
-                console.log("linedata : " + lineGraphCost);
-            }
-
-            for (var i = 0; i < this.state.list.length; i++) {
-                const rowData = [];
-                var accumCost = 0;
-                for(var j = i;j<this.state.list.length; j+=1)
-                    accumCost += this.state.list[j].cost;
-                
-                rowData = rowData.concat(this.state.list[i].date)
-                .concat(this.state.list[i].cost)
-                .concat(this.state.list[i].name)
-                .concat(this.state.list[i].options.count)
-                .concat(accumCost);
-                
-                tableData.push(rowData);
-            }
-    
-            var lineGraphdata = {
-                labels: lineGraphHead,
-                datasets: [
-                {
-                    data: [20, 10, 0, 30, 40, 20, 20],
-                    color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-                    strokeWidth: 2 // optional
-                }],
-                legend: ["Rainy Days"] // optional
-            };
             return(
+                <SafeAreaView style={styles.backgroundStyle}>
                 <ScrollView style={{margin: 20}}>
-                    <View style={{flex: 10, backgroundColor: 'white', flexDirection: 'row', borderTopStartRadius: 30, borderTopEndRadius: 30,}}>
-                    <View style={styles.container}>
-                            <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
+                    <View style = {{flexDirection: 'row'}}>
+                    <View style={styles.leftArea}>
+                            <Text style = {styles.subTitle}>총 매출 : {this.state.totalCost}</Text>
+                            <View style={styles.buttonArea}>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
+                                        <Text style={styles.buttonText}>1개월</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(3)}>
+                                        <Text style={styles.buttonText}>3개월</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(6)}>
+                                        <Text style={styles.buttonText}>6개월</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(0)}>
+                                        <Text style={styles.buttonText}>전체</Text>
+                                    </TouchableOpacity>
+                                </View>
                                 <ScrollView horizontal={true}>
                                     <View>
-                                        <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                                            <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
+                                        <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0'}}>
+                                            <Row 
+                                                data={this.state.tableHead} 
+                                                widthArr={this.state.tableWidthArr} 
+                                                style={styles.header} 
+                                                textStyle={styles.text}
+                                            />
                                         </Table>
                                         <ScrollView style={styles.dataWrapper}>
-                                            <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                                                {tableData.map((rowData, index) => (
+                                            <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0',}}>
+                                                {this.state.tableData.map((rowData, index) => (
                                                 <Row
                                                     key={index}
                                                     data={rowData}
-                                                    widthArr={this.state.widthArr}
-                                                    style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
+                                                    widthArr={this.state.tableWidthArr}
+                                                    style={[styles.row, index%2 && {backgroundColor: '#f5fffa'}]}
                                                     textStyle={styles.text}
                                                 />
                                                 ))}
@@ -213,87 +242,162 @@ const chartConfig = {
                                     </View>
                                 </ScrollView>
                             </View>
-                        <View style = {{flex : 5, flexDirection: 'column', margin: 20,}}>
-                            <View style = {{flex: 3,backgroundColor: '#fff',
-                                            borderRadius: 20,
-                                            paddingTop: 20,
-                                            padding: 5,
-                                            margin: 20,
-                                            shadowColor: "#333",
-                                            shadowOffset: {
-                                                width: 1,
-                                                height: 2
-                                            },
-                                            shadowOpacity: 0.365,
-                                            shadowRadius: 1,
-                                            elevation: 5}}>
-                                <Text style = {{color: 'hotpink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매뉴 별 매출현황</Text>
+                        <View style = {styles.rightArea}>
+                            <View style = {styles.pieChartArea}>
+                                <Text style = {styles.subTitle}>인기메뉴</Text>
                                 <PieChart
                                     data={this.state.menu}
-                                    width={screenWidth}
+                                    width={screenWidth * 0.90}
                                     height={220}
                                     chartConfig={chartConfig}
                                     accessor="count"
-                                    backgroundColor="transparent"
+                                    backgroundColor="#fffafa"
                                     paddingLeft="15"
                                     absolute
                                 />
                             </View>
-                            <View style = {{flex : 2, margin: 20, alignItems: 'center', backgroundColor: '#fff',
-                                            borderRadius: 20,
-                                            paddingTop: 20,
-                                            padding: 5,
-                                            shadowColor: "#333",
-                                            shadowOffset: {
-                                                width: 1,
-                                                height: 2,
-                                            },
-                                            shadowOpacity: 0.365,
-                                            shadowRadius: 1,
-                                            elevation: 5}}>
-                                <Text style = {{color: 'hotpink', fontSize: 20, font: 'bold', textAlign: 'center'}}>매출 추이{'\n'}</Text>
-                                <ScrollView horizontal={true}>
+                            <View style = {styles.lineGraphArea}>
+                                <Text style = {styles.subTitle}>매출 추이</Text>
+                                <ScrollView horizontal={true} style = {{margin: 20,}}>
                                 <LineGraph
-                                    data={lineGraphCost}
-                                    Labels={lineGraphHead}
+                                    data={this.state.costData}
                                     width={screenWidth}
-                                    height={300}
+                                    height={250}
                                     isBezier
-                                    lineColor='pink'
+                                    lineColor='#EEAF9D'
+                                    dotColor='#cd5c5c'
                                     hasShadow
                                     baseConfig={{
-                                    startAtZero: true,
-                                    hasXAxisBackgroundLines: true,
-                                    hasXAxisLabels: true,
+                                        startAtZero: true,
+                                        hasXAxisBackgroundLines: true,
                                     }}
                                     style={{
-                                    marginTop: 30,
-                                    alignItems: 'center',
-                                }}
-                            />
+                                        marginTop: 30,
+                                        alignItems: 'center',
+                                    }}
+                                />
                             </ScrollView>
                         </View>
                         </View>
                     </View>
                 </ScrollView>
+            </SafeAreaView>
                 
         )}
     }
     
     const styles = StyleSheet.create({
-        container: { flex: 5, margin: 30, padding: 16, alignItems: 'center', paddingTop: 30, backgroundColor: '#fff',
-        borderRadius: 20,
-        paddingTop: 20,
-        shadowColor: "#333",
-        shadowOffset: {
-            width: 1,
-            height: 2,
+        backgroundStyle: {
+            flex: 10, 
+            margin: 15, 
+            backgroundColor: 'white', 
+            flexDirection: 'row', 
+            borderTopStartRadius: 30, 
+            borderTopEndRadius: 30,
         },
-        shadowOpacity: 0.365,
-        shadowRadius: 1,
-        elevation: 5 },
-        header: { height: 50, backgroundColor: '#537791' },
-        text: { textAlign: 'center', fontWeight: '100' },
-        dataWrapper: { marginTop: -1 },
-        row: { height: 40, backgroundColor: '#E7E6E1' }
+        leftArea: { 
+            flex: 5, 
+            margin: 20, 
+            padding: 16, 
+            alignItems: 'center', 
+            paddingTop: 30, 
+            backgroundColor: '#fffafa',
+            borderRadius: 20,
+            paddingTop: 20,
+            shadowColor: "#333",
+            shadowOffset: {
+                width: 1,
+                height: 2,
+            },
+            shadowOpacity: 0.365,
+            shadowRadius: 1,
+            elevation: 5 
+        },
+        header: { 
+            height: 50, 
+            backgroundColor: '#87cefa',
+            borderTopStartRadius: 15,
+            borderTopEndRadius: 15,
+        },
+        text: { 
+            textAlign: 'center', 
+            fontWeight: '100' 
+        },
+        subTitle: {
+            color: 'black', 
+            fontSize: 20, 
+            //font: 'bold', 
+            textAlign: 'center',
+        },
+        buttonArea:{
+            flexDirection: 'row', 
+            margin: 5, 
+            width: "80%", 
+            height: "10%", 
+            alignItems: 'center'
+        },
+        button: {
+            borderRadius: 20,
+            backgroundColor: '#EEAF9D',
+            width: '22%',
+            height: '70%',
+            margin: 5,
+            alignItems: 'center',
+            alignContent: 'center',
+            textAlignVertical: 'center',
+        },
+        buttonText: {
+            color: 'white',
+            padding: 10,
+            fontSize: 20,
+        },
+        dataWrapper: { 
+            marginTop: -1 
+        },
+        rightArea: {
+            flex : 5, 
+            flexDirection: 'column',
+            margin: 10,
+        },
+        pieChartArea:{
+            flex: 3,
+            backgroundColor: '#fffafa',
+            width: screenWidth * 0.9,
+            borderRadius: 20,
+            paddingTop: 20,
+            alignItems: 'center',
+            margin: 10,
+            shadowColor: "#333",
+            shadowOffset: {
+                width: 1,
+                height: 2
+            },
+            shadowOpacity: 0.365,
+            shadowRadius: 1,
+            elevation: 5
+        },
+        lineGraphArea:{
+            flex : 2, 
+            margin: 20, 
+            alignItems: 'center', 
+            backgroundColor: '#fff',
+            borderRadius: 20,
+            paddingTop: 20,
+            //padding: 5,
+            width: screenWidth * 0.9,
+            margin: 10,
+            backgroundColor: "#fffafa",
+            shadowColor: "#333",
+            shadowOffset: {
+                width: 1,
+                height: 2,
+            },
+            shadowOpacity: 0.365,
+            shadowRadius: 1,
+            elevation: 5
+        },
+        row: { 
+            height: 40, 
+            backgroundColor: '#e0ffff' 
+        },
       });
