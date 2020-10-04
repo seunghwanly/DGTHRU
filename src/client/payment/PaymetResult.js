@@ -249,9 +249,8 @@ export default class PaymentResult extends React.Component {
                 //init
                 this.setState({ orderState: [], isMenuReady: false, data: [], isCoupon: [] });
                 var idx = 0;
-                console.log("플리즈 : "+ snapshot.key );
                 snapshot.forEach((childSnapShot) => {
-                    console.log(" : "+ childSnapShot.key );
+                    var tempKey = childSnapShot.key;
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
                         var tempJSONObject = {
@@ -347,23 +346,11 @@ export default class PaymentResult extends React.Component {
                         if (this.state.isCoupon[i] === false) {
                             couponUpdate(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) {
-                                console.log("되고 있어요~");
-                                var ukey = '';
-
-                                var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
-                                updateOrderInfo.update({ getCoupon: true });
-
-                                database()
-                                    .ref(userHistoryRef())
-                                    .once('value', snapshot => {
-                                        ukey = snapshot.key;
-                                    }).then(() => { // update
-                                        database()
-                                            .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
-                                            .update({ getCoupon: true });
-                                    });
+                                console.log("hello");
+                                database().ref(userHistoryRef() + '/' + tempKey + '/orderInfo').update({ getCoupon: true });
                             } else {
-                                console.log("되고 있어요~2");
+
+                                // 이 부분은 어떻게 하지...
 
                                 var okey = '';
                                 var ukey = '';
