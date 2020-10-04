@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { menuManage, modalItem } from '../styles'
 import MenuModal from './MenuModal';
+import AddMenuModal from './AddMenuModal';
 import database from '@react-native-firebase/database';
 
 export default class MenuManagement extends React.Component {
@@ -32,7 +33,8 @@ export default class MenuManagement extends React.Component {
             modalVisible: false,
             searchItem: null,
             searchResult: null,
-            isAddMenu : false
+            isAddMenu : false,
+            addMenuModalVisible : false
         }
         console.log("최종 : " + this.props.shopname);
         this._menuDatabse = database().ref('menu/' + this.props.shopname);
@@ -46,14 +48,17 @@ export default class MenuManagement extends React.Component {
         return nextState !== this.state;
     }
 
-    _setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
+    _setModalVisible = (isAddMenu, visible) => {
+        if(!isAddMenu)
+            this.setState({ modalVisible: visible });
+        else
+            this.setState({ addMenuModalVisible : visible });
     }
 
     _setAddMenu = (add, visible) => {
         this.setState({ 
             isAddMenu : add,
-            modalVisible : visible
+            addMenuModalVisible : visible
         });
     }
 
@@ -65,7 +70,7 @@ export default class MenuManagement extends React.Component {
             currentCategoryIndex: index,
             currentType: type
         });
-        this._setModalVisible(true);
+        this._setModalVisible(false, true);
     }
 
     _fetchData = () => {
@@ -160,8 +165,15 @@ export default class MenuManagement extends React.Component {
                     categoryType={this.state.currentType}
                     shopname={this.props.shopname}
                     modalVisible={this.state.modalVisible}
-                    onPress={() => this._setModalVisible(!this.state.modalVisible)}
+                    onPress={() => this._setModalVisible(false,!this.state.modalVisible)}
+                />
+                <AddMenuModal
                     isAddMenu={this.state.isAddMenu}
+                    shopname={this.props.shopname}
+                    drinkData={this.state.drinkMenu}
+                    bakeryData={this.state.bakeryData}
+                    modalVisible={this.state.addMenuModalVisible}
+                    onPress={() => this._setModalVisible(true, !this.state.addMenuModalVisible)}
                 />
 
                 <KeyboardAvoidingView
