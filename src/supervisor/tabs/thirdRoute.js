@@ -1,5 +1,5 @@
 import React, { Component, useEffect, } from 'react';
-import { Platform, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { withTheme } from 'react-native-elements';
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import { exampleStyle } from '../styles';
@@ -35,7 +35,7 @@ const chartConfig = {
             this.state = {
                 totalCost: 0,
                 tableHead: ["날짜", "금액", "품목", "개수", "누적금액"],
-                widthArr: [150, 70, 90, 70, 70],
+                tableWidthArr: [150, 70, 90, 70, 70],
                 list: [],
                 menu: [],
                 
@@ -43,7 +43,7 @@ const chartConfig = {
             }
         }
     
-        randomColor() {return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
+        randomColor(){return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
     
         revert(){
             var tmp = []
@@ -188,14 +188,15 @@ const chartConfig = {
                 legend: ["Rainy Days"] // optional
             };
             return(
+                <SafeAreaView style={{flex: 10, backgroundColor: 'white', flexDirection: 'row', borderTopStartRadius: 30, borderTopEndRadius: 30,}}>
                 <ScrollView style={{margin: 20}}>
-                    <View style={{flex: 10, backgroundColor: 'white', flexDirection: 'row', borderTopStartRadius: 30, borderTopEndRadius: 30,}}>
+                    <View style = {{flexDirection: 'row',}}>
                     <View style={styles.container}>
                             <Text style = {{color: 'black', fontSize: 15, font: 'bold', textAlign: 'center'}}>총 매출 : {this.state.totalCost}</Text>
                                 <ScrollView horizontal={true}>
                                     <View>
                                         <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
-                                            <Row data={this.state.tableHead} widthArr={this.state.widthArr} style={styles.header} textStyle={styles.text}/>
+                                            <Row data={this.state.tableHead} widthArr={this.state.tableWidthArr} style={styles.header} textStyle={styles.text}/>
                                         </Table>
                                         <ScrollView style={styles.dataWrapper}>
                                             <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
@@ -203,7 +204,7 @@ const chartConfig = {
                                                 <Row
                                                     key={index}
                                                     data={rowData}
-                                                    widthArr={this.state.widthArr}
+                                                    widthArr={this.state.tableWidthArr}
                                                     style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
                                                     textStyle={styles.text}
                                                 />
@@ -276,6 +277,7 @@ const chartConfig = {
                         </View>
                     </View>
                 </ScrollView>
+            </SafeAreaView>
                 
         )}
     }
