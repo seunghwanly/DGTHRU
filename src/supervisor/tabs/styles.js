@@ -198,3 +198,27 @@ export const modalItem = StyleSheet.create({
     
 
 });
+
+export const myMenuStyle = StyleSheet.create({
+    header: {
+        justifyContent:'center',
+        width:'100%',
+        height:'10%',
+        backgroundColor:'gray',
+    }
+    ,
+    body: {
+        justifyContent:'flex-end',
+        flexDirection:'column',
+        alignItems:'center',
+        width:'100%',
+        height:'70%',
+        backgroundColor:'white',
+    }
+    ,
+    footer: {
+        width:'100%',
+        height:'20%',
+        backgroundColor:'gray',
+    }
+})

@@ -42,7 +42,7 @@ export default ImageLinker = (item) => {
             return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/favorite.png')} />)
 
         case "logout":
-              return (<Image style={[item.style, { backgroundColor: null }]} source={require('../../image/exit.png')} />)
+              return (<Image style={[item.style, { backgroundColor: null }]} source={require('../../image/log-out.png')} />)
 
         default:
             return (<View style={item.style}><Text style={{ color: 'white', fontSize: 12 }}>준비중</Text></View>)

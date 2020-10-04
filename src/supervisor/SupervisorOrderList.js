@@ -12,6 +12,7 @@ import imageLinker from '../utils/ImageLinker';
 import FirstRoute from './tabs/OrderManagementPage/firstRoute';
 import SecondRoute from './tabs/OrderManagementPage/secondRoute';
 import ThirdRoute from './tabs/thirdRoute';
+import MyMenuRoute from './tabs/MyMenuRoute';
 import OrderManagement from './tabs/OrderManagementPage/OrderManagement';
 import MenuManagement from './tabs/MenuManagement/MenuManagement';
 const initialLayout = { width: Dimensions.get('window').width };
@@ -19,6 +20,45 @@ const initialLayout = { width: Dimensions.get('window').width };
 // var shopname = '';
 var phonenumber = '';
 
+const shopData = [
+    {
+        id: 'main_outdoor',
+        adminPhoneNumber : '+821033333333',
+        title: '가온누리',
+        location: '본관 야외 휴게장소',
+    },
+    {
+        id: 'singong_1f',
+        adminPhoneNumber : '+821044444444',
+        title: '남산학사',
+        location: '신공학관 1층',
+    },
+    {
+        id: 'hyehwa_roof',
+        adminPhoneNumber : '+821011112222',
+        title: '혜화카페',
+        location: '혜화관 옥상',
+    },
+    {
+        id: 'economy_outdoor',
+        adminPhoneNumber : '+821022222222',
+        title: '그루터기',
+        location: '경영관 야외',
+    },
+    {
+        id: 'munhwa_1f',
+        title: '카페두리터',
+        adminPhoneNumber : '+821041282470',
+        location: '학술문화관 지하1층',
+    },
+    {
+        id: 'logout',
+        title: '로그아웃',
+        adminPhoneNumber : '+8200000000',
+        location: '오늘 하루도 수고하셨어요 !',
+    },
+   
+];
 
 export default class SupervisorOrderList extends Component {
 
@@ -27,7 +67,7 @@ export default class SupervisorOrderList extends Component {
         // shopname = props.route.params.shopInfo.id;
         this.state = {
             index: 0,
-            shopname : props.route.params.shopInfo,
+            shopname : shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).id,
             routes: [
                 { key: 'first', title: '매장관리' },
                 { key: 'second', title: '메뉴관리' },
@@ -72,6 +112,7 @@ export default class SupervisorOrderList extends Component {
                                             onPressFunction={this.setCurrentPage}   
                                             />
                                         :
+                                       
                                         <></>
                         }
                     </>
@@ -86,8 +127,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'fourth':
                 return (
-                    <>
-                    </>
+                   <MyMenuRoute />
                 )
             default:
                 return null;
