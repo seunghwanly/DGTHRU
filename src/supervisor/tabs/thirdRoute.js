@@ -53,20 +53,22 @@ const chartConfig = {
             else
                 datelimit = moment().subtract(months, 'months').format("YYYY_MM_DD");
 
-            var len = this.state.dateData.length, newTableData = [], accumCost = 0, index = len;
+            var len = this.state.dateData.length, newTableData = [], index = len;
 
             for(var i = len - 1;i>= 0;i--){
+                var accumCost = 0;
+                const rowData = [];
                 if(this.state.dateData[i] < datelimit){
                     index = i;
+                    this.setState({totalCost: 0});
                     continue;
-                }
-                const rowData = [];
-                var accumCost = 0;
+                } 
 
                 for(var j = index - 1;j>=i; j--)
                     accumCost += this.state.costData[j];
                 
                 rowData = rowData.concat(this.state.dateData[i]).concat(this.state.costData[i]).concat(accumCost);
+                this.setState({totalCost: accumCost});
                 newTableData.push(rowData);
             }
             var tmp = [];
@@ -77,13 +79,6 @@ const chartConfig = {
             this.setState({tableData: this.reverse(newTableData)});
         }
     
-        reversde(){
-            var tmp = [];
-            for(var i = 0;i<this.state.list.length;i++){
-                tmp[i] = this.state.list[this.state.list.length - i - 1];
-            }
-            this.setState({list : tmp});
-        }
         reverse(li){
             var tmp = [];
             for(var i = 0;i<li.length;i++){
@@ -92,7 +87,7 @@ const chartConfig = {
             return tmp;
         }
 
-        sortListByTime() {
+        sortListByDate() {
             this.state.list.sort(function (obj2, obj1) {
                 // return obj1.cost - obj2.cost;
                 //return new moment(obj1.orderTime). -new Date(obj2.orderTime).getTime().valueOf;
@@ -104,8 +99,7 @@ const chartConfig = {
                 { list: previousState.list }
             ))
         }
-    
-    
+
         sortListByCount(tempMenu) {
             tempMenu = tempMenu.sort(function (obj1, obj2) {
                 // return obj1.cost - obj2.cost;
@@ -118,7 +112,6 @@ const chartConfig = {
         }
     
         componentDidMount(){
-            var tempTotalCost = 0;
             database().ref('admin/' + this.state.shopname).once('value').then(snapshot => {
                 var li = [];
                 var tempMenu = [];
@@ -128,7 +121,6 @@ const chartConfig = {
                     var orderDate = childSnapShot.key;
                     childSnapShot.forEach((menuChild) => {
                         var keyName = menuChild.key;
-                        tempTotalCost += menuChild.val().cost;
                         // list 에 추가
                         li.push({
                             listSize: 1,
@@ -171,14 +163,14 @@ const chartConfig = {
                 else{
                     this.setState({menu : tempMenu});
                 }   
-                this.setState({ totalCost: tempTotalCost, list: li });
-                this.sortListByTime();
+                this.setState({list: li });
+                this.sortListByDate();
                 this.setState({list: this.reverse(this.state.list)});
 
 
                 li = this.state.list;
                 var dateColumn = [], costColumn = [], tableColumn = [];
-                var len = this.state.list.length, prevDate;
+                var len = this.state.list.length, prevDate, sum = 0;;
                 for(var i = 0;i< len;i++){
                     if((i === 0) || (prevDate !== li[i].date)){
                         dateColumn.push(li[i].date);
@@ -195,12 +187,11 @@ const chartConfig = {
                     var accumCost = 0;
                     for(var j = i;j<dateColumn.length; j+=1)
                         accumCost += costColumn[j];
-                    
                     rowData = rowData.concat(dateColumn[i]).concat(costColumn[i]).concat(accumCost);
-                    this.setState({totalCost: accumCost});
                     tableColumn.push(rowData);
+                    sum+=costColumn[i];
                 }
-                this.setState({dateData: dateColumn, costData: costColumn, tableData: tableColumn});
+                this.setState({dateData: dateColumn, costData: costColumn, tableData: tableColumn, totalCost: sum});
             })
         }
     
