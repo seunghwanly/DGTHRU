@@ -284,6 +284,7 @@ export default Basket = ({ navigation, route }) => {
                 isCanceled: false,
                 isSet: isMoreThanOne,
                 shopInfo: shopInfo,
+                getCoupon: false,
             },
         }
 

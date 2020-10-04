@@ -42,19 +42,20 @@ async function updateCurrentOrderNumber(shopInfo) {
 
 async function couponUpdate(couponNum) {
     if (couponNum === '10잔') { //쿠폰 사용 했으면
-        console.log("쿠폰1 : "+ couponNum);
-        for (var i = 0; i < 10; i++) {
-            database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    if (child.key.charAt(0) === '-') {
-                        key = child.key;
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
-                    }
-                });                
-            })
-        }
+        console.log("쿠폰1 : " + couponNum);
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+            snapshot.forEach((child) => {
+                console.log("이건 첫번째");
+                if (child.key.charAt(0) === '-') {
+                    key = child.key;
+                    console.log("이건 두번째: " + key);
+
+                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                }
+            });
+        })
     } else if (couponNum === '15잔') { //쿠폰 사용 했으면
-        console.log("쿠폰2 : "+ couponNum);
+        console.log("쿠폰2 : " + couponNum);
         for (var i = 0; i < 15; i++) {
             database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
                 snapshot.forEach((child) => {
@@ -67,8 +68,8 @@ async function couponUpdate(couponNum) {
             })
         }
     }
-    else{
-        console.log("쿠폰3 : "+ couponNum);
+    else {
+        console.log("쿠폰3 : " + couponNum);
         database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
             "shopInfo": this.props.route.params.shopInfo
         });
@@ -126,7 +127,7 @@ export default class PaymentResult extends React.Component {
             currentOrderNumber: '',
             isUpdated: false,
             isLoading: true,
-            couponSelected: this.props.route.params.coupon
+            isCoupon: []
 
         }
 
@@ -246,9 +247,11 @@ export default class PaymentResult extends React.Component {
         this._firebaseRef
             .on('value', (snapshot) => {
                 //init
-                this.setState({ orderState: [], isMenuReady: false, data: [] });
+                this.setState({ orderState: [], isMenuReady: false, data: [], isCoupon: [] });
                 var idx = 0;
+                console.log("플리즈 : "+ snapshot.key );
                 snapshot.forEach((childSnapShot) => {
+                    console.log(" : "+ childSnapShot.key );
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
                         var tempJSONObject = {
@@ -263,6 +266,7 @@ export default class PaymentResult extends React.Component {
                         this.setState({
                             orderState: this.state.orderState.concat(childSnapShot.val().orderInfo.orderState),
                             data: this.state.data.concat(tempJSONObject),
+                            isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
                         });
                         idx++;
                     }
@@ -280,6 +284,7 @@ export default class PaymentResult extends React.Component {
                             this.setState({
                                 orderState: this.state.orderState.concat(dataChild.val().orderInfo.orderState),
                                 data: this.state.data.concat(tempJSONObject),
+                                isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
                             });
                             idx++;
                         })
@@ -337,8 +342,63 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
-                        couponUpdate(this.props.route.params.coupon);
+                        console.log("쿠폰 스테이트 : " + this.state.isCoupon[i]);
+
+                        if (this.state.isCoupon[i] === false) {
+                            couponUpdate(this.props.route.params.coupon);
+                            if (!this.state.data[i].orderInfo.isSet) {
+                                console.log("되고 있어요~");
+                                var ukey = '';
+
+                                var updateOrderInfo = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/orderInfo');
+                                updateOrderInfo.update({ getCoupon: true });
+
+                                database()
+                                    .ref(userHistoryRef())
+                                    .once('value', snapshot => {
+                                        ukey = snapshot.key;
+                                    }).then(() => { // update
+                                        database()
+                                            .ref(userHistoryRef() + '/' + ukey + '/orderInfo')
+                                            .update({ getCoupon: true });
+                                    });
+                            } else {
+                                console.log("되고 있어요~2");
+
+                                var okey = '';
+                                var ukey = '';
+                                database()
+                                    .ref(userHistoryRef())
+                                    .once('value', snapshot => {
+                                        snapshot.forEach(childSnapShot => {
+                                            okey = childSnapShot.key;
+                                            childSnapShot.forEach(data => {
+                                                ukey = data.key;
+                                            })
+                                        })
+                                    }).then(() => {
+                                        database()
+                                            .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                            .update({ getCoupon: true });
+                                    })
+                            }
+
+                        }
+
+
+
+
+
+                        // if(this.state.isCoupon[i] === 0){
+                        //     couponUpdate(this.props.route.params.coupon);
+
+                        //     const newCoupon = this.state.isCoupon.slice();
+                        //     newCoupon[i] = 1;
+                        //     this.setState({isCoupon: newCoupon});
+
+                        // }
                     }
+
                     else {
                         if (isFullyReady > 0) isFullyReady--;
                     }
