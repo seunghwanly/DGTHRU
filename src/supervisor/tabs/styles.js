@@ -197,7 +197,7 @@ export const modalItem = StyleSheet.create({
         width:300
     },
     addSubMenuTextInput :{
-        width:200,
+        width:180,
         paddingVertical:10,
         paddingHorizontal:15,
         marginBottom:5,

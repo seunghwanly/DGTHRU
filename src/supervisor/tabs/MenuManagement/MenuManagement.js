@@ -171,7 +171,7 @@ export default class MenuManagement extends React.Component {
                     isAddMenu={this.state.isAddMenu}
                     shopname={this.props.shopname}
                     drinkData={this.state.drinkMenu}
-                    bakeryData={this.state.bakeryData}
+                    bakeryData={this.state.dessertMenu}
                     modalVisible={this.state.addMenuModalVisible}
                     onPress={() => this._setModalVisible(true, !this.state.addMenuModalVisible)}
                 />
