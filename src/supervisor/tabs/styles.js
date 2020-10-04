@@ -35,7 +35,7 @@ export const menuManage = StyleSheet.create({
     searchBarIcon: {
         width: 30,
         height: 30,
-        backgroundColor: '#ddd',
+        backgroundColor: '#eee',
         borderRadius: 10,
         padding: 5,
         marginHorizontal: 5,
@@ -184,7 +184,8 @@ export const modalItem = StyleSheet.create({
         flexDirection:'row',
         marginVertical:8,
         paddingVertical:2,
-        width:400
+        width:400,
+        alignItems:'center'
      },
      addMenuLeftText : {
         fontSize:14,
@@ -195,6 +196,46 @@ export const modalItem = StyleSheet.create({
     addMenuRightText : {
         width:300
     },
-    
+    addSubMenuTextInput :{
+        width:200,
+        paddingVertical:10,
+        paddingHorizontal:15,
+        marginBottom:5,
+        alignSelf:'flex-start',
+        borderRadius:20,
+        borderColor:'#eee',
+        borderWidth:1
+    },
+    addSubMenuBtn : {
+        backgroundColor:'lightgray',
+        width:25,
+        height:25,
+        borderRadius:10,
+        alignItems:'center',
+        justifyContent:'center',
+        marginHorizontal:2                                                                
+    },
+    addMenuTypeView : {
+        flexDirection:'column',
+        width:110,
+        marginHorizontal:10,
+        marginVertical:'2%',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    addMenuTypeText :{
+        fontSize:14,
+        fontWeight:'bold',
+        textAlign:'center',
+        marginVertical:10
+    },
+    addMenuTypeTextInput : {
+        width:100,
+        paddingVertical:10,
+        paddingHorizontal:15,
+        borderRadius:20,
+        borderColor:'#eee',
+        borderWidth:1,
+    }
 
 });
