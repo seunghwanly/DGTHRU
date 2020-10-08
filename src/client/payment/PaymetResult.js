@@ -248,10 +248,8 @@ export default class PaymentResult extends React.Component {
                 var idx = 0;
                 snapshot.forEach((childSnapShot) => {
                     var tempKey = childSnapShot.key;
-                    console.log("tempkey: " + tempKey);
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
-                        console.log("여기로 안들어오나요?");
                         var tempJSONObject = {
                             key: childSnapShot.key,
                             name: childSnapShot.val().name,
@@ -270,7 +268,6 @@ export default class PaymentResult extends React.Component {
                     }
                     else {  // 장바구니 주문 건
                         childSnapShot.forEach((dataChild) => {
-                            console.log("여기 문제?1");
 
                             var tempJSONObject = {
                                 key: dataChild.key,
@@ -279,7 +276,6 @@ export default class PaymentResult extends React.Component {
                                 options: dataChild.val().options,
                                 orderInfo: dataChild.val().orderInfo
                             };
-                            console.log("올덜인포 : " + tempJSONObject.orderInfo);
 
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
 
@@ -344,8 +340,6 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
-                        console.log("쿠폰 스테이트 : " + this.state.isCoupon[i]);
-
                         if (this.state.isCoupon[i] === false) {
                             couponUpdate(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
@@ -354,7 +348,7 @@ export default class PaymentResult extends React.Component {
                                 this._firebaseRef.once('value', snapshot => {
                                     snapshot.forEach((child) => {
                                         ukey = child.key;
-                                        console.log("KEY : : " + ukey);
+
                                         if (ukey.charAt(0) === '-') {
                                             database()
                                                 .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
