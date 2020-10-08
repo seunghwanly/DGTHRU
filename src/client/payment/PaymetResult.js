@@ -40,6 +40,39 @@ async function updateCurrentOrderNumber(shopInfo) {
     }
 }
 
+async function couponUpdate(couponNum) {
+    var count = 0;
+    if (couponNum === '10잔') { //쿠폰 10개 사용
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+            snapshot.forEach((child) => {
+                if (child.key.charAt(0) === '-' && count < 10) {
+                    key = child.key;
+                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    count++;
+
+                }
+            });
+        })
+    } else if (couponNum === '15잔') { //쿠폰 15개 사용
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+            snapshot.forEach((child) => {
+                if (child.key.charAt(0) === '-' && count < 15) {
+                    key = child.key;
+                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    count++;
+
+                }
+            });
+        })
+    }
+    else {
+        console.log("쿠폰3 : " + couponNum);
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
+            "shopInfo": this.props.route.params.shopInfo
+        });
+    }
+}
+
 async function updateUserHistroy(data, orderNumber, isGroup) {
 
     if (isGroup === false) {
@@ -90,7 +123,9 @@ export default class PaymentResult extends React.Component {
             basket: [],
             currentOrderNumber: '',
             isUpdated: false,
-            isLoading: true
+            isLoading: true,
+            isCoupon: []
+
         }
 
         this._firebaseRef = database().ref(commonRef(this.props.route.params.shopInfo));
@@ -137,7 +172,7 @@ export default class PaymentResult extends React.Component {
                                 updateOrderInfo.update({ orderNumber: res });
                                 //update coupon
                                 var updateCoupon = database().ref(commonRef(this.props.route.params.shopInfo) + '/' + key + '/options');
-                                updateCoupon.update({ coupon : this.props.route.params.coupon });
+                                updateCoupon.update({ coupon: this.props.route.params.coupon });
 
                                 //get data
                                 database()
@@ -204,13 +239,15 @@ export default class PaymentResult extends React.Component {
     }
 
 
+
     _isMenuReady() {
         this._firebaseRef
             .on('value', (snapshot) => {
                 //init
-                this.setState({ orderState: [], isMenuReady: false, data: [] });
+                this.setState({ orderState: [], isMenuReady: false, data: [], isCoupon: [] });
                 var idx = 0;
                 snapshot.forEach((childSnapShot) => {
+                    var tempKey = childSnapShot.key;
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
                         var tempJSONObject = {
@@ -225,11 +262,13 @@ export default class PaymentResult extends React.Component {
                         this.setState({
                             orderState: this.state.orderState.concat(childSnapShot.val().orderInfo.orderState),
                             data: this.state.data.concat(tempJSONObject),
+                            isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
                         });
                         idx++;
                     }
                     else {  // 장바구니 주문 건
                         childSnapShot.forEach((dataChild) => {
+
                             var tempJSONObject = {
                                 key: dataChild.key,
                                 name: dataChild.val().name,
@@ -237,17 +276,19 @@ export default class PaymentResult extends React.Component {
                                 options: dataChild.val().options,
                                 orderInfo: dataChild.val().orderInfo
                             };
+
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
+
                             //주문정보담기
                             this.setState({
                                 orderState: this.state.orderState.concat(dataChild.val().orderInfo.orderState),
                                 data: this.state.data.concat(tempJSONObject),
+                                isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
                             });
+
                             idx++;
                         })
                     }
-
-
                 })
 
                 var isFullyReady = 0;
@@ -299,10 +340,58 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
-                        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
-                            "shopInfo": this.props.route.params.shopInfo
-                        });
+                        if (this.state.isCoupon[i] === false) {
+                            couponUpdate(this.props.route.params.coupon);
+                            if (!this.state.data[i].orderInfo.isSet) { // single menu
+                                var ukey = '';
+
+                                this._firebaseRef.once('value', snapshot => {
+                                    snapshot.forEach((child) => {
+                                        ukey = child.key;
+
+                                        if (ukey.charAt(0) === '-') {
+                                            database()
+                                                .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
+                                                .update({ getCoupon: true });
+                                        }
+
+                                    });
+                                });
+                            } else {
+                                var okey = '';
+                                var ukey = '';
+                                database()
+                                    .ref(userHistoryRef())
+                                    .once('value', snapshot => {
+                                        snapshot.forEach(childSnapShot => {
+                                            okey = childSnapShot.key;
+                                            childSnapShot.forEach(data => {
+                                                ukey = data.key;
+                                            })
+                                        })
+                                    }).then(() => {
+                                        database()
+                                            .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                            .update({ getCoupon: true });
+                                    })
+                            }
+
+                        }
+
+
+
+
+
+                        // if(this.state.isCoupon[i] === 0){
+                        //     couponUpdate(this.props.route.params.coupon);
+
+                        //     const newCoupon = this.state.isCoupon.slice();
+                        //     newCoupon[i] = 1;
+                        //     this.setState({isCoupon: newCoupon});
+
+                        // }
                     }
+
                     else {
                         if (isFullyReady > 0) isFullyReady--;
                     }
@@ -347,7 +436,7 @@ export default class PaymentResult extends React.Component {
 
                 return (
                     <View style={{ flex: 1, backgroundColor: '#eeaf9d' }}>
-                    <StatusBar barStyle='light-content' />
+                        <StatusBar barStyle='light-content' />
                         <View style={{}}>
                             <Image
                                 style={[paymentStyles.loadingGif, { alignSelf: 'center' }]}
@@ -408,10 +497,10 @@ export default class PaymentResult extends React.Component {
                                         top: '5%',
                                         transform: [{ rotate: '330deg' }],
                                     }
-                                } 
+                                }
                                     name={this.props.route.params.shopInfo}
                                 />
-                                
+
 
                             </View>
                         </ScrollView>

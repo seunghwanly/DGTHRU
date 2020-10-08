@@ -17,7 +17,6 @@ import {
 import ImageLinker from '../../utils/ImageLinker';
 import { basketStyles } from './styles';
 import { MinusButton, PlusButton } from './components/CountButton';
-
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
@@ -26,6 +25,7 @@ import moment from 'moment';
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
+
 
 export default Basket = ({ navigation, route }) => {
 
@@ -66,9 +66,24 @@ export default Basket = ({ navigation, route }) => {
     //bakery option
     const [waffleCream, setWaffleCream] = useState(null);
     const [waffleSyrup, setWaffleSyrup] = useState(null);
-    
+    //discount
+    const [useCoupon, setUseCoupon] = useState(null);
+    const [couponNum, setCouponNum] = useState(0);
+
+
     //modal
     const [optionVisible, setOptionVisible] = useState(true);
+
+
+    function GetCouponNum() {
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
+            snapshot.forEach((childSnapshot) => {
+                setCouponNum(couponNum + 1);
+                //이거 state에 저장해서 쿠폰으로 결제할 때 쓸 수 있도록!
+            });
+        })
+        return couponNum;
+    }
 
     function ChooseDetail(props) {
         const subMenu = props.subMenu;
@@ -123,7 +138,7 @@ export default Basket = ({ navigation, route }) => {
                         }
                         keyExtractor={(item) => item.toString()}
                         extraData={selected}
-                        contentContainerStyle={{paddingHorizontal:10,justifyContent:'flex-end', flexDirection: 'row', width: subMenu.sub_menu.length >= 5 ? subMenu.sub_menu.length * 65 : 340}}
+                        contentContainerStyle={{ paddingHorizontal: 10, justifyContent: 'flex-end', flexDirection: 'row', width: subMenu.sub_menu.length >= 5 ? subMenu.sub_menu.length * 65 : 340 }}
                         scrollEnabled={true}
                         alwaysBounceVertical={false}
                         showsHorizontalScrollIndicator={false}
@@ -145,7 +160,7 @@ export default Basket = ({ navigation, route }) => {
         //샷추가
         if (shotNum > 0)
             res += 500;
-        
+
         if (syrup > 0)
             res += 500;
 
@@ -164,7 +179,7 @@ export default Basket = ({ navigation, route }) => {
         if (steamMilk === true)
             res += 2300;
 
-        if (cupSize === "사이즈업")           
+        if (cupSize === "사이즈업")
             res += handleSizeUp();
 
         return res;
@@ -247,17 +262,18 @@ export default Basket = ({ navigation, route }) => {
                 cup: inOrOut,
                 type: setBasicType(hotOrIced, item),
                 selected: selected,
-                size:cupSize,
+                size: cupSize,
                 whipping: whippingCream,
                 shotNum: shotNum,
                 syrup: syrup,
                 waffleCream: waffleCream,
                 waffleSyrup: waffleSyrup,
                 offers: offers,
+
                 addedCost:handleOptionCost() * count,
                 coupon:'-'
             },
-            orderInfo : {
+            orderInfo: {
                 orderTime: moment().format('HH:mm:ss'),
                 orderState: 'request',
                 orderNumber: '-',
@@ -265,9 +281,10 @@ export default Basket = ({ navigation, route }) => {
                 isCanceled: false,
                 isSet: isMoreThanOne,
                 shopInfo: shopInfo,
+                getCoupon: false,
             },
         }
-        
+
         if (isMoreThanOne === false) {
             // 1. 사용자 전용 장바구니안에 group으로 넣지않음
             const orderRef = database()
@@ -275,6 +292,7 @@ export default Basket = ({ navigation, route }) => {
                     .push();
             const key = orderRef.key;
             orderRef
+
                     .set(forPush)
                     .then(() => {
                         navigation.navigate('BeforePayment', {
@@ -433,12 +451,13 @@ export default Basket = ({ navigation, route }) => {
 
         return (
             <>
+
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"}
                     keyboardVerticalOffset={95}
                     style={{ backgroundColor: '#2C4061', flex: 1 }}
                 >
-                    <StatusBar barStyle='dark-content'/>
+                    <StatusBar barStyle='dark-content' />
 
                     <View style={[basketStyles.basketTopColumnWrapper, { backgroundColor: '#fff', borderBottomEndRadius: 30, borderBottomStartRadius: 30, paddingBottom: 10 }]}>
                         {/* 아이콘이랑 이름 */}
@@ -559,26 +578,26 @@ export default Basket = ({ navigation, route }) => {
                                             contentContainerStyle={{ alignItems: 'flex-end' }}
                                         />
                                     </View>
-                                {
-                                    type === 'drink' ?
+                                    {
+                                        type === 'drink' ?
 
-                                    <View style={basketStyles.basketOptionWrapper}>
-                                        <View style={basketStyles.basketOptionDesc}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: 14, marginBottom: 3 }}>SIZE</Text>
-                                            <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>SIZE-UP은 메뉴 별로{'\n'}추가 가격이 다릅니다.</Text>
-                                        </View>
-                                        <FlatList
-                                            data={dataCupSize}
-                                            renderItem={
-                                                ({ item }) => {
+                                            <View style={basketStyles.basketOptionWrapper}>
+                                                <View style={basketStyles.basketOptionDesc}>
+                                                    <Text style={{ fontWeight: 'bold', fontSize: 14, marginBottom: 3 }}>SIZE</Text>
+                                                    <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>SIZE-UP은 메뉴 별로{'\n'}추가 가격이 다릅니다.</Text>
+                                                </View>
+                                                <FlatList
+                                                    data={dataCupSize}
+                                                    renderItem={
+                                                        ({ item }) => {
 
-                                                    const backgroundColor = item.toString()
-                                                        === cupSize ?
-                                                        '#EEAF9D' : '#F2F2F2';
+                                                            const backgroundColor = item.toString()
+                                                                === cupSize ?
+                                                                '#EEAF9D' : '#F2F2F2';
 
-                                                    const color = item.toString()
-                                                        === cupSize ?
-                                                        'white' : 'black';
+                                                            const color = item.toString()
+                                                                === cupSize ?
+                                                                'white' : 'black';
 
                                                     return (
                                                         <TouchableOpacity
@@ -593,30 +612,31 @@ export default Basket = ({ navigation, route }) => {
                                                                         <Text style={{ color, fontSize:10, marginTop:2 }}>
                                                                             + {handleSizeUp().toLocaleString()}원
                                                                         </Text>
-                                                                    </>
-                                                                    :
-                                                                    <Text style={{ color }}>
-                                                                        {item}
-                                                                    </Text>
-                                                            }
-                                                        </TouchableOpacity>
-                                                    )
-                                                }
-                                            }
-                                            numColumns={3}
-                                            keyExtractor={(item, index) => item.toString()}
-                                            extraData={cupSize}
-                                            scrollEnabled={false}
-                                            contentContainerStyle={{ alignItems: 'flex-end' }}
-                                        />
-                                    </View>
-                                :
-                                <></>
-                                }
+                                                                            </>
+                                                                            :
+                                                                            <Text style={{ color }}>
+                                                                                {item}
+                                                                            </Text>
+                                                                    }
+                                                                </TouchableOpacity>
+                                                            )
+                                                        }
+                                                    }
+                                                    numColumns={3}
+                                                    keyExtractor={(item, index) => item.toString()}
+                                                    extraData={cupSize}
+                                                    scrollEnabled={false}
+                                                    contentContainerStyle={{ alignItems: 'flex-end' }}
+                                                />
+                                            </View>
+                                            :
+                                            <></>
+                                    }
                                 </View>
 
 
                                 <ChooseDetail subMenu={item} />
+
 
 
                                 <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'column', padding:5, backgroundColor:'#eee'}]}>
@@ -741,13 +761,14 @@ export default Basket = ({ navigation, route }) => {
                                                         }}> 스팀우유 </Text>
                                                     </TouchableOpacity>
                                                 </View>
-                                        </>
-                                        :
-                                        <></>
+                                            </>
+                                            :
+                                            <></>
                                     }
                                     {   // 와플 크림 추가
                                         type === 'bakery' && categoryName === 'Waffle' ?
                                             <>
+
                                                 <View style={[basketStyles.basketOptionWrapper, {justifyContent:'flex-start', paddingHorizontal:5, width:330}]}>
                                                     <View style={[basketStyles.basketOptionDesc,{width:'80%'}]}>
                                                         <Text style={{ fontSize: 12, fontWeight:'bold'}}>생크림 추가{'\n'}(+500원)</Text>
@@ -780,7 +801,7 @@ export default Basket = ({ navigation, route }) => {
                                             <>
                                                 <View style={[basketStyles.basketOptionWrapper,{paddingHorizontal:5, width:330}]}>
                                                     <View style={basketStyles.basketOptionDesc}>
-                                                        <Text style={{ fontSize: 12, fontWeight:'bold' }}>시럽 추가{'\n'}(+500원)</Text>
+                                                        <Text style={{ fontSize: 12, fontWeight: 'bold' }}>시럽 추가{'\n'}(+500원)</Text>
                                                     </View>
                                                     <FlatList
                                                         data={item.sub_menu[1].sub_menu}
@@ -819,7 +840,7 @@ export default Basket = ({ navigation, route }) => {
                                                         keyExtractor={(item, index) => item.key}
                                                         extraData={waffleSyrup}
                                                         scrollEnabled={false}
-                                                        contentContainerStyle={{alignSelf:'flex-end'}}
+                                                        contentContainerStyle={{ alignSelf: 'flex-end' }}
                                                     />
                                                 </View>
                                             </>
@@ -847,7 +868,39 @@ export default Basket = ({ navigation, route }) => {
                                             <></>
                                     }
                                 </View>
-                                
+                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'row', marginVertical: 5, }]} >
+                                    <View style={basketStyles.basketOptionDesc}>
+                                        <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
+                                        <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                                    </View>
+                                    {/* <Picker
+                                        style={{ width: '53%', height: 80, marginHorizontal: 20, justifyContent: 'center' }}
+                                        selectedValue={useCoupon}
+                                        onValueChange={(itemValue, itemIndex) => {
+                                            setUseCoupon(itemValue);
+                                        }}
+                                        mode='dropdown'
+                                        itemStyle={{ fontSize: 12, marginHorizontal: 20 }}
+                                    >
+                                        <GetCouponNum />
+                                        {
+                                            couponNum === 10 ?
+                                                <>
+                                                    <Picker.Item label='10잔 모았네요 !' value={2600} />
+                                                </>
+                                                :
+                                                couponNum === 15 ?
+                                                    <>
+                                                        <Picker.Item label='10잔 사용!' value={2600} />
+                                                        <Picker.Item label='15잔 모았네요!' value={2600} />
+                                                    </>
+                                                    :
+                                                    <Picker.Item label='사용 가능한 쿠폰 없음' value={2600} />
+
+                                        }
+                                    </Picker> */}
+                                </View>
+
                                 <TouchableOpacity
                                     style={[basketStyles.pushToBasket, { alignSelf: 'center' }]}
                                     onPress={() => handleOrder(item) === true ? [sendOrder(true), alert('담겼습니다!')] : console.log('handleOrder(error)')}>
