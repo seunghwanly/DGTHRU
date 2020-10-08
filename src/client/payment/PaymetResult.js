@@ -41,32 +41,29 @@ async function updateCurrentOrderNumber(shopInfo) {
 }
 
 async function couponUpdate(couponNum) {
-    if (couponNum === '10잔') { //쿠폰 사용 했으면
-        console.log("쿠폰1 : " + couponNum);
+    var count = 0;
+    if (couponNum === '10잔') { //쿠폰 10개 사용
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
             snapshot.forEach((child) => {
-                console.log("이건 첫번째");
-                if (child.key.charAt(0) === '-') {
+                if (child.key.charAt(0) === '-' && count < 10) {
                     key = child.key;
-                    console.log("이건 두번째: " + key);
-
                     database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    count++;
+
                 }
             });
         })
-    } else if (couponNum === '15잔') { //쿠폰 사용 했으면
-        console.log("쿠폰2 : " + couponNum);
-        for (var i = 0; i < 15; i++) {
-            database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    if (child.key.charAt(0) === '-') {
-                        key = child.key;
-                    }
-                });
-            }).then(() => {
-                database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
-            })
-        }
+    } else if (couponNum === '15잔') { //쿠폰 15개 사용
+        database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
+            snapshot.forEach((child) => {
+                if (child.key.charAt(0) === '-' && count < 15) {
+                    key = child.key;
+                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    count++;
+
+                }
+            });
+        })
     }
     else {
         console.log("쿠폰3 : " + couponNum);
