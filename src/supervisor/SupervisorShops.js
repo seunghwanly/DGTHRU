@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     View,
     Text,
@@ -14,6 +14,7 @@ import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import CustomNavigator from '../utils/CustomNavigator';
 import database from '@react-native-firebase/database';
+import { clientStyles } from '../client/styles';
 
 enableScreens();
 
@@ -49,65 +50,60 @@ const shopData = [
         location: '학술문화관 지하1층',
     },
     {
-        id: 'favorate_shop',
-        adminPhoneNumber : '0000',
-        title: '즐겨찾기',
-        location: ' ',
+        id: 'logout',
+        title: '로그아웃',
+        adminPhoneNumber : '+8200000000',
+        location: '오늘 하루도 수고하셨어요 !',
     },
+   
 ];
 
 
 
 
-function putpicture(id){
-    switch (id) { 
-        case 'main_outdoor':
-            return require('../../image/shop-image/outdoor.png');
-            break;
-        case 'singong_1f':
-            return require('../../image/shop-image/shingong.png');
-            break;
-        case 'hyehwa_roof':
-            return require('../../image/shop-image/hyehwa.png');
-            break;
-        case 'economy_outdoor':
-            return require('../../image/shop-image/economy.png');
-            break;
-        case 'munhwa_1f':
-            return require('../../image/shop-image/munhwa.png');
-            break;
-        case 'favorate_shop':
-            return require('../../image/shop-image/shop.png');
-            break;
-        }
-}
+// function putpicture(id){
+//     switch (id) { 
+//         case 'main_outdoor':
+//             return require('../../image/shop-image/outdoor.png');
+//             break;
+//         case 'singong_1f':
+//             return require('../../image/shop-image/shingong.png');
+//             break;
+//         case 'hyehwa_roof':
+//             return require('../../image/shop-image/hyehwa.png');
+//             break;
+//         case 'economy_outdoor':
+//             return require('../../image/shop-image/economy.png');
+//             break;
+//         case 'munhwa_1f':
+//             return require('../../image/shop-image/munhwa.png');
+//             break;
+//         case 'favorate_shop':
+//             return require('../../image/shop-image/shop.png');
+//             break;
+//         }
+// }
 
 class Item extends React.Component {
     componentDidMount(){
         var li = [];
       
 
-        var shopInfoRef = database().ref().child('adminInfo');
-        for(var i = 0; i<shopData.length; i++){
-            shopInfoRef.child(shopData[i].adminPhoneNumber).set({
-                id : shopData[i].id,
-                title : shopData[i].title,
-                location : shopData[i].location,
-            })
+        // var shopInfoRef = database().ref().child('adminInfo');
+        // for(var i = 0; i<shopData.length; i++){
+        //     shopInfoRef.child(shopData[i].adminPhoneNumber).set({
+        //         id : shopData[i].id,
+        //         title : shopData[i].title,
+        //         location : shopData[i].location,
+        //     })
 
-        }
+        // }
 
     }
 
   
 
     _onPress = () => {
-        if (this.props.id === 'hyehwa_roof') {
-            if (this.props.navigation !== null) {
-                this.props.navigation.navigate('example',{ shopInfo: this.props.id });
-            }
-        }
-        else
             this.props.onPressItem(this.props.id);
     };
 
@@ -117,12 +113,29 @@ class Item extends React.Component {
         var id=this.props.id;
         
         return (
-            <View style = {shopStyles.itemContainer}>
+            <View style = {[shopStyles.itemContainer ]}>
                 <TouchableOpacity
                     style={shopStyles.imageContainer}
                     onPress={this._onPress}
                 >
-                    <Image style = {shopStyles.image} source={putpicture(id)}/>
+                     <ImageLinker
+                        name={id}
+                        style={
+                            id ==='logout' ? {
+                                width: 120,
+                                height: 100,
+                                marginVertical : 2,
+                                marginTop: 15     
+                            
+
+                            } :
+                            {
+                            width: 120,
+                            height: 120,
+                            marginVertical : 2,
+                            marginTop: 15
+                            
+                        }} />
                 </TouchableOpacity>
                 <Text style={shopStyles.itemDesc}>{title}</Text>
                 <Text style={shopStyles.itemSubDesc}>{location}</Text>
@@ -132,14 +145,19 @@ class Item extends React.Component {
 }
 
 function supervisorShops({ navigation }) {
+    const [userInfo, setuserInfo] = useState(1);
+    
+    function fetchUserInfo(){
+        var newInfo = shopData.filter(function(item){    
+            return item.adminPhoneNumber === auth().currentUser.phoneNumber;
+          });         
+          console.log("과연 ? " + newInfo.id);
+         return newInfo.id;
+        
+    }
+
 
     function _onPress(id){
-        if (id === 'hyehwa_roof') {
-            if (navigation !== null) {
-                navigation.navigate('example',{ shopInfo: id });
-            }
-        }
-        else
             onPressItem(id);
     };
 
@@ -147,21 +165,22 @@ function supervisorShops({ navigation }) {
 
         switch (id) {
             case 'main_outdoor':
-                alert('준비중입니다!');
+                navigation.navigate('SupervisorOrderList',{ shopInfo:id });
                 break;
             case 'singong_1f':
-                navigation.navigate('SupervisorTabview',{ shopInfo:id });
+                navigation.navigate('SupervisorOrderList',{ shopInfo: id});
                 break;
             case 'hyehwa_roof':
-                alert('혜화관디저트카페');
+                navigation.navigate('SupervisorOrderList',{ shopInfo:id });
                 break;
             case 'economy_outdoor':
+                navigation.navigate('SupervisorOrderList',{ shopInfo:id });
                 break;
             case 'munhwa_1f':
                 navigation.navigate('SupervisorOrderList',{ shopInfo:id });
                 break;
-            case 'favorate_shop':
-                alert('준비중입니다!');
+            case 'logout':
+                _logOut();
                 break;
         }
     }
@@ -177,8 +196,7 @@ function supervisorShops({ navigation }) {
         />
     );
 
-    function _logOut(test){
-       
+    function _logOut(){
         auth()
         .signOut()
         .then(() => [ console.log('User Signed Out !'),])
@@ -191,21 +209,36 @@ function supervisorShops({ navigation }) {
     return (
         <>
             <View style={shopStyles.background}>
-                <View style={shopStyles.header}>
+                <View style={shopStyles.header }>
                     <Text style={shopStyles.title}>DGTHRU SUPERVISOR</Text>
-                    <Text style={shopStyles.subTitle}>동국대학교 CAFE LIST</Text>
-                    <TouchableOpacity onPress={() => _logOut()}>
-                        <Text>로 그 아 웃 !</Text>
-                    </TouchableOpacity>
+
+                    <View style={{flexDirection:'row' ,marginTop:5}}>
+                    <Text style={[shopStyles.subTitle,{fontWeight:'bold' , color:'black'} ]} > {
+                        shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title
+                    } </Text>
+
+                      <Text style={shopStyles.subTitle}> 관리자님 반갑습니다~</Text>
+
+                    </View>
                 </View>
-                <View style={shopStyles.body}>
+                <View style={{alignContent:'flex-end'}}>
+                <Text style={shopStyles.subTitle}>동국대학교 CAFE LIST</Text>
+
+                </View>
+                <View style={[shopStyles.body ,{ borderTopColor:'#182335' , borderTopWidth:3 ,backgroundColor:'white',}]}>
+                    <View style={{
+
+                        backgroundColor:'white'
+                    }}>
                     <FlatList
+                        style={{backgroundColor:'white',}}
                         data={shopData} 
                         renderItem={renderItem}
-                        numColumns={2}
+                        numColumns={3}
                         keyExtractor={keyExtractor}
-                        scrollEnabled={true}
+                        scrollEnabled={false}
                     />
+                    </View>
                 </View>
             </View>
         </>

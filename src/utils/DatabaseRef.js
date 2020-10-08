@@ -55,25 +55,40 @@ export const userFavoriteDatabase = (shopInfo) => {
         return database().ref(favoriteRef(shopInfo));
 }
 
-export const pushFavorite = (shopInfo, menu, type, categoryName) => {
+export const pushFavorite = async (shopInfo, menu, type, categoryName) => {
     if (auth().currentUser !== null) {
 
-        const newItem = database()
-            .ref(favoriteRef())
-            .push();
+        var isSameMenu = false;
+
+        await database().ref(favoriteRef()).once('value', snapshot => {
+            snapshot.forEach((childSnapShot) => {    // auto key
+                childSnapShot.forEach((item) => {   // value
+                    if (item.val().name === menu.name)
+                        isSameMenu = true;
+                })
+            })
+        }).then(() => {
+            if (!isSameMenu) {
+                const newItem = database()
+                    .ref(favoriteRef())
+                    .push();
 
 
-        const data = {
-            'key': newItem.key,
-            'shopInfo' : shopInfo,
-            'type' : type,
-            'categoryName' : categoryName,
-            'value': menu
-        }
+                const data = {
+                    'key': newItem.key,
+                    'shopInfo': shopInfo,
+                    'type': type,
+                    'categoryName': categoryName,
+                    'value': menu
+                }
 
-        newItem
-            .set(data)
-            .then(() => alert('즐겨찾기로 등록되었습니다 !'));
+                newItem
+                    .set(data)
+                    .then(() => alert('즐겨찾기로 등록되었습니다 !'));
+            }
+            else
+                alert('이미 등록되어있습니다 !');
+        });
     }
 }
 
@@ -113,7 +128,7 @@ export function orderNumDatabase(shopInfo) {
     if (auth().currentUser !== null) {
         console.log('orderNum >> ' + shopInfo);
         //현재 주문번호를 읽어오자
-        return database().ref('order_num/'+shopInfo);
+        return database().ref('order_num/' + shopInfo);
     }
 }
 

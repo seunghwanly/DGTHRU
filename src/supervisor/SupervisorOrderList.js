@@ -12,22 +12,62 @@ import imageLinker from '../utils/ImageLinker';
 import FirstRoute from './tabs/OrderManagementPage/firstRoute';
 import SecondRoute from './tabs/OrderManagementPage/secondRoute';
 import ThirdRoute from './tabs/thirdRoute';
-import OrderManagement from './tabs/OrderManagement';
-import MenuManagement from './tabs/MenuManagement';
+import MyMenuRoute from './tabs/MyMenuRoute';
+import OrderManagement from './tabs/OrderManagementPage/OrderManagement';
+import MenuManagement from './tabs/MenuManagement/MenuManagement';
 const initialLayout = { width: Dimensions.get('window').width };
 
-var shopname = '';
+// var shopname = '';
 var phonenumber = '';
 
+const shopData = [
+    {
+        id: 'main_outdoor',
+        adminPhoneNumber : '+821033333333',
+        title: '가온누리',
+        location: '본관 야외 휴게장소',
+    },
+    {
+        id: 'singong_1f',
+        adminPhoneNumber : '+821044444444',
+        title: '남산학사',
+        location: '신공학관 1층',
+    },
+    {
+        id: 'hyehwa_roof',
+        adminPhoneNumber : '+821011112222',
+        title: '혜화카페',
+        location: '혜화관 옥상',
+    },
+    {
+        id: 'economy_outdoor',
+        adminPhoneNumber : '+821022222222',
+        title: '그루터기',
+        location: '경영관 야외',
+    },
+    {
+        id: 'munhwa_1f',
+        title: '카페두리터',
+        adminPhoneNumber : '+821041282470',
+        location: '학술문화관 지하1층',
+    },
+    {
+        id: 'logout',
+        title: '로그아웃',
+        adminPhoneNumber : '+8200000000',
+        location: '오늘 하루도 수고하셨어요 !',
+    },
+   
+];
 
 export default class SupervisorOrderList extends Component {
 
     constructor(props) {
         super(props);
-        shopname = "hyehwa_roof";
-
+        // shopname = props.route.params.shopInfo.id;
         this.state = {
             index: 0,
+            shopname : shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).id,
             routes: [
                 { key: 'first', title: '매장관리' },
                 { key: 'second', title: '메뉴관리' },
@@ -68,26 +108,26 @@ export default class SupervisorOrderList extends Component {
                                     this.state.pageIndex === 2 ?
                                         <SecondRoute 
                                             data={this.state.pastList} 
-                                            route={route}
+                                            route={route}originList
                                             onPressFunction={this.setCurrentPage}   
                                             />
                                         :
+                                       
                                         <></>
                         }
                     </>
                 )
             case 'second':
                 return (
-                    <MenuManagement shopname={'hyehwa_roof'}/>
+                    <MenuManagement shopname={this.state.shopname}/>
                 )
             case 'third':
                 return (
-                    <ThirdRoute route={route} />
+                    <ThirdRoute shopname={this.state.shopname} />
                 )
             case 'fourth':
                 return (
-                    <>
-                    </>
+                   <MyMenuRoute />
                 )
             default:
                 return null;
@@ -119,7 +159,6 @@ export default class SupervisorOrderList extends Component {
                 alert('준비중입니다!');
                 break;
             case 'munhwa_1f':
-
                 break;
             case 'favorate_shop':
                 alert('준비중입니다!');
@@ -131,7 +170,7 @@ export default class SupervisorOrderList extends Component {
     componentDidMount = () => {
         //console.log('key: ' + shopname);
 
-        database().ref('shops/' + shopname).on('value', (snapshot) => {
+        database().ref('shops/' + this.state.shopname).on('value', (snapshot) => {
             var li = []
             var index = 0;
             //snapshot: 날짜
@@ -214,7 +253,7 @@ export default class SupervisorOrderList extends Component {
 
         })
 
-        database().ref('admin/' + shopname).on('value', (snapshot) => {
+        database().ref('admin/' + this.state.shopname).on('value', (snapshot) => {
             var li = []
             var index = 0;
             //snapshot: 날짜
@@ -240,7 +279,7 @@ export default class SupervisorOrderList extends Component {
                         options: menuChild.val().options,
                         orderInfo: menuChild.val().orderInfo,
                         //key : orderInfo.orderTime,
-                        key: keyName,
+                        //key: keyName,
                         date: menuChild.val().date,
                     })
 
@@ -253,8 +292,9 @@ export default class SupervisorOrderList extends Component {
 
             })
             //console.log(JSON.stringify(li));
-            li.sort((d2, d1) => new Moment(d2.orderInfo.orderTime, 'HH:mm:ss') - new Moment(d1.orderInfo.orderTime, 'HH:mm:ss'));
-
+            li.sort((d2, d1) => parseInt(d2.orderInfo.orderNumber.substring(2,d2.orderInfo.orderNumber.length)) -     
+                                parseInt(d1.orderInfo.orderNumber.substring(2,d1.orderInfo.orderNumber.length)));
+                     
             this.setState({ pastList: li });
 
         })

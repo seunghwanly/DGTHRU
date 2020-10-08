@@ -480,7 +480,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && item.options.coupon !== '-' ? <Text style={{ textAlign: 'right' }}>{item.options.coupon}쿠폰 사용!</Text> : <></>
+                                                    index === 0 && ( item.options.coupon !== '-' || item.options.coupon !== '적용안함' ) ? <Text style={{textAlign:'right'}}>{item.options.coupon}쿠폰 사용!</Text> : <></>
                                                 }
                                             </View>
                                         )

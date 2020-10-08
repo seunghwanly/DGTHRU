@@ -102,7 +102,7 @@ export default StackContainer = ({ navigation }) => {
         console.log('current user : ' + user.phoneNumber);
         return (
             <Stack.Navigator
-                initialRouteName={user.phoneNumber === '+821011112222' ? 'SupervisorShops' : 'Shops'}
+                initialRouteName={user.phoneNumber === '+821011112222' ? 'SupervisorOrderList' : 'Shops'}
                 screenOptions={{
                     headerTitle: 'DONGGUCKS.',
                 }}
@@ -138,8 +138,7 @@ export default StackContainer = ({ navigation }) => {
                                             <View style={{ flexDirection: 'row' }}>
                                                 {
                                                     name === 'Menu' || name === "MenuTabView" || name === 'MenuDetail' ||
-                                                        name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ||
-                                                        name === 'SupervisorOrderList' ?
+                                                        name === 'SelectMenu' || name === 'Basket' || name === 'Favorites' ?
 
                                                         <TouchableOpacity
                                                             style={{ flexDirection: 'row-reverse' }}
@@ -174,12 +173,12 @@ export default StackContainer = ({ navigation }) => {
 
                                 animationTypeForReplace: true,
 
-                                gestureEnabled: name === 'Shops' || name === 'SupervisorShops' || name === "Result" ? false : true,
+                                gestureEnabled: name === 'Shops' || name === 'SupervisorOrderList' || name === "Result" ? false : true,
                                 // gestureEnabled: false
                                 headerStyle: {
                                     backgroundColor:
                                         name === "Shops" || name === 'MenuTabView' || name === 'Basket' ||
-                                            name === 'SupervisorOrderList' ?
+                                            name === 'SupervisorOrderList' || name === 'SupervisorShops' ?
                                             '#182335'
                                             :
                                             name === 'Result' || name === 'Loading' ?
@@ -189,7 +188,7 @@ export default StackContainer = ({ navigation }) => {
                                     shadowColor: 'transparent',
                                 },
                                 headerTitleStyle: {
-                                    color: name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Basket' || name === 'Loading' || name === 'SupervisorOrderList' ? '#fff' : '#000',
+                                    color: name === "Shops" || name === "MenuTabView" || name === "Result" || name === 'Basket' || name === 'Loading' || name ==='SupervisorShops' || name === 'SupervisorOrderList' ? '#fff' : '#000',
                                     fontWeight: 'bold',
                                 },
                             })

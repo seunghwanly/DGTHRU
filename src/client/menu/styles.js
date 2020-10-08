@@ -56,9 +56,9 @@ const menuStyles = StyleSheet.create({
         margin:1
     },
     subRadiusIconSoldOut: {
-        width: 100,
-        height: 100,
-        borderRadius: 100,
+        width: 70,
+        height: 70,
+        borderRadius: 70,
         backgroundColor: 'gray',
         justifyContent: 'center',
         alignItems: 'center',

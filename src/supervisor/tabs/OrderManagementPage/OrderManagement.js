@@ -1,14 +1,17 @@
-import React from 'react';
+import React ,{useState}from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     FlatList,
     Image,
+    Button,
+
     Dimensions,
     StatusBar
 } from 'react-native';
-import { exampleStyle } from '../styles';
+import { exampleStyle } from '../../styles';
+
 import moment from 'moment';
 
 export default OrderManagement = (props) => {
@@ -16,6 +19,9 @@ export default OrderManagement = (props) => {
     const {
         data, route, onPressFunction,
     } = props;
+
+  
+
 
     return (
         <View style={[exampleStyle.background,
@@ -29,6 +35,8 @@ export default OrderManagement = (props) => {
         }
         ]}>
             <StatusBar barStyle='light-content' />
+            
+            
             <View style={exampleStyle.functionWrapper}>
                 <View style={   // 상위 탭
                     {
@@ -82,7 +90,7 @@ export default OrderManagement = (props) => {
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
-                            source={require('../../../image/chevron-forward-outline.png')} />
+                            source={require('../../../../image/chevron-forward-outline.png')} />
                     </TouchableOpacity>
                 </View>
                 <View style={
@@ -92,7 +100,8 @@ export default OrderManagement = (props) => {
                         borderBottomWidth: 2,
                         paddingVertical: 10,
                         borderColor: '#777',
-                        marginTop: 10
+                        marginTop: 10,
+                        
                     }
                 }>
                     <Text style={exampleStyle.pastOrderListText}>주문번호</Text>
@@ -126,11 +135,12 @@ export default OrderManagement = (props) => {
                                                     <>
                                                         <View style={
                                                             {
+                                                                width: '100%',
                                                                 paddingVertical: 10,
                                                                 flexDirection: 'row',
                                                             }
                                                         }>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.orderNumber}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 , }]}>{item.orderInfo.orderNumber}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.name}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.options.count}</Text>
                                                             <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.clientPhoneNumber}</Text>
@@ -158,6 +168,8 @@ export default OrderManagement = (props) => {
                                         <>
                                             <View style={
                                                 {
+                                                    width: '100%',
+                                                    justifyContent:'center',
                                                     paddingVertical: 10,
                                                     flexDirection: 'row',
 
@@ -268,7 +280,7 @@ export default OrderManagement = (props) => {
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
-                            source={require('../../../image/chevron-forward-outline.png')} />
+                            source={require('../../../../image/chevron-forward-outline.png')} />
                     </TouchableOpacity>
                 </View>
                 <View style={

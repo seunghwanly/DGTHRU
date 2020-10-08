@@ -7,9 +7,10 @@ import {
     TouchableOpacity,
     FlatList,
     ScrollView,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Pressable,
 } from 'react-native';
-import { modalItem } from './styles';
+import { modalItem, menuManage } from '../styles';
 import database from '@react-native-firebase/database';
 
 const updateDatabase = async (name, inputJSON, ref) => {
@@ -19,26 +20,25 @@ const updateDatabase = async (name, inputJSON, ref) => {
     var newName = inputJSON.name.changed ? inputJSON.name.now : inputJSON.name.prev;
     var newCost = inputJSON.cost.changed ? inputJSON.cost.now : inputJSON.cost.prev;
     var newSoldOut = inputJSON.sold_out.changed ?
-                        inputJSON.sold_out.now === '품절' ? true : false
-                        :
-                        inputJSON.sold_out.prev === '품절' ? true : false;
+        inputJSON.sold_out.now === '품절' ? true : false
+        :
+        inputJSON.sold_out.prev === '품절' ? true : false;
 
     await database()
         .ref(ref)
         .once('value', snapshot => {
-            if(snapshot.val().name === name)
+            if (snapshot.val().name === name)
                 isRightRef = true;
         }).then(() => {
-            if(isRightRef) {
+            if (isRightRef) {
 
                 database().ref(ref).update({
-                    name : newName,
-                    cost : newCost,
-                    sold_out : newSoldOut
+                    name: newName,
+                    cost: newCost,
+                    sold_out: newSoldOut
                 }).then(() => console.log('Updated Menu'));
             }
-        })
-
+        });
 }
 
 export default MenuModal = (props) => {
@@ -46,16 +46,15 @@ export default MenuModal = (props) => {
     const {
         data,
         dataIndex,
-        category,
         categoryIndex,
         categoryType,
         shopname,
         modalVisible,
-        onPress
+        onPress,
+        isAddMenu
     } = props;
 
     if (data !== null) {
-
         //name
         const [name, setName] = useState(null);
         const [editName, setEditName] = useState(false);
@@ -71,17 +70,17 @@ export default MenuModal = (props) => {
             "name": {
                 "prev": data.name,
                 "now": name,
-                "changed" : false
+                "changed": false
             },
             "cost": {
                 "prev": data.cost,
                 "now": cost,
-                "changed" : false
+                "changed": false
             },
             "sold_out": {
                 "prev": data.sold_out,
                 "now": soldOut,
-                "changed" : false
+                "changed": false
             }
         };
 
@@ -123,8 +122,6 @@ export default MenuModal = (props) => {
                                 <Text style={[modalItem.modalSubTitleText, { marginHorizontal: 5, color: '#eaaf9d' }]}>수정</Text>
                                 <Text style={modalItem.modalSubTitleText}>하기</Text>
                             </View>
-
-
 
                             <View style={modalItem.modalSubItemWrapper}>
                                 <Text style={[modalItem.modalSubItemDescText, { width: 60 }]}>이름 : </Text>
@@ -245,7 +242,7 @@ export default MenuModal = (props) => {
                                         </>
                                 }
                             </View>
-                            <View style={{ flexDirection: 'row', alignSelf: 'center', width: '50%', marginTop:50 }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', width: '50%', marginTop: 50 }}>
                                 <TouchableOpacity
                                     style={modalItem.modalButton}
                                     onPress={onPress}
@@ -279,14 +276,15 @@ export default MenuModal = (props) => {
                     <View style={modalItem.modalSubBackground}>
                         <Text>ERROR</Text>
                     </View>
+                    <TouchableOpacity
+                        style={modalItem.modalButton}
+                        onPress={onPress}
+                    >
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    style={modalItem.modalButton}
-                    onPress={onPress}
-                >
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                </TouchableOpacity>
             </Modal>
         )
     }
+
 }

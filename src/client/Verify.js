@@ -157,7 +157,7 @@ function Verify({ navigation, number }) {
         if (admin) {
             try {
                 await confirm.confirm(code)
-                    .then(() => navigation.navigate('SupervisorShops', { navigation: navigation }));
+                    .then(() => navigation.navigate('SupervisorOrderList', { navigation: navigation }));
                 console.log('smscode : ' + code);
             } catch (error) {
                 console.log('Invalid code.' + error);
@@ -215,7 +215,7 @@ function Verify({ navigation, number }) {
                                 appleAuth.isSupported === false ?
 
                                     <View style={clientStyles.footer}>
-                                        <Text>애플로그인이 지원되지않습니다.</Text>
+                                        {/* <Text>애플로그인이 지원되지않습니다.</Text> */}
                                     </View>
 
                                     :
