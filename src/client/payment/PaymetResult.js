@@ -251,8 +251,10 @@ export default class PaymentResult extends React.Component {
                 var idx = 0;
                 snapshot.forEach((childSnapShot) => {
                     var tempKey = childSnapShot.key;
+                    console.log("tempkey: " + tempKey);
 
                     if (childSnapShot.key.charAt(0) === '-') {  // 단일 주문 건
+                        console.log("여기로 안들어오나요?");
                         var tempJSONObject = {
                             key: childSnapShot.key,
                             name: childSnapShot.val().name,
@@ -271,6 +273,8 @@ export default class PaymentResult extends React.Component {
                     }
                     else {  // 장바구니 주문 건
                         childSnapShot.forEach((dataChild) => {
+                            console.log("여기 문제?1");
+
                             var tempJSONObject = {
                                 key: dataChild.key,
                                 name: dataChild.val().name,
@@ -278,18 +282,20 @@ export default class PaymentResult extends React.Component {
                                 options: dataChild.val().options,
                                 orderInfo: dataChild.val().orderInfo
                             };
+                            console.log("올덜인포 : " + tempJSONObject.orderInfo);
+
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
+
                             //주문정보담기
                             this.setState({
                                 orderState: this.state.orderState.concat(dataChild.val().orderInfo.orderState),
                                 data: this.state.data.concat(tempJSONObject),
                                 isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
                             });
+
                             idx++;
                         })
                     }
-
-
                 })
 
                 var isFullyReady = 0;
@@ -345,13 +351,22 @@ export default class PaymentResult extends React.Component {
 
                         if (this.state.isCoupon[i] === false) {
                             couponUpdate(this.props.route.params.coupon);
-                            if (!this.state.data[i].orderInfo.isSet) {
-                                console.log("hello");
-                                database().ref(userHistoryRef() + '/' + tempKey + '/orderInfo').update({ getCoupon: true });
+                            if (!this.state.data[i].orderInfo.isSet) { // single menu
+                                var ukey = '';
+
+                                this._firebaseRef.once('value', snapshot => {
+                                    snapshot.forEach((child) => {
+                                        ukey = child.key;
+                                        console.log("KEY : : " + ukey);
+                                        if (ukey.charAt(0) === '-') {
+                                            database()
+                                                .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
+                                                .update({ getCoupon: true });
+                                        }
+
+                                    });
+                                });
                             } else {
-
-                                // 이 부분은 어떻게 하지...
-
                                 var okey = '';
                                 var ukey = '';
                                 database()
