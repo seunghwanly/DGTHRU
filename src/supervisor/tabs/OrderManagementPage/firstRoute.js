@@ -82,7 +82,7 @@ const FirstRoute = (props) => {
 
             <FlatList
                 data={props.data}
-                keyExtractor={item => item.key}
+                keyExtractor={item => item.key+toString(item.name)}
                 contentContainerStyle={
                     {
                         paddingHorizontal: '5%',
@@ -153,6 +153,7 @@ const FirstRoute = (props) => {
                                                         <ImageLinker style={exampleStyle.listImage} name={item.name} />
                                                         <Text textAlign="center" style={{ fontWeight: 'bold' }}>
                                                             {
+                                                                
                                                                 item.orderInfo.orderNumber
                                                             }
                                                         </Text>
@@ -287,7 +288,9 @@ const FirstRoute = (props) => {
                                             }
                                             >
                                                 <ImageLinker style={exampleStyle.listImage} name={item.name} />
-                                                <Text textAlign="center">{item.orderInfo.orderNumber}</Text>
+                                                <Text textAlign="center">{
+                                                console.log('item.key:' + item.key),
+                                                item.orderInfo.orderNumber}</Text>
                                                 <Text style={{ fontSize: 16, fontWeight: "bold", }} textAlign="center">{_stringConverter(item.orderInfo.orderState)}</Text>
                                             </View>
                                             <View style={
