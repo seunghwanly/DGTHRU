@@ -12,7 +12,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import {myMenuStyle} from './styles';
-
+import moment from 'moment';
 enableScreens();
 
 const shopData = [
@@ -56,58 +56,119 @@ const shopData = [
 ];
 
 
+export default class MyMenuRoute extends React.Component {
+// function MyMenuRoute({ navigation, props  }) {
+    // const [pastList, setpastList] = useState(props.pastList);
+    constructor(props){
+        super(props);
+        this.state = {
+            pastList : this.props.pastList,
+            todayList : [],
+            totalAmount : 0,
+            templist : [],
+        };
 
-function MyMenuRoute({ navigation }) {
-    function _logOut(){
+    }
+
+     _logOut(){
         auth()
         .signOut()
         .then(() => [ console.log('User Signed Out !'),])
         .catch(() => console.log('already signed out !'));
     }
+     fetchData(){
+         var templist = [];
+         var tempTotal =0;
+         
+        for(var i =0; i<this.state.pastList.length; i++){
+            if(new moment(this.state.pastList[i].date,'YYYY_MM_DD').format('YYYY_MM_DD') == new moment('2020_10_02','YYYY_MM_DD').format('YYYY_MM_DD')){
+                templist.push(this.state.pastList[i]);
+                tempTotal += this.state.pastList[i].cost;
+            }
+        }
+        this.state.todayList = templist;
+        this.state.totalAmount = tempTotal;
+        return(templist.length)
+    }
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    render() {
     return (
         <>
-            <View style={myMenuStyle.header}>
-            <Text  style={{alignSelf:'center',
-                fontSize:22,
-                fontWeight:'bold',
-                color:'#fff',
-                }}>DGTHRU SUPERVISOR</Text>
-            </View>
             <View style={myMenuStyle.body}>
-                <Text style={{alignItems:'flex-start'}}>
-                    안녕하세요
                     
-                </Text>
-                <Text>
-                     {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title} 관리자님
-                </Text>
+                    <View style={myMenuStyle.contentArea}>
+                        <View style ={myMenuStyle.contentArea_left}>
+                        <Text style={{alignItems:'center'}}>
+                            회원 정보
+                        </Text>
+                        <Text>
+                            매장이름 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
+                           
+                        </Text>
+                        <Text>
+                            
+                            관리번호 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).adminPhoneNumber}
+                          
+                        </Text>
+                        <Text>
+                            
+                            매장위치 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).location}
+                        </Text>
+                        </View>
 
-                <TouchableOpacity
-                    onPress={_logOut}
-                    style={{alignSelf:'center',flexDirection:'column' , justifyContent:'flex-end'}}
-                >   
-                     <ImageLinker
-                        name={'logout'}
-                        style={
-                            
-                           {
-                                
-                                width: 50,
-                                height: 50,
-                                marginVertical : 2,
-                                marginTop: 15     
-                            
-                            } 
-                            } />
-                             <Text>로그아웃</Text>
-                </TouchableOpacity>
+                        <View style ={myMenuStyle.contentArea_right}>
+                        <Text style={myMenuStyle.thinFont}>
+                        오늘 주문된 총 건수는?
+                          
+                        </Text>
+                        <Text style={myMenuStyle.thickFont}>
+                          
+                           {this.fetchData()
+                            }건
+                        </Text>
+
+
+                        <Text style={myMenuStyle.thinFont}>
+                           오늘 {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
+                           에서 주문된 총 금액은?
+                          
+                        </Text>
+                        <Text style={myMenuStyle.thickFont}>
+                        {this.numberWithCommas(this.state.totalAmount)}원
+                        </Text>
+                        
+                        </View>
+                    </View>
+                
             </View>
             <View style={myMenuStyle.footer}>
-           
+                <View style ={myMenuStyle.logoutArea}>
+                        <TouchableOpacity
+                            onPress={this._logOut}
+                            style={{alignSelf:'center',flexDirection:'column' , justifyContent:'flex-end'}}
+                        >   
+                            <ImageLinker
+                                name={'logout'}
+                                style={
+                                    
+                                {
+                                        
+                                        width: 50,
+                                        height: 50,
+                                        marginVertical : 2,
+                                        marginTop: 15     
+                                    
+                                    } 
+                                    } />
+                                    <Text>로그아웃</Text>
+                        </TouchableOpacity>
+
+                    </View>
             </View>
-           
-        </>
+           </>
     );
 }
-
-export default MyMenuRoute;
+}   
