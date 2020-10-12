@@ -34,7 +34,7 @@ export default class BasketDetail extends React.Component {
             chooseCoupon: null,
             totalCost: 0
         }
-        
+
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
@@ -54,7 +54,7 @@ export default class BasketDetail extends React.Component {
     fetchData() {
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
-                
+
                 var tempOrderJSONArray = [];
                 var tempPropsJSONArray = [];
                 var totalCostforSave = 0;
@@ -80,7 +80,7 @@ export default class BasketDetail extends React.Component {
                 this.setState({
                     orderData: tempOrderJSONArray,
                     propsData: tempPropsJSONArray,
-                    totalCost : totalCostforSave
+                    totalCost: totalCostforSave
                 });
             })
     }
@@ -106,23 +106,23 @@ export default class BasketDetail extends React.Component {
             });
         }
     }
-    
+
     updateAndSendData(shopInfo) {
         //set data fixed
-        if(this.state.chooseCoupon !== null){
-            if(this.state.chooseCoupon === '10잔') {
+        if (this.state.chooseCoupon !== null) {
+            if (this.state.chooseCoupon === '10잔') {
                 this.state.propsData[0].cost -= 2000;
                 this.state.propsData[0].options.coupon = this.state.chooseCoupon;
             }
-            else if(this.state.chooseCoupon === '15잔'){
+            else if (this.state.chooseCoupon === '15잔') {
                 this.state.propsData[0].cost -= 2600;
                 this.state.propsData[0].options.coupon = this.state.chooseCoupon;
             }
         }
-        
+
         this.props.navigation.navigate('Paying',
             {
-                totalCost: this.state.totalCost,
+                totalCost: this.state.totalCost >= 0 ? this.state.totalCost : 0,
                 quantity: this.state.orderData.length,
                 shopInfo: shopInfo,
                 itemData: JSON.stringify(this.state.propsData),
@@ -244,85 +244,89 @@ export default class BasketDetail extends React.Component {
                         </ScrollView>
                         <View style={
                             {
-                                borderTopStartRadius:30, 
-                                borderTopEndRadius:30, 
-                                borderTopColor:'gray', 
-                                paddingTop:20,
-                                alignItems:'center',
-                                backgroundColor:'#fff'
+                                borderTopStartRadius: 30,
+                                borderTopEndRadius: 30,
+                                borderTopColor: 'gray',
+                                paddingTop: 20,
+                                alignItems: 'center',
+                                backgroundColor: '#fff'
                             }
-                            }>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 25,}} >
-                            <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
-                                <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
-                                <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                        }>
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 25, }} >
+                                <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
+                                    <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
+                                    <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                                </View>
+
+                                <FlatList
+                                    data={['적용안함', '10잔', '15잔']}
+                                    keyExtractor={item => item.key}
+                                    horizontal={true}
+                                    scrollEnabled={false}
+                                    renderItem={({ item, index }) => {
+
+                                        const backgroundColor = item.toString()
+                                            === this.state.chooseCoupon ?
+                                            '#EEAF9D' : '#F2F2F2';
+
+                                        const color = item.toString()
+                                            === this.state.chooseCoupon ?
+                                            'white' : 'black';
+                                        return (
+
+                                            <TouchableOpacity
+                                                style={[basketStyles.basketThreeItem, { backgroundColor }]}
+                                                onPress={() => this.chosenCoupon(item, _totalCost)}
+                                            >
+                                                <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
+                                                    {
+                                                        index === 0 ? item : item + '\n적용하기'
+                                                    }
+                                                </Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                />
                             </View>
 
-                            <FlatList
-                                data={['적용안함', '10잔', '15잔']}
-                                keyExtractor={item => item.key}
-                                horizontal={true}
-                                scrollEnabled={false}
-                                renderItem={({ item, index }) => {
-
-                                    const backgroundColor = item.toString()
-                                        === this.state.chooseCoupon ?
-                                        '#EEAF9D' : '#F2F2F2';
-
-                                    const color = item.toString()
-                                        === this.state.chooseCoupon ?
-                                        'white' : 'black';
-                                    return (
-
-                                        <TouchableOpacity
-                                            style={[basketStyles.basketThreeItem, { backgroundColor }]}
-                                            onPress={() => this.chosenCoupon(item, _totalCost)}
-                                        >
-                                            <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
-                                                {
-                                                    index === 0 ? item : item + '\n적용하기'
-                                                }
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )
-                                }}
-                            />
-                        </View>
-
-                        <View style={basketStyles.detailTotalInfoWrapper}>
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
-                                {
-                                    this.state.totalCost === 0 ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
-                                }원
+                            <View style={basketStyles.detailTotalInfoWrapper}>
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
+                                    {
+                                        this.state.totalCost === 0
+                                            ? _totalCost.toLocaleString()
+                                            : this.state.totalCost < 0
+                                                ? 0
+                                                : this.state.totalCost.toLocaleString()
+                                    }원
                             </Text>
-                        </View>
-                        <TouchableOpacity
-                            style={basketStyles.goToPayment}
-                            onPress={() => {
-                                isSameshop === true ?
-                                    Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
-                                        [
-                                            {
-                                                text: '취소', onPress: () => console.log('canceled order')
-                                            },
-                                            {
-                                                text: '확인', onPress: () =>
-                                                    [
-                                                        this.updateAndSendData(sameShopInfo)
-                                                        ,
-                                                        //pop and push
-                                                        handleOrder(sameShopInfo, this.state.propsData, true)
-                                                    ]
-                                            }
-                                        ])
-                                    :
-                                    Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
-                            }
-                            }
-                        >
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
-                        </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity
+                                style={basketStyles.goToPayment}
+                                onPress={() => {
+                                    isSameshop === true ?
+                                        Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
+                                            [
+                                                {
+                                                    text: '취소', onPress: () => console.log('canceled order')
+                                                },
+                                                {
+                                                    text: '확인', onPress: () =>
+                                                        [
+                                                            this.updateAndSendData(sameShopInfo)
+                                                            ,
+                                                            //pop and push
+                                                            handleOrder(sameShopInfo, this.state.propsData, true)
+                                                        ]
+                                                }
+                                            ])
+                                        :
+                                        Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
+                                }
+                                }
+                            >
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </>
@@ -331,7 +335,7 @@ export default class BasketDetail extends React.Component {
         else {
             return (
                 <View style={[basketStyles.background, { backgroundColor: '#182335' }]}>
-                    <Text style={{color:'#fff'}}>장바구니가 비어있어요 !</Text>
+                    <Text style={{ color: '#fff' }}>장바구니가 비어있어요 !</Text>
                 </View>
             );
         }

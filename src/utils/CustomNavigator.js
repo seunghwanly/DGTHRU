@@ -54,7 +54,7 @@ function CustomDrawerContent(props) {
           <DrawerItemList {...props}
             activeTintColor='white'
             activeBackgroundColor='#eeaf9d'
-            itemStyle={{ borderTopStartRadius:30, borderBottomStartRadius:30, borderColor:'transparent', paddingStart:10}}
+            itemStyle={{ borderTopStartRadius:30, borderBottomStartRadius:30, borderColor:'transparent', paddingStart:5, width:'100%'}}
             inactiveBackgroundColor='transparent'
             inactiveTintColor='#182335'
           />

@@ -61,8 +61,8 @@ export default class ReceiptGroupModal extends React.Component {
                                 </View>
                                 {
                                     item.orderInfo.isCanceled === true ?
-                                        <View style={[RecieptModal.isCanceledWrapper,{width:'100%'}]}>
-                                            <Text style={[RecieptModal.isCanceledText, {fontSize:13}]}>취소된 결제</Text>
+                                        <View style={[RecieptModal.isCanceledWrapper, { width: '100%' }]}>
+                                            <Text style={[RecieptModal.isCanceledText, { fontSize: 13 }]}>취소된 결제</Text>
                                         </View>
                                         :
                                         <></>
@@ -74,12 +74,12 @@ export default class ReceiptGroupModal extends React.Component {
                     <View style={RecieptModal.orderTimeWrapper}>
                         <Text style={RecieptModal.orderTimeTextLeft}>쿠폰사용여부 : </Text>
                         <Text style={RecieptModal.orderTimeTextRight}>
-                        {
-                            this.props.item.group[0].options.coupon !== '-' ?
-                                this.props.item.group[0].options.coupon + '쿠폰 사용됨'
-                                :
-                                '사용안함'
-                        }
+                            {
+                                this.props.item.group[0].options.coupon === '-' || this.props.item.group[0].options.coupon === '적용안함' ?
+                                    '사용안함'
+                                    :
+                                    this.props.item.group[0].options.coupon + '쿠폰 사용됨'
+                            }
                         </Text>
                     </View>
                     <View style={RecieptModal.totalCostWrapper}>
