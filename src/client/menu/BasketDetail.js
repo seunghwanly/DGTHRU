@@ -252,43 +252,6 @@ export default class BasketDetail extends React.Component {
                                 backgroundColor:'#fff'
                             }
                             }>
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 25,}} >
-                            <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
-                                <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
-                                <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
-                            </View>
-
-                            <FlatList
-                                data={['적용안함', '10잔', '15잔']}
-                                keyExtractor={item => item.key}
-                                horizontal={true}
-                                scrollEnabled={false}
-                                renderItem={({ item, index }) => {
-
-                                    const backgroundColor = item.toString()
-                                        === this.state.chooseCoupon ?
-                                        '#EEAF9D' : '#F2F2F2';
-
-                                    const color = item.toString()
-                                        === this.state.chooseCoupon ?
-                                        'white' : 'black';
-                                    return (
-
-                                        <TouchableOpacity
-                                            style={[basketStyles.basketThreeItem, { backgroundColor }]}
-                                            onPress={() => this.chosenCoupon(item, _totalCost)}
-                                        >
-                                            <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
-                                                {
-                                                    index === 0 ? item : item + '\n적용하기'
-                                                }
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )
-                                }}
-                            />
-                        </View>
-
                         <View style={basketStyles.detailTotalInfoWrapper}>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
