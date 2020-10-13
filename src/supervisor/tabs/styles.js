@@ -241,6 +241,36 @@ export const modalItem = StyleSheet.create({
 });
 
 export const myMenuStyle = StyleSheet.create({
+    contentArea : {
+        justifyContent:'center',
+        flexDirection:'row',
+        alignItems:'center',
+        width:'100%',
+        height:'80%',
+        backgroundColor:'white',
+    },
+    contentArea_left : {
+
+        alignItems:'center',
+        width:'48%',
+        height:'100%',
+        margin:5,
+        backgroundColor:'lightgray',
+    },
+
+    contentArea_right : {
+        alignItems:'center',
+        width:'48%',
+        height:'100%',
+        margin: 5,
+        backgroundColor:'lightgray',
+    },
+
+    logoutArea : {
+        width:'100%',
+        height:'100%',
+
+    }   , 
     header: {
         justifyContent:'center',
         width:'100%',
@@ -249,17 +279,29 @@ export const myMenuStyle = StyleSheet.create({
     }
     ,
     body: {
-        justifyContent:'flex-end',
+        justifyContent:'center',
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        height:'70%',
-        backgroundColor:'white',
+        height:'80%',
+        backgroundColor:'darkgray',
     }
     ,
     footer: {
         width:'100%',
         height:'20%',
         backgroundColor:'gray',
-    }
+    },
+    thinFont :{
+        fontSize:14,
+        fontWeight:'200',
+        color:'black',
+        
+    },
+    thickFont :{
+        fontSize:25,
+        fontWeight:'bold',
+        borderBottomColor:'darkgray',
+        borderBottomWidth:3,
+    },
 })

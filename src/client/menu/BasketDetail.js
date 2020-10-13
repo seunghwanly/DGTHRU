@@ -34,7 +34,7 @@ export default class BasketDetail extends React.Component {
             chooseCoupon: null,
             totalCost: 0
         }
-        
+
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
     };
 
@@ -54,7 +54,7 @@ export default class BasketDetail extends React.Component {
     fetchData() {
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
-                
+
                 var tempOrderJSONArray = [];
                 var tempPropsJSONArray = [];
                 var totalCostforSave = 0;
@@ -80,7 +80,7 @@ export default class BasketDetail extends React.Component {
                 this.setState({
                     orderData: tempOrderJSONArray,
                     propsData: tempPropsJSONArray,
-                    totalCost : totalCostforSave
+                    totalCost: totalCostforSave
                 });
             })
     }
@@ -106,23 +106,23 @@ export default class BasketDetail extends React.Component {
             });
         }
     }
-    
+
     updateAndSendData(shopInfo) {
         //set data fixed
-        if(this.state.chooseCoupon !== null){
-            if(this.state.chooseCoupon === '10잔') {
+        if (this.state.chooseCoupon !== null) {
+            if (this.state.chooseCoupon === '10잔') {
                 this.state.propsData[0].cost -= 2000;
                 this.state.propsData[0].options.coupon = this.state.chooseCoupon;
             }
-            else if(this.state.chooseCoupon === '15잔'){
+            else if (this.state.chooseCoupon === '15잔') {
                 this.state.propsData[0].cost -= 2600;
                 this.state.propsData[0].options.coupon = this.state.chooseCoupon;
             }
         }
-        
+
         this.props.navigation.navigate('Paying',
             {
-                totalCost: this.state.totalCost,
+                totalCost: this.state.totalCost >= 0 ? this.state.totalCost : 0,
                 quantity: this.state.orderData.length,
                 shopInfo: shopInfo,
                 itemData: JSON.stringify(this.state.propsData),
@@ -244,12 +244,12 @@ export default class BasketDetail extends React.Component {
                         </ScrollView>
                         <View style={
                             {
-                                borderTopStartRadius:30, 
-                                borderTopEndRadius:30, 
-                                borderTopColor:'gray', 
-                                paddingTop:20,
-                                alignItems:'center',
-                                backgroundColor:'#fff'
+                                borderTopStartRadius: 30,
+                                borderTopEndRadius: 30,
+                                borderTopColor: 'gray',
+                                paddingTop: 20,
+                                alignItems: 'center',
+                                backgroundColor: '#fff'
                             }
                             }>
                         <View style={basketStyles.detailTotalInfoWrapper}>
@@ -294,7 +294,7 @@ export default class BasketDetail extends React.Component {
         else {
             return (
                 <View style={[basketStyles.background, { backgroundColor: '#182335' }]}>
-                    <Text style={{color:'#fff'}}>장바구니가 비어있어요 !</Text>
+                    <Text style={{ color: '#fff' }}>장바구니가 비어있어요 !</Text>
                 </View>
             );
         }

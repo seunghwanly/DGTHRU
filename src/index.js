@@ -36,7 +36,7 @@ export default App = () => {
             
           //Home onPress () >> reset 애들한테 물어보자 이건
           />
-          <DrawerStack.Screen name='Receipt/History' component={Bill}
+          <DrawerStack.Screen name='e-Receipt/History' component={Bill}
             options={
               {
                 drawerIcon: ({focused}) => (<Image style={{ width: 20, height: 20 }} source={focused ? require('../image/reader-white.png') : require('../image/reader-outline.png')} />)

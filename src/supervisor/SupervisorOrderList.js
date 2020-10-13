@@ -127,7 +127,7 @@ export default class SupervisorOrderList extends Component {
                 )
             case 'fourth':
                 return (
-                   <MyMenuRoute />
+                   <MyMenuRoute pastList={this.state.pastList} />
                 )
             default:
                 return null;
