@@ -252,6 +252,35 @@ export default class BasketDetail extends React.Component {
                                 backgroundColor: '#fff'
                             }
                             }>
+                        <FlatList
+                                    data={['적용안함', '10잔', '15잔']}
+                                    keyExtractor={item => item.key}
+                                    horizontal={true}
+                                    scrollEnabled={false}
+                                    renderItem={({ item, index }) => {
+
+                                        const backgroundColor = item.toString()
+                                            === this.state.chooseCoupon ?
+                                            '#EEAF9D' : '#F2F2F2';
+
+                                        const color = item.toString()
+                                            === this.state.chooseCoupon ?
+                                            'white' : 'black';
+                                        return (
+
+                                            <TouchableOpacity
+                                                style={[basketStyles.basketThreeItem, { backgroundColor }]}
+                                                onPress={() => this.chosenCoupon(item, _totalCost)}
+                                            >
+                                                <Text style={[{ fontSize: 12, textAlign: 'center' }, color]}>
+                                                    {
+                                                        index === 0 ? item : item + '\n적용하기'
+                                                    }
+                                                </Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }}
+                                />
                         <View style={basketStyles.detailTotalInfoWrapper}>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
                             <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
@@ -260,6 +289,7 @@ export default class BasketDetail extends React.Component {
                                 }원
                             </Text>
                         </View>
+                        
                         <TouchableOpacity
                             style={basketStyles.goToPayment}
                             onPress={() => {
