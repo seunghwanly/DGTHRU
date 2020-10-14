@@ -251,8 +251,13 @@ export default class BasketDetail extends React.Component {
                                 alignItems: 'center',
                                 backgroundColor: '#fff'
                             }
-                            }>
-                        <FlatList
+                        }>
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 25, }} >
+                                <View style={[basketStyles.basketOptionDesc, { width: '40%', paddingStart: 0 }]}>
+                                    <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
+                                    <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
+                                </View>
+                                <FlatList
                                     data={['적용안함', '10잔', '15잔']}
                                     keyExtractor={item => item.key}
                                     horizontal={true}
@@ -281,41 +286,42 @@ export default class BasketDetail extends React.Component {
                                         )
                                     }}
                                 />
-                        <View style={basketStyles.detailTotalInfoWrapper}>
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
-                                {
-                                    this.state.totalCost === 0 ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
-                                }원
+                            </View>
+                            <View style={basketStyles.detailTotalInfoWrapper}>
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'left', width: '60%' }]}>TOTAL</Text>
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'right', width: '30%' }]}>
+                                    {
+                                        this.state.totalCost === 0 ? _totalCost.toLocaleString() : this.state.totalCost.toLocaleString()
+                                    }원
                             </Text>
-                        </View>
-                        
-                        <TouchableOpacity
-                            style={basketStyles.goToPayment}
-                            onPress={() => {
-                                isSameshop === true ?
-                                    Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
-                                        [
-                                            {
-                                                text: '취소', onPress: () => console.log('canceled order')
-                                            },
-                                            {
-                                                text: '확인', onPress: () =>
-                                                    [
-                                                        this.updateAndSendData(sameShopInfo)
-                                                        ,
-                                                        //pop and push
-                                                        handleOrder(sameShopInfo, this.state.propsData, true)
-                                                    ]
-                                            }
-                                        ])
-                                    :
-                                    Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
-                            }
-                            }
-                        >
-                            <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
-                        </TouchableOpacity>
+                            </View>
+
+                            <TouchableOpacity
+                                style={basketStyles.goToPayment}
+                                onPress={() => {
+                                    isSameshop === true ?
+                                        Alert.alert("DGTHRU 알림", "결제하시겠습니까?",
+                                            [
+                                                {
+                                                    text: '취소', onPress: () => console.log('canceled order')
+                                                },
+                                                {
+                                                    text: '확인', onPress: () =>
+                                                        [
+                                                            this.updateAndSendData(sameShopInfo)
+                                                            ,
+                                                            //pop and push
+                                                            handleOrder(sameShopInfo, this.state.propsData, true)
+                                                        ]
+                                                }
+                                            ])
+                                        :
+                                        Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
+                                }
+                                }
+                            >
+                                <Text style={[basketStyles.smallRadiusText, { textAlign: 'center', fontSize: 18 }]}>카카오페이로 결제하기</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </>
