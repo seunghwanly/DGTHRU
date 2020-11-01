@@ -361,7 +361,7 @@ export default class PaymentResult extends React.Component {
                                 var okey = '';
                                 var ukey = '';
                                 database()
-                                    .ref(userHistoryRef())
+                                    .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
                                         snapshot.forEach(childSnapShot => {
                                             okey = childSnapShot.key;
@@ -369,8 +369,6 @@ export default class PaymentResult extends React.Component {
                                                 ukey = data.key;
                                             })
                                         })
-                                        console.log("okey: "+ okey);
-                                        console.log("ukey: "+ ukey);
                                     }).then(() => {
                                         database()
                                             .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
