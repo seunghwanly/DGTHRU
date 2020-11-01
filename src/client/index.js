@@ -102,7 +102,7 @@ export default StackContainer = ({ navigation }) => {
         console.log('current user : ' + user.phoneNumber);
         return (
             <Stack.Navigator
-                initialRouteName={user.phoneNumber === '+821011112222' ? 'SupervisorOrderList' : 'Shops'}
+                initialRouteName={user.phoneNumber === '+821011112222' || user.phoneNumber === '+821022221111' ? 'SupervisorOrderList' : 'Shops'}
                 screenOptions={{
                     headerTitle: 'DONGGUCKS.',
                 }}

@@ -18,7 +18,7 @@ import { clientStyles } from '../client/styles';
 
 enableScreens();
 
-const shopData = [
+const shopData = [  
     {
         id: 'main_outdoor',
         adminPhoneNumber : '+821033333333',
@@ -27,7 +27,7 @@ const shopData = [
     },
     {
         id: 'singong_1f',
-        adminPhoneNumber : '+821044444444',
+        adminPhoneNumber : '+821022221111',
         title: '남산학사',
         location: '신공학관 1층',
     },

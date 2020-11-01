@@ -79,7 +79,7 @@ function Intro({ navigation }) {
                 <TouchableOpacity
                     style={styles.confirmButton}
                     onPress={() => {
-                        user.phoneNumber === '+821011112222' ? navigation.replace('SupervisorOrderList') : navigation.replace('Shops')
+                        user.phoneNumber === '+821011112222' || user.phoneNumber ==='+821022221111' ? navigation.replace('SupervisorOrderList') : navigation.replace('Shops')
                     }}
                 >
                     <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#FFF' }}>시작하기</Text>
@@ -97,7 +97,7 @@ function Intro({ navigation }) {
                 <TouchableOpacity
                     style={styles.confirmButton}
                     onPress={() => {
-                        user.phoneNumber === '+821011112222' ? navigation.replace('SupervisorOrderList') : navigation.replace('Shops')
+                        user.phoneNumber === '+821011112222' || user.phoneNumber ==='+821022221111' ? navigation.replace('SupervisorOrderList') : navigation.replace('Shops')
                     }}
                 >
                     <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#FFF' }}>시작하기</Text>

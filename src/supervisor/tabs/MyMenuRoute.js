@@ -24,7 +24,7 @@ const shopData = [
     },
     {
         id: 'singong_1f',
-        adminPhoneNumber : '+821044444444',
+        adminPhoneNumber : '+821022221111',
         title: '남산학사',
         location: '신공학관 1층',
     },
