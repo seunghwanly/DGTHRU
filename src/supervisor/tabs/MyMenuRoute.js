@@ -101,46 +101,83 @@ export default class MyMenuRoute extends React.Component {
                     
                     <View style={myMenuStyle.contentArea}>
                         <View style ={myMenuStyle.contentArea_left}>
-                        <Text style={{alignItems:'center'}}>
-                            회원 정보
+                        
+                        <ImageLinker
+                                name={shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).id}
+                                style={
+    
+                                {
+                                        width: 200,
+                                        height: 200,
+                                        marginVertical:20,
+                                        marginTop:0,              
+                                    } 
+                                    } />
+                        <Text style = {myMenuStyle.thickFont}>
+                            {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}  
                         </Text>
-                        <Text>
-                            매장이름 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
-                           
-                        </Text>
-                        <Text>
+                        <Text style = {myMenuStyle.thinFont2}>
                             
-                            관리번호 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).adminPhoneNumber}
-                          
+                         Tel.  {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).adminPhoneNumber} 
+                       
                         </Text>
-                        <Text>
+                        {/* <Text style = {myMenuStyle.thinFont2}>
                             
-                            매장위치 :{shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).location}
-                        </Text>
+                          </Text> */}
                         </View>
-
+                        <View style ={myMenuStyle.contentArea_rightBody}>
                         <View style ={myMenuStyle.contentArea_right}>
-                        <Text style={myMenuStyle.thinFont}>
-                        오늘 주문된 총 건수는?
-                          
-                        </Text>
-                        <Text style={myMenuStyle.thickFont}>
-                          
-                           {this.fetchData()
-                            }건
-                        </Text>
+                            <Text style={myMenuStyle.thinFont}>
+                            오늘 주문된 총 건수는?
+                            
+                            </Text>
+                            
+                            <Text style={myMenuStyle.thickFont}>
+                            
+                            {this.fetchData()
+                                }건
+                            </Text>
 
-
-                        <Text style={myMenuStyle.thinFont}>
-                           오늘 {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
-                           에서 주문된 총 금액은?
-                          
-                        </Text>
-                        <Text style={myMenuStyle.thickFont}>
-                        {this.numberWithCommas(this.state.totalAmount)}원
-                        </Text>
+                        </View>
+                        <View style ={myMenuStyle.contentArea_right}>
+                            <Text style={myMenuStyle.thinFont}>
+                            오늘 {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
+                            에서 주문된 총 금액은?
+                            
+                            </Text>
+                            <Text style={myMenuStyle.thickFont}>
+                            {this.numberWithCommas(this.state.totalAmount)}원
+                            </Text>
                         
                         </View>
+                        </View>
+
+                        <View style ={myMenuStyle.contentArea_rightBody}>
+                        <View style ={myMenuStyle.contentArea_right}>
+                            <Text style={myMenuStyle.thinFont}>
+                            오늘의 인기 메뉴는 ? 
+                            </Text>
+                            
+                            <Text style={myMenuStyle.thickFont}>
+                            
+                            아메리카노
+                           
+                            </Text>
+
+                        </View>
+                        <View style ={myMenuStyle.contentArea_right}>
+                            <Text style={myMenuStyle.thinFont}>
+                            이번 달 {shopData.find(d => d.adminPhoneNumber=== auth().currentUser.phoneNumber).title}
+                            에서 주문된 총 금액은?
+                            
+                            </Text>
+                            <Text style={myMenuStyle.thickFont}>
+                            {this.numberWithCommas(this.state.totalAmount+569500)}원
+                            </Text>
+                        
+                        </View>
+                        </View>
+
                     </View>
                 
             </View>

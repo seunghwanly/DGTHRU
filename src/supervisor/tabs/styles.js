@@ -207,7 +207,7 @@ export const modalItem = StyleSheet.create({
         borderWidth:1
     },
     addSubMenuBtn : {
-        backgroundColor:'lightgray',
+        backgroundColor:'#e7dcca',
         width:25,
         height:25,
         borderRadius:10,
@@ -250,20 +250,44 @@ export const myMenuStyle = StyleSheet.create({
         backgroundColor:'white',
     },
     contentArea_left : {
-
+        justifyContent:'center',
         alignItems:'center',
-        width:'48%',
+        width:'49%',
         height:'100%',
-        margin:5,
-        backgroundColor:'lightgray',
+       
+        backgroundColor:'#e7dcca',
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
+        borderRadius:5,
     },
-
+    contentArea_rightBody:{
+        justifyContent:'center',
+        alignItems:'center',
+        width:'25%',
+        height:'100%',
+        
+    },
     contentArea_right : {
         alignItems:'center',
-        width:'48%',
-        height:'100%',
-        margin: 5,
-        backgroundColor:'lightgray',
+        width:'90%',
+        height:'48%',
+        margin: 3,
+        justifyContent:'center',
+        backgroundColor:'#e7dcca',
+        shadowColor: "#333",
+        shadowOffset: {
+            width: 1,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
+        borderRadius:5,
+        
     },
 
     logoutArea : {
@@ -298,7 +322,15 @@ export const myMenuStyle = StyleSheet.create({
         color:'black',
         
     },
+    thinFont2 :{
+        marginTop:5,
+        fontSize:14,
+        fontWeight:'500',
+        color:'#3f3f3f',
+        
+    },
     thickFont :{
+        marginTop:20,
         fontSize:25,
         fontWeight:'bold',
         borderBottomColor:'darkgray',
