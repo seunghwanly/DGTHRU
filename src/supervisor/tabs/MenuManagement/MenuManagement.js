@@ -299,7 +299,7 @@ export default class MenuManagement extends React.Component {
                                                             <TouchableOpacity style={[menuManage.categoryFlatlistItems,{
                                                                 backgroundColor : item.menu[index].name === this.state.searchResult ? '#eaaf9d' : '#eee'
                                                             }]}
-                                                                onPress={() => this._setCurrentItem(item.menu[index], item.category_name, categoryIndex, 'categories_bakery')}
+                                                                onPress={() => this._setCurrentItem(item.menu[index], index, item.category_name, categoryIndex, 'categories_bakery')}
                                                             >
                                                                 <Text style={[menuManage.categoryFlatlistItemsTitle,{
                                                                     color : item.menu[index].name === this.state.searchResult ? '#fff' : '#000'

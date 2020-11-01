@@ -9,9 +9,19 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     Pressable,
+    Alert,
 } from 'react-native';
 import { modalItem, menuManage } from '../styles';
 import database from '@react-native-firebase/database';
+
+const removeFromDatabase = async(ref) => {
+
+    console.log('ref : ' + ref);
+
+    await database()
+        .ref(ref)
+        .remove(() => console.log('removed successfully'));
+}
 
 const updateDatabase = async (name, inputJSON, ref) => {
 
@@ -257,6 +267,25 @@ export default MenuModal = (props) => {
                                     }}
                                 >
                                     <Text style={{ color: '#182335', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>저장하기</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[modalItem.modalButton, { backgroundColor: '#ea5517' }]}
+                                    onPress={() => {
+                                        Alert.alert("DGTHRU 알림", "정말로 삭제하시겠습니까? 삭제하시면 되돌릴 수 없습니다.",
+                                        [
+                                            {
+                                                text: '취소',
+                                                onPress: () => console.log('canceled delete !')
+                                            },
+                                            {
+                                                text: '확인',
+                                                onPress:() => removeFromDatabase(updateRef).then(onPress)
+                                            }
+                                        ]
+                                    )
+                                    }}
+                                >
+                                    <Text style={{ color: '#182335', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>삭제하기</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
