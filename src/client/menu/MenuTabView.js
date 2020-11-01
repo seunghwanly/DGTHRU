@@ -159,48 +159,12 @@ export default class TabViewExample extends React.Component {
                         initialLayout={initialLayout}
                         renderScene={({ route }) => {
                             if (this.state.isDrinkMenu === true) {
-                                switch (route.key) {
-                                    case 0:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 1:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 2:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 3:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 4:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 5:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 6:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 7:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    case 8:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    // case 9:
-                                    //     if (route.title === 'Cold Brew')
-                                    //         return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                    //     else
-                                    //         return null;
-                                    default:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />
-                                }   // switch
+                                if(route.key <= this.state.drinkRoutes.length)
+                                    return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.drinkData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="drink" navigation={this.props.navigation} />;
                             }   // if    
                             else {
-                                switch (route.key) {
-                                    case 0:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.bakeryData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="bakery" navigation={this.props.navigation} />
-                                    case 1:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.bakeryData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="bakery" navigation={this.props.navigation} />
-                                    case 2:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.bakeryData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="bakery" navigation={this.props.navigation} />
-                                    case 3:
-                                        return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.bakeryData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="bakery" navigation={this.props.navigation} />
-                                    default:
-                                        return null;
-
-                                }
+                                if(route.key <= this.state.bakeryRoutes.length)
+                                    return <MenuChildView categoryName={route.title} itemsString={JSON.stringify(this.state.bakeryData.filter((item) => { if (item.category_name === route.title) return item.menu }))} shopInfo={this.props.route.params.shopInfo} type="bakery" navigation={this.props.navigation} />;
                             }
                         }}
                     />
