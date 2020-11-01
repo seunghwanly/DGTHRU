@@ -38,7 +38,7 @@ export default class RecieptSingleModal extends React.Component {
                         <Text style={RecieptModal.recieptTopItemTextLeft}>주문상품</Text>
                         <Text style={RecieptModal.recieptTopItemTextCenter}>갯수</Text>
                         <Text style={RecieptModal.recieptTopItemTextCenter}>유형</Text>
-                        <Text style={RecieptModal.recieptTopItemTextRight}>가격</Text>~
+                        <Text style={RecieptModal.recieptTopItemTextRight}>가격</Text>
                     </View>
 
                     <View style={RecieptModal.recieptItemSubWrapper}>
@@ -51,12 +51,12 @@ export default class RecieptSingleModal extends React.Component {
                     <View style={RecieptModal.orderTimeWrapper}>
                         <Text style={RecieptModal.orderTimeTextLeft}>쿠폰사용여부 : </Text>
                         <Text style={RecieptModal.orderTimeTextRight}>
-                        {
-                            this.props.item.options.coupon === '-'?
-                                '사용안함'
-                                :
-                                this.props.item.options.coupon + '쿠폰 사용됨'
-                        }
+                            {
+                                this.props.item.options.coupon === '-' || this.props.item.options.coupon === '적용안함' ?
+                                    '사용안함'
+                                    :
+                                    this.props.item.options.coupon + '쿠폰 사용됨'
+                            }
                         </Text>
                     </View>
 

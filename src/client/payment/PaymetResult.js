@@ -283,7 +283,7 @@ export default class PaymentResult extends React.Component {
                             this.setState({
                                 orderState: this.state.orderState.concat(dataChild.val().orderInfo.orderState),
                                 data: this.state.data.concat(tempJSONObject),
-                                isCoupon: this.state.isCoupon.concat(childSnapShot.val().orderInfo.getCoupon),
+                                isCoupon: this.state.isCoupon.concat(dataChild.val().orderInfo.getCoupon),
                             });
 
                             idx++;
@@ -369,6 +369,8 @@ export default class PaymentResult extends React.Component {
                                                 ukey = data.key;
                                             })
                                         })
+                                        console.log("okey: "+ okey);
+                                        console.log("ukey: "+ ukey);
                                     }).then(() => {
                                         database()
                                             .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
@@ -480,7 +482,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && ( item.options.coupon !== '-' || item.options.coupon !== '적용안함' ) ? <Text style={{textAlign:'right'}}>{item.options.coupon}쿠폰 사용!</Text> : <></>
+                                                    index === 0 && ( item.options.coupon === "-" || item.options.coupon === "적용안함" ) ? <></> : <Text style={{textAlign:'right'}}>{item.options.coupon} 쿠폰 사용</Text>
                                                 }
                                             </View>
                                         )

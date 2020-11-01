@@ -101,9 +101,10 @@ export default Basket = ({ navigation, route }) => {
                             color: 'black',
                             fontWeight: 'bold',
                             alignSelf: 'flex-start',
-                            marginTop: 5,
+                            marginTop: 10,
                             marginEnd: 5,
-                            marginBottom: 5
+                            marginBottom: 5,
+                            paddingStart:10
                         }
                     }>맛 선택</Text>
                     {/* <Text style={basketStyles.chooseDetailText}>맛을 선택해주세요</Text> */}
@@ -129,7 +130,8 @@ export default Basket = ({ navigation, route }) => {
                                         <Text
                                             style={{
                                                 color,
-                                                fontWeight
+                                                fontWeight,
+                                                textAlign:'center'
                                             }}
                                         > {item} </Text>
                                     </TouchableOpacity>
@@ -867,38 +869,6 @@ export default Basket = ({ navigation, route }) => {
                                             :
                                             <></>
                                     }
-                                </View>
-                                <View style={[basketStyles.basketOptionWrapper, { flexDirection: 'row', marginVertical: 5, }]} >
-                                    <View style={basketStyles.basketOptionDesc}>
-                                        <Text style={{ color: '#182335', fontWeight: 'bold', marginBottom: 5 }}>쿠폰선택</Text>
-                                        <Text style={{ fontWeight: '400', fontSize: 10, color: 'gray' }}>모으신 쿠폰에 따라{'\n'}적용되는 할인이 다릅니다.</Text>
-                                    </View>
-                                    {/* <Picker
-                                        style={{ width: '53%', height: 80, marginHorizontal: 20, justifyContent: 'center' }}
-                                        selectedValue={useCoupon}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setUseCoupon(itemValue);
-                                        }}
-                                        mode='dropdown'
-                                        itemStyle={{ fontSize: 12, marginHorizontal: 20 }}
-                                    >
-                                        <GetCouponNum />
-                                        {
-                                            couponNum === 10 ?
-                                                <>
-                                                    <Picker.Item label='10잔 모았네요 !' value={2600} />
-                                                </>
-                                                :
-                                                couponNum === 15 ?
-                                                    <>
-                                                        <Picker.Item label='10잔 사용!' value={2600} />
-                                                        <Picker.Item label='15잔 모았네요!' value={2600} />
-                                                    </>
-                                                    :
-                                                    <Picker.Item label='사용 가능한 쿠폰 없음' value={2600} />
-
-                                        }
-                                    </Picker> */}
                                 </View>
 
                                 <TouchableOpacity
