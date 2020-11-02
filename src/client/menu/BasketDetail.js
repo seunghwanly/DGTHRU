@@ -32,7 +32,9 @@ export default class BasketDetail extends React.Component {
             propsData: [],
             needRefresh: false,
             chooseCoupon: null,
-            totalCost: 0
+            totalCost: 0,
+            couponNum: 0
+
         }
 
         this._firebaseCommonDatabase = database().ref('user/basket/' + auth().currentUser.uid + '/' + 'group');
@@ -52,6 +54,16 @@ export default class BasketDetail extends React.Component {
     }
 
     fetchData() {
+
+            var i = 0;
+            database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
+                snapshot.forEach((childSnapshot) => {
+                    i++;
+                    this.setState({ couponNum: i });
+                });
+            });
+        
+
         this._firebaseCommonDatabase
             .on('value', (snapshot) => {
 
@@ -88,16 +100,26 @@ export default class BasketDetail extends React.Component {
     chosenCoupon = (name, _totalCost) => {
         if (name === '10잔') { // 10잔 짜리
             console.log('10 cups');
+            if(this.state.couponNum < 10){
+                alert(10 - this.state.couponNum + "개 더 모아야 해요");
+            }
+            else{
             this.setState({
                 totalCost: _totalCost - 2000,
                 chooseCoupon: name,
             });
+        }
         } else if (name === '15잔') {  // 15잔 짜리
             console.log('15 cups');
+            if(this.state.couponNum < 15){
+                alert(15 - this.state.couponNum + "개 더 모아야 해요");
+            }
+            else{
             this.setState({
                 totalCost: _totalCost - 2600,
                 chooseCoupon: name
             });
+        }
         } else { // 쿠폰없음
             console.log('no coupons');
             this.setState({

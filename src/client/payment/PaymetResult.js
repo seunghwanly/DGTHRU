@@ -371,7 +371,7 @@ export default class PaymentResult extends React.Component {
                                         })
                                     }).then(() => {
                                         database()
-                                            .ref(userHistoryRef() + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
                                             .update({ getCoupon: true });
                                     })
                             }
