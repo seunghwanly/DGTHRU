@@ -1,5 +1,6 @@
 import React, { Component, useEffect, } from 'react';
-import { Platform, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
+import { Platform, Modal, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, StyleSheet, Text, View, 
+    Image, TextInput, Alert, FlatList, ListItem, Button, TouchableHighlight } from 'react-native';
 import { withTheme } from 'react-native-elements';
 import { exampleStyle } from '../styles';
 import { _setPickUpTime , _setCompleteTime , _setConfirmTime , _stringConverter, DeleteOrderList , Setconfirm , SetUnconfirm , SetReady , SetRemove ,
@@ -40,8 +41,21 @@ const chartConfig = {
                 costData: [],
                 list: [],
                 menu: [],
+                tableModalVisible: false,
+                lineGraphModalViaible: false,
+                PieChartModalVisible: false,
                 shopname: this.props.shopname,
             }
+        }
+
+        settableModalVisible = (visible) => {
+            this.setState({ tableModalVisible: visible });
+        }
+        setlineGraphModalViaible = (visible) => {
+            this.setState({ lineGraphModalViaible: visible });
+        }
+        setPieChartModalVisible = (visible) => {
+            this.setState({ PieChartModalVisible: visible });
         }
     
         randomColor(){return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
@@ -198,10 +212,164 @@ const chartConfig = {
         render(){ 
             return(
                 <SafeAreaView style={styles.backgroundStyle}>
-                <ScrollView style={{margin: 20}}>
+                    <ScrollView scrollEnabled={false} style={{margin: 15}}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={this.state.tableModalVisible}
+                            onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            }}
+                        >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={{ textAlign: 'center', fontSize: 20,}}>총 매출 : {this.state.totalCost}원</Text>
+                                    <View style={styles.buttonArea}>
+                                        <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
+                                            <Text style={styles.buttonText}>1개월</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.button} onPress={() => this.onPress(3)}>
+                                            <Text style={styles.buttonText}>3개월</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.button} onPress={() => this.onPress(6)}>
+                                            <Text style={styles.buttonText}>6개월</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.button} onPress={() => this.onPress(0)}>
+                                            <Text style={styles.buttonText}>전체</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <ScrollView horizontal={true}>
+                                        <View>
+                                            <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0'}}>
+                                                <Row 
+                                                    data={this.state.tableHead} 
+                                                    widthArr={this.state.tableWidthArr} 
+                                                    style={styles.header} 
+                                                    textStyle={styles.text}
+                                                />
+                                            </Table>
+                                            <ScrollView style={styles.dataWrapper}>
+                                                <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0',}}>
+                                                    {this.state.tableData.map((rowData, index) => (
+                                                    <Row
+                                                        key={index}
+                                                        data={rowData}
+                                                        widthArr={this.state.tableWidthArr}
+                                                        style={[styles.row, index%2 && {backgroundColor: '#f5fffa'}]}
+                                                        textStyle={styles.text}
+                                                    />
+                                                    ))}
+                                                </Table>
+                                            </ScrollView>
+                                        </View>
+                                    </ScrollView>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        onPress={() => {this.settableModalVisible(false);}}
+                                    >
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={this.state.lineGraphModalViaible}
+                            onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            }}
+                        >
+                            <View style={styles.centeredView}>
+                                <View style={styles.ModalLineGraph}>
+                                    <Text style={{ textAlign: 'center', fontSize: 20,}}>매출 추이</Text>
+                                    <ScrollView horizontal={true} >
+                                        <LineGraph
+                                            data={this.state.costData}
+                                            labels={this.state.dateData}
+                                            width={screenWidth * 2}
+                                            height={200}
+                                            lineColor='#EEAF9D'
+                                            dotColor='#cd5c5c'
+                                            hasShadow={true}
+                                            baseConfig={{
+                                                startAtZero: true,
+                                                //hasXAxisBackgroundLines: true,
+                                                //hasYAxisLabels: true,
+                                                xAxisLabelStyle: {
+                                                    suffix: '원',
+                                                    //offset: 0,
+                                                    //position: "right",
+                                                }
+                                            }}
+                                            style={{
+                                                marginTop: 20,
+                                                alignItems: 'center',
+                                            }}
+                                        />
+                                    </ScrollView>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        onPress={() => {this.setlineGraphModalViaible(false);}}
+                                    >
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={this.state.PieChartModalVisible}
+                            onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            }}
+                        >
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={{ textAlign: 'center', fontSize: 20,}}>인기메뉴</Text>
+                                    <PieChart
+                                        data={this.state.menu}
+                                        width={screenWidth}
+                                        height={180}
+                                        chartConfig={chartConfig}
+                                        accessor="count"
+                                        backgroundColor="#fffafa"
+                                        paddingLeft="15"
+                                        absolute
+                                    />
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        onPress={() => {this.setPieChartModalVisible(false);}}
+                                    >
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
                     <View style = {{flexDirection: 'row'}}>
                     <View style={styles.leftArea}>
-                            <Text style = {styles.subTitle}>총 매출 : {this.state.totalCost}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                            <Text style={{ textAlign: 'center', fontSize: 20,}}>총 매출 : {this.state.totalCost}원</Text>
+                            <TouchableOpacity
+                                style={
+                                    {
+                                        width: '10%',
+                                        alignContent: "flex-end",
+                                        alignItems: 'flex-end',
+                                    }
+                                }
+                                onPress={() =>
+                                    this.settableModalVisible(true)
+                                }
+                            >
+                                <Image
+                                    style={{ width: 24, height: 24, }}
+                                    resizeMode='cover'
+                                    source={require('../../../image/chevron-forward-outline.png')} 
+                                />
+                            </TouchableOpacity>
+                            </View>
                             <View style={styles.buttonArea}>
                                     <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
                                         <Text style={styles.buttonText}>1개월</Text>
@@ -244,11 +412,29 @@ const chartConfig = {
                             </View>
                         <View style = {styles.rightArea}>
                             <View style = {styles.pieChartArea}>
+                                <View style={{flexDirection: 'row'}}>
                                 <Text style = {styles.subTitle}>인기메뉴</Text>
+                                <TouchableOpacity
+                                style={
+                                    {
+                                        width: '10%',
+                                        alignContent: "flex-end",
+                                        alignItems: 'flex-end',
+                                    }
+                                }
+                                onPress={() =>this.setPieChartModalVisible(true)}
+                                >
+                                <Image
+                                    style={{ width: 24, height: 24, }}
+                                    resizeMode='cover'
+                                    source={require('../../../image/chevron-forward-outline.png')} 
+                                />
+                            </TouchableOpacity>
+                            </View>
                                 <PieChart
                                     data={this.state.menu}
                                     width={screenWidth * 0.90}
-                                    height={220}
+                                    height={180}
                                     chartConfig={chartConfig}
                                     accessor="count"
                                     backgroundColor="#fffafa"
@@ -257,25 +443,52 @@ const chartConfig = {
                                 />
                             </View>
                             <View style = {styles.lineGraphArea}>
+                            <View style={{flexDirection: 'row'}}>
                                 <Text style = {styles.subTitle}>매출 추이</Text>
-                                <ScrollView horizontal={true} style = {{margin: 20,}}>
-                                <LineGraph
-                                    data={this.state.costData}
-                                    width={screenWidth}
-                                    height={250}
-                                    isBezier
-                                    lineColor='#EEAF9D'
-                                    dotColor='#cd5c5c'
-                                    hasShadow
-                                    baseConfig={{
-                                        startAtZero: true,
-                                        hasXAxisBackgroundLines: true,
-                                    }}
-                                    style={{
-                                        marginTop: 30,
-                                        alignItems: 'center',
-                                    }}
+                                <TouchableOpacity
+                                style={
+                                    {
+                                        width: '10%',
+                                        alignContent: "flex-end",
+                                        alignItems: 'flex-end',
+                                    }
+                                }
+                                onPress={() =>
+                                    this.setlineGraphModalViaible(true)
+                                }
+                            >
+                                <Image
+                                    style={{ width: 24, height: 24, }}
+                                    resizeMode='cover'
+                                    source={require('../../../image/chevron-forward-outline.png')} 
                                 />
+                            </TouchableOpacity>
+                            </View>
+                                <ScrollView horizontal={true} style = {{margin: 20, width: screenWidth*0.8,}}>
+                                    <LineGraph
+                                        data={this.state.costData}
+                                        width={screenWidth*0.75}
+                                        height={200}
+                                        labels={this.state.dateData}
+                                        lineColor='#EEAF9D'
+                                        dotColor='#cd5c5c'
+                                        //hasShadow={true}
+                                        baseConfig={{
+                                            startAtZero: true,
+                                            hasXAxisBackgroundLines: true,
+                                            hasYAxisLabels: true,
+                                            xAxisLabelStyle: {
+                                                suffix: '원',
+                                                offset: 0,
+                                                position: "right",
+                                            }
+
+                                        }}
+                                        style={{
+                                            marginTop: 20,
+                                            alignItems: 'center',
+                                        }}
+                                    />
                             </ScrollView>
                         </View>
                         </View>
@@ -348,7 +561,7 @@ const chartConfig = {
         },
         buttonText: {
             color: 'white',
-            padding: 10,
+            paddingTop: 5,
             fontSize: 20,
         },
         dataWrapper: { 
@@ -362,7 +575,7 @@ const chartConfig = {
         pieChartArea:{
             flex: 3,
             backgroundColor: '#fffafa',
-            width: screenWidth * 0.9,
+            //width: screenWidth * 0.9,
             borderRadius: 20,
             paddingTop: 20,
             alignItems: 'center',
@@ -377,14 +590,14 @@ const chartConfig = {
             elevation: 5
         },
         lineGraphArea:{
-            flex : 2, 
+            flex : 2,
+            //width : screenWidth * 0.9, 
             margin: 20, 
             alignItems: 'center', 
             backgroundColor: '#fff',
             borderRadius: 20,
             paddingTop: 20,
             //padding: 5,
-            width: screenWidth * 0.9,
             margin: 10,
             backgroundColor: "#fffafa",
             shadowColor: "#333",
@@ -400,4 +613,57 @@ const chartConfig = {
             height: 40, 
             backgroundColor: '#e0ffff' 
         },
+        //////////////////////////////////////////////////////
+        centeredView: {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 22
+          },
+          modalView: {
+            margin: 20,
+            backgroundColor: "white",
+            borderRadius: 20,
+            padding: 35,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5
+          },
+          ModalLineGraph: {
+            margin: 20,
+            height: '50%',
+            backgroundColor: "white",
+            borderRadius: 20,
+            padding: 30,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5
+          },
+          openButton: {
+            backgroundColor: "#F194FF",
+            borderRadius: 20,
+            padding: 10,
+            elevation: 2
+          },
+          textStyle: {
+            color: "white",
+            fontWeight: "bold",
+            textAlign: "center"
+          },
+          modalText: {
+            marginBottom: 15,
+            textAlign: "center"
+          }
       });
