@@ -81,3 +81,7 @@ ios/**
 package-lock.json
 ios/GoogleService-Info.plist
 ios/Podfile.lock
+*.pbxproj
+ios/Podfile.lock
+*.lock
+*.lock
