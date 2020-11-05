@@ -64,6 +64,7 @@ export default class SupervisorOrderList extends Component {
 
     constructor(props) {
         super(props);
+        
         // shopname = props.route.params.shopInfo.id;
         this.state = {
             index: 0,
@@ -167,7 +168,7 @@ export default class SupervisorOrderList extends Component {
     }
 
 
-    componentDidMount = () => {
+    componentDidMount = async() => {
         //console.log('key: ' + shopname);
 
         database().ref('shops/' + this.state.shopname).on('value', (snapshot) => {
