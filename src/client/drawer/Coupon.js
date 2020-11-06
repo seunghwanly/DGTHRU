@@ -228,26 +228,9 @@ export default class Coupon extends React.Component {
 
                     <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
                         <View style={{ flexDirection: 'column', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'main_outdoor'} style={{ width: 25, height: 25 }} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>가온누리    2260-8961</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'singong_1f'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>남산학사 카페   2260-8509</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'hyehwa_roof'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>혜화디저트 카페  2260-8966</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'munhwa_1f'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>두리터 카페     2260-1478</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'economy_outdoor'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>그루터기 카페     2260-1478</Text>
-                            </View>
+                            <Text style={{ fontWeight: 'bold', width: '100%' }}>현재 쿠폰 {this.state.shopInfo} 장</Text>
+                       
+                        
                         </View>
 
                         <View >

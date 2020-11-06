@@ -277,6 +277,8 @@ export default class PaymentResult extends React.Component {
                                 orderInfo: dataChild.val().orderInfo
                             };
 
+                            console.log("ORDERINFO: " + tempJSONObject.orderInfo + ", " + dataChild.val().orderInfo.orderState);
+
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
 
                             //주문정보담기
@@ -341,11 +343,13 @@ export default class PaymentResult extends React.Component {
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
                         if (this.state.isCoupon[i] === false) {
+                            console.log(this.props.route.params.coupon);
                             couponUpdate(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
                                 var ukey = '';
-
-                                this._firebaseRef.once('value', snapshot => {
+                                database()
+                                    .ref(userHistoryRef())
+                                    .once('value', snapshot => {
                                     snapshot.forEach((child) => {
                                         ukey = child.key;
 
@@ -361,7 +365,7 @@ export default class PaymentResult extends React.Component {
                                 var okey = '';
                                 var ukey = '';
                                 database()
-                                    .ref(commonRef(this.props.route.params.shopInfo))
+                                    .ref(userHistoryRef())
                                     .once('value', snapshot => {
                                         snapshot.forEach(childSnapShot => {
                                             okey = childSnapShot.key;
@@ -375,21 +379,7 @@ export default class PaymentResult extends React.Component {
                                             .update({ getCoupon: true });
                                     })
                             }
-
                         }
-
-
-
-
-
-                        // if(this.state.isCoupon[i] === 0){
-                        //     couponUpdate(this.props.route.params.coupon);
-
-                        //     const newCoupon = this.state.isCoupon.slice();
-                        //     newCoupon[i] = 1;
-                        //     this.setState({isCoupon: newCoupon});
-
-                        // }
                     }
 
                     else {
