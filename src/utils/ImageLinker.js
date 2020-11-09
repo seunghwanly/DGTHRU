@@ -38,6 +38,8 @@ export default ImageLinker = (item) => {
             return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/그루터기.png')} />)
         case "munhwa_1f":
             return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/두리터.png')} />)
+        case "nothing":
+            return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/blank.png')} />)
         case "favorite_shop":
             return (<Image style={[item.style, { backgroundColor: null }]} resizeMode='cover' source={require('../../image/cafe-icon/favorite.png')} />)
 

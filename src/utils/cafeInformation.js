@@ -10,6 +10,8 @@ export const getCafeIcon = name => {
             return require('../../image/cafe-icon/그루터기.png');
         case "munhwa_1f":
             return require('../../image/cafe-icon/두리터.png');
+        case "nothing":
+            return require('../../image/cafe-icon/blank.png');
     }
 }
 
