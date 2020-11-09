@@ -122,6 +122,12 @@ const chartConfig = {
                 var count2 = obj2.count;
                 return count2 - count1;
             });
+
+            tempMenu[0].color = '#162338';
+            tempMenu[1].color = '#f5deb3';
+            tempMenu[2].color = '#4D7ACA';
+            tempMenu[3].color = '#536178';
+            tempMenu[4].color = '#eaaf9d';
             return tempMenu;
         }
     
@@ -205,6 +211,9 @@ const chartConfig = {
                     tableColumn.push(rowData);
                     sum+=costColumn[i];
                 }
+                costColumn[costColumn.length] = 0;
+                costColumn = this.reverse(costColumn);
+
                 this.setState({dateData: dateColumn, costData: costColumn, tableData: tableColumn, totalCost: sum});
             })
         }
@@ -240,7 +249,7 @@ const chartConfig = {
                                     </View>
                                     <ScrollView horizontal={true}>
                                         <View>
-                                            <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0'}}>
+                                            <Table borderStyle={{borderWidth: 1, borderColor: '#e6e6fa'}}>
                                                 <Row 
                                                     data={this.state.tableHead} 
                                                     widthArr={this.state.tableWidthArr} 
@@ -249,14 +258,14 @@ const chartConfig = {
                                                 />
                                             </Table>
                                             <ScrollView style={styles.dataWrapper}>
-                                                <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0',}}>
+                                                <Table borderStyle={{borderWidth: 1, borderColor: '#e6e6fa',}}>
                                                     {this.state.tableData.map((rowData, index) => (
                                                     <Row
                                                         key={index}
                                                         data={rowData}
                                                         widthArr={this.state.tableWidthArr}
-                                                        style={[styles.row, index%2 && {backgroundColor: '#f5fffa'}]}
-                                                        textStyle={styles.text}
+                                                        style={[styles.row, index%2 && {backgroundColor: '#f2f2f2'}]}
+                                                        textStyle={styles.tableText}
                                                     />
                                                     ))}
                                                 </Table>
@@ -264,10 +273,10 @@ const chartConfig = {
                                         </View>
                                     </ScrollView>
                                     <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        style={{ ...styles.openButton, backgroundColor: "#162338" }}
                                         onPress={() => {this.settableModalVisible(false);}}
                                     >
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                        <Text style={styles.textStyle}>    닫기    </Text>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -282,37 +291,38 @@ const chartConfig = {
                         >
                             <View style={styles.centeredView}>
                                 <View style={styles.ModalLineGraph}>
-                                    <Text style={{ textAlign: 'center', fontSize: 20,}}>매출 추이</Text>
+                                    <Text style={{ textAlign: 'center', fontSize: 20,}}>매출 추이(원)</Text>
                                     <ScrollView horizontal={true} >
-                                        <LineGraph
-                                            data={this.state.costData}
-                                            labels={this.state.dateData}
-                                            width={screenWidth * 2}
-                                            height={200}
-                                            lineColor='#EEAF9D'
-                                            dotColor='#cd5c5c'
-                                            hasShadow={true}
-                                            baseConfig={{
-                                                startAtZero: true,
-                                                //hasXAxisBackgroundLines: true,
-                                                //hasYAxisLabels: true,
-                                                xAxisLabelStyle: {
-                                                    suffix: '원',
-                                                    //offset: 0,
-                                                    //position: "right",
-                                                }
-                                            }}
-                                            style={{
-                                                marginTop: 20,
-                                                alignItems: 'center',
-                                            }}
-                                        />
-                                    </ScrollView>
+                                    <LineGraph
+                                        data={this.state.costData}
+                                        width={screenWidth*1.5}
+                                        height={300}
+                                        labels={this.state.dateData}
+                                        lineColor='#162338'
+                                        dotColor='#162338'
+                                        hasShadow={true}
+                                        baseConfig={{
+                                            startAtZero: true,
+                                            //hasXAxisBackgroundLines: true,
+                                            //hasYAxisLabels: true,
+                                            xAxisLabelStyle: {
+                                                //suffix: '원',
+                                                //offset: 0,
+                                                //position: "right",
+                                            }
+
+                                        }}
+                                        style={{
+                                            marginTop: 20,
+                                            alignItems: 'center',
+                                        }}
+                                    />
+                                        </ScrollView>
                                     <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        style={{ ...styles.openButton, backgroundColor: "#162338" }}
                                         onPress={() => {this.setlineGraphModalViaible(false);}}
                                     >
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                        <Text style={styles.textStyle}>    닫기    </Text>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -334,15 +344,15 @@ const chartConfig = {
                                         height={180}
                                         chartConfig={chartConfig}
                                         accessor="count"
-                                        backgroundColor="#fffafa"
+                                        backgroundColor="white"
                                         paddingLeft="15"
                                         absolute
                                     />
                                     <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                                        style={{ ...styles.openButton, backgroundColor: "#162338" }}
                                         onPress={() => {this.setPieChartModalVisible(false);}}
                                     >
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                        <Text style={styles.textStyle}>    닫기    </Text>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -386,7 +396,7 @@ const chartConfig = {
                                 </View>
                                 <ScrollView horizontal={true}>
                                     <View>
-                                        <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0'}}>
+                                        <Table borderStyle={{borderWidth: 1, borderColor: '#e6e6fa'}}>
                                             <Row 
                                                 data={this.state.tableHead} 
                                                 widthArr={this.state.tableWidthArr} 
@@ -395,14 +405,14 @@ const chartConfig = {
                                             />
                                         </Table>
                                         <ScrollView style={styles.dataWrapper}>
-                                            <Table borderStyle={{borderWidth: 1, borderColor: '#f0fff0',}}>
+                                            <Table borderStyle={{borderWidth: 1, borderColor: '#e6e6fa',}}>
                                                 {this.state.tableData.map((rowData, index) => (
                                                 <Row
                                                     key={index}
                                                     data={rowData}
                                                     widthArr={this.state.tableWidthArr}
-                                                    style={[styles.row, index%2 && {backgroundColor: '#f5fffa'}]}
-                                                    textStyle={styles.text}
+                                                    style={[styles.row, index%2 && {backgroundColor: '#f2f2f2'}]}
+                                                    textStyle={styles.tableText}
                                                 />
                                                 ))}
                                             </Table>
@@ -437,14 +447,14 @@ const chartConfig = {
                                     height={180}
                                     chartConfig={chartConfig}
                                     accessor="count"
-                                    backgroundColor="#fffafa"
+                                    backgroundColor="white"
                                     paddingLeft="15"
                                     absolute
                                 />
                             </View>
                             <View style = {styles.lineGraphArea}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style = {styles.subTitle}>매출 추이</Text>
+                                <Text style = {styles.subTitle}>매출 추이(원)</Text>
                                 <TouchableOpacity
                                 style={
                                     {
@@ -470,17 +480,17 @@ const chartConfig = {
                                         width={screenWidth*0.75}
                                         height={200}
                                         labels={this.state.dateData}
-                                        lineColor='#EEAF9D'
-                                        dotColor='#cd5c5c'
-                                        //hasShadow={true}
+                                        lineColor='#162338'
+                                        dotColor='#162338'
+                                        hasShadow={true}
                                         baseConfig={{
                                             startAtZero: true,
-                                            hasXAxisBackgroundLines: true,
-                                            hasYAxisLabels: true,
+                                            //hasXAxisBackgroundLines: true,
+                                            //hasYAxisLabels: true,
                                             xAxisLabelStyle: {
-                                                suffix: '원',
-                                                offset: 0,
-                                                position: "right",
+                                                //suffix: '원',
+                                                //offset: 0,
+                                                //position: "right",
                                             }
 
                                         }}
@@ -514,7 +524,7 @@ const chartConfig = {
             padding: 16, 
             alignItems: 'center', 
             paddingTop: 30, 
-            backgroundColor: '#fffafa',
+            backgroundColor: 'white',
             borderRadius: 20,
             paddingTop: 20,
             shadowColor: "#333",
@@ -528,13 +538,19 @@ const chartConfig = {
         },
         header: { 
             height: 50, 
-            backgroundColor: '#87cefa',
+            backgroundColor: '#182335',
             borderTopStartRadius: 15,
             borderTopEndRadius: 15,
         },
         text: { 
-            textAlign: 'center', 
-            fontWeight: '100' 
+            textAlign: 'center',
+            color: 'white', 
+            fontWeight: '600', 
+        },
+        tableText: {
+            textAlign: 'center',
+            color: '#333', 
+            fontWeight: '600', 
         },
         subTitle: {
             color: 'black', 
@@ -551,7 +567,8 @@ const chartConfig = {
         },
         button: {
             borderRadius: 20,
-            backgroundColor: '#EEAF9D',
+            backgroundColor: '#182335',
+            
             width: '22%',
             height: '70%',
             margin: 5,
@@ -560,9 +577,10 @@ const chartConfig = {
             textAlignVertical: 'center',
         },
         buttonText: {
+            fontWeight: 'bold',
             color: 'white',
             paddingTop: 5,
-            fontSize: 20,
+            fontSize: 18,
         },
         dataWrapper: { 
             marginTop: -1 
@@ -574,7 +592,7 @@ const chartConfig = {
         },
         pieChartArea:{
             flex: 3,
-            backgroundColor: '#fffafa',
+            backgroundColor: 'white',
             //width: screenWidth * 0.9,
             borderRadius: 20,
             paddingTop: 20,
@@ -599,7 +617,7 @@ const chartConfig = {
             paddingTop: 20,
             //padding: 5,
             margin: 10,
-            backgroundColor: "#fffafa",
+            backgroundColor: "white",
             shadowColor: "#333",
             shadowOffset: {
                 width: 1,
@@ -611,7 +629,7 @@ const chartConfig = {
         },
         row: { 
             height: 40, 
-            backgroundColor: '#e0ffff' 
+            backgroundColor: '#fff' 
         },
         //////////////////////////////////////////////////////
         centeredView: {
@@ -637,7 +655,7 @@ const chartConfig = {
           },
           ModalLineGraph: {
             margin: 20,
-            height: '50%',
+            height: '60%',
             backgroundColor: "white",
             borderRadius: 20,
             padding: 30,
@@ -660,7 +678,8 @@ const chartConfig = {
           textStyle: {
             color: "white",
             fontWeight: "bold",
-            textAlign: "center"
+            textAlign: "center",
+            fontSize: 20,
           },
           modalText: {
             marginBottom: 15,
