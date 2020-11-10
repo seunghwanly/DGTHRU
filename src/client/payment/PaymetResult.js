@@ -53,6 +53,24 @@ async function couponUpdate(couponNum) {
                 }
             });
         })
+        if (this.state.data[i].orderInfo.isSet) { // group menu
+            database()
+                .ref(commonRef(this.props.route.params.shopInfo))
+                .once('value', snapshot => {
+                    snapshot.forEach(childSnapShot => {
+                        okey = childSnapShot.key;
+                        
+                        childSnapShot.forEach(data => {
+                            console.log("DATA: "+ data);
+                            database()
+                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + data + '/orderInfo')
+                            .update({ getCoupon: true });                        
+                        })
+                    })
+                })
+        }
+
+        //그룹이라면, 다른 것도 getcoupon:true로 해줘야.. 해 ... ㅠ ㅓ... . ...ㅏ   ㅏㅏㅏ ㅏㅏㅏㅏ ㅠㅠ 제발
     } else if (couponNum === '15잔') { //쿠폰 15개 사용
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
             snapshot.forEach((child) => {
@@ -67,6 +85,7 @@ async function couponUpdate(couponNum) {
     }
     else {
         console.log("쿠폰3 : " + couponNum);
+        console.log
         database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
             "shopInfo": this.props.route.params.shopInfo
         });
@@ -277,8 +296,6 @@ export default class PaymentResult extends React.Component {
                                 orderInfo: dataChild.val().orderInfo
                             };
 
-                            console.log("ORDERINFO: " + tempJSONObject.orderInfo + ", " + dataChild.val().orderInfo.orderState);
-
                             if (idx === 0) this.state.timeArray.paid = dataChild.val().orderInfo.orderTime;
 
                             //주문정보담기
@@ -342,40 +359,42 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
+                        console.log("this.state.isCoupon[i]" + this.state.isCoupon[i]);
                         if (this.state.isCoupon[i] === false) {
                             console.log(this.props.route.params.coupon);
                             couponUpdate(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
                                 var ukey = '';
                                 database()
-                                    .ref(userHistoryRef())
+                                    .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
-                                    snapshot.forEach((child) => {
-                                        ukey = child.key;
+                                        snapshot.forEach((child) => {
+                                            ukey = child.key;
+                                            console.log("ukey: " + ukey);
+                                            if (ukey.charAt(0) === '-') {
+                                                database()
+                                                    .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
+                                                    .update({ getCoupon: true });
+                                            }
 
-                                        if (ukey.charAt(0) === '-') {
-                                            database()
-                                                .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
-                                                .update({ getCoupon: true });
-                                        }
-
+                                        });
                                     });
-                                });
                             } else {
                                 var okey = '';
                                 var ukey = '';
                                 database()
-                                    .ref(userHistoryRef())
+                                    .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
                                         snapshot.forEach(childSnapShot => {
                                             okey = childSnapShot.key;
                                             childSnapShot.forEach(data => {
                                                 ukey = data.key;
                                             })
+                                            console.log("okey: " + okey + " ukey: " + ukey);
                                         })
                                     }).then(() => {
                                         database()
-                                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
+                                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
                                             .update({ getCoupon: true });
                                     })
                             }
@@ -470,7 +489,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && ( item.options.coupon === "-" || item.options.coupon === "적용안함" ) ? <></> : <Text style={{textAlign:'right'}}>{item.options.coupon} 쿠폰 사용</Text>
+                                                    index === 0 && (item.options.coupon === "-" || item.options.coupon === "적용안함") ? <></> : <Text style={{ textAlign: 'right' }}>{item.options.coupon} 쿠폰 사용</Text>
                                                 }
                                             </View>
                                         )
