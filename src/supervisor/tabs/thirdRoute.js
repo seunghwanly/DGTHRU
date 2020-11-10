@@ -39,6 +39,7 @@ const chartConfig = {
                 tableData: [],
                 dateData: [],
                 costData: [],
+                currency: [],
                 list: [],
                 menu: [],
                 tableModalVisible: false,
@@ -91,6 +92,10 @@ const chartConfig = {
             }
             console.log("press >> " + newTableData);
             this.setState({tableData: this.reverse(newTableData)});
+        }
+
+        numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     
         reverse(li){
@@ -187,7 +192,6 @@ const chartConfig = {
                 this.sortListByDate();
                 this.setState({list: this.reverse(this.state.list)});
 
-
                 li = this.state.list;
                 var dateColumn = [], costColumn = [], tableColumn = [];
                 var len = this.state.list.length, prevDate, sum = 0;;
@@ -201,20 +205,27 @@ const chartConfig = {
                     }
                     prevDate = li[i].date;
                 }
+
+                var currencyli = [];
+                for(var i = 0;i<costColumn.length;i++){
+                   currencyli.push(this.numberWithCommas(costColumn[i]));
+                }
                 
                 for (var i = 0; i <dateColumn.length; i++) {
                     const rowData = [];
                     var accumCost = 0;
                     for(var j = i;j<dateColumn.length; j+=1)
                         accumCost += costColumn[j];
-                    rowData = rowData.concat(dateColumn[i]).concat(costColumn[i]).concat(accumCost);
+                    rowData = rowData.concat(dateColumn[i]).concat(currencyli[i]).concat(this.numberWithCommas(accumCost));
                     tableColumn.push(rowData);
                     sum+=costColumn[i];
+                    console.log(this.numberWithCommas(costColumn[i]));
                 }
-                costColumn[costColumn.length] = 0;
+                //costColumn[costColumn.length] = 0;
                 costColumn = this.reverse(costColumn);
-
-                this.setState({dateData: dateColumn, costData: costColumn, tableData: tableColumn, totalCost: sum});
+                currencyli = this.reverse(currencyli);
+               
+                this.setState({dateData: dateColumn, costData: costColumn, currency: currencyli, tableData: tableColumn, totalCost: sum});
             })
         }
     
