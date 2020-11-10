@@ -253,7 +253,7 @@ const exampleStyle = StyleSheet.create({
         alignItems: 'center',
         borderRadius:30,
         paddingHorizontal:15,
-        paddingVertical:20,
+        //paddingVertical:20,
         marginHorizontal:10,
         backgroundColor:'white',
         shadowColor: "#333",

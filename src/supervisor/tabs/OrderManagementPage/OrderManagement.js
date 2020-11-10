@@ -38,61 +38,62 @@ export default OrderManagement = (props) => {
             
             
             <View style={exampleStyle.functionWrapper}>
-                <View style={   // 상위 탭
-                    {
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        paddingVertical: 20,
-                        paddingHorizontal: 10,
+                <TouchableOpacity
+                    style={
+                        {
+                            //width: '10%',
+                            flexDirection: 'row',
+                            //alignItems: 'flex-end'
+                        }
                     }
-                }>
-                    <View style={
+                    onPress={() =>
+                        onPressFunction(1)
+                    }
+                >
+                    <View style={   // 상위 탭
                         {
                             flexDirection: 'row',
-                            width: '90%'
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            paddingVertical: 20,
+                            paddingHorizontal: 10,
                         }
                     }>
-                        <Text style={
+                        <View style={
                             {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#182335',
+                                flexDirection: 'row',
+                                width: '90%'
                             }
-                        }>미처리</Text>
-                        <Text style={
-                            {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#eaaf9d',
-                                marginHorizontal: 8
-                            }
-                        }>주문</Text>
-                        <Text style={
-                            {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#182335',
-                            }
-                        }>건</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={
-                            {
-                                width: '10%',
-                                alignItems: 'flex-end'
-                            }
-                        }
-                        onPress={() =>
-                            onPressFunction(1)
-                        }
-                    >
+                        }>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#182335',
+                                }
+                            }>미처리</Text>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#eaaf9d',
+                                    marginHorizontal: 8
+                                }
+                            }>주문</Text>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#182335',
+                                }
+                            }>건</Text>
+                        </View>
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
                             source={require('../../../../image/chevron-forward-outline.png')} />
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
                 <View style={
                     {
                         flexDirection: 'row',
@@ -228,61 +229,62 @@ export default OrderManagement = (props) => {
 
 
             <View style={exampleStyle.functionWrapper}>
-                <View style={   // 상위 탭
-                    {
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        paddingVertical: 20,
-                        paddingHorizontal: 10,
+                <TouchableOpacity
+                    style={
+                        {
+                            //width: '10%',
+                            flexDirection: 'row',
+                            //alignItems: 'flex-end',
+                        }
                     }
-                }>
-                    <View style={
+                    onPress={() =>
+                        onPressFunction(2)
+                    }
+                >
+                    <View style={   // 상위 탭
                         {
                             flexDirection: 'row',
-                            width: '90%'
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            paddingVertical: 20,
+                            paddingHorizontal: 10,
                         }
                     }>
-                        <Text style={
+                        <View style={
                             {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#182335',
+                                flexDirection: 'row',
+                                width: '90%'
                             }
-                        }>처리된</Text>
-                        <Text style={
-                            {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#eaaf9d',
-                                marginHorizontal: 8
-                            }
-                        }>주문</Text>
-                        <Text style={
-                            {
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                color: '#182335',
-                            }
-                        }>건</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={
-                            {
-                                width: '10%',
-                                alignItems: 'flex-end'
-                            }
-                        }
-                        onPress={() =>
-                            onPressFunction(2)
-                        }
-                    >
+                        }>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#182335',
+                                }
+                            }>처리된</Text>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#eaaf9d',
+                                    marginHorizontal: 8
+                                }
+                            }>주문</Text>
+                            <Text style={
+                                {
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    color: '#182335',
+                                }
+                            }>건</Text>
+                        </View>
                         <Image
                             style={{ width: 24, height: 24, }}
                             resizeMode='cover'
                             source={require('../../../../image/chevron-forward-outline.png')} />
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                </TouchableOpacity>
                 <View style={
                     {
                         flexDirection: 'row',

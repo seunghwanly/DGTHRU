@@ -232,7 +232,9 @@ const chartConfig = {
                         >
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={{ textAlign: 'center', fontSize: 20,}}>총 매출 : {this.state.totalCost}원</Text>
+                                <View style = {{marginBottom: 15,}}>
+                                <Text style={{ textAlign: 'center', fontSize: 25, fontWeight: 'bold'}}>총 매출 : {this.state.totalCost}원</Text>
+                                </View>
                                     <View style={styles.buttonArea}>
                                         <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
                                             <Text style={styles.buttonText}>1개월</Text>
@@ -358,28 +360,50 @@ const chartConfig = {
                             </View>
                         </Modal>
                     <View style = {{flexDirection: 'row'}}>
-                    <View style={styles.leftArea}>
-                            <View style={{flexDirection: 'row'}}>
-                            <Text style={{ textAlign: 'center', fontSize: 20,}}>총 매출 : {this.state.totalCost}원</Text>
+                        <View style={styles.leftArea}>
                             <TouchableOpacity
                                 style={
                                     {
-                                        width: '10%',
-                                        alignContent: "flex-end",
-                                        alignItems: 'flex-end',
+                                       // width: '10%',
+                                        alignContent: "flex-start",
+                                        alignItems: 'flex-start',
                                     }
                                 }
                                 onPress={() =>
                                     this.settableModalVisible(true)
                                 }
                             >
-                                <Image
-                                    style={{ width: 24, height: 24, }}
-                                    resizeMode='cover'
-                                    source={require('../../../image/chevron-forward-outline.png')} 
-                                />
+                                <View style={   // 상위 탭
+                                    {
+                                        flexDirection: 'row',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        paddingVertical: 5,
+                                        paddingHorizontal: 15,
+                                    }
+                                }>
+                                    <View style={
+                                        {
+                                            flexDirection: 'row',
+                                            width: '90%',
+                                            marginBottom: 10,
+                                        }
+                                    }>
+                                        <Text style={
+                                            {
+                                                fontSize: 22,
+                                                fontWeight: 'bold',
+                                                color: '#182335',
+                                            }
+                                        }>총 매출 : {this.state.totalCost}원</Text>
+                                    </View>
+                                    <Image
+                                        style={{ width: 24, height: 24, }}
+                                        resizeMode='cover'
+                                        source={require('../../../image/chevron-forward-outline.png')} 
+                                    />
+                                </View>
                             </TouchableOpacity>
-                            </View>
                             <View style={styles.buttonArea}>
                                     <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
                                         <Text style={styles.buttonText}>1개월</Text>
@@ -422,25 +446,45 @@ const chartConfig = {
                             </View>
                         <View style = {styles.rightArea}>
                             <View style = {styles.pieChartArea}>
-                                <View style={{flexDirection: 'row'}}>
-                                <Text style = {styles.subTitle}>인기메뉴</Text>
-                                <TouchableOpacity
-                                style={
-                                    {
-                                        width: '10%',
+                            <TouchableOpacity
+                                style={{
+                                        //width: '10%',
                                         alignContent: "flex-end",
                                         alignItems: 'flex-end',
-                                    }
-                                }
+                                    }}
                                 onPress={() =>this.setPieChartModalVisible(true)}
-                                >
-                                <Image
-                                    style={{ width: 24, height: 24, }}
-                                    resizeMode='cover'
-                                    source={require('../../../image/chevron-forward-outline.png')} 
-                                />
+                            >
+                                <View style={{flexDirection: 'row', paddingHorizontal: 20,}}>
+                                    <View style={   // 상위 탭
+                                        {
+                                            flexDirection: 'row',
+                                            justifyContent: 'flex-start',
+                                            alignItems: 'center',
+                                            //paddingVertical: 20,
+                                            paddingHorizontal: 10,
+                                        }
+                                    }>
+                                        <View style={
+                                            {
+                                                flexDirection: 'row',
+                                                width: '90%'
+                                            }
+                                        }>
+                                            <Text style={
+                                                {
+                                                    fontSize: 22,
+                                                    fontWeight: 'bold',
+                                                    color: '#182335',
+                                                }
+                                            }>인기 메뉴</Text>
+                                        </View>
+                                        <Image
+                                            style={{ width: 24, height: 24, }}
+                                            resizeMode='cover'
+                                            source={require('../../../image/chevron-forward-outline.png')} />
+                                    </View>
+                                </View>
                             </TouchableOpacity>
-                            </View>
                                 <PieChart
                                     data={this.state.menu}
                                     width={screenWidth * 0.90}
@@ -453,54 +497,77 @@ const chartConfig = {
                                 />
                             </View>
                             <View style = {styles.lineGraphArea}>
-                            <View style={{flexDirection: 'row'}}>
-                                <Text style = {styles.subTitle}>매출 추이(원)</Text>
                                 <TouchableOpacity
-                                style={
-                                    {
-                                        width: '10%',
-                                        alignContent: "flex-end",
-                                        alignItems: 'flex-end',
+                                    style={
+                                        {
+                                            //width: '10%',
+                                            alignContent: "flex-start",
+                                            alignItems: 'flex-start',
+                                        }
                                     }
-                                }
-                                onPress={() =>
-                                    this.setlineGraphModalViaible(true)
-                                }
-                            >
-                                <Image
-                                    style={{ width: 24, height: 24, }}
-                                    resizeMode='cover'
-                                    source={require('../../../image/chevron-forward-outline.png')} 
-                                />
-                            </TouchableOpacity>
-                            </View>
-                                <ScrollView horizontal={true} style = {{margin: 20, width: screenWidth*0.8,}}>
-                                    <LineGraph
-                                        data={this.state.costData}
-                                        width={screenWidth*0.75}
-                                        height={200}
-                                        labels={this.state.dateData}
-                                        lineColor='#162338'
-                                        dotColor='#162338'
-                                        hasShadow={true}
-                                        baseConfig={{
-                                            startAtZero: true,
-                                            //hasXAxisBackgroundLines: true,
-                                            //hasYAxisLabels: true,
-                                            xAxisLabelStyle: {
-                                                //suffix: '원',
-                                                //offset: 0,
-                                                //position: "right",
+                                    onPress={() =>
+                                        this.setlineGraphModalViaible(true)
+                                    }
+                                >
+                                    <View style={{flexDirection: 'row'}}>
+                                        <View style={   // 상위 탭
+                                            {
+                                                flexDirection: 'row',
+                                                justifyContent: 'flex-start',
+                                                alignItems: 'center',
+                                                //paddingVertical: 10,
+                                                paddingHorizontal: 20,
                                             }
-
-                                        }}
-                                        style={{
-                                            marginTop: 20,
-                                            alignItems: 'center',
-                                        }}
-                                    />
-                            </ScrollView>
-                        </View>
+                                        }>
+                                            <View style={
+                                                {
+                                                    flexDirection: 'row',
+                                                    width: '90%',
+                                                    paddingTop: 10,
+                                                }
+                                            }>
+                                                <Text style={
+                                                    {
+                                                        fontSize: 22,
+                                                        fontWeight: 'bold',
+                                                        color: '#182335',
+                                                    }
+                                                }>매출 추이(원)</Text>
+                                            </View>
+                                            <Image
+                                                style={{ width: 24, height: 24, }}
+                                                resizeMode='cover'
+                                                source={require('../../../image/chevron-forward-outline.png')} 
+                                            />
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                                    <ScrollView horizontal={true} style = {{margin: 20, width: screenWidth*0.8,}}>
+                                        <LineGraph
+                                            data={this.state.costData}
+                                            width={screenWidth*0.75}
+                                            height={200}
+                                            labels={this.state.dateData}
+                                            lineColor='#162338'
+                                            dotColor='#162338'
+                                            hasShadow={true}
+                                            baseConfig={{
+                                                startAtZero: true,
+                                                //hasXAxisBackgroundLines: true,
+                                                //hasYAxisLabels: true,
+                                                xAxisLabelStyle: {
+                                                    //suffix: '원',
+                                                    //offset: 0,
+                                                    //position: "right",
+                                                }
+                                            }}
+                                            style={{
+                                                marginTop: 20,
+                                                alignItems: 'center',
+                                            }}
+                                        />
+                                    </ScrollView>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
@@ -508,7 +575,6 @@ const chartConfig = {
                 
         )}
     }
-    
     const styles = StyleSheet.create({
         backgroundStyle: {
             flex: 10, 
@@ -560,6 +626,8 @@ const chartConfig = {
         },
         buttonArea:{
             flexDirection: 'row', 
+            //marginVertical: 5,
+            marginBottom: 10,
             margin: 5, 
             width: "80%", 
             height: "10%", 
@@ -595,7 +663,7 @@ const chartConfig = {
             backgroundColor: 'white',
             //width: screenWidth * 0.9,
             borderRadius: 20,
-            paddingTop: 20,
+            paddingTop: 15,
             alignItems: 'center',
             margin: 10,
             shadowColor: "#333",
@@ -610,18 +678,16 @@ const chartConfig = {
         lineGraphArea:{
             flex : 2,
             //width : screenWidth * 0.9, 
-            margin: 20, 
-            alignItems: 'center', 
-            backgroundColor: '#fff',
+            backgroundColor: 'white',
+            //width: screenWidth * 0.9,
             borderRadius: 20,
-            paddingTop: 20,
-            //padding: 5,
+            paddingTop: 15,
+            alignItems: 'center',
             margin: 10,
-            backgroundColor: "white",
             shadowColor: "#333",
             shadowOffset: {
                 width: 1,
-                height: 2,
+                height: 2
             },
             shadowOpacity: 0.365,
             shadowRadius: 1,
