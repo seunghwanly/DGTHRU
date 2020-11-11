@@ -338,7 +338,7 @@ export default class BasketDetail extends React.Component {
                                                 }
                                             ])
                                         :
-                                        Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요 !", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
+                                        Alert.alert("DGTHRU 알림", "같은 카페의 제품만 담아주세요!", [{ text: '확인', onPress: () => console.log('> set of diff shopInfo'), style: 'cancel' }])
                                 }
                                 }
                             >

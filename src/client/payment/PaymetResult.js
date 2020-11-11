@@ -40,14 +40,14 @@ async function updateCurrentOrderNumber(shopInfo) {
     }
 }
 
-async function couponUpdate(couponNum) {
+async function couponUpdate(couponNum, shopInfo) {
     var count = 0;
     if (couponNum === '10잔') { //쿠폰 10개 사용
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
             snapshot.forEach((child) => {
                 if (child.key.charAt(0) === '-' && count < 10) {
                     key = child.key;
-                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    database().ref('user/coupons/' + auth().currentUser.uid + '/' + key).remove();
                     count++;
 
                 }
@@ -58,7 +58,7 @@ async function couponUpdate(couponNum) {
             snapshot.forEach((child) => {
                 if (child.key.charAt(0) === '-' && count < 15) {
                     key = child.key;
-                    database().ref('user/coupons' + '/' + auth().currentUser.uid + '/' + key).remove();
+                    database().ref('user/coupons/' + auth().currentUser.uid + '/' + key).remove();
                     count++;
 
                 }
@@ -66,9 +66,8 @@ async function couponUpdate(couponNum) {
         })
     }
     else {
-        console.log("쿠폰3 : " + couponNum);
-        database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
-            "shopInfo": this.props.route.params.shopInfo
+        database().ref('user/coupons/' + auth().currentUser.uid).push({
+            "shopInfo": shopInfo
         });
     }
 }
@@ -292,6 +291,7 @@ export default class PaymentResult extends React.Component {
                 })
 
                 var isFullyReady = 0;
+                var group_count = false;
 
                 for (var i = 0; i < this.state.orderState.length; ++i) {
                     if (this.state.orderState[i] === 'ready') {
@@ -340,56 +340,52 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
+
                         if (this.state.isCoupon[i] === false) {
-                            couponUpdate(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
                                 var ukey = '';
-
-                                this._firebaseRef.once('value', snapshot => {
-                                    snapshot.forEach((child) => {
-                                        ukey = child.key;
-
-                                        if (ukey.charAt(0) === '-') {
-                                            database()
-                                                .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
-                                                .update({ getCoupon: true });
-                                        }
-
-                                    });
-                                });
-                            } else {
-                                var okey = '';
-                                var ukey = '';
+                                couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
-                                        snapshot.forEach(childSnapShot => {
-                                            okey = childSnapShot.key;
-                                            childSnapShot.forEach(data => {
-                                                ukey = data.key;
+                                        snapshot.forEach((child) => {
+                                            ukey = child.key;
+                                            if (ukey.charAt(0) === '-') {
+                                                database()
+                                                    .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
+                                                    .update({ getCoupon: true });
+                                            }
+
+                                        });
+                                    });
+                            } else {
+                                var okey = '';
+                                var ukey = '';
+                                if ((this.props.route.params.coupon !== '10잔' || this.props.route.params.coupon !== '15잔') && group_count === false) {
+                                    couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
+                                    group_count = true;
+                                }
+                                if (this.props.route.params.coupon === '10잔' || this.props.route.params.coupon === '15잔') {
+                                    database()
+                                        .ref(commonRef(this.props.route.params.shopInfo))
+                                        .once('value', snapshot => {
+                                            snapshot.forEach(childSnapShot => {
+                                                okey = childSnapShot.key;   //group
+                                                childSnapShot.forEach(data => {
+                                                    ukey = data.key;    //0,1,...
+                                                    console.log("ukey 몇 번? "+ ukey);
+                                                    database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
+                                                        .update({ getCoupon: true });
+                                                    couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
+
+                                                })
+
+
                                             })
                                         })
-                                    }).then(() => {
-                                        database()
-                                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/' + i + '/orderInfo')
-                                            .update({ getCoupon: true });
-                                    })
+                                }
                             }
-
                         }
-
-
-
-
-
-                        // if(this.state.isCoupon[i] === 0){
-                        //     couponUpdate(this.props.route.params.coupon);
-
-                        //     const newCoupon = this.state.isCoupon.slice();
-                        //     newCoupon[i] = 1;
-                        //     this.setState({isCoupon: newCoupon});
-
-                        // }
                     }
 
                     else {
@@ -400,8 +396,6 @@ export default class PaymentResult extends React.Component {
                 if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
                     this.setState({ isMenuReady: true });
                 }
-
-                console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
     }
 
@@ -480,7 +474,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && ( item.options.coupon === "-" || item.options.coupon === "적용안함" ) ? <></> : <Text style={{textAlign:'right'}}>{item.options.coupon} 쿠폰 사용</Text>
+                                                    index === 0 && (item.options.coupon === "-" || item.options.coupon === "적용안함") ? <></> : <Text style={{ textAlign: 'right' }}>{item.options.coupon} 쿠폰 사용</Text>
                                                 }
                                             </View>
                                         )
@@ -589,5 +583,4 @@ export default class PaymentResult extends React.Component {
             }
         }
     }
-
 }

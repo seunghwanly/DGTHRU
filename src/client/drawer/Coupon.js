@@ -5,101 +5,22 @@ import {
     Text,
     FlatList,
     View,
-    Modal, Button
+    Modal, 
+    StyleSheet
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
 import ReceiptGroupModal from '../../utils/ReceiptGroupModal';
 import { Header } from 'react-native-elements';
-import { BillStyles, CircleStyles } from './styles';
+import { BillStyles, CircleStyles, couponStyles } from './styles';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
+import { clientStyles } from '../styles';
 import database from '@react-native-firebase/database'
 
 //firebase
 import { userCouponTotalDatabase } from '../../utils/DatabaseRef';
 import { firebase } from '@react-native-firebase/database';
-
-const GetCafeIcon = ({ name }) => {
-
-    if (name === 'main_outdoor') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/가온누리.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'singong_1f') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/남산학사.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === "hyehwa_roof") {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/혜화.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'economy_outdoor') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/그루터기.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'munhwa_1f') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 25, height: 25 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/두리터.png')}
-                />
-            </View>
-        );
-    }
-    else if (name === 'coffee_icon') {
-        return (
-            <View style={{ width: '15%', paddingStart: 5, alignItems: 'baseline' }}>
-                <Image
-                    style={{ width: 30, height: 80 }}
-                    resizeMode='cover'
-                    alignItems="flex-end"
-                    source={require('../../../image/cafe-icon/coffee_icon.png')}
-                />
-            </View>
-        );
-    }
-    else {
-        return (
-            <Text>None</Text>
-        );
-    }
-
-}
+import { color } from 'react-native-reanimated';
 
 export default class Coupon extends React.Component {
 
@@ -110,6 +31,7 @@ export default class Coupon extends React.Component {
 
         this.state = {
             shopInfo: [],
+            couponNum: 0,
             refreshing: false,
             modalVisible: false,
             currentItem: {}
@@ -136,19 +58,51 @@ export default class Coupon extends React.Component {
     }
 
     _fetchData() {
-        var i=0;
+        var i = 0;
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value').then(snapshot => {
             snapshot.forEach((childSnapshot) => {
                 var childData = childSnapshot.val().shopInfo;
                 i++;
-                if(i <= 15){
-                    this.setState({ shopInfo: this.state.shopInfo.concat(childData) });
+                if (i <= 15) {
+                    this.setState({ shopInfo: this.state.shopInfo.concat(childData), couponNum: i });
+                    console.log("shopinfo: " + this.state.shopInfo[6]);
                 }
-                else{
+                else {
                     alert('you can use coupon');
                 }
             });
         });
+    }
+
+    couponImage = (number) => {
+        if (this.state.shopInfo[number] !== undefined) {
+            return (
+                <View>
+                    <ImageLinker
+                        name={this.state.shopInfo[number]}
+                        style={{
+                            width: 50,
+                            height: 50,
+                            marginVertical: 2,
+                            marginTop: 15
+                        }} />
+                </View>
+            )
+        }
+        else {
+            return (
+                <View>
+                    <ImageLinker
+                        name={'nothing'}
+                        style={{
+                            width: 50,
+                            height: 50,
+                            marginVertical: 2,
+                            marginTop: 15
+                        }} />
+                </View>
+            )
+        }
     }
 
     _onRefresh = React.Component(() => {
@@ -174,7 +128,7 @@ export default class Coupon extends React.Component {
                                 currentItem.group !== undefined ? <ReceiptGroupModal item={currentItem} /> : <ReceiptSingleModal item={currentItem} />
                             }
                             <TouchableOpacity
-                                style={{ borderRadius: 10, backgroundColor: 'black', width: '90%', paddingHorizontal: 50, paddingVertical: 10 }}
+                                style={BillStyles.modalButton}
                                 onPress={() => this.setModalVisible(!modalVisible)}
                             >
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
@@ -183,8 +137,9 @@ export default class Coupon extends React.Component {
                     </View>
                 </Modal>
                 <Header
-                    containerStyle={{ backgroundColor: 'white' }}
-                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16 }}>Coupon</Text>)}
+                    barStyle='light-content'
+                    containerStyle={{ backgroundColor: '#182335', borderBottomColor: 'transparent' }}
+                    centerComponent={(<Text style={{ fontWeight: 'bold', fontSize: 16, color: '#fff' }}>e-Receipt / History</Text>)}
                     leftComponent={
                         () => (
                             <TouchableOpacity
@@ -195,7 +150,7 @@ export default class Coupon extends React.Component {
                                 <Image
                                     style={{ height: 30, width: 30, }}
                                     resizeMode='cover'
-                                    source={require('../../../image/chevron-back-outline.png')}
+                                    source={require('../../../image/chevron-back-white.png')}
                                 />
                             </TouchableOpacity>
                         )
@@ -210,7 +165,7 @@ export default class Coupon extends React.Component {
                                 <Image
                                     style={{ height: 30, width: 30, }}
                                     resizeMode='cover'
-                                    source={require('../../../image/menu-outline.png')}
+                                    source={require('../../../image/menu-white.png')}
                                 />
                             </TouchableOpacity>
                         )
@@ -220,65 +175,42 @@ export default class Coupon extends React.Component {
                         flex: 1,
                         justifyContent: 'center',
                         alignItems: 'stretch',
-                        backgroundColor: '#F2F2F2',
+                        backgroundColor: '#182335',
                         paddingTop: 20,
                         paddingLeft: 15,
                         paddingRight: 15
                     }}>
-
                     <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
-                        <View style={{ flexDirection: 'column', marginBottom: 5, borderBottomWidth: 1, padding: 8 }}>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'main_outdoor'} style={{ width: 25, height: 25 }} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>가온누리    2260-8961</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'singong_1f'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>남산학사 카페   2260-8509</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'hyehwa_roof'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>혜화디저트 카페  2260-8966</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'munhwa_1f'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>두리터 카페     2260-1478</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-                                <GetCafeIcon name={'economy_outdoor'} />
-                                <Text style={{ fontWeight: 'bold', width: '100%' }}>그루터기 카페     2260-1478</Text>
-                            </View>
+                        <View style={{ flexDirection: 'column', marginBottom: 5, padding: 8 }}>
+                            <Text style={{ fontWeight: 'bold', width: '100%' }}>현재 쿠폰 {this.state.couponNum} 장</Text>
                         </View>
-
                         <View >
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                            <View style = {couponStyles.imageContainer}>
+                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8}}>
+                                    {this.couponImage(0)}
+                                    {this.couponImage(1)}
+                                    {this.couponImage(2)}
+                                    {this.couponImage(3)}
+                                    {this.couponImage(4)}
+                                </View>
+                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                                    {this.couponImage(5)}
+                                    {this.couponImage(6)}
+                                    {this.couponImage(7)}
+                                    {this.couponImage(8)}
+                                    {this.couponImage(9)}
+                                </View>
+                                <Text style={{ textAlign: 'right' }}>10장 아메리카노 1잔</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
-
-                            </View>
-                            <View style={{ marginBottom: 5, padding: 8 }}>
-                                <FlatList
-                                    contentContainerStyle={{ margin: 4 }}
-                                    horizontal={false}
-                                    numColumns={5}
-                                    data={this.state.shopInfo}
-                                    renderItem={
-                                        ({ item }) => (
-                                            <View>
-                                                <ImageLinker
-                                                    name={item}
-                                                    style={{
-                                                        width: 68,
-                                                        height: 68,
-                                                        marginVertical: 2,
-                                                        marginTop: 15
-                                                    }} />
-                                            </View>
-                                        )
-                                    }
-                                    keyExtractor={item => item.key}
-                                >
-                                </FlatList>
+                            <View style = {couponStyles.imageContainer}>
+                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
+                                    {this.couponImage(10)}
+                                    {this.couponImage(11)}
+                                    {this.couponImage(12)}
+                                    {this.couponImage(13)}
+                                    {this.couponImage(14)}
+                                </View>
+                                <Text style={{ textAlign: "right" }}>15장 카페라떼 1잔</Text>
                             </View>
                         </View>
                     </View>

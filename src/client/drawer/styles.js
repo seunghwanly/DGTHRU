@@ -224,3 +224,41 @@ export const RecieptModal = StyleSheet.create({
         color: '#000'
     },
 })
+
+const couponStyles = StyleSheet.create({
+        imageContainer:{
+            width: '90%',
+            backgroundColor:'#fff',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginVertical:10,
+            paddingTop:0,
+            paddingVertical:20,
+            borderRadius:20,
+            shadowColor: "#333",
+            shadowOffset: {
+                width: 1,
+                height: 2
+            },
+            shadowOpacity: 0.3,
+            shadowRadius:2
+        },
+        itemDesc: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            color:'#182355',
+            marginVertical:4
+        },
+        itemSubDesc: {
+            textAlign: 'right',
+            color: '#555',
+            fontSize: 12,
+            marginVertical:2
+        }
+    
+});
+
+export {
+    couponStyles
+}
