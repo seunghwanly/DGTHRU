@@ -53,24 +53,6 @@ async function couponUpdate(couponNum) {
                 }
             });
         })
-        if (this.state.data[i].orderInfo.isSet) { // group menu
-            database()
-                .ref(commonRef(this.props.route.params.shopInfo))
-                .once('value', snapshot => {
-                    snapshot.forEach(childSnapShot => {
-                        okey = childSnapShot.key;
-                        
-                        childSnapShot.forEach(data => {
-                            console.log("DATA: "+ data);
-                            database()
-                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + data + '/orderInfo')
-                            .update({ getCoupon: true });                        
-                        })
-                    })
-                })
-        }
-
-        //그룹이라면, 다른 것도 getcoupon:true로 해줘야.. 해 ... ㅠ ㅓ... . ...ㅏ   ㅏㅏㅏ ㅏㅏㅏㅏ ㅠㅠ 제발
     } else if (couponNum === '15잔') { //쿠폰 15개 사용
         database().ref('user/coupons' + '/' + auth().currentUser.uid).once('value', (snapshot) => {
             snapshot.forEach((child) => {
@@ -85,7 +67,6 @@ async function couponUpdate(couponNum) {
     }
     else {
         console.log("쿠폰3 : " + couponNum);
-        console.log
         database().ref('user/coupons' + '/' + auth().currentUser.uid).push({
             "shopInfo": this.props.route.params.shopInfo
         });
@@ -360,9 +341,11 @@ export default class PaymentResult extends React.Component {
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
                         console.log("this.state.isCoupon[i]" + this.state.isCoupon[i]);
+
                         if (this.state.isCoupon[i] === false) {
-                            console.log(this.props.route.params.coupon);
                             couponUpdate(this.props.route.params.coupon);
+
+                            console.log(this.props.route.params.coupon);
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
                                 var ukey = '';
                                 database()
@@ -370,7 +353,6 @@ export default class PaymentResult extends React.Component {
                                     .once('value', snapshot => {
                                         snapshot.forEach((child) => {
                                             ukey = child.key;
-                                            console.log("ukey: " + ukey);
                                             if (ukey.charAt(0) === '-') {
                                                 database()
                                                     .ref(commonRef(this.props.route.params.shopInfo) + '/' + ukey + '/orderInfo')
@@ -386,16 +368,23 @@ export default class PaymentResult extends React.Component {
                                     .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
                                         snapshot.forEach(childSnapShot => {
-                                            okey = childSnapShot.key;
+                                            okey = childSnapShot.key;   //group
                                             childSnapShot.forEach(data => {
-                                                ukey = data.key;
+                                                ukey = data.key;    //0,1
+                                                if(this.props.route.params.coupon === '10잔' || this.props.route.params.coupon === '15잔'){
+                                                    database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
+                                                    .update({ getCoupon: true });
+                                                    console.log("okey: " + okey + " ukey: " + ukey);
+                                                }
+                                                else{
+                                                    if(this.state.orderState[i] === 'confirm'){
+                                                        database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
+                                                    .update({ getCoupon: true });
+                                                        console.log("ORDERSTATE: "+ this.state.orderState[i]);
+                                                    }
+                                                }
                                             })
-                                            console.log("okey: " + okey + " ukey: " + ukey);
                                         })
-                                    }).then(() => {
-                                        database()
-                                            .ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
-                                            .update({ getCoupon: true });
                                     })
                             }
                         }
