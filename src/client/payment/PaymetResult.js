@@ -361,27 +361,28 @@ export default class PaymentResult extends React.Component {
                             } else {
                                 var okey = '';
                                 var ukey = '';
-                                if((this.props.route.params.coupon !== '10잔' || this.props.route.params.coupon !== '15잔') && group_count === false){
+                                if ((this.props.route.params.coupon !== '10잔' || this.props.route.params.coupon !== '15잔') && group_count === false) {
                                     couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
                                     group_count = true;
                                 }
-                                else{
-                                database()
-                                    .ref(commonRef(this.props.route.params.shopInfo))
-                                    .once('value', snapshot => {
-                                        snapshot.forEach(childSnapShot => {
-                                            okey = childSnapShot.key;   //group
+                                if (this.props.route.params.coupon === '10잔' || this.props.route.params.coupon === '15잔') {
+                                    database()
+                                        .ref(commonRef(this.props.route.params.shopInfo))
+                                        .once('value', snapshot => {
+                                            snapshot.forEach(childSnapShot => {
+                                                okey = childSnapShot.key;   //group
                                                 childSnapShot.forEach(data => {
                                                     ukey = data.key;    //0,1,...
-                                                        database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
-                                                            .update({ getCoupon: true });
-                                                            couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
+                                                    console.log("ukey 몇 번? "+ ukey);
+                                                    database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
+                                                        .update({ getCoupon: true });
+                                                    couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
 
                                                 })
-                                            
-                                            
+
+
+                                            })
                                         })
-                                    })
                                 }
                             }
                         }
