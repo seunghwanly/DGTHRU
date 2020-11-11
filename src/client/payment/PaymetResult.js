@@ -293,6 +293,7 @@ export default class PaymentResult extends React.Component {
                 })
 
                 var isFullyReady = 0;
+                var group_count = false;
 
                 for (var i = 0; i < this.state.orderState.length; ++i) {
                     if (this.state.orderState[i] === 'ready') {
@@ -341,6 +342,9 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
+                        var v_orderState = this.state.orderState[i];
+                        var v_iscoupon = this.state.isCoupon[i];
+                        console.log("한 번만 오나요?" + v_orderState +" 랑 "+ v_iscoupon);
 
                         if (this.state.isCoupon[i] === false) {
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
@@ -362,8 +366,12 @@ export default class PaymentResult extends React.Component {
                             } else {
                                 var okey = '';
                                 var ukey = '';
-                                couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
-
+                                if((this.props.route.params.coupon !== '10잔' || this.props.route.params.coupon !== '15잔') && group_count === false){
+                                    couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
+                                    console.log("제발 한 번만 와줘.. 두번 오지 마 ㅠㅠㅠ");
+                                    group_count = true;
+                                }
+                                else{
                                 database()
                                     .ref(commonRef(this.props.route.params.shopInfo))
                                     .once('value', snapshot => {
@@ -378,8 +386,10 @@ export default class PaymentResult extends React.Component {
 
                                                 })
                                             }
+                                            
                                         })
                                     })
+                                }
                             }
                         }
                     }
