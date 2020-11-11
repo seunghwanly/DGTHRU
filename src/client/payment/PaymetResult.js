@@ -66,8 +66,6 @@ async function couponUpdate(couponNum, shopInfo) {
         })
     }
     else {
-        console.log("쿠폰3 : " + couponNum);
-        console.log("this.props.route.params.shopInfo: " + shopInfo);
         database().ref('user/coupons/' + auth().currentUser.uid).push({
             "shopInfo": shopInfo
         });
@@ -342,9 +340,6 @@ export default class PaymentResult extends React.Component {
                     }
                     else if (this.state.orderState[i] === 'confirm') {
                         this.state.timeArray.confirm = moment().format('HH:mm:ss');
-                        var v_orderState = this.state.orderState[i];
-                        var v_iscoupon = this.state.isCoupon[i];
-                        console.log("한 번만 오나요?" + v_orderState +" 랑 "+ v_iscoupon);
 
                         if (this.state.isCoupon[i] === false) {
                             if (!this.state.data[i].orderInfo.isSet) { // single menu
@@ -368,7 +363,6 @@ export default class PaymentResult extends React.Component {
                                 var ukey = '';
                                 if((this.props.route.params.coupon !== '10잔' || this.props.route.params.coupon !== '15잔') && group_count === false){
                                     couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
-                                    console.log("제발 한 번만 와줘.. 두번 오지 마 ㅠㅠㅠ");
                                     group_count = true;
                                 }
                                 else{
@@ -377,15 +371,14 @@ export default class PaymentResult extends React.Component {
                                     .once('value', snapshot => {
                                         snapshot.forEach(childSnapShot => {
                                             okey = childSnapShot.key;   //group
-                                            if (this.props.route.params.coupon === '10잔' || this.props.route.params.coupon === '15잔') {
                                                 childSnapShot.forEach(data => {
-                                                    ukey = data.key;    //0,1
+                                                    ukey = data.key;    //0,1,...
                                                         database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
                                                             .update({ getCoupon: true });
                                                             couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
 
                                                 })
-                                            }
+                                            
                                             
                                         })
                                     })
@@ -402,8 +395,6 @@ export default class PaymentResult extends React.Component {
                 if (isFullyReady === this.state.orderState.length && isFullyReady > 0) {
                     this.setState({ isMenuReady: true });
                 }
-
-                console.log('\norderState >>' + this.state.orderState.length + '\n' + this.state.orderState);
             });
     }
 
