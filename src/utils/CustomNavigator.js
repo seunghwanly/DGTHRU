@@ -65,7 +65,7 @@ function CustomDrawerContent(props) {
           }
         }>
         <TouchableOpacity style={{justifyContent:'flex-start', alignItems:'center', paddingStart:20, flexDirection:'row'}} onPress={() => signOut()}>
-            <Image source={require('../../image/close-white.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
+            <Image source={require('../../image/log-out-outline-white.png')} resizeMode='cover' style={{width: 20, height: 20, marginEnd:25}}/>
             <Text style={{width:'60%' ,textAlign:'right', color:'#fff'}}>로그아웃</Text>
         </TouchableOpacity>
         </SafeAreaView>

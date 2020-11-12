@@ -416,7 +416,9 @@ export default Basket = ({ navigation, route }) => {
 
                 }
                 else { //매장용/일회용 선택안한 경우
-                    alert('컵을 선택해주세요 !');
+                    if(cupSize != null)
+                        alert('컵을 선택해주세요 !');
+                        
                     return false;
                 }
             }
