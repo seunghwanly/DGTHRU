@@ -125,6 +125,7 @@ export default MenuModal = (props) => {
                             {
                                 margin: 5,
                                 padding: 10,
+                                alignItems:'center'
                             }
                         }>
                             <View style={modalItem.modalSubTitleView}>
@@ -172,7 +173,7 @@ export default MenuModal = (props) => {
                                         <>
                                             <Text style={modalItem.modalSubItemDescText}>
                                                 {
-                                                    forUpdate.cost.now === null ? forUpdate.cost.prev : forUpdate.cost.now
+                                                    forUpdate.cost.now === null ? forUpdate.cost.prev.toLocaleString()+" 원" : forUpdate.cost.now.toLocaleString()+" 원"
                                                 }
                                             </Text>
                                             <TouchableOpacity style={modalItem.modalSubUtemDescBtn}
@@ -285,7 +286,7 @@ export default MenuModal = (props) => {
                                     )
                                     }}
                                 >
-                                    <Text style={{ color: '#182335', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>삭제하기</Text>
+                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14, textAlign: 'center' }}>삭제하기</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

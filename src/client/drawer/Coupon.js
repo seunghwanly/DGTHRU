@@ -5,7 +5,7 @@ import {
     Text,
     FlatList,
     View,
-    Modal, 
+    Modal,
     StyleSheet
 } from 'react-native';
 import ReceiptSingleModal from '../../utils/ReceiptSingleModal';
@@ -117,25 +117,6 @@ export default class Coupon extends React.Component {
 
         return (
             <>
-                <Modal
-                    animationType='slide'
-                    transparent={true}
-                    visible={modalVisible}
-                >
-                    <View style={BillStyles.modalBackground}>
-                        <View style={BillStyles.modalSubBackground}>
-                            {
-                                currentItem.group !== undefined ? <ReceiptGroupModal item={currentItem} /> : <ReceiptSingleModal item={currentItem} />
-                            }
-                            <TouchableOpacity
-                                style={BillStyles.modalButton}
-                                onPress={() => this.setModalVisible(!modalVisible)}
-                            >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>닫기</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
                 <Header
                     barStyle='light-content'
                     containerStyle={{ backgroundColor: '#182335', borderBottomColor: 'transparent' }}
@@ -182,11 +163,15 @@ export default class Coupon extends React.Component {
                     }}>
                     <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
                         <View style={{ flexDirection: 'column', marginBottom: 5, padding: 8 }}>
-                            <Text style={{ fontWeight: 'bold', width: '100%' }}>현재 쿠폰 {this.state.couponNum} 장</Text>
+                            <Text style={{ fontWeight: 'bold', width: '100%', fontSize : 16 }}>현재 쿠폰 {this.state.couponNum} 장</Text>
                         </View>
-                        <View >
-                            <View style = {couponStyles.imageContainer}>
-                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8}}>
+                        <View style={
+                            {
+                                alignItems:'center'
+                            }
+                            }>
+                            <View style={couponStyles.imageContainer}>
+                                <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                                     {this.couponImage(0)}
                                     {this.couponImage(1)}
                                     {this.couponImage(2)}
@@ -202,7 +187,7 @@ export default class Coupon extends React.Component {
                                 </View>
                                 <Text style={{ textAlign: 'right' }}>10장 아메리카노 1잔</Text>
                             </View>
-                            <View style = {couponStyles.imageContainer}>
+                            <View style={couponStyles.imageContainer}>
                                 <View style={{ flexDirection: 'row', marginBottom: 5, padding: 8 }}>
                                     {this.couponImage(10)}
                                     {this.couponImage(11)}

@@ -22,22 +22,23 @@ import Loading from './Loading';
 async function updateCurrentOrderNumber(shopInfo) {
 
     var res = 0;
-
+    // 가게 별 주문 번호 가져오기
     await database().ref('order_num/' + shopInfo)
         .once('value', (snapshot) => {
             snapshot.forEach((childSnapShot) => {
                 console.log('Kakaopay ... ' + childSnapShot.val(), typeof childSnapShot.val());
                 res = childSnapShot.val();
             })
+        }).then(() => {
+            // 주문 번호 업데이트
+            if (res === 999)
+                database().ref('order_num/' + shopInfo).update({ number: 1 });
+            else {
+                res += 1;
+                console.log('> res : ' + res);
+                database().ref('order_num/' + shopInfo).update({ number: res });
+            }
         });
-
-    if (res === 999)
-        await database().ref('order_num/' + shopInfo).update({ number: 1 });
-    else {
-        res += 1;
-        console.log('> res : ' + res);
-        await database().ref('order_num/' + shopInfo).update({ number: res });
-    }
 }
 
 async function couponUpdate(couponNum, shopInfo) {
@@ -139,8 +140,11 @@ export default class PaymentResult extends React.Component {
 
         if (this.props.route.params.response.imp_success === 'true' && this.state.isUpdated === false) {
 
+            var isAllUpdated = false;
+
             var data = JSON.parse(this.props.route.params.itemData); // 넣을 data
             console.log(this.props.route.params.itemData + '\n\n\n\n\n' + this.props.route.params.itemData.length, data.hasOwnProperty('options'));
+
             // 디비에 주문번호 업데이트하기
             // 1. 단일메뉴일 경우
             if (data.hasOwnProperty('options')) {
@@ -179,8 +183,11 @@ export default class PaymentResult extends React.Component {
                                     .once('value', (snapshot) => {
                                         updateUserHistroy(snapshot.val(), res, false);
                                     });
+                                // 주문번호 업데이트하기
+                                updateCurrentOrderNumber(this.props.route.params.shopInfo).then(() => console.log('updated order number !'));
+                                this.setState({ isUpdated: true });
                             })
-                    });
+                    })
             }
             // 2. 장바구니일 경우
             else {
@@ -219,12 +226,11 @@ export default class PaymentResult extends React.Component {
                                 })
                             });
                         updateUserHistroy(data, res, true);
+                        // 주문번호 업데이트하기
+                        updateCurrentOrderNumber(this.props.route.params.shopInfo).then(() => console.log('updated order number !'));
+                        this.setState({ isUpdated: true });
                     })
             }   // else
-
-            // 주문번호 업데이트하기
-            updateCurrentOrderNumber(this.props.route.params.shopInfo);
-            this.setState({ isUpdated: true });
         }
 
         this._isMenuReady();
@@ -373,7 +379,7 @@ export default class PaymentResult extends React.Component {
                                                 okey = childSnapShot.key;   //group
                                                 childSnapShot.forEach(data => {
                                                     ukey = data.key;    //0,1,...
-                                                    console.log("ukey 몇 번? "+ ukey);
+                                                    console.log("ukey 몇 번? " + ukey);
                                                     database().ref(commonRef(this.props.route.params.shopInfo) + '/' + okey + '/' + ukey + '/orderInfo')
                                                         .update({ getCoupon: true });
                                                     couponUpdate(this.props.route.params.coupon, this.props.route.params.shopInfo);
@@ -474,7 +480,7 @@ export default class PaymentResult extends React.Component {
                                                     }
                                                 </View>
                                                 {
-                                                    index === 0 && (item.options.coupon === "-" || item.options.coupon === "적용안함") ? <></> : <Text style={{ textAlign: 'right' }}>{item.options.coupon} 쿠폰 사용</Text>
+                                                    (item.options.coupon.toString() === "-" || item.options.coupon.toString() === "적용안함") ? <></> : <Text style={{ textAlign: 'right' }}>{item.options.coupon} 쿠폰 사용</Text>
                                                 }
                                             </View>
                                         )

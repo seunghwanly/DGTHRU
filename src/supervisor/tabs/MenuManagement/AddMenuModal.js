@@ -398,8 +398,8 @@ export default AddMenuModal = (props) => {
                                 contentContainerStyle={
                                     {
                                         height: Dimensions.get('screen').height,
-                                        width: Dimensions.get('screen').width * 0.5,
-                                        alignItems: 'stretch'
+                                        width: Dimensions.get('screen').width / 2,
+                                        alignItems: 'stretch',
                                     }
                                 }
                             >
