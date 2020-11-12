@@ -10,6 +10,7 @@ import {
   Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 import {enableScreens} from 'react-native-screens';
 import {myMenuStyle} from './styles';
 import moment from 'moment';
@@ -55,6 +56,7 @@ const shopData = [
 ];
 
 export default class MyMenuRoute extends React.Component {
+  _adminReference;
   // function MyMenuRoute({ navigation, props  }) {
   // const [pastList, setpastList] = useState(props.pastList);
   constructor(props) {
@@ -64,7 +66,102 @@ export default class MyMenuRoute extends React.Component {
       todayList: [],
       totalAmount: 0,
       templist: [],
+      dayTotalCost: 0,
+      dayTotalOrder: 0,
+      monthTotalCost: 0,
+      dayHotMenu: null
     };
+
+    this._adminReference = database().ref(
+      'admin/' +
+        shopData.find(
+          (d) => d.adminPhoneNumber === auth().currentUser.phoneNumber,
+        ).id,
+    );
+  }
+
+  componentDidMount() {
+    //today date info
+    let todayDate = new Date();
+    let todayDateString =
+      todayDate.getFullYear() +
+      '_' +
+      (todayDate.getMonth() + 1) +
+      '_' +
+      todayDate.getDate();
+    //get from database
+    this._adminReference.on('value', (snapShot) => {
+      var todayTotalCost = 0;
+      var todayTotalOrder = 0;
+      var thisMonthTotalCost = 0;
+      var todayTotalList = [];
+
+      snapShot.forEach((dateSnapShot) => {
+        // count today total order / total cost
+        if (todayDateString === dateSnapShot.key) {
+          dateSnapShot.forEach((contentSnapShot) => {
+            // only for today
+            todayTotalCost += contentSnapShot.val().cost;
+            todayTotalOrder += 1;
+            
+            todayTotalList.push(contentSnapShot.val().name);
+          }); // dateSnapShot forEach
+        }
+        // only for this month
+        if (
+          dateSnapShot.key.substring(5, 7) ===
+          (todayDate.getMonth() + 1).toString()
+        ) {
+          dateSnapShot.forEach((contentSnapShot) => {
+            thisMonthTotalCost += contentSnapShot.val().cost;
+          });
+        }
+      }); // snapShot forEach
+
+      // what is the hottest menu : today
+      var hottestList = [
+          {
+              name: '',
+              count: 0
+          }
+      ];
+      todayTotalList.forEach((item) => {
+        // not in the list -> add
+        if(hottestList.find((node) => node.name === item) === undefined) {
+            //init
+            if(hottestList.length === 1) {
+                hottestList[0].name = item;
+                hottestList[0].cost ++;
+            }
+            else { //add another one
+                hottestList.push(
+                    {
+                        name: item,
+                        count: 1
+                    }
+                );
+            }
+        }
+        // in the list
+        else {
+            hottestList.find((node) => node.name === item).count++;
+        }
+      });
+      //then sort with count
+      hottestList.sort((A,B) => A.count - B.count);
+
+      this.setState({
+        dayTotalCost: todayTotalCost,
+        dayTotalOrder: todayTotalOrder,
+        monthTotalCost: thisMonthTotalCost,
+        dayHotMenu: hottestList[0].name
+      });
+    }); //end : once
+  }
+
+  componentWillUnmount() {
+    //database off
+    this._adminReference.off();
   }
 
   _logOut() {
@@ -73,7 +170,7 @@ export default class MyMenuRoute extends React.Component {
       .then(() => [console.log('User Signed Out !')])
       .catch(() => console.log('already signed out !'));
   }
-  
+
   fetchData() {
     var templist = [];
     var tempTotal = 0;
@@ -142,7 +239,9 @@ export default class MyMenuRoute extends React.Component {
               <View style={myMenuStyle.contentArea_right}>
                 <Text style={myMenuStyle.thinFont}>오늘 주문된 총 건수는?</Text>
 
-                <Text style={myMenuStyle.thickFont}>{this.fetchData()}건</Text>
+                <Text style={myMenuStyle.thickFont}>
+                  {this.state.dayTotalOrder}건
+                </Text>
               </View>
               <View style={myMenuStyle.contentArea_right}>
                 <Text style={myMenuStyle.thinFont}>
@@ -156,7 +255,7 @@ export default class MyMenuRoute extends React.Component {
                   에서 주문된 총 금액은?
                 </Text>
                 <Text style={myMenuStyle.thickFont}>
-                  {this.numberWithCommas(this.state.totalAmount)}원
+                  {this.state.dayTotalCost.toLocaleString()}원
                 </Text>
               </View>
             </View>
@@ -165,7 +264,7 @@ export default class MyMenuRoute extends React.Component {
               <View style={myMenuStyle.contentArea_right}>
                 <Text style={myMenuStyle.thinFont}>오늘의 인기 메뉴는 ?</Text>
 
-                <Text style={myMenuStyle.thickFont}>아메리카노</Text>
+                <Text style={myMenuStyle.thickFont}>{this.state.dayHotMenu}</Text>
               </View>
               <View style={myMenuStyle.contentArea_right}>
                 <Text style={myMenuStyle.thinFont}>
@@ -179,7 +278,7 @@ export default class MyMenuRoute extends React.Component {
                   에서 주문된 총 금액은?
                 </Text>
                 <Text style={myMenuStyle.thickFont}>
-                  {this.numberWithCommas(this.state.totalAmount + 569500)}원
+                  {this.numberWithCommas(this.state.monthTotalCost)}원
                 </Text>
               </View>
             </View>

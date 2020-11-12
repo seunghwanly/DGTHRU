@@ -331,7 +331,7 @@ export default Basket = ({ navigation, route }) => {
             if (item.sold_out !== true) {
 
                 //count 확인  + 매장용/일회용 선택
-                if (count >= 1 && inOrOut != null) {
+                if (count >= 1 && inOrOut != null && cupSize !== null) {
                     //ice 가능과 hotOrIced 선택되있는지 확인
                     /*
                         [ ice_available,    hotOrIced,  only_ice ]
@@ -416,14 +416,12 @@ export default Basket = ({ navigation, route }) => {
 
                 }
                 else { //매장용/일회용 선택안한 경우
-                    if(cupSize != null)
-                        alert('컵을 선택해주세요 !');
-                        
+                    alert('컵을 선택해주세요 !');
                     return false;
                 }
             }
         }   //if
-        else {
+        else {  // 디저트 류
             if (item.sold_out !== true) {
                 if (inOrOut !== null)
                     return true;
