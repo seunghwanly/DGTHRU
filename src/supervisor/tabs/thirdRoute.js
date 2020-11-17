@@ -128,16 +128,28 @@ const chartConfig = {
                 return count2 - count1;
             });
 
-            tempMenu[0].color = '#162338';
-            tempMenu[1].color = '#f5deb3';
-            tempMenu[2].color = '#4D7ACA';
-            tempMenu[3].color = '#536178';
-            tempMenu[4].color = '#eaaf9d';
+            var piecolor = [];
+            piecolor.push('#162338');
+            piecolor.push('#f5deb3');
+            piecolor.push('#4D7ACA');
+            piecolor.push('#536178');
+            piecolor.push('#eaaf9d');
+
+
+            var i = 0;
+            while(i < tempMenu.length){
+                console.log("color >> " + tempMenu[i].color + '\n');
+                if(i >= 5)
+                break;
+                tempMenu[i].color = piecolor[i];
+                console.log("color >> " + tempMenu[i].color + '\n');
+                i++;
+            }
             return tempMenu;
         }
     
         componentDidMount(){
-            database().ref('admin/' + this.state.shopname).once('value').then(snapshot => {
+            database().ref('admin/' + this.state.shopname).on('value', snapshot => {
                 var li = [];
                 var tempMenu = [];
                 //snapshot: 날짜
@@ -219,9 +231,16 @@ const chartConfig = {
                     rowData = rowData.concat(dateColumn[i]).concat(currencyli[i]).concat(this.numberWithCommas(accumCost));
                     tableColumn.push(rowData);
                     sum+=costColumn[i];
-                    console.log(this.numberWithCommas(costColumn[i]));
                 }
-                //costColumn[costColumn.length] = 0;
+                
+                // 라인그래프에서 데이터가 1개 이하면 에러가 뜸, 2개 이상으로 만들어 주기 위함
+                if(costColumn.length === 1)
+                    costColumn[costColumn.length] = 0;
+                else if(costColumn.length === 0){
+                    for(var i = 0;i<2;i++)
+                        costColumn.push(0);
+                }
+                
                 costColumn = this.reverse(costColumn);
                 currencyli = this.reverse(currencyli);
                
@@ -654,11 +673,11 @@ const chartConfig = {
             alignItems: 'center',
             alignContent: 'center',
             textAlignVertical: 'center',
+            justifyContent: 'center',
         },
         buttonText: {
             fontWeight: 'bold',
-            color: 'white',
-            paddingTop: 5,
+            color: 'white', 
             fontSize: 18,
         },
         dataWrapper: { 
