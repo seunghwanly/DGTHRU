@@ -84,6 +84,8 @@ export const translateCategoryName = name => {
             return "에이드";
         case "Cold Brew":
             return "콜드브루";
+        case "Blender":
+            return "블랜더";
         case "SandWich":
             return "샌드위치";
         case "Bakery":
@@ -92,6 +94,10 @@ export const translateCategoryName = name => {
             return "베이글";
         case "Waffle":
             return "와플";
+        case "Maccaron":
+            return "마카롱";
+        case "Others":
+            return "기타";
         default:
             return "뭘까요?";
     }

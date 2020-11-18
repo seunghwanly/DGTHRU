@@ -41,7 +41,6 @@ export default class TabViewExample extends React.Component {
             .once('value', (snapshot) => {
                 this.setState({ bakeryData: snapshot.val() });
             }).then(() => this._setRoute());
-
     }
 
     _setRoute = () => {
@@ -75,7 +74,7 @@ export default class TabViewExample extends React.Component {
     }
 
     componentDidMount = async () => {
-        console.log('> componentDidMount');
+        console.log('> componentDidMount >>>' + this.props.route.params.shopInfo);
         this._fetchData();
         setTimeout(() => { this.setState({ isLoading: false }) }, 1000);
     }

@@ -49,7 +49,17 @@ const shopData = [
 class Item extends React.Component {
 
     _onPress = () => {
-        if (this.props.id === 'hyehwa_roof' || this.props.id === 'singong_1f') {
+        if (this.props.id === 'hyehwa_roof') {
+            if (this.props.navigation !== null) {
+                this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
+            }
+        }
+        else if(this.props.id === 'singong_1f') {
+            if (this.props.navigation !== null) {
+                this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
+            }
+        }
+        else if(this.props.id === 'economy_outdoor') {
             if (this.props.navigation !== null) {
                 this.props.navigation.navigate('MenuTabView',{ shopInfo: this.props.id })
             }
@@ -58,6 +68,7 @@ class Item extends React.Component {
             if(this.props.navigation !== null)
                 this.props.navigation.navigate('Favorites');
         }
+        
         else
             this.props.onPressItem(this.props.id);
     };
