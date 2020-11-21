@@ -263,6 +263,7 @@ export default AddMenuModal = (props) => {
 
                     return addMenu(shopname, category, route, newCategoryname, res);
                 }
+                return addMenu(shopname, category, route, newCategoryname, form);
             }
             else {  //  DESSERT
 
@@ -861,7 +862,7 @@ export default AddMenuModal = (props) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={modalItem.modalButton}
-                                    onPress={() => autoSetForm().then(() => alert('새로운 메뉴가 추가되었습니다.')).then(onPress)}
+                                    onPress={() => autoSetForm().then(() => console.log("updated !")).then(onPress)}
                                 >
                                     <Text style={{ color: 'white', fontWeight: 'bold' }}>저장하기</Text>
                                 </TouchableOpacity>
