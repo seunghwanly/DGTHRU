@@ -62,6 +62,10 @@ const chartConfig = {
         randomColor(){return ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);}
 
         onPress(months){
+
+            if(this.state.costData.length === 2 && this.state.costData[0] === 0){
+                return;
+            }
             var datelimit;
             if(months === 0)
                 datelimit = "1990_01_01";
@@ -69,7 +73,6 @@ const chartConfig = {
                 datelimit = moment().subtract(months, 'months').format("YYYY_MM_DD");
 
             var len = this.state.dateData.length, newTableData = [], index = len;
-
             for(var i = len - 1;i>= 0;i--){
                 var accumCost = 0;
                 const rowData = [];
@@ -82,7 +85,7 @@ const chartConfig = {
                 for(var j = index - 1;j>=i; j--)
                     accumCost += this.state.costData[j];
                 
-                rowData = rowData.concat(this.state.dateData[i]).concat(this.state.costData[i]).concat(accumCost);
+                rowData = rowData.concat(this.state.dateData[i]).concat(this.numberWithCommas(this.state.costData[i])).concat(this.numberWithCommas(accumCost));
                 this.setState({totalCost: accumCost});
                 newTableData.push(rowData);
             }
@@ -117,6 +120,7 @@ const chartConfig = {
             this.setState(previousState => (
                 { list: previousState.list }
             ))
+            console.log("datr >> " + this.state.list.date);
         }
 
         sortListByCount(tempMenu) {
@@ -234,14 +238,19 @@ const chartConfig = {
                 }
                 
                 // 라인그래프에서 데이터가 1개 이하면 에러가 뜸, 2개 이상으로 만들어 주기 위함
-                if(costColumn.length === 1)
-                    costColumn[costColumn.length] = 0;
+                if(costColumn.length === 1){
+                    costColumn.push(0);
+                    dateColumn.push("0");
+                    costColumn=this.reverse(costColumn);
+                    dateColumn=this.reverse(dateColumn);
+                }
                 else if(costColumn.length === 0){
                     for(var i = 0;i<2;i++)
                         costColumn.push(0);
+                        dateColumn.push("0");
                 }
                 
-                costColumn = this.reverse(costColumn);
+                //costColumn = this.reverse(costColumn);
                 currencyli = this.reverse(currencyli);
                
                 this.setState({dateData: dateColumn, costData: costColumn, currency: currencyli, tableData: tableColumn, totalCost: sum});
@@ -326,7 +335,7 @@ const chartConfig = {
                                     <Text style={{ textAlign: 'center', fontSize: 20,}}>매출 추이(원)</Text>
                                     <ScrollView horizontal={true} >
                                     <LineGraph
-                                        data={this.state.costData}
+                                        data={this.reverse(this.state.costData)}
                                         width={screenWidth*1.5}
                                         height={300}
                                         labels={this.state.dateData}
@@ -438,10 +447,10 @@ const chartConfig = {
                                     <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
                                         <Text style={styles.buttonText}>1개월</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(3)}>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(2)}>
                                         <Text style={styles.buttonText}>3개월</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(6)}>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.onPress(3)}>
                                         <Text style={styles.buttonText}>6개월</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.button} onPress={() => this.onPress(0)}>
@@ -574,7 +583,7 @@ const chartConfig = {
                                 </TouchableOpacity>
                                     <ScrollView horizontal={true} style = {{margin: 20, width: screenWidth*0.8,}}>
                                         <LineGraph
-                                            data={this.state.costData}
+                                            data={this.reverse(this.state.costData)}
                                             width={screenWidth*0.75}
                                             height={200}
                                             labels={this.state.dateData}
