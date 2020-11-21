@@ -177,7 +177,7 @@ export default class Coupon extends React.Component {
                         paddingLeft: 15,
                         paddingRight: 15
                     }}>
-                    <View style={{ backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
+                    <View style={{ alignItems: 'center',backgroundColor: 'white', flex: 1, padding: 10, borderTopStartRadius: 12, borderTopEndRadius: 12 }}>
                         <View style={{ flexDirection: 'column', marginBottom: 5, padding: 8 }}>
                             <Text style={{ fontWeight: 'bold', width: '100%' }}>현재 쿠폰 {this.state.couponNum} 장</Text>
                         </View>
