@@ -44,9 +44,9 @@ React-native X Firebase
 <img src="https://user-images.githubusercontent.com/22142225/99914359-39741d80-2d40-11eb-9691-856f5d3bfebd.PNG" width="150"/>
 <img src="https://user-images.githubusercontent.com/22142225/99914363-3f69fe80-2d40-11eb-91e2-fdcc672e06f1.PNG" width="150"/>
 </p>
-<br></br>
+
 ### Supervisor
-<p>
+<p align="center">
 <img src="https://user-images.githubusercontent.com/22142225/99960052-7804e900-2dcf-11eb-99da-fad3b5bf80db.jpeg" height="300"/>
 <img src="https://user-images.githubusercontent.com/22142225/99960045-75a28f00-2dcf-11eb-8faa-861a188ade3a.jpeg" height="300"/>
 <img src="https://user-images.githubusercontent.com/22142225/99960055-79361600-2dcf-11eb-9d08-e7493070bf7d.jpeg" height="300"/>
