@@ -236,7 +236,7 @@ const exampleStyle = StyleSheet.create({
         alignSelf:'center',
         fontWeight: 'bold', 
         fontSize: 14, 
-        width: '14%', 
+        width: '15%', 
         textAlign: 'center',
         color:'#182335'
     },

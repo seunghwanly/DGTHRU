@@ -13,6 +13,7 @@ import LineGraph from '@chartiful/react-native-line-graph';
 import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 import { Line } from 'react-native-svg';
+import { interpolate } from 'react-native-reanimated';
 const screenWidth = Dimensions.get("window").width * (4/9);
 var currDate = moment().format("YYYY_MM_DD");    
 
@@ -272,7 +273,7 @@ const chartConfig = {
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
                                 <View style = {{marginBottom: 15,}}>
-                                <Text style={{ textAlign: 'center', fontSize: 25, fontWeight: 'bold'}}>총 매출 : {this.state.totalCost}원</Text>
+                                <Text style={{ textAlign: 'center', fontSize: 25, fontWeight: 'bold'}}>총 매출 : {this.state.totalCost.toLocaleString()}원</Text>
                                 </View>
                                     <View style={styles.buttonArea}>
                                         <TouchableOpacity style={styles.button} onPress={() => this.onPress(1)}>
@@ -317,7 +318,9 @@ const chartConfig = {
                                         style={{ ...styles.openButton, backgroundColor: "#162338" }}
                                         onPress={() => {this.settableModalVisible(false);}}
                                     >
-                                        <Text style={styles.textStyle}>    닫기    </Text>
+                                    <View style={{ width: 80 }}>
+                                        <Text style={styles.textStyle}>닫기</Text>
+                                    </View>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -434,7 +437,7 @@ const chartConfig = {
                                                 fontWeight: 'bold',
                                                 color: '#182335',
                                             }
-                                        }>총 매출 : {this.state.totalCost}원</Text>
+                                        }>총 매출 : {this.state.totalCost.toLocaleString()}원</Text>
                                     </View>
                                     <Image
                                         style={{ width: 24, height: 24, }}
@@ -595,10 +598,11 @@ const chartConfig = {
                                                 //hasXAxisBackgroundLines: true,
                                                 //hasYAxisLabels: true,
                                                 xAxisLabelStyle: {
-                                                    //suffix: '원',
-                                                    //offset: 0,
-                                                    //position: "right",
-                                                }
+                                                    suffix: '원',
+                                                    fontSize:10,
+                                                    xOffset:-10,
+                                                    yOffset:-2
+                                                },
                                             }}
                                             style={{
                                                 marginTop: 20,

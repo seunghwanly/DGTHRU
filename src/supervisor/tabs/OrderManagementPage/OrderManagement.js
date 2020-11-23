@@ -1,4 +1,4 @@
-import React ,{useState}from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -20,7 +20,7 @@ export default OrderManagement = (props) => {
         data, route, onPressFunction,
     } = props;
 
-  
+
 
 
     return (
@@ -35,8 +35,8 @@ export default OrderManagement = (props) => {
         }
         ]}>
             <StatusBar barStyle='light-content' />
-            
-            
+
+
             <View style={exampleStyle.functionWrapper}>
                 <TouchableOpacity
                     style={
@@ -97,20 +97,21 @@ export default OrderManagement = (props) => {
                 <View style={
                     {
                         flexDirection: 'row',
-                        width: '95%',
+                        width: '100%',
                         borderBottomWidth: 2,
                         paddingVertical: 10,
+                        paddingHorizontal:10,
                         borderColor: '#777',
                         marginTop: 10,
-                        
+
                     }
                 }>
-                    <Text style={exampleStyle.pastOrderListText}>주문번호</Text>
+                    <Text style={[exampleStyle.pastOrderListText, { textAlign: 'left' }]}>주문번호</Text>
                     <Text style={exampleStyle.pastOrderListText}>상품명</Text>
                     <Text style={exampleStyle.pastOrderListText}>갯수</Text>
-                    <Text style={[exampleStyle.pastOrderListText, { width: '25%' }]}>비고</Text>
-                    <Text style={exampleStyle.pastOrderListText}>주문시간</Text>
-                    <Text style={exampleStyle.pastOrderListText}>경과시간</Text>
+                    <Text style={[exampleStyle.pastOrderListText, { textAlign: 'right' }]}>주문자번호</Text>
+                    <Text style={[exampleStyle.pastOrderListText, { textAlign: 'right' }]}>경과시간</Text>
+                    <Text style={[exampleStyle.pastOrderListText, { width: '20%', textAlign: 'right' }]}>비고</Text>
                 </View>
                 {
                     data.length > 0 ?
@@ -120,7 +121,7 @@ export default OrderManagement = (props) => {
                             keyExtractor={item => item.key}
                             contentContainerStyle={
                                 {
-                                    paddingHorizontal: '5%',
+                                    // paddingHorizontal: '5%',
                                 }
                             }
                             scrollEnabled={true}
@@ -137,20 +138,21 @@ export default OrderManagement = (props) => {
                                                         <View style={
                                                             {
                                                                 width: '100%',
+                                                                justifyContent: 'center',
                                                                 paddingVertical: 10,
                                                                 flexDirection: 'row',
                                                             }
                                                         }>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 , }]}>{item.orderInfo.orderNumber}</Text>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.name}</Text>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.options.count}</Text>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>{item.orderInfo.clientPhoneNumber}</Text>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14 }]}>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12, textAlign: 'left' }]}>{item.orderInfo.orderNumber}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12 }]}>{item.name}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12 }]}>{item.options.count}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12 }]}>{item.orderInfo.clientPhoneNumber}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12 }]}>
                                                                 {
-                                                                    item.date.substr(5, 2) + '월 ' + item.date.substr(8, 2) + '일  ' + item.orderInfo.orderTime
+                                                                    moment().diff(new moment(item.orderInfo.orderTime, 'HH:mm:ss'), 'minutes') + '분'
                                                                 }
                                                             </Text>
-                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 14, width: '25%' }]}>샷 추가 : {item.options.shotNum} / 시럽 추가 : {item.options.syrup} / 크림 추가 : {item.options.whipping}</Text>
+                                                            <Text style={[exampleStyle.pastOrderListText, { fontWeight: 'normal', fontSize: 12, width: '20%', textAlign: 'right' }]}>샷 추가 : {item.options.shotNum}{'\n'}시럽 추가 : {item.options.syrup}{'\n'}크림 추가 : {item.options.whipping}</Text>
                                                         </View>
                                                         <View style={
                                                             {
@@ -170,22 +172,22 @@ export default OrderManagement = (props) => {
                                             <View style={
                                                 {
                                                     width: '100%',
-                                                    justifyContent:'center',
+                                                    justifyContent: 'center',
                                                     paddingVertical: 10,
                                                     flexDirection: 'row',
 
                                                 }
                                             }>
-                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal', textAlign:'left' }]}>{item.orderInfo.orderNumber}</Text>
+                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal', textAlign: 'left' }]}>{item.orderInfo.orderNumber}</Text>
                                                 <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal' }]}>{item.name}</Text>
                                                 <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal' }]}>{item.options.count}</Text>
-                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal', width: '25%' }]}> 샷 추가 : {item.options.shotNum}{'\n'}시럽 추가 : {item.options.syrup}{'\n'}크림 추가 : {item.options.whipping} </Text>                                               
-                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal' }]}>{item.orderInfo.orderTime}</Text>
+                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal' }]}>{item.orderInfo.clientPhoneNumber}</Text>
                                                 <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal' }]}>
                                                     {
                                                         moment().diff(new moment(item.orderInfo.orderTime, 'HH:mm:ss'), 'minutes') + '분'
                                                     }
                                                 </Text>
+                                                <Text style={[exampleStyle.pastOrderListText, { fontSize: 12, fontWeight: 'normal', width: '20%', textAlign: 'right' }]}> 샷 추가 : {item.options.shotNum}{'\n'}시럽 추가 : {item.options.syrup}{'\n'}크림 추가 : {item.options.whipping} </Text>
                                             </View>
                                             <View style={
                                                 {
